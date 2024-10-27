@@ -31,10 +31,12 @@ button {
   border-radius: 4px;
   cursor: pointer;
   font-family: "Roboto";
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 button:hover {
   background-color: var(--active-like-color);
+  transform: scale(1.1);
 }
 
 .icon-panel {
@@ -55,4 +57,15 @@ button:hover {
 
 .icon-panel .active-like {
   fill: var(--active-like-color);
+}
+
+a {
+  color: var(--secondary-text-color);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: var(--icon-panel-color);
+  text-decoration: underline;
 }

@@ -6,8 +6,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 450px;
+  justify-content: space-between;
+  height: 500px;
   width: 450px;
   background-color: var(--background-color);
   text-align: center;
@@ -26,18 +26,19 @@ input {
   font-size: 16px;
 }
 
-h1 {
-  margin: 0 0 20px 0;
+.signup h1 {
   font-size: 24px;
 }
 
-h2 {
-  margin: 20px 0 10px 0;
+.signup h2 {
   font-size: 18px;
-  color: #555;
+  margin: 10px;
 }
 
 .signup button {
-  padding: 10px 20px;
   font-size: 16px;
+}
+
+.signup div {
+  padding: 5px;
 }
