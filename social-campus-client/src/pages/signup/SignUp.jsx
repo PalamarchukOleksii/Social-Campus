@@ -2,6 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignUp.css";
+import { toast } from "react-toastify";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -10,7 +11,9 @@ function SignUp() {
     e.preventDefault();
     try {
       // Handle sign-up logic here
-      console.log("Sign up logic goes here");
+      console.log("Sign up normaly");
+      navigate("/home");
+      toast("Your account has been successfully created! Welcome aboard!");
     } catch (error) {
       console.log(error);
     }

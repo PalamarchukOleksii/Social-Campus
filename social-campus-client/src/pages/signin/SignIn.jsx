@@ -2,6 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignIn.css";
+import { toast } from "react-toastify";
 
 function SignIn() {
   const navigate = useNavigate();
@@ -10,7 +11,9 @@ function SignIn() {
     e.preventDefault();
     try {
       // Handle sign-in logic here
-      console.log("Sign in logic goes here");
+      console.log("Sign in normaly");
+      navigate("/home");
+      toast("Welcome back! You have successfully signed in.");
     } catch (error) {
       console.log(error);
     }

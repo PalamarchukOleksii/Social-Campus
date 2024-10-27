@@ -10,6 +10,8 @@ import SignIn from "./pages/signin/SignIn";
 import Welcom from "./pages/welcom/Welcom";
 import Footer from "./components/footer/Footer";
 import Header from "./components/header/Header";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
         </Routes>
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 }
