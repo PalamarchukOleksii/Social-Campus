@@ -1,55 +1,17 @@
-/* Global font style */
+html,
 body {
-  font-family: "Roboto", sans-serif;
-  background-color: #faf7fe;
-  color: #6a687e;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
-:root {
-  --background-color: #faf7fe;
-  --button-color: #afb4c7;
-  --secondary-text-color: #d2d3d8;
-  --active-like-color: #b7b4c7;
-  --icon-panel-color: #6a687e;
-}
-
-.general-text {
-  color: var(--button-color);
-}
-
-.not-general-text {
-  color: var(--secondary-text-color);
-}
-
-button {
-  background-color: var(--button-color);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: var(--active-like-color);
-}
-
-.icon-panel {
-  background-color: var(--icon-panel-color);
-  padding: 10px;
+.App {
   display: flex;
-  gap: 10px;
-  justify-content: center;
-  border-radius: 4px;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.icon-panel svg {
-  width: 24px;
-  height: 24px;
-  fill: white;
-  cursor: pointer;
-}
-
-.icon-panel .active-like {
-  fill: var(--active-like-color);
+.main-container {
+  flex: 1;
+  padding: 20px;
 }
