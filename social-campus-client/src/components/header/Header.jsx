@@ -5,7 +5,7 @@ function Header() {
   return (
     <header>
       <div className="header">
-        <img src="/favicon-32x32.png" alt="logo"></img>
+        <img src="/android-chrome-512x512.png" alt="logo"></img>
         <h1>Social Campus</h1>
       </div>
     </header>

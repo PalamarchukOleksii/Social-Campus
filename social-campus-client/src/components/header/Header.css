@@ -10,3 +10,7 @@
 .header * {
   margin: 0;
 }
+
+.header img {
+  height: 40px;
+}
