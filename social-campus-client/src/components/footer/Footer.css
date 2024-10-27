@@ -1,0 +1,16 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 30px;
+  justify-content: space-between;
+}
+
+.footer .not-general-text {
+  font-size: 13px;
+  margin: 0;
+}
+
+.footer a:hover {
+  color: var(--general-text-color);
+}

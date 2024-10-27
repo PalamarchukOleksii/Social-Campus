@@ -18,20 +18,18 @@ function SignIn() {
 
   return (
     <div className="signin">
-      <div className="signin-option">
-        <h1 className="general-text">Sign In</h1>
-        <form onSubmit={handleSignIn}>
-          <input type="text" placeholder="Email" required />
-          <input type="password" placeholder="Password" required />
-          <button type="submit" className="signin-button">
-            Sign In
-          </button>
-        </form>
-        <h2 className="not-general-text">Don&apos;t have an account?</h2>
-        <button className="signup-button" onClick={() => navigate("/signup")}>
-          Sign Up
+      <h1 className="general-text">Sign In</h1>
+      <form onSubmit={handleSignIn}>
+        <input type="text" placeholder="Email" required />
+        <input type="password" placeholder="Password" required />
+        <button type="submit" className="signin-button">
+          Sign In
         </button>
-      </div>
+      </form>
+      <h2 className="not-general-text">Don&apos;t have an account?</h2>
+      <button className="signup-button" onClick={() => navigate("/signup")}>
+        Sign Up
+      </button>
     </div>
   );
 }
