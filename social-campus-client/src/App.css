@@ -1,20 +1,22 @@
-/* Global font style */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Roboto";
   background-color: #faf7fe;
-  color: #6a687e;
+  color: #4a4a4a;
 }
 
 :root {
-  --background-color: #faf7fe;
+  --background-color: #ffffff;
   --button-color: #afb4c7;
-  --secondary-text-color: #d2d3d8;
-  --active-like-color: #b7b4c7;
+  --secondary-text-color: #a0a3ab;
+  --active-like-color: #8a8f99;
   --icon-panel-color: #6a687e;
+  --general-text-color: #3a3a3a;
 }
 
 .general-text {
-  color: var(--button-color);
+  color: var(--general-text-color);
 }
 
 .not-general-text {
@@ -28,6 +30,7 @@ button {
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
+  font-family: "Roboto";
 }
 
 button:hover {
