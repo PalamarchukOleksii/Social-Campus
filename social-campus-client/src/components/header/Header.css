@@ -1,0 +1,12 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  margin: 0;
+  gap: 10px;
+}
+
+.header * {
+  margin: 0;
+}

@@ -20,7 +20,7 @@ function SignIn() {
     <div className="signin">
       <h1 className="general-text">Sign In</h1>
       <form onSubmit={handleSignIn}>
-        <input type="text" placeholder="Email" required />
+        <input type="email" placeholder="Email" required />
         <input type="password" placeholder="Password" required />
         <button type="submit" className="signin-button">
           Sign In
