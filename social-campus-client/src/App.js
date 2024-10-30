@@ -12,7 +12,7 @@ import Landing from "./pages/landing/Landing";
 import Footer from "./components/footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ROUTES } from "./utils/constants";
+import ROUTES from "./utils/RoutesConsts";
 
 function App() {
   const location = useLocation();
