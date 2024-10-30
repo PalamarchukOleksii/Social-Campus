@@ -41,7 +41,7 @@ function App() {
       <div className="footer-container">
         <Footer />
       </div>
-      <ToastContainer />
+      <ToastContainer progressStyle={{ background: "#3a3a3a" }} />
     </div>
   );
 }
