@@ -1,0 +1,52 @@
+
+.menu {
+    width: 250px; /* Ширина сайдбара */
+    background-color: #6a687e; /* Цвет фона, как у Twitter */
+    color: #d2d3d8; /* Цвет текста */
+    padding: 20px; /* Отступы */
+    position: fixed; /* Фиксированное положение */
+    height: 100%; /* Высота 100% */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Тень для глубины */
+    border-radius: 10px; /* Закругление углов сайдбара */
+}
+
+.menu h2 {
+    margin-top: 0; /* Убираем верхний отступ */
+    font-size: 2em; /* Размер шрифта заголовка */
+    font-weight: bold; /* Жирный шрифт */
+}
+
+.menu ul {
+    list-style: none; /* Убираем маркеры списка */
+    padding: 15px; /* Убираем отступы */
+    
+}
+
+.menu li {
+    margin: 15px 0; /* Отступы между элементами списка */
+}
+
+.menu a, .menu button {
+    color: #d2d3d8; /* Цвет текста */
+    text-decoration: none; /* Убираем подчеркивание */
+    display: block; /* Позволяет нажимать на всю область элемента */
+    padding: 10px; /* Отступы для элементов */
+    border-radius: 4px; /* Закругленные углы */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+}
+
+.menu a:hover, .menu button:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Полупрозрачный фон при наведении */
+}
+
+.menu button {
+    background: none;
+    border: none;
+    color: #d2d3d8; /* Цвет текста для кнопок */
+    cursor: pointer;
+}
+
+.menu button:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Полупрозрачный фон при наведении для кнопки */
+}
+
