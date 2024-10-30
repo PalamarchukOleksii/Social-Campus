@@ -19,7 +19,7 @@
   font-size: 20px;
   color: var(--general-text-color);
   opacity: 0.5;
-  transition: opacity 0.3s;
+  transition: all 0.3s;
 }
 
 .sidebar a:hover {
@@ -48,16 +48,32 @@
 .logout {
   display: flex;
   flex-direction: row;
+  gap: 20px;
   align-items: center;
-  background-color: var(--general-text-color);
-  padding: 10px;
-  opacity: 0.75;
-  border-radius: 360px;
+  justify-content: center;
   position: absolute;
-  bottom: 50px;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.loggout-btn {
-  width: 100px;
-  font-size: 16px;
+.logout * {
+  margin: 0;
+}
+
+.logout .profile-image {
+  height: 50px;
+  width: 50px;
+}
+
+.exit-icon {
+  opacity: 0.5;
+  font-size: 30px;
+  transition: all 0.3s;
+}
+
+.exit-icon:hover {
+  opacity: 1;
 }
