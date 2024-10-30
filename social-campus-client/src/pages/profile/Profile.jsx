@@ -23,13 +23,10 @@ function Profile() {
       </div>
       <div className="profile-tweets">
         <h3>Posts</h3>
-        <div className="tweet">
-    
-        </div>
+        <div className="tweet"></div>
       </div>
     </div>
   );
 }
 
 export default Profile;
-
