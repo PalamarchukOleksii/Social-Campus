@@ -27,6 +27,18 @@ body {
   flex-direction: column;
 }
 
-.footer-container {
-  padding: 20px;
+.footer-main {
+  width: calc(100% - 260px);
+  position: relative;
+  left: 260px;
+  text-align: center;
+  bottom: 10px;
+  padding-top: 20px;
+}
+
+.footer {
+  position: relative;
+  text-align: center;
+  bottom: 10px;
+  padding-top: 20px;
 }
