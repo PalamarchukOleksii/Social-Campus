@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import "./Sidebar.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import NavItem from "../navItem/NavItem";
 import ShortProfile from "../shortProfile/ShortProfile";
 import NavItems from "../../utils/consts/NavItems";
 
 function Sidebar() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
   const [hoveredIcon, setHoveredIcon] = useState("");
 
   const handleLogout = async (e) => {
@@ -34,17 +36,22 @@ function Sidebar() {
               label,
               inactiveIcon: InactiveIcon,
               activeIcon: ActiveIcon,
-            }) => (
-              <NavItem
-                key={path}
-                path={path}
-                label={label}
-                inactiveIcon={InactiveIcon}
-                activeIcon={ActiveIcon}
-                hoveredIcon={hoveredIcon}
-                setHoveredIcon={setHoveredIcon}
-              />
-            )
+            }) => {
+              const isActive = currentPath === path;
+
+              return (
+                <NavItem
+                  key={path}
+                  path={path}
+                  label={label}
+                  inactiveIcon={InactiveIcon}
+                  activeIcon={ActiveIcon}
+                  hoveredIcon={hoveredIcon}
+                  setHoveredIcon={setHoveredIcon}
+                  isActive={isActive}
+                />
+              );
+            }
           )}
         </ul>
       </div>
