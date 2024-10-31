@@ -2,12 +2,12 @@
 
 body {
   font-family: "Roboto";
-  background-color: #faf7fe;
+  background-color: #ffff;
   color: #4a4a4a;
 }
 
 :root {
-  --background-color: #ffff;
+  --background-color: #f6f8fa;
   --button-color: #afb4c7;
   --secondary-text-color: #a0a3ab;
   --active-like-color: #8a8f99;
