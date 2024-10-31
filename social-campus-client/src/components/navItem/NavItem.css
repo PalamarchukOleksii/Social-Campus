@@ -2,16 +2,23 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  font-weight: 550;
   text-decoration: none;
   font-size: 20px;
   color: var(--general-text-color);
-  opacity: 0.5;
+  opacity: 0.6;
   transition: all 0.3s;
 }
 
-.nav-item a:hover {
+.nav-item link:hover {
   opacity: 1;
 }
+
+.nav-item .link.active {
+  opacity: 1;
+}
+
 .nav-item .icon {
-  padding: 10px;
+  padding: 10px 5px;
+  font-size: 30px;
 }

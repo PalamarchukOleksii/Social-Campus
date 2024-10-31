@@ -1,31 +1,37 @@
 import React from "react";
 import "./NavItem.css";
 import PropTypes from "prop-types";
+import { NavLink } from "react-router-dom";
 
 function NavItem(props) {
   return (
     <div className="nav-item">
       <li>
-        <a
-          href={props.path}
+        <NavLink
+          to={props.path}
           onMouseEnter={() => props.setHoveredIcon(props.label.toLowerCase())}
           onMouseLeave={() => props.setHoveredIcon(null)}
+          className={({ isActive }) => (isActive ? "link active" : "link")}
         >
-          {props.hoveredIcon === props.label.toLowerCase() ? (
-            <props.activeIcon className="icon" />
-          ) : (
-            <props.inactiveIcon className="icon" />
+          {({ isActive }) => (
+            <>
+              {props.hoveredIcon === props.label.toLowerCase() || isActive ? (
+                <props.activeIcon className="icon" />
+              ) : (
+                <props.inactiveIcon className="icon" />
+              )}
+              <span>{props.label}</span>
+            </>
           )}
-          <span>{props.label}</span>
-        </a>
+        </NavLink>
       </li>
     </div>
   );
 }
 
 NavItem.propTypes = {
-  activeIcon: PropTypes.string.isRequired,
-  inactiveIcon: PropTypes.string.isRequired,
+  activeIcon: PropTypes.elementType.isRequired,
+  inactiveIcon: PropTypes.elementType.isRequired,
   label: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   setHoveredIcon: PropTypes.func.isRequired,

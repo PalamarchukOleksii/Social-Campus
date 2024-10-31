@@ -1,0 +1,11 @@
+{
+  "id": "12345",
+  "login": "@johndoe",
+  "email": "johndoe@example.com",
+  "username": "John Doe",
+  "bio": "Software developer with a passion for open-source projects.",
+  "profileImage": "/default-profile.png",
+  "followers": 1200,
+  "following": 300,
+  "postCount": 58
+}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
 import NavItem from "../navItem/NavItem";
-import UserProfile from "../userProfile/UserProfile";
+import ShortProfile from "../shortProfile/ShortProfile";
 import NavItems from "../../utils/consts/NavItems";
 
 function Sidebar() {
@@ -34,21 +34,23 @@ function Sidebar() {
               label,
               inactiveIcon: InactiveIcon,
               activeIcon: ActiveIcon,
-            }) => (
-              <NavItem
-                key={path}
-                path={path}
-                label={label}
-                inactiveIcon={InactiveIcon}
-                activeIcon={ActiveIcon}
-                hoveredIcon={hoveredIcon}
-                setHoveredIcon={setHoveredIcon}
-              />
-            )
+            }) => {
+              return (
+                <NavItem
+                  key={path}
+                  path={path}
+                  label={label}
+                  inactiveIcon={InactiveIcon}
+                  activeIcon={ActiveIcon}
+                  hoveredIcon={hoveredIcon}
+                  setHoveredIcon={setHoveredIcon}
+                />
+              );
+            }
           )}
         </ul>
       </div>
-      <UserProfile
+      <ShortProfile
         handleLogout={handleLogout}
         setHoveredIcon={setHoveredIcon}
         hoveredIcon={hoveredIcon}
