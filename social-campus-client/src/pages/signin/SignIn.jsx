@@ -25,18 +25,26 @@ function SignIn() {
       </div>
       <div className="right-half">
         <div className="signin">
-          <h1 className="general-text">Sign In</h1>
-          <form onSubmit={handleSignIn}>
-            <input type="email" placeholder="Email" required />
-            <input type="password" placeholder="Password" required />
-            <button type="submit" className="signin-button">
-              Sign In
+          <div>
+            <h1 className="general-text">Sign In</h1>
+            <form onSubmit={handleSignIn}>
+              <input type="email" placeholder="Email" required />
+              <input type="password" placeholder="Password" required />
+              <button type="submit" className="signin-button">
+                Sign In
+              </button>
+            </form>
+          </div>
+          <div>
+            {" "}
+            <h2 className="not-general-text">Don&apos;t have an account?</h2>
+            <button
+              className="signup-button"
+              onClick={() => navigate("/signup")}
+            >
+              Sign Up
             </button>
-          </form>
-          <h2 className="not-general-text">Don&apos;t have an account?</h2>
-          <button className="signup-button" onClick={() => navigate("/signup")}>
-            Sign Up
-          </button>
+          </div>
           <div className="goWelcom">
             <a href="/" className="not-general-text">
               Go Back to Welcome Page

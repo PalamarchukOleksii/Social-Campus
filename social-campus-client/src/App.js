@@ -10,6 +10,7 @@ import SignIn from "./pages/signin/SignIn";
 import Sidebar from "./components/sidebar/Sidebar";
 import Landing from "./pages/landing/Landing";
 import Footer from "./components/footer/Footer";
+import FollowersFollowing from "./pages/followersFollowing/FollowersFollowing";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ROUTES from "./utils/consts/Routes";
@@ -38,6 +39,14 @@ function App() {
           <Route path={ROUTES.SEARCH} element={<Search />} />
           <Route path={ROUTES.PROFILE} element={<Profile />} />
           <Route path={ROUTES.MESSAGES} element={<Messages />} />
+          <Route
+            path={`${ROUTES.PROFILE}/followers`}
+            element={<FollowersFollowing />}
+          />
+          <Route
+            path={`${ROUTES.PROFILE}/following`}
+            element={<FollowersFollowing />}
+          />
         </Routes>
       </div>
       <div className={footerContainerClass}>
