@@ -11,25 +11,6 @@
   padding: 0;
 }
 
-.sidebar a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  font-size: 20px;
-  color: var(--general-text-color);
-  opacity: 0.5;
-  transition: all 0.3s;
-}
-
-.sidebar a:hover {
-  opacity: 1;
-}
-
-.icon {
-  padding: 10px;
-}
-
 .head {
   display: flex;
   align-items: center;
@@ -43,37 +24,4 @@
 .head span {
   font-size: 25px;
   font-weight: bold;
-}
-
-.logout {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  bottom: 60px;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.logout * {
-  margin: 0;
-}
-
-.logout .profile-image {
-  height: 50px;
-  width: 50px;
-}
-
-.exit-icon {
-  opacity: 0.5;
-  font-size: 30px;
-  transition: all 0.3s;
-}
-
-.exit-icon:hover {
-  opacity: 1;
 }

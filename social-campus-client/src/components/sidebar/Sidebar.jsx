@@ -1,22 +1,13 @@
 import React, { useState } from "react";
-import {
-  IoHomeOutline,
-  IoSearchOutline,
-  IoChatboxEllipsesOutline,
-  IoPersonOutline,
-  IoExitOutline,
-  IoHomeSharp,
-  IoSearchSharp,
-  IoChatboxEllipses,
-  IoPersonSharp,
-  IoExit,
-} from "react-icons/io5";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
+import NavItem from "../navItem/NavItem";
+import UserProfile from "../userProfile/UserProfile";
+import NavItems from "../../utils/consts/NavItems";
 
 function Sidebar() {
   const navigate = useNavigate();
-  const [hoveredIcon, setHoveredIcon] = useState(null);
+  const [hoveredIcon, setHoveredIcon] = useState("");
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -32,92 +23,36 @@ function Sidebar() {
   return (
     <div className="sidebar">
       <div className="head">
-        <img src="/android-chrome-512x512.png" alt="logo"></img>
+        <img src="/android-chrome-512x512.png" alt="logo" />
         <span>Social Campus</span>
       </div>
       <div className="navigation">
         <ul>
-          <li>
-            <a
-              href="/home"
-              onMouseEnter={() => setHoveredIcon("home")}
-              onMouseLeave={() => setHoveredIcon(null)}
-            >
-              {hoveredIcon === "home" ? (
-                <IoHomeSharp className="icon" />
-              ) : (
-                <IoHomeOutline className="icon" />
-              )}
-              <span>Home</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="/search"
-              onMouseEnter={() => setHoveredIcon("search")}
-              onMouseLeave={() => setHoveredIcon(null)}
-            >
-              {hoveredIcon === "search" ? (
-                <IoSearchSharp className="icon" />
-              ) : (
-                <IoSearchOutline className="icon" />
-              )}
-              <span>Search</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="/messages"
-              onMouseEnter={() => setHoveredIcon("messages")}
-              onMouseLeave={() => setHoveredIcon(null)}
-            >
-              {hoveredIcon === "messages" ? (
-                <IoChatboxEllipses className="icon" />
-              ) : (
-                <IoChatboxEllipsesOutline className="icon" />
-              )}
-              <span>Messages</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="/profile"
-              onMouseEnter={() => setHoveredIcon("profile")}
-              onMouseLeave={() => setHoveredIcon(null)}
-            >
-              {hoveredIcon === "profile" ? (
-                <IoPersonSharp className="icon" />
-              ) : (
-                <IoPersonOutline className="icon" />
-              )}
-              <span>Profile</span>
-            </a>
-          </li>
+          {NavItems.map(
+            ({
+              path,
+              label,
+              inactiveIcon: InactiveIcon,
+              activeIcon: ActiveIcon,
+            }) => (
+              <NavItem
+                key={path}
+                path={path}
+                label={label}
+                inactiveIcon={InactiveIcon}
+                activeIcon={ActiveIcon}
+                hoveredIcon={hoveredIcon}
+                setHoveredIcon={setHoveredIcon}
+              />
+            )
+          )}
         </ul>
       </div>
-      <div className="logout">
-        <img
-          src="https://via.placeholder.com/150"
-          alt="Profile"
-          className="profile-image"
-        />
-        <div className="profile-info">
-          <h3 className="general-text">Username</h3>
-          <h4 className="general-text">@login</h4>
-        </div>
-        <div
-          onClick={handleLogout}
-          className="logout-icon"
-          onMouseEnter={() => setHoveredIcon("logout")}
-          onMouseLeave={() => setHoveredIcon(null)}
-        >
-          {hoveredIcon === "logout" ? (
-            <IoExit className="exit-icon" />
-          ) : (
-            <IoExitOutline className="exit-icon" />
-          )}
-        </div>
-      </div>
+      <UserProfile
+        handleLogout={handleLogout}
+        setHoveredIcon={setHoveredIcon}
+        hoveredIcon={hoveredIcon}
+      />
     </div>
   );
 }

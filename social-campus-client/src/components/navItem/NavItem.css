@@ -1,0 +1,17 @@
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-size: 20px;
+  color: var(--general-text-color);
+  opacity: 0.5;
+  transition: all 0.3s;
+}
+
+.nav-item a:hover {
+  opacity: 1;
+}
+.nav-item .icon {
+  padding: 10px;
+}
