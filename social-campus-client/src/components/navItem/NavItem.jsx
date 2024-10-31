@@ -11,13 +11,18 @@ function NavItem(props) {
           to={props.path}
           onMouseEnter={() => props.setHoveredIcon(props.label.toLowerCase())}
           onMouseLeave={() => props.setHoveredIcon(null)}
+          className={({ isActive }) => (isActive ? "link active" : "link")}
         >
-          {props.hoveredIcon === props.label.toLowerCase() || props.isActive ? (
-            <props.activeIcon className="icon" />
-          ) : (
-            <props.inactiveIcon className="icon" />
+          {({ isActive }) => (
+            <>
+              {props.hoveredIcon === props.label.toLowerCase() || isActive ? (
+                <props.activeIcon className="icon" />
+              ) : (
+                <props.inactiveIcon className="icon" />
+              )}
+              <span>{props.label}</span>
+            </>
           )}
-          <span>{props.label}</span>
         </NavLink>
       </li>
     </div>
@@ -31,7 +36,6 @@ NavItem.propTypes = {
   path: PropTypes.string.isRequired,
   setHoveredIcon: PropTypes.func.isRequired,
   hoveredIcon: PropTypes.string.isRequired,
-  isActive: PropTypes.bool.isRequired,
 };
 
 export default NavItem;

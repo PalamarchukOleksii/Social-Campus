@@ -10,13 +10,15 @@
   transition: all 0.3s;
 }
 
-.nav-item a:hover {
+.nav-item link:hover {
   opacity: 1;
 }
+
+.nav-item .link.active {
+  opacity: 1;
+}
+
 .nav-item .icon {
-  padding-left: 5px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-right: 5px;
+  padding: 10px 5px;
   font-size: 30px;
 }
