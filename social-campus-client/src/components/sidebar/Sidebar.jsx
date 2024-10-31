@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
 import NavItem from "../navItem/NavItem";
-import UserProfile from "../userProfile/UserProfile";
+import ShortProfile from "../shortProfile/ShortProfile";
 import NavItems from "../../utils/consts/NavItems";
 
 function Sidebar() {
@@ -48,7 +48,7 @@ function Sidebar() {
           )}
         </ul>
       </div>
-      <UserProfile
+      <ShortProfile
         handleLogout={handleLogout}
         setHoveredIcon={setHoveredIcon}
         hoveredIcon={hoveredIcon}

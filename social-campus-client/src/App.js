@@ -17,15 +17,14 @@ import ROUTES from "./utils/consts/Routes";
 function App() {
   const location = useLocation();
 
-  const hideSidebarPaths = [ROUTES.LANDING, ROUTES.SIGN_IN, ROUTES.SIGN_UP];
-  const showSidebar = !hideSidebarPaths.includes(location.pathname);
-  const mainContainerClass = [
-    ROUTES.LANDING,
-    ROUTES.SIGN_IN,
-    ROUTES.SIGN_UP,
-  ].includes(location.pathname)
+  const notAuthorizePages = [ROUTES.LANDING, ROUTES.SIGN_IN, ROUTES.SIGN_UP];
+  const showSidebar = !notAuthorizePages.includes(location.pathname);
+  const mainContainerClass = notAuthorizePages.includes(location.pathname)
     ? "main-full-width"
     : "main-container";
+  const footerContainerClass = notAuthorizePages.includes(location.pathname)
+    ? "footer"
+    : "footer-main";
 
   return (
     <div className="App">
@@ -41,7 +40,7 @@ function App() {
           <Route path={ROUTES.MESSAGES} element={<Messages />} />
         </Routes>
       </div>
-      <div className="footer-container">
+      <div className={footerContainerClass}>
         <Footer />
       </div>
       <ToastContainer progressStyle={{ background: "#3a3a3a" }} />

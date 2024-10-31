@@ -1,19 +1,20 @@
 import React from "react";
 import { IoExit, IoExitOutline } from "react-icons/io5";
-import "./UserProfile.css";
+import "./ShortProfile.css";
 import PropTypes from "prop-types";
+import userData from "../../data/userProfile.json";
 
 function UserProfile(props) {
   return (
     <div className="logout">
       <img
-        src="https://via.placeholder.com/150"
+        src={userData.profileImage}
         alt="Profile"
         className="profile-image"
       />
       <div className="profile-info">
-        <h3 className="general-text">Username</h3>
-        <h4 className="general-text">@login</h4>
+        <h3 className="general-text">{userData.username}</h3>
+        <h4 className="general-text">{userData.login}</h4>
       </div>
       <div
         onClick={props.handleLogout}
