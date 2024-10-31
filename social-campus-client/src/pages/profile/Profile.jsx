@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import "./Profile.css";
 import userData from "../../data/userProfile.json";
 
@@ -19,8 +20,12 @@ function Profile() {
       </div>
       <div className="profile-stats">
         <span>Posts: {userData.postCount}</span>
-        <span>Followers: {userData.followers}</span>
-        <span>Following: {userData.following}</span>
+        <Link to="/followers">
+          <span>Followers: {userData.followers}</span>
+        </Link>
+        <Link to="/following">
+          <span>Following: {userData.following}</span>
+        </Link>
       </div>
       <div className="profile-tweets">
         <h3>Posts</h3>
