@@ -2,7 +2,7 @@ import React from "react";
 import { IoExit, IoExitOutline } from "react-icons/io5";
 import "./ShortProfile.css";
 import PropTypes from "prop-types";
-import userData from "../../data/userProfile.json";
+import userData from "../../data/userData.json";
 
 function UserProfile(props) {
   return (

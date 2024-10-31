@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import "./Profile.css";
-import userData from "../../data/userProfile.json";
+import userData from "../../data/userData.json";
 
 function Profile() {
   return (
