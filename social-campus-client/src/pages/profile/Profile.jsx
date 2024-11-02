@@ -15,24 +15,19 @@ function Profile() {
           alt="Profile"
           className="profile-image"
         />
-        <div className="profile-info">
-          <h2 className="profile-name">{userData.username}</h2>
-          <p className="profile-username">{userData.login}</p>
-          <p className="profile-bio">{userData.bio}</p>
-        </div>
+      </div>
+      <div className="profile-info">
+        <h2 className="profile-name general-text">{userData.username}</h2>
+        <p className="profile-login not-general-text">{userData.login}</p>
+        <p className="profile-bio general-text">{userData.bio}</p>
       </div>
       <div className="profile-stats">
-        <span>Posts: {userData.postCount}</span>
         <Link to="/followers">
-          <span>Followers: {userData.followers}</span>
+          <span>{userData.followers} Followers</span>
         </Link>
         <Link to="/following">
-          <span>Following: {userData.following}</span>
+          <span>{userData.following} Following</span>
         </Link>
-      </div>
-      <div className="profile-tweets">
-        <h3>Posts</h3>
-        <div className="tweet"></div>
       </div>
     </div>
   );
