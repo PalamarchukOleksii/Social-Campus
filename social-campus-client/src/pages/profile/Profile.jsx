@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Profile.css";
 import userData from "../../data/userData.json";
+import PicturePost from "../../components/picturePost/PicturePost";
+import TextPost from "../../components/textPost/TextPost";
+
 
 function Profile() {
   return (

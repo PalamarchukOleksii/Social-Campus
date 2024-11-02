@@ -14,6 +14,9 @@ import FollowersFollowing from "./pages/followersFollowing/FollowersFollowing";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ROUTES from "./utils/consts/Routes";
+import PicturePost from "./components/picturePost/PicturePost";
+import TextPost from "./components/textPost/TextPost";
+
 
 function App() {
   const location = useLocation();
