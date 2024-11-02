@@ -1,12 +1,10 @@
 import React from "react";
-import { IoExit, IoExitOutline } from "react-icons/io5";
 import "./ShortProfile.css";
-import PropTypes from "prop-types";
 import userData from "../../data/userData.json";
 
-function UserProfile(props) {
+function UserProfile() {
   return (
-    <div className="logout">
+    <div className="short-info">
       <img
         src={userData.profileImage}
         alt="Profile"
@@ -14,28 +12,10 @@ function UserProfile(props) {
       />
       <div className="profile-info">
         <h3 className="general-text">{userData.username}</h3>
-        <h4 className="general-text">{userData.login}</h4>
-      </div>
-      <div
-        onClick={props.handleLogout}
-        className="logout-icon"
-        onMouseEnter={() => props.setHoveredIcon("logout")}
-        onMouseLeave={() => props.setHoveredIcon(null)}
-      >
-        {props.hoveredIcon === "logout" ? (
-          <IoExit className="exit-icon" />
-        ) : (
-          <IoExitOutline className="exit-icon" />
-        )}
+        <h4 className="not-general-text">{userData.login}</h4>
       </div>
     </div>
   );
 }
-
-UserProfile.propTypes = {
-  handleLogout: PropTypes.func.isRequired,
-  setHoveredIcon: PropTypes.func.isRequired,
-  hoveredIcon: PropTypes.string.isRequired,
-};
 
 export default UserProfile;

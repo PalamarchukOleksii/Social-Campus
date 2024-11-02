@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 30px;
-  background-color: var(--icon-panel-color);
+  background-color: var(--active-like-color);
   padding: 15px;
   border-radius: 0px;
   position: relative;
