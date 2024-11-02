@@ -1,8 +1,9 @@
-﻿using System.Security.Cryptography;
+﻿using Application.Security;
+using System.Security.Cryptography;
 
 namespace Infrastructure.Security
 {
-    public class PasswordHasher
+    public class PasswordHasher : IPasswordHasher
     {
         private const int SaltSize = 16;
         private const int HashSize = 32;

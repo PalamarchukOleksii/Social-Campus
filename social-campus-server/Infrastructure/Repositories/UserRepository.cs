@@ -1,43 +1,31 @@
-﻿using Domain.Interfaces;
-using Domain.Models.Users;
+﻿using Domain.Models;
+using Domain.Repositories;
 using Infrastructure.Data;
-using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class UserRepository(ApplicationDbContext context, PasswordHasher hasher, JwtProvider jwtProvider) : IUserRepository
+    public class UserRepository(ApplicationDbContext context) : IUserRepository
     {
-        public async Task<User?> GetByIdAsync(UserId id)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
-            return await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return await context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<string> LoginAsync(string email, string password)
+        public async Task<User?> GetUserByLoginAsync(string login)
         {
-            User? user = await context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null || !hasher.Verify(password, user.PasswordHash))
-            {
-                throw new UnauthorizedAccessException("Invalid email or password.");
-            }
-
-            string token = jwtProvider.CreateToken(user);
-
-            return token;
+            return await context.Users.FirstOrDefaultAsync(u => u.Login == login);
         }
 
-        public async Task<User?> RegisterAsync(string login, string password, string email, string firstName, string lastName)
+        public async Task<User?> CreateUserAsync(string login, string passwordHash, string email, string firstName, string lastName)
         {
-            if (await context.Users.AnyAsync(u => u.Email == email))
+            if (await GetUserByEmailAsync(email) is not null || await GetUserByLoginAsync(login) is not null)
             {
-                throw new InvalidOperationException("User with this email already exists.");
+                return default;
             }
 
-            var passwordHash = hasher.Hash(password);
-
-            User user = new User
+            User user = new()
             {
-                Id = new UserId(new Guid()),
                 Login = login,
                 Email = email,
                 FirstName = firstName,
@@ -46,7 +34,6 @@ namespace Infrastructure.Repositories
             };
 
             context.Users.Add(user);
-            await context.SaveChangesAsync();
 
             return user;
         }

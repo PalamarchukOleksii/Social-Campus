@@ -1,8 +1,8 @@
-﻿namespace Domain.Models.Users
+﻿namespace Domain.Models
 {
     public class User
     {
-        public required UserId Id { get; set; }
+        public int Id { get; set; }
         public string Login { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;

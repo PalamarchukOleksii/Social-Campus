@@ -1,4 +1,4 @@
-﻿using Domain.Models.Users;
+﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,7 +11,8 @@ namespace Infrastructure.Configurations
             builder.HasKey(u => u.Id);
 
             builder.Property(u => u.Id)
-                   .IsRequired();
+                   .IsRequired()
+                   .ValueGeneratedOnAdd();
 
             builder.Property(u => u.Login)
                    .IsRequired()

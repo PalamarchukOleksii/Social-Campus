@@ -1,4 +1,5 @@
-﻿using Domain.Models.Users;
+﻿using Application.Security;
+using Domain.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace Infrastructure.Security
 {
-    public class JwtProvider(IConfiguration configuration)
+    public class JwtProvider(IConfiguration configuration) : IJwtProvider
     {
         public string CreateToken(User user)
         {

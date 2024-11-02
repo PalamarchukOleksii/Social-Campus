@@ -1,4 +1,6 @@
-﻿using Domain.Interfaces;
+﻿using Application.Data;
+using Application.Security;
+using Domain.Repositories;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Security;
@@ -30,12 +32,15 @@ namespace Infrastructure
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!)),
+                    ClockSkew = TimeSpan.Zero
                 });
 
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddSingleton<PasswordHasher>();
-            services.AddSingleton<JwtProvider>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddSingleton<IPasswordHasher, PasswordHasher>();
+            services.AddSingleton<IJwtProvider, JwtProvider>();
 
             return services;
         }
