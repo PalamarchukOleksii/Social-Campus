@@ -1,52 +1,57 @@
 .profile {
-  max-width: 600px;
-  margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-family: Arial, sans-serif;
+  margin: 10px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .profile-header {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  background-color: #6a687e;
-  padding: 10px;
-  border-radius: 8px;
+  margin-bottom: 30px;
+  background-color: var(--icon-panel-color);
+  padding: 15px;
+  border-radius: 0px;
+  position: relative;
+  height: 120px;
 }
 
-.profile-image {
-  width: 60px;
-  height: 60px;
+.profile-header .profile-image {
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  margin-right: 15px;
+  position: absolute;
+  top: 80px;
+  left: 20px;
+  border: 5px solid #ffffff;
+  background-color: #ffffff;
 }
 
 .profile-info {
   display: flex;
   flex-direction: column;
-  color: #ccc;
+  padding: 20px;
 }
 
 .profile-name {
-  font-size: 1.5em;
+  font-size: 30px;
   margin: 0;
 }
 
-.profile-username {
-  color: #ccc;
+.profile-login {
+  padding-top: 5px;
   margin: 0;
 }
 
 .profile-bio {
-  margin: 5px 0;
+  margin: 0;
+  padding-top: 20px;
 }
 
 .profile-stats {
   display: flex;
-  justify-content: space-around;
-  margin: 20px 0;
-  color: #ccc;
+  justify-content: flex-start;
+  gap: 20px;
   font-weight: bold;
+  padding: 0 20px;
 }
