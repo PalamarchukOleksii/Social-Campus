@@ -1,63 +1,57 @@
 .profile {
-  max-width: 1100px; /* Увеличиваем ширину профиля */
-  margin: 0 20px 0 5px; /* Добавляем отступ слева для бокового меню */
   padding: 20px;
-  font-family: Arial, sans-serif;
-  border-radius: 0px; /* Закругленные углы */
-  background-color: #ffffff; /* Белый фон для блока профиля */
-  position: relative; /* Для позиционирования аватарки */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Добавляем легкую тень для визуального эффекта */
+  margin: 10px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .profile-header {
   display: flex;
   align-items: center;
   margin-bottom: 30px;
-  background-color: #6a687e; /* Тёмно-фиолетовый цвет для блока заголовка */
-  padding: 15px; /* Увеличенный внутренний отступ */
-  border-radius: 0px; /* Закругленные углы */
-  position: relative; /* Для позиционирования аватарки */
-  height: 120px; /* Фиксированная высота для заголовка */
+  background-color: var(--icon-panel-color);
+  padding: 15px;
+  border-radius: 0px;
+  position: relative;
+  height: 120px;
 }
 
-.profile-image {
-  width: 100px; /* Увеличенный размер изображения профиля */
+.profile-header .profile-image {
+  width: 100px;
   height: 100px;
   border-radius: 50%;
-  position: absolute; /* Абсолютное позиционирование для пересечения блоков */
-  top: 80px; /* Позиционируем аватарку ниже заголовка */
-  left: 20px; /* Отступ слева */
-  border: 5px solid #ffffff; /* Белая обводка для лучшего визуального разделения */
-  background-color: #ffffff; /* Фон аватарки */
+  position: absolute;
+  top: 80px;
+  left: 20px;
+  border: 5px solid #ffffff;
+  background-color: #ffffff;
 }
 
 .profile-info {
   display: flex;
   flex-direction: column;
-  color: #ccc; /* Цвет текста в блоке */
-  margin-left: 140px; /* Отступ слева, чтобы не накладываться на аватарку */
-  padding-top: 20px; /* Дополнительный отступ сверху для визуальной гармонии */
+  padding: 20px;
 }
 
 .profile-name {
-  font-size: 1.8em; /* Увеличенный размер шрифта имени */
+  font-size: 30px;
   margin: 0;
 }
 
-.profile-username {
-  color: #ccc;
-  margin: 5px 0 0 0; /* Добавляем отступ сверху */
+.profile-login {
+  padding-top: 5px;
+  margin: 0;
 }
 
 .profile-bio {
-  margin: 10px 0; /* Увеличенные отступы сверху и снизу */
+  margin: 0;
+  padding-top: 20px;
 }
 
 .profile-stats {
   display: flex;
-  justify-content: space-between; /* Равномерное распределение элементов */
-  margin-top: 60px; /* Увеличенный отступ сверху для опускания блока */
-  color: #ccc; /* Цвет текста */
+  justify-content: flex-start;
+  gap: 20px;
   font-weight: bold;
-  padding: 0 20px; /* Боковые отступы для выравнивания */
+  padding: 0 20px;
 }
