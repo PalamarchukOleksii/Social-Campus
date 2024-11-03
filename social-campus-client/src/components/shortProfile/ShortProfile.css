@@ -1,32 +1,21 @@
-.logout {
+.short-info {
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  bottom: 40px;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-.logout * {
+.short-info * {
   margin: 0;
+  padding: 0;
 }
 
-.logout .profile-image {
+.short-info .profile-info {
+  padding: 0;
+}
+
+.short-info .profile-image {
   height: 50px;
   width: 50px;
-}
-
-.exit-icon {
-  opacity: 0.5;
-  font-size: 30px;
-  transition: all 0.3s;
-}
-
-.exit-icon:hover {
-  opacity: 1;
 }

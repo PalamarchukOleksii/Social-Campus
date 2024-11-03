@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
+import { IoExit, IoExitOutline } from "react-icons/io5";
 import NavItem from "../navItem/NavItem";
 import ShortProfile from "../shortProfile/ShortProfile";
 import NavItems from "../../utils/consts/NavItems";
@@ -50,11 +51,25 @@ function Sidebar() {
           )}
         </ul>
       </div>
-      <ShortProfile
-        handleLogout={handleLogout}
-        setHoveredIcon={setHoveredIcon}
-        hoveredIcon={hoveredIcon}
-      />
+      <div className="logout">
+        <ShortProfile
+          handleLogout={handleLogout}
+          setHoveredIcon={setHoveredIcon}
+          hoveredIcon={hoveredIcon}
+        />
+        <div
+          onClick={handleLogout}
+          className="logout-icon"
+          onMouseEnter={() => setHoveredIcon("logout")}
+          onMouseLeave={() => setHoveredIcon(null)}
+        >
+          {hoveredIcon === "logout" ? (
+            <IoExit className="exit-icon" />
+          ) : (
+            <IoExitOutline className="exit-icon" />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
