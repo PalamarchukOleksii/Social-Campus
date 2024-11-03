@@ -10,7 +10,7 @@ function NavItem(props) {
         <NavLink
           to={props.path}
           onMouseEnter={() => props.setHoveredIcon(props.label.toLowerCase())}
-          onMouseLeave={() => props.setHoveredIcon(null)}
+          onMouseLeave={() => props.setHoveredIcon("")}
           className={({ isActive }) => (isActive ? "link active" : "link")}
         >
           {({ isActive }) => (
