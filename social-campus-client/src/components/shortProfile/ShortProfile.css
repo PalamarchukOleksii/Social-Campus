@@ -11,6 +11,10 @@
   padding: 0;
 }
 
+.short-info .profile-info {
+  padding: 0;
+}
+
 .short-info .profile-image {
   height: 50px;
   width: 50px;
