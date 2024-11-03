@@ -81,7 +81,8 @@ The target audience includes students, young people, and university staff aged 1
 6. Start the backend server:
 
    ```bash
-   dotnet run
+   cd Presentation
+   dotnet watch run
    ```
 
 7. Start the frontend server:
