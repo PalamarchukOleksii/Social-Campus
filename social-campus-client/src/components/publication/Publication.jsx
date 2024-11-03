@@ -9,7 +9,11 @@ function Publication(props) {
   return (
     <div className="publication-container">
       <div className="short-info-container">
-        <ShortProfile />
+        <ShortProfile
+          username={props.username}
+          login={props.login}
+          profileImage={props.profileImage}
+        />
         <h4 className="creation-time not-general-text">
           {props.creationTime || "Time of creation"}
         </h4>
@@ -43,6 +47,9 @@ Publication.propTypes = {
   creationTime: PropTypes.string.isRequired,
   likesCount: PropTypes.number.isRequired,
   commentsCount: PropTypes.number.isRequired,
+  profileImage: PropTypes.string,
+  username: PropTypes.string.isRequired,
+  login: PropTypes.string.isRequired,
 };
 
 export default Publication;

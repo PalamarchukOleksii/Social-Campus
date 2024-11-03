@@ -6,6 +6,8 @@ import NavItem from "../navItem/NavItem";
 import ShortProfile from "../shortProfile/ShortProfile";
 import NavItems from "../../utils/consts/NavItems";
 
+import userData from "../../data/userData.json";
+
 function Sidebar() {
   const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState("");
@@ -53,15 +55,15 @@ function Sidebar() {
       </div>
       <div className="logout">
         <ShortProfile
-          handleLogout={handleLogout}
-          setHoveredIcon={setHoveredIcon}
-          hoveredIcon={hoveredIcon}
+          username={userData.username}
+          login={userData.login}
+          profileImage={userData.profileImage}
         />
         <div
           onClick={handleLogout}
           className="logout-icon"
           onMouseEnter={() => setHoveredIcon("logout")}
-          onMouseLeave={() => setHoveredIcon(null)}
+          onMouseLeave={() => setHoveredIcon("")}
         >
           {hoveredIcon === "logout" ? (
             <IoExit className="exit-icon" />
