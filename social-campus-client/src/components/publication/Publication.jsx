@@ -18,12 +18,15 @@ function Publication(props) {
         <h2 className="description general-text">
           {props.description || "Description"}
         </h2>
-        {props.imageUrl && <img src={props.imageUrl} alt="Publication" />}
+        <div className="image-wrapper">
+          {props.imageUrl && <img src={props.imageUrl} alt="Publication" />}
+        </div>
       </div>
       <div className="interaction-stat">
         <InteractionItem
           label={props.likesCount}
           icon={InteractionItems.likeIcon}
+          activeIcon={InteractionItems.activeLikeIcon}
         />
         <InteractionItem
           label={props.commentsCount}

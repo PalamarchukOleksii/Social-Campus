@@ -43,6 +43,7 @@
   opacity: 0.5;
   font-size: 30px;
   transition: all 0.3s;
+  color: var(--general-text-color);
 }
 
 .exit-icon:hover {

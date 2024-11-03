@@ -18,7 +18,7 @@ body {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 55px);
-  width: calc(100% - 520px);
+  width: calc(100% - 260px);
 }
 
 .main-full-width {
@@ -28,7 +28,7 @@ body {
 }
 
 .footer-main {
-  width: calc(100% - 520px);
+  width: calc(100% - 260px);
   position: relative;
   left: 260px;
   text-align: center;
