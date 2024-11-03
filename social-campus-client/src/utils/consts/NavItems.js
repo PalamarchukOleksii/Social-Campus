@@ -1,12 +1,12 @@
 import {
   IoHomeOutline,
   IoSearchOutline,
-  IoChatboxEllipsesOutline,
+  IoMailOutline,
   IoPersonOutline,
-  IoHomeSharp,
-  IoSearchSharp,
-  IoChatboxEllipses,
-  IoPersonSharp,
+  IoHome,
+  IoSearch,
+  IoMail,
+  IoPerson,
 } from "react-icons/io5";
 
 const NavItems = [
@@ -14,25 +14,25 @@ const NavItems = [
     path: "/home",
     label: "Home",
     inactiveIcon: IoHomeOutline,
-    activeIcon: IoHomeSharp,
+    activeIcon: IoHome,
   },
   {
     path: "/search",
     label: "Search",
     inactiveIcon: IoSearchOutline,
-    activeIcon: IoSearchSharp,
+    activeIcon: IoSearch,
   },
   {
     path: "/messages",
     label: "Messages",
-    inactiveIcon: IoChatboxEllipsesOutline,
-    activeIcon: IoChatboxEllipses,
+    inactiveIcon: IoMailOutline,
+    activeIcon: IoMail,
   },
   {
     path: "/profile",
     label: "Profile",
     inactiveIcon: IoPersonOutline,
-    activeIcon: IoPersonSharp,
+    activeIcon: IoPerson,
   },
 ];
 
