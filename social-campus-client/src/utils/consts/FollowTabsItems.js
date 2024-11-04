@@ -9,12 +9,12 @@ const FollowTabsItems = [
     activeIcon: IoArrowBackCircle,
   },
   {
-    path: `${ROUTES.FOLLOWING}`,
-    label: "Following",
-  },
-  {
     path: `${ROUTES.FOLLOWERS}`,
     label: "Followers",
+  },
+  {
+    path: `${ROUTES.FOLLOWING}`,
+    label: "Following",
   },
 ];
 
