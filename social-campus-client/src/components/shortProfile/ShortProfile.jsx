@@ -1,21 +1,27 @@
 import React from "react";
+import PropTypes from "prop-types";
 import "./ShortProfile.css";
-import userData from "../../data/userData.json";
 
-function UserProfile() {
+function ShortProfile(props) {
   return (
     <div className="short-info">
       <img
-        src={userData.profileImage}
+        src={props.profileImage || "/default-profile.png"}
         alt="Profile"
         className="profile-image"
       />
       <div className="profile-info">
-        <h3 className="general-text">{userData.username}</h3>
-        <h4 className="not-general-text">{userData.login}</h4>
+        <h3 className="general-text">{props.username}</h3>
+        <h4 className="not-general-text">{props.login}</h4>
       </div>
     </div>
   );
 }
 
-export default UserProfile;
+ShortProfile.propTypes = {
+  profileImage: PropTypes.string,
+  username: PropTypes.string.isRequired,
+  login: PropTypes.string.isRequired,
+};
+
+export default ShortProfile;

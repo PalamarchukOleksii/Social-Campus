@@ -1,0 +1,56 @@
+[
+  {
+    "id": "12346",
+    "email": "janesmith@example.com",
+    "username": "Jane Smith",
+    "login": "@janesmith",
+    "bio": "Graphic designer and illustrator who loves creating digital art.",
+    "profileImage": "/default-profile.png",
+    "isFollowing": true
+  },
+  {
+    "id": "12347",
+    "email": "mikejohnson@example.com",
+    "username": "Mike Johnson",
+    "login": "@mikejohnson",
+    "bio": "Freelance photographer and travel enthusiast.",
+    "profileImage": "/default-profile.png",
+    "isFollowing": false
+  },
+  {
+    "id": "12348",
+    "email": "sarabrown@example.com",
+    "username": "Sara Brown",
+    "login": "@sarabrown",
+    "bio": "Content writer and social media strategist.",
+    "profileImage": "/default-profile.png",
+    "isFollowing": true
+  },
+  {
+    "id": "12349",
+    "email": "davismiller@example.com",
+    "username": "Davis Miller",
+    "login": "@davismiller",
+    "bio": "Full-stack developer with a love for tech startups.",
+    "profileImage": "/default-profile.png",
+    "isFollowing": true
+  },
+  {
+    "id": "12350",
+    "email": "emilyclark@example.com",
+    "username": "Emily Clark",
+    "login": "@emilyclark",
+    "bio": "Marketing specialist with a passion for branding and storytelling.",
+    "profileImage": "/default-profile.png",
+    "isFollowing": false
+  },
+  {
+    "id": "12351",
+    "email": "robertbrown@example.com",
+    "username": "Robert Brown",
+    "login": "@robertbrown",
+    "bio": "Software engineer and open-source advocate.",
+    "profileImage": "/default-profile.png",
+    "isFollowing": true
+  }
+]

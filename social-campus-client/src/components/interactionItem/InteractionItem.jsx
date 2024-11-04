@@ -30,7 +30,7 @@ function InteractionItem(props) {
 }
 
 InteractionItem.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.number.isRequired,
   icon: PropTypes.elementType.isRequired,
   activeIcon: PropTypes.elementType,
 };

@@ -1,5 +1,5 @@
 .wraper {
-  width: 700px;
+  width: 100%;
 }
 
 .profile {
@@ -8,7 +8,7 @@
   position: relative;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  width: 100%;
+  width: calc(100% - 60px);
 }
 
 .profile-header {

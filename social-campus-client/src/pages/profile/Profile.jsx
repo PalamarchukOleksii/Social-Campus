@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./Profile.css";
 import userData from "../../data/userData.json";
 import Publication from "../../components/publication/Publication";
+import ROUTES from "../../utils/consts/Routes";
 
 function Profile() {
   return (
@@ -21,10 +22,10 @@ function Profile() {
           <p className="profile-bio general-text">{userData.bio}</p>
         </div>
         <div className="profile-stats">
-          <Link to="/followers">
+          <Link to={ROUTES.FOLLOWERS}>
             <span>{userData.followers} Followers</span>
           </Link>
-          <Link to="/following">
+          <Link to={ROUTES.FOLLOWING}>
             <span>{userData.following} Following</span>
           </Link>
         </div>
@@ -38,6 +39,9 @@ function Profile() {
             creationTime={publication.creationTime}
             likesCount={publication.likesCount}
             commentsCount={publication.commentsCount}
+            username={userData.username}
+            login={userData.login}
+            profileImage={userData.profileImage}
           />
         ))}
       </div>
