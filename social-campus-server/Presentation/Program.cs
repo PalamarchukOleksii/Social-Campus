@@ -4,7 +4,6 @@ using Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services
     .AddPresentation()
     .AddInfrastructure(builder.Configuration)
@@ -25,4 +24,4 @@ app.UseAuthentication();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
