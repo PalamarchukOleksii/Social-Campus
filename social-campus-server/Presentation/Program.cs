@@ -1,14 +1,12 @@
 using Application;
 using Infrastructure;
-using Presentation.Extensions;
+using Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGenWithAuth();
 
 builder.Services
+    .AddPresentation()
     .AddInfrastructure(builder.Configuration)
     .AddApplication();
 

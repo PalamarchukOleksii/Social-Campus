@@ -6,6 +6,6 @@ namespace Application.Users.Commands.RegisterUserCommand
         string Login,
         string FirstName,
         string LastName,
-        string Email, string
-        Password) : IRequest<RegisterUserCommandResponse>;
+        string Email,
+        string Password) : IRequest;
 }

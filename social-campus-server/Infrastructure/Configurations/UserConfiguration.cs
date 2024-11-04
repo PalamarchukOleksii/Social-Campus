@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,27 +11,34 @@ namespace Infrastructure.Configurations
             builder.HasKey(u => u.Id);
 
             builder.Property(u => u.Id)
-                   .IsRequired()
-                   .ValueGeneratedOnAdd();
+                .IsRequired()
+                .ValueGeneratedOnAdd();
 
             builder.Property(u => u.Login)
-                   .IsRequired()
-                   .HasMaxLength(50);
+                .IsRequired()
+                .HasMaxLength(50);
 
             builder.Property(u => u.Email)
-                   .IsRequired()
-                   .HasMaxLength(100);
+                .IsRequired()
+                .HasMaxLength(100);
 
             builder.Property(u => u.FirstName)
-                   .IsRequired()
-                   .HasMaxLength(50);
+                .IsRequired()
+                .HasMaxLength(50);
 
             builder.Property(u => u.LastName)
-                   .IsRequired()
-                   .HasMaxLength(50);
+                .IsRequired()
+                .HasMaxLength(50);
 
             builder.HasIndex(u => u.Email)
-                   .IsUnique();
+                .IsUnique();
+
+            builder.HasIndex(u => u.Login)
+                .IsUnique();
+
+            builder.HasOne(u => u.RefreshToken)
+                .WithOne(rt => rt.User)
+                .HasForeignKey<User>(rt => rt.RefreshTokenId);
         }
     }
 }
