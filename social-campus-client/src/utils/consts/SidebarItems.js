@@ -9,7 +9,7 @@ import {
   IoPerson,
 } from "react-icons/io5";
 
-const NavItems = [
+const SidebarItems = [
   {
     path: "/home",
     label: "Home",
@@ -36,4 +36,4 @@ const NavItems = [
   },
 ];
 
-export default NavItems;
+export default SidebarItems;
