@@ -1,4 +1,4 @@
-import { IoArrowBackCircleOutline, IoArrowBackCircle } from "react-icons/io5"; // Import your icon components
+import { IoArrowBackCircleOutline, IoArrowBackCircle } from "react-icons/io5";
 import ROUTES from "./Routes";
 
 const FollowTabsItems = [
