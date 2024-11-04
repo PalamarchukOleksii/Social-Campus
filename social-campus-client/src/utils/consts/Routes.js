@@ -6,6 +6,8 @@ const ROUTES = {
   SEARCH: "/search",
   PROFILE: "/profile",
   MESSAGES: "/messages",
+  FOLLOWERS: "/profile/followers",
+  FOLLOWING: "/profile/following",
 };
 
 export default ROUTES;

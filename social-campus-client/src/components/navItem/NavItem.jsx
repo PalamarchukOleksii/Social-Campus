@@ -6,33 +6,34 @@ import { NavLink } from "react-router-dom";
 function NavItem(props) {
   return (
     <div className="nav-item">
-      <li>
-        <NavLink
-          to={props.path}
-          onMouseEnter={() => props.setHoveredIcon(props.label.toLowerCase())}
-          onMouseLeave={() => props.setHoveredIcon(null)}
-          className={({ isActive }) => (isActive ? "link active" : "link")}
-        >
-          {({ isActive }) => (
-            <>
-              {props.hoveredIcon === props.label.toLowerCase() || isActive ? (
+      <NavLink
+        to={props.path}
+        end
+        onMouseEnter={() => props.setHoveredIcon(props.label.toLowerCase())}
+        onMouseLeave={() => props.setHoveredIcon("")}
+        className={({ isActive }) => (isActive ? "link active" : "link")}
+      >
+        {({ isActive }) => (
+          <>
+            {props.hoveredIcon === props.label.toLowerCase() || isActive ? (
+              props.activeIcon ? (
                 <props.activeIcon className="icon" />
-              ) : (
-                <props.inactiveIcon className="icon" />
-              )}
-              <span>{props.label}</span>
-            </>
-          )}
-        </NavLink>
-      </li>
+              ) : null
+            ) : props.inactiveIcon ? (
+              <props.inactiveIcon className="icon" />
+            ) : null}
+            {props.label && <span>{props.label}</span>}
+          </>
+        )}
+      </NavLink>
     </div>
   );
 }
 
 NavItem.propTypes = {
-  activeIcon: PropTypes.elementType.isRequired,
-  inactiveIcon: PropTypes.elementType.isRequired,
-  label: PropTypes.string.isRequired,
+  activeIcon: PropTypes.elementType,
+  inactiveIcon: PropTypes.elementType,
+  label: PropTypes.string,
   path: PropTypes.string.isRequired,
   setHoveredIcon: PropTypes.func.isRequired,
   hoveredIcon: PropTypes.string.isRequired,

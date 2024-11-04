@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { IoExit, IoExitOutline } from "react-icons/io5";
 import NavItem from "../navItem/NavItem";
 import ShortProfile from "../shortProfile/ShortProfile";
-import NavItems from "../../utils/consts/NavItems";
+import SidebarItems from "../../utils/consts/SidebarItems";
+
+import userData from "../../data/userData.json";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -29,7 +31,7 @@ function Sidebar() {
       </div>
       <div className="navigation">
         <ul>
-          {NavItems.map(
+          {SidebarItems.map(
             ({
               path,
               label,
@@ -37,15 +39,16 @@ function Sidebar() {
               activeIcon: ActiveIcon,
             }) => {
               return (
-                <NavItem
-                  key={path}
-                  path={path}
-                  label={label}
-                  inactiveIcon={InactiveIcon}
-                  activeIcon={ActiveIcon}
-                  hoveredIcon={hoveredIcon}
-                  setHoveredIcon={setHoveredIcon}
-                />
+                <li key={path}>
+                  <NavItem
+                    path={path}
+                    label={label}
+                    inactiveIcon={InactiveIcon}
+                    activeIcon={ActiveIcon}
+                    hoveredIcon={hoveredIcon}
+                    setHoveredIcon={setHoveredIcon}
+                  />
+                </li>
               );
             }
           )}
@@ -53,15 +56,15 @@ function Sidebar() {
       </div>
       <div className="logout">
         <ShortProfile
-          handleLogout={handleLogout}
-          setHoveredIcon={setHoveredIcon}
-          hoveredIcon={hoveredIcon}
+          username={userData.username}
+          login={userData.login}
+          profileImage={userData.profileImage}
         />
         <div
           onClick={handleLogout}
           className="logout-icon"
           onMouseEnter={() => setHoveredIcon("logout")}
-          onMouseLeave={() => setHoveredIcon(null)}
+          onMouseLeave={() => setHoveredIcon("")}
         >
           {hoveredIcon === "logout" ? (
             <IoExit className="exit-icon" />
