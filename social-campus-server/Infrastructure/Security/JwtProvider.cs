@@ -28,9 +28,9 @@ namespace Infrastructure.Security
         public async Task<ClaimsPrincipal> GetPrincipalFromExpiredTokenAsync(string token)
         {
             string secretKey = configuration["Jwt:SecretKey"]!;
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(secretKey));
 
-            TokenValidationParameters tokenValidationParameters = new TokenValidationParameters
+            TokenValidationParameters tokenValidationParameters = new()
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
@@ -42,7 +42,7 @@ namespace Infrastructure.Security
                 ClockSkew = TimeSpan.Zero
             };
 
-            JsonWebTokenHandler handler = new JsonWebTokenHandler();
+            JsonWebTokenHandler handler = new();
             TokenValidationResult result = await handler.ValidateTokenAsync(token, tokenValidationParameters);
 
             if (!result.IsValid)
@@ -56,11 +56,11 @@ namespace Infrastructure.Security
         private string GenerateAccessToken(User user)
         {
             string secretKey = configuration["Jwt:SecretKey"]!;
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(secretKey));
 
-            SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512);
+            SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha512);
 
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            SecurityTokenDescriptor tokenDescriptor = new()
             {
                 Subject = new ClaimsIdentity(
                 [
@@ -74,12 +74,12 @@ namespace Infrastructure.Security
                 Audience = configuration["Jwt:Audience"]
             };
 
-            JsonWebTokenHandler handler = new JsonWebTokenHandler();
+            JsonWebTokenHandler handler = new();
             string token = handler.CreateToken(tokenDescriptor);
 
             return token;
         }
-        private string GenerateRefreshToken()
+        private static string GenerateRefreshToken()
         {
             byte[] randomNumber = new byte[128];
             using var rng = RandomNumberGenerator.Create();

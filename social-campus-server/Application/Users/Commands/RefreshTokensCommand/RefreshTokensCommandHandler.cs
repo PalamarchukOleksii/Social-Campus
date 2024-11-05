@@ -18,7 +18,7 @@ namespace Application.Users.Commands.RefreshTokensCommand
         {
             ClaimsPrincipal principal = await jwtProvider.GetPrincipalFromExpiredTokenAsync(request.AccessToken);
             string? email = principal.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
-            if (principal == null || email == null)
+            if (email == null)
             {
                 return new RefreshTokensCommandResponse(
                     IsSuccess: false,
