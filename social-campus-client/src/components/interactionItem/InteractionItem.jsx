@@ -3,19 +3,21 @@ import PropTypes from "prop-types";
 import "./InteractionItem.css";
 
 function InteractionItem(props) {
-  const [isFavorited, setIsFavorited] = useState(false);
-  const [likesCount, setLikesCount] = useState(props.label);
+  const [isActive, setIsActive] = useState(false);
+  const [count, setCount] = useState(props.label);
 
-  const toggleFavorite = props.activeIcon
-    ? () => {
-        setIsFavorited((prev) => !prev);
-        setLikesCount((prev) => (isFavorited ? prev - 1 : prev + 1));
-      }
-    : undefined;
+  const handleClick = () => {
+    setIsActive((prev) => !prev);
+    setCount((prev) => (isActive ? prev - 1 : prev + 1));
+
+    if (props.onClick) {
+      props.onClick();
+    }
+  };
 
   return (
-    <div className="interaction-item" onClick={toggleFavorite}>
-      {isFavorited ? (
+    <div className="interaction-item" onClick={handleClick}>
+      {isActive ? (
         props.activeIcon ? (
           <props.activeIcon className="icon" />
         ) : (
@@ -24,7 +26,7 @@ function InteractionItem(props) {
       ) : (
         <props.icon className="icon" />
       )}
-      <span className="stat">{likesCount}</span>
+      <span className="stat">{count}</span>
     </div>
   );
 }
@@ -33,6 +35,7 @@ InteractionItem.propTypes = {
   label: PropTypes.number.isRequired,
   icon: PropTypes.elementType.isRequired,
   activeIcon: PropTypes.elementType,
+  onClick: PropTypes.func,
 };
 
 export default InteractionItem;

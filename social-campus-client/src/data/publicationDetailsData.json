@@ -1,0 +1,39 @@
+{
+  "publication": {
+    "id": 1,
+    "description": "Exploring the beauty of nature in autumn.",
+    "imageUrl": "https://example.com/image.jpg",
+    "creationTime": "2023-11-01T10:30:00Z",
+    "username": "nature_lover",
+    "login": "nature_lover",
+    "profileImage": "https://example.com/profile.jpg",
+    "likesCount": 120,
+    "commentsCount": 3
+  },
+  "comments": [
+    {
+      "username": "wanderlust_jane",
+      "login": "wanderlust_jane",
+      "profileImage": "https://example.com/user1.jpg",
+      "text": "Absolutely stunning! Autumn is my favorite season.",
+      "likeCount": 15,
+      "creationTime": "2023-11-01T12:45:00Z"
+    },
+    {
+      "username": "photo_guy",
+      "login": "photo_guy",
+      "profileImage": "https://example.com/user2.jpg",
+      "text": "Great shot! The colors are vibrant.",
+      "likeCount": 20,
+      "creationTime": "2023-11-01T13:10:00Z"
+    },
+    {
+      "username": "nature_fan",
+      "login": "nature_fan",
+      "profileImage": "https://example.com/user3.jpg",
+      "text": "Where was this taken? The landscape is incredible!",
+      "likeCount": 8,
+      "creationTime": "2023-11-01T14:00:00Z"
+    }
+  ]
+}
