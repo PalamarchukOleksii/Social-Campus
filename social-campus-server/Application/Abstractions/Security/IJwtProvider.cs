@@ -2,7 +2,7 @@
 using Domain.Models;
 using System.Security.Claims;
 
-namespace Application.Security
+namespace Application.Abstractions.Security
 {
     public interface IJwtProvider
     {

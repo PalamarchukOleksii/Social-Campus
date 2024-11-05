@@ -1,6 +1,6 @@
-﻿using Application.Data;
+﻿using Application.Abstractions.Data;
+using Domain.Abstractions.Repositories;
 using Domain.Entities;
-using Domain.Repositories;
 using MediatR;
 
 namespace Application.RefreshTokens.Commands.RevokeCommand

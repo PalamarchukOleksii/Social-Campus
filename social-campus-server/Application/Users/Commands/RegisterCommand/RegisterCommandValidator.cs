@@ -1,4 +1,4 @@
-﻿using Domain.Repositories;
+﻿using Domain.Abstractions.Repositories;
 using FluentValidation;
 
 namespace Application.Users.Commands.RegisterCommand

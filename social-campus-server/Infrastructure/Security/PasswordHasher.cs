@@ -1,4 +1,4 @@
-﻿using Application.Security;
+﻿using Application.Abstractions.Security;
 using System.Security.Cryptography;
 
 namespace Infrastructure.Security

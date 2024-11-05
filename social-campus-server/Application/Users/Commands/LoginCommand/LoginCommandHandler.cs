@@ -1,8 +1,8 @@
-﻿using Application.Data;
-using Application.Security;
+﻿using Application.Abstractions.Data;
+using Application.Abstractions.Security;
+using Domain.Abstractions.Repositories;
 using Domain.Entities;
 using Domain.Models;
-using Domain.Repositories;
 using MediatR;
 
 namespace Application.Users.Commands.LoginCommand

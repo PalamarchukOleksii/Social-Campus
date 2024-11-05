@@ -1,4 +1,4 @@
-﻿using Application.Security;
+﻿using Application.Abstractions.Security;
 using Domain.Entities;
 using Domain.Models;
 using Microsoft.Extensions.Configuration;

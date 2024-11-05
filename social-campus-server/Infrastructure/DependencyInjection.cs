@@ -1,6 +1,6 @@
-﻿using Application.Data;
-using Application.Security;
-using Domain.Repositories;
+﻿using Application.Abstractions.Data;
+using Application.Abstractions.Security;
+using Domain.Abstractions.Repositories;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Security;
