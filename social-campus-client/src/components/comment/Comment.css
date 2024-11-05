@@ -1,0 +1,25 @@
+.comment-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.comment-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-text {
+  font-size: 18px;
+  color: var(--general-text-color);
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+.comment-interactions {
+  margin-top: 5px;
+}
