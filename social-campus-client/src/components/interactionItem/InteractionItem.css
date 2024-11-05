@@ -18,3 +18,7 @@
 .interaction-item .icon {
   font-size: 25px;
 }
+
+.interaction-item .active {
+  opacity: 1;
+}

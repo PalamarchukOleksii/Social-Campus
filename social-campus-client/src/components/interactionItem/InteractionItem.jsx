@@ -17,7 +17,7 @@ function InteractionItem(props) {
     <div className="interaction-item" onClick={toggleFavorite}>
       {isFavorited ? (
         props.activeIcon ? (
-          <props.activeIcon className="icon" />
+          <props.activeIcon className="active icon" />
         ) : (
           <props.icon className="icon" />
         )
