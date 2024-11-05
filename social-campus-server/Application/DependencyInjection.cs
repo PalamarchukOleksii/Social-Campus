@@ -1,4 +1,4 @@
-﻿using Application.Users.Commands.RegisterUserCommand;
+﻿using Application.Users.Commands.RegisterCommand;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,7 +9,7 @@ namespace Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
-            services.AddValidatorsFromAssemblyContaining<RegisterUserCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<RegisterCommandValidator>();
 
             return services;
         }

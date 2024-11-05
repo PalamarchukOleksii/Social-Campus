@@ -5,21 +5,21 @@ using Domain.Models;
 using Domain.Repositories;
 using MediatR;
 
-namespace Application.Users.Commands.LoginUserCommand
+namespace Application.Users.Commands.LoginCommand
 {
-    public class LoginUserCommandHandler(
+    public class LoginCommandHandler(
         IJwtProvider jwtProvider,
         IUserRepository userRepository,
         IRefreshTokenRepository tokenRepository,
         IPasswordHasher passwordHasher,
-        IUnitOfWork unitOfWork) : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
+        IUnitOfWork unitOfWork) : IRequestHandler<LoginCommandRequest, LoginCommandResponse>
     {
-        public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
+        public async Task<LoginCommandResponse> Handle(LoginCommandRequest request, CancellationToken cancellationToken)
         {
             User? user = await userRepository.GetByEmailAsync(request.Email);
             if (user is null)
             {
-                return new LoginUserCommandResponse(
+                return new LoginCommandResponse(
                     IsSuccess: false,
                     AccessToken: default,
                     RefreshToken: default,
@@ -30,7 +30,7 @@ namespace Application.Users.Commands.LoginUserCommand
             bool isPasswordValid = passwordHasher.Verify(request.Password, user.PasswordHash);
             if (!isPasswordValid)
             {
-                return new LoginUserCommandResponse(
+                return new LoginCommandResponse(
                     IsSuccess: false,
                     AccessToken: default,
                     RefreshToken: default,
@@ -52,7 +52,7 @@ namespace Application.Users.Commands.LoginUserCommand
 
             await unitOfWork.SaveChangesAsync();
 
-            return new LoginUserCommandResponse
+            return new LoginCommandResponse
             (
                 IsSuccess: true,
                 AccessToken: tokens.AccessToken,

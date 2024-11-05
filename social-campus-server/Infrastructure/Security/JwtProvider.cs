@@ -79,6 +79,7 @@ namespace Infrastructure.Security
 
             return token;
         }
+
         private static string GenerateRefreshToken()
         {
             byte[] randomNumber = new byte[128];

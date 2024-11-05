@@ -26,5 +26,10 @@ namespace Infrastructure.Repositories
         {
             return await context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
+
+        public async Task<User?> GetByRefreshTokenIdAsync(int refreshTokenId)
+        {
+            return await context.Users.FirstOrDefaultAsync(u => u.RefreshTokenId == refreshTokenId);
+        }
     }
 }

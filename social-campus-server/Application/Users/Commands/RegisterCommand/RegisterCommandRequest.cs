@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
-namespace Application.Users.Commands.RegisterUserCommand
+namespace Application.Users.Commands.RegisterCommand
 {
-    public record RegisterUserCommandRequest(
+    public record RegisterCommandRequest(
         string Login,
         string FirstName,
         string LastName,

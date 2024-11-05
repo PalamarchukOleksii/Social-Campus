@@ -1,11 +1,11 @@
 ﻿using Domain.Repositories;
 using FluentValidation;
 
-namespace Application.Users.Commands.LoginUserCommand
+namespace Application.Users.Commands.LoginCommand
 {
-    public class LoginUserCommandValidator : AbstractValidator<LoginUserCommandRequest>
+    public class LoginCommandValidator : AbstractValidator<LoginCommandRequest>
     {
-        public LoginUserCommandValidator(IUserRepository userRepository)
+        public LoginCommandValidator(IUserRepository userRepository)
         {
             RuleFor(u => u.Email)
                 .NotEmpty().WithMessage("Email is required.")

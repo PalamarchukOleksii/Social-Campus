@@ -1,5 +1,5 @@
-﻿using Application.Users.Commands.LoginUserCommand;
-using Application.Users.Commands.RegisterUserCommand;
+﻿using Application.Users.Commands.LoginCommand;
+using Application.Users.Commands.RegisterCommand;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -12,13 +12,13 @@ namespace Presentation.Controllers
     [Route("api/[controller]")]
     public class UserController(
         IMediator mediator,
-        IValidator<RegisterUserCommandRequest> registerValidator,
-        IValidator<LoginUserCommandRequest> loginValidator) : ControllerBase
+        IValidator<RegisterCommandRequest> registerValidator,
+        IValidator<LoginCommandRequest> loginValidator) : ControllerBase
     {
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto request)
         {
-            RegisterUserCommandRequest commandRequest = new(
+            RegisterCommandRequest commandRequest = new(
                 request.Login,
                 request.FirstName,
                 request.LastName,
@@ -46,7 +46,7 @@ namespace Presentation.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto request)
         {
-            LoginUserCommandRequest commandRequest = new(request.Email, request.Password);
+            LoginCommandRequest commandRequest = new(request.Email, request.Password);
 
             ValidationResult result = await loginValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
@@ -61,7 +61,7 @@ namespace Presentation.Controllers
                 return ValidationProblem(new ValidationProblemDetails(errors));
             }
 
-            LoginUserCommandResponse response = await mediator.Send(commandRequest);
+            LoginCommandResponse response = await mediator.Send(commandRequest);
             if (!response.IsSuccess)
             {
                 return Unauthorized(new { message = response.ErrorMessage });

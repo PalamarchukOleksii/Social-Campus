@@ -4,14 +4,14 @@ using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 
-namespace Application.Users.Commands.RegisterUserCommand
+namespace Application.Users.Commands.RegisterCommand
 {
-    public class RegisterUserCommandHandler(
+    public class RegisterCommandHandler(
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        IPasswordHasher passwordHasher) : IRequestHandler<RegisterUserCommandRequest>
+        IPasswordHasher passwordHasher) : IRequestHandler<RegisterCommandRequest>
     {
-        public async Task Handle(RegisterUserCommandRequest request, CancellationToken cancellationToken)
+        public async Task Handle(RegisterCommandRequest request, CancellationToken cancellationToken)
         {
             string passwordHash = passwordHasher.Hash(request.Password);
 

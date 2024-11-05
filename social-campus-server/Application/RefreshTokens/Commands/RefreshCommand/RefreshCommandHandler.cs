@@ -6,21 +6,21 @@ using Domain.Repositories;
 using MediatR;
 using System.Security.Claims;
 
-namespace Application.Users.Commands.RefreshTokensCommand
+namespace Application.RefreshTokens.Commands.RefreshCommand
 {
-    public class RefreshTokensCommandHandler(
+    public class RefreshCommandHandler(
         IUserRepository userRepository,
         IJwtProvider jwtProvider,
         IRefreshTokenRepository tokenRepository,
-        IUnitOfWork unitOfWork) : IRequestHandler<RefreshTokensCommandRequest, RefreshTokensCommandResponse>
+        IUnitOfWork unitOfWork) : IRequestHandler<RefreshCommandRequest, RefreshCommandResponse>
     {
-        public async Task<RefreshTokensCommandResponse> Handle(RefreshTokensCommandRequest request, CancellationToken cancellationToken)
+        public async Task<RefreshCommandResponse> Handle(RefreshCommandRequest request, CancellationToken cancellationToken)
         {
             ClaimsPrincipal principal = await jwtProvider.GetPrincipalFromExpiredTokenAsync(request.AccessToken);
             string? email = principal.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
             if (email == null)
             {
-                return new RefreshTokensCommandResponse(
+                return new RefreshCommandResponse(
                     IsSuccess: false,
                     AccessToken: default,
                     RefreshToken: default,
@@ -30,7 +30,7 @@ namespace Application.Users.Commands.RefreshTokensCommand
             User? user = await userRepository.GetByEmailAsync(email);
             if (user == null)
             {
-                return new RefreshTokensCommandResponse(
+                return new RefreshCommandResponse(
                     IsSuccess: false,
                     AccessToken: default,
                     RefreshToken: default,
@@ -40,7 +40,7 @@ namespace Application.Users.Commands.RefreshTokensCommand
             RefreshToken? refreshToken = await tokenRepository.GetByIdAsync(user.RefreshTokenId);
             if (refreshToken == null || refreshToken.Token != request.RefreshToken || refreshToken.TokenExpiryTime <= DateTime.Now)
             {
-                return new RefreshTokensCommandResponse(
+                return new RefreshCommandResponse(
                     IsSuccess: false, AccessToken: default,
                     RefreshToken: default,
                     ErrorMessage: "Invalid refresh token.");
@@ -51,7 +51,7 @@ namespace Application.Users.Commands.RefreshTokensCommand
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return new RefreshTokensCommandResponse(
+            return new RefreshCommandResponse(
                 IsSuccess: true,
                 AccessToken: tokens.AccessToken,
                 RefreshToken: tokens.RefreshToken,
