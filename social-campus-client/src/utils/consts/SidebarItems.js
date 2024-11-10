@@ -29,7 +29,7 @@ const SidebarItems = [
     activeIcon: IoMail,
   },
   {
-    path: "/profile",
+    path: "/profile/johndoe",
     label: "Profile",
     inactiveIcon: IoPersonOutline,
     activeIcon: IoPerson,

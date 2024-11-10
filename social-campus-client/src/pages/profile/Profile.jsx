@@ -18,7 +18,7 @@ function Profile() {
         </div>
         <div className="profile-info">
           <h2 className="profile-name general-text">{userData.username}</h2>
-          <p className="profile-login not-general-text">{userData.login}</p>
+          <p className="profile-login not-general-text">@{userData.login}</p>
           <p className="profile-bio general-text">{userData.bio}</p>
         </div>
         <div className="profile-stats">
@@ -34,6 +34,7 @@ function Profile() {
         {userData.publications.map((publication, index) => (
           <Publication
             key={index}
+            publicationId={publication.id}
             description={publication.description}
             imageUrl={publication.imageUrl}
             creationTime={publication.creationTime}

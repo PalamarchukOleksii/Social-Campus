@@ -28,11 +28,14 @@ function Publication(props) {
       </div>
       <div className="interaction-stat">
         <InteractionItem
+          itemType="like"
           label={props.likesCount}
           icon={InteractionItems.likeIcon}
           activeIcon={InteractionItems.activeLikeIcon}
         />
         <InteractionItem
+          itemType="comment"
+          publicationId={props.publicationId}
           label={props.commentsCount}
           icon={InteractionItems.commentIcon}
         />
@@ -42,6 +45,7 @@ function Publication(props) {
 }
 
 Publication.propTypes = {
+  publicationId: PropTypes.number.isRequired,
   description: PropTypes.string.isRequired,
   imageUrl: PropTypes.string,
   creationTime: PropTypes.string.isRequired,

@@ -1,47 +1,52 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import Publication from "../publication/Publication";
-import Comment from "../comment/Comment";
+import { useParams } from "react-router-dom";
+import Publication from "../../components/publication/Publication";
+import Comment from "../../components/comment/Comment";
 import "./PublicationDetail.css";
 import publicationDetailsData from "../../data/publicationDetailsData.json";
 
-function PublicationDetail({ publication }) {
-  const [comments, setComments] = useState([]);
+function PublicationDetail() {
+  const { id } = useParams();
+  const [publication, setPublication] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchComments = async () => {
+    const fetchPublication = async () => {
       try {
-        // fetch real data
-        const data = publicationDetailsData;
-        setComments(data);
+        setPublication(publicationDetailsData);
       } catch (error) {
-        console.error("Error fetching comments:", error);
+        console.error("Error fetching publication:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    if (publication?.id) {
-      fetchComments();
+    if (id) {
+      fetchPublication();
     }
-  }, [publication]);
+  }, [id]);
+
+  if (loading) return <p>Loading publication...</p>;
+  if (!publication) return <p>Publication not found.</p>;
 
   return (
     <div className="publication-detail-container">
-      <Publication {...publication} />
+      <Publication
+        username={publication.login}
+        login={publication.login}
+        creationTime={publication.creationTime}
+        imageUrl={publication.imageUrl}
+        description={publication.description}
+      />
 
       <h3>Comments:</h3>
       <div className="comments-section">
-        {loading ? (
-          <p>Loading comments...</p>
-        ) : comments.length > 0 ? (
-          comments.map((comment, index) => (
+        {publication.comments.length > 0 ? (
+          publication.comments.map((comment, index) => (
             <Comment
               key={index}
               username={comment.username}
               login={comment.login}
-              profileImage={comment.profileImage}
               text={comment.text}
               likeCount={comment.likeCount}
               creationTime={comment.creationTime}
@@ -54,19 +59,5 @@ function PublicationDetail({ publication }) {
     </div>
   );
 }
-
-PublicationDetail.propTypes = {
-  publication: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string,
-    creationTime: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    login: PropTypes.string.isRequired,
-    profileImage: PropTypes.string,
-    likesCount: PropTypes.number,
-    commentsCount: PropTypes.number,
-  }).isRequired,
-};
 
 export default PublicationDetail;

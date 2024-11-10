@@ -9,7 +9,7 @@ function Comment(props) {
   return (
     <div className="comment-container">
       <div className="comment-info">
-        <div>
+        <div className="user-info">
           <ShortProfile username={props.username} login={props.login} />
           <h4>{props.creatingTime}</h4>
         </div>

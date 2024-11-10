@@ -2,32 +2,71 @@
   "id": "12345",
   "email": "johndoe@example.com",
   "username": "John Doe",
-  "login": "@johndoe",
+  "login": "johndoe",
   "bio": "Software developer with a passion for open-source projects.",
   "profileImage": "/default-profile.png",
   "followers": 1200,
   "following": 300,
   "publications": [
     {
+      "id": 1,
       "description": "Exploring the beauty of nature",
       "imageUrl": "https://img.freepik.com/free-photo/river-surrounded-by-forests-cloudy-sky-thuringia-germany_181624-30863.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
-      "creationTime": "2024-11-03",
+      "creationTime": "2024-11-03T10:00:00Z",
       "likesCount": 150,
-      "commentsCount": 12
+      "commentsCount": 12,
+      "comments": [
+        {
+          "username": "nature_lover",
+          "text": "Absolutely stunning! Nature is so beautiful.",
+          "creationTime": "2024-11-03T11:00:00Z",
+          "likeCount": 5
+        },
+        {
+          "username": "travel_fan",
+          "text": "Can't wait to visit this place!",
+          "creationTime": "2024-11-03T12:30:00Z",
+          "likeCount": 3
+        }
+      ]
     },
     {
+      "id": 2,
       "description": "An insightful book review",
       "imageUrl": null,
-      "creationTime": "2024-11-02",
+      "creationTime": "2024-11-02T09:15:00Z",
       "likesCount": 80,
-      "commentsCount": 5
+      "commentsCount": 5,
+      "comments": [
+        {
+          "username": "bookworm",
+          "text": "Thanks for sharing this review!",
+          "creationTime": "2024-11-02T10:00:00Z",
+          "likeCount": 2
+        }
+      ]
     },
     {
+      "id": 3,
       "description": "The Beauty and Significance of Nature\nNature, in all its magnificence, is a tapestry woven with the threads of life that encompasses every living being on our planet. From the towering mountains and expansive forests to the vibrant meadows and serene oceans, nature offers a diverse array of ecosystems, each with its own unique beauty and vital role in the web of life.\nAs we venture into the heart of nature, we are greeted by the soothing sound of rustling leaves, the melodic chirping of birds, and the gentle flow of water in streams and rivers. Each sound creates a symphony that reminds us of the intricate connections between all living things. The vibrant colors of flowers, the lush greens of trees, and the earthy browns of soil and rocks create a breathtaking palette that changes with the seasons. Spring brings forth a riot of colors as flowers bloom and trees regain their foliage, while autumn paints the landscape in shades of gold, orange, and crimson as leaves fall to the ground.",
       "imageUrl": "https://img.freepik.com/free-photo/beautiful-natural-landscape_23-2151839181.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
-      "creationTime": "2024-11-01",
+      "creationTime": "2024-11-01T08:45:00Z",
       "likesCount": 200,
-      "commentsCount": 25
+      "commentsCount": 25,
+      "comments": [
+        {
+          "username": "environmentalist",
+          "text": "A beautifully written piece!",
+          "creationTime": "2024-11-01T09:00:00Z",
+          "likeCount": 10
+        },
+        {
+          "username": "nature_fanatic",
+          "text": "I love this! Nature is truly magnificent.",
+          "creationTime": "2024-11-01T09:30:00Z",
+          "likeCount": 8
+        }
+      ]
     }
   ]
 }
