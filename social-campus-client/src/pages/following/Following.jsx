@@ -1,10 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import FollowItem from "../../components/followItem/FollowItem";
-import followingData from "../../data/followingData.json";
 import FollowTabs from "../../components/followTads/FollowTabs";
+import userData from "../../data/userData.json";
 
 function Following() {
-  const [following, setFollowing] = useState(followingData);
+  const { login } = useParams();
+  const [following, setFollowing] = useState([]);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      const user = userData.find((user) => user.login === login);
+      if (user) {
+        setFollowing(user.following);
+      }
+    };
+
+    fetchUserData();
+  }, [login]);
 
   const handleUnfollowClick = (username) => {
     console.log(`Unfollowed ${username}`);

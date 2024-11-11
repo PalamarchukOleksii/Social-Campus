@@ -1,16 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
 import { IoExit, IoExitOutline } from "react-icons/io5";
 import NavItem from "../navItem/NavItem";
 import ShortProfile from "../shortProfile/ShortProfile";
 import SidebarItems from "../../utils/consts/SidebarItems";
-
 import userData from "../../data/userData.json";
+import login from "../../utils/consts/AuthUserLogin";
 
 function Sidebar() {
   const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState("");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      const foundUser = userData.find((user) => user.login === login);
+      setUser(foundUser || null);
+      setLoading(false);
+    };
+
+    fetchUserData();
+  }, [login]);
+
+  if (loading) {
+    return <div className="sidebar-loading">Loading...</div>;
+  }
+
+  if (!user) {
+    return <p>User not found.</p>;
+  }
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -56,9 +76,9 @@ function Sidebar() {
       </div>
       <div className="logout">
         <ShortProfile
-          username={userData.username}
-          login={userData.login}
-          profileImage={userData.profileImage}
+          username={user.username}
+          login={user.login}
+          profileImage={user.profileImage}
         />
         <div
           onClick={handleLogout}
