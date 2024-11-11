@@ -10,11 +10,11 @@
   transition: all 0.3s;
 }
 
-.nav-item link:hover {
+.nav-item .link:hover {
   opacity: 1;
 }
 
-.nav-item .link.active {
+.nav-item link.active {
   opacity: 1;
 }
 
