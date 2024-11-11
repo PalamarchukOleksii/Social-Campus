@@ -20,6 +20,7 @@ function Comment(props) {
           label={props.likeCount}
           icon={InteractionItems.likeIcon}
           activeIcon={InteractionItems.activeLikeIcon}
+          itemType="like"
         />
       </div>
     </div>

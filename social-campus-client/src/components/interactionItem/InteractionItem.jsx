@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./InteractionItem.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function InteractionItem(props) {
   const [isActive, setIsActive] = useState(false);
   const [count, setCount] = useState(props.label);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClick = () => {
-    if (props.itemType === "comment") {
+    if (
+      props.itemType === "comment" &&
+      location.pathname !== `/publication/${props.publicationId}`
+    ) {
       navigate(`/publication/${props.publicationId}`);
-    } else {
+    } else if (props.itemType === "like") {
       setIsActive((prev) => !prev);
       setCount((prev) => (isActive ? prev - 1 : prev + 1));
     }
