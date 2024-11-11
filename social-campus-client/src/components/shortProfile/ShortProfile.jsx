@@ -12,7 +12,7 @@ function ShortProfile(props) {
       />
       <div className="profile-info">
         <h3 className="general-text">{props.username}</h3>
-        <h4 className="not-general-text">{props.login}</h4>
+        <h4 className="not-general-text">@{props.login}</h4>
       </div>
     </div>
   );
