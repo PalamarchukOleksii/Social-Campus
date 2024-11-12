@@ -4,10 +4,11 @@ const ROUTES = {
   SIGN_IN: "/signin",
   SIGN_UP: "/signup",
   SEARCH: "/search",
-  PROFILE: "/profile",
+  PROFILE: "/profile/:login",
   MESSAGES: "/messages",
-  FOLLOWERS: "/profile/followers",
-  FOLLOWING: "/profile/following",
+  FOLLOWERS: "/profile/:login/followers",
+  FOLLOWING: "/profile/:login/following",
+  PUBLICATIONDETAILS: "/publication/:id",
 };
 
 export default ROUTES;

@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ROUTES from "./utils/consts/Routes";
 import Followers from "./pages/followers/Followers";
 import Following from "./pages/following/Following";
+import PublicationDetail from "./pages/publicationDetail/PublicationDetail";
 
 function App() {
   const location = useLocation();
@@ -42,6 +43,10 @@ function App() {
           <Route path={ROUTES.MESSAGES} element={<Messages />} />
           <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
           <Route path={ROUTES.FOLLOWING} element={<Following />} />
+          <Route
+            path={ROUTES.PUBLICATIONDETAILS}
+            element={<PublicationDetail />}
+          />
         </Routes>
       </div>
       <div className={footerContainerClass}>

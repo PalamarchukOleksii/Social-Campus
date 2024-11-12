@@ -1,12 +1,17 @@
-.tabs {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 20px 20px 10px 20px;
+.comment-section-text {
+  margin: 20px;
 }
 
-.tabs .link {
+.top-section {
+  padding: 20px 20px 10px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.top-section .link {
   text-decoration: none;
   color: var(--general-text-color);
   opacity: 0.5;
@@ -17,17 +22,17 @@
   padding: 0;
 }
 
-.tabs .link.active {
+.top-section .link.active {
   opacity: 1;
   font-weight: bold;
   border-bottom: 3px solid var(--general-text-color);
 }
 
-.tabs .icon {
+.top-section .icon {
   font-size: 30px;
   padding: 0;
 }
 
-.tabs .link:hover {
+.top-section .link:hover {
   opacity: 1;
 }

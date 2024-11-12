@@ -7,11 +7,11 @@ function InteractionItem(props) {
   const [count, setCount] = useState(props.label);
 
   const handleClick = () => {
-    setIsActive((prev) => !prev);
-    setCount((prev) => (isActive ? prev - 1 : prev + 1));
-
-    if (props.onClick) {
-      props.onClick();
+    if (props.itemType === "comment") {
+      // TODO: add pop up window to add comment
+    } else {
+      setIsActive((prev) => !prev);
+      setCount((prev) => (isActive ? prev - 1 : prev + 1));
     }
   };
 
@@ -32,10 +32,10 @@ function InteractionItem(props) {
 }
 
 InteractionItem.propTypes = {
+  itemType: PropTypes.string.isRequired,
   label: PropTypes.number.isRequired,
   icon: PropTypes.elementType.isRequired,
   activeIcon: PropTypes.elementType,
-  onClick: PropTypes.func,
 };
 
 export default InteractionItem;

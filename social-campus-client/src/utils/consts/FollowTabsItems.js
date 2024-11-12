@@ -3,17 +3,17 @@ import ROUTES from "./Routes";
 
 const FollowTabsItems = [
   {
-    path: `${ROUTES.PROFILE}`,
+    path: ROUTES.PROFILE,
     label: "Profile",
     inactiveIcon: IoArrowBackCircleOutline,
     activeIcon: IoArrowBackCircle,
   },
   {
-    path: `${ROUTES.FOLLOWERS}`,
+    path: ROUTES.FOLLOWERS,
     label: "Followers",
   },
   {
-    path: `${ROUTES.FOLLOWING}`,
+    path: ROUTES.FOLLOWING,
     label: "Following",
   },
 ];

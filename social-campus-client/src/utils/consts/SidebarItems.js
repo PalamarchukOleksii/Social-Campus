@@ -9,6 +9,8 @@ import {
   IoPerson,
 } from "react-icons/io5";
 
+import login from "./AuthUserLogin";
+
 const SidebarItems = [
   {
     path: "/home",
@@ -29,7 +31,7 @@ const SidebarItems = [
     activeIcon: IoMail,
   },
   {
-    path: "/profile",
+    path: `/profile/${login}`,
     label: "Profile",
     inactiveIcon: IoPersonOutline,
     activeIcon: IoPerson,

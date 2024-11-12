@@ -37,7 +37,7 @@ function Landing() {
               Create a New Profile
             </button>
           </div>
-          <h2 className="not-general-text">Already hava an account?</h2>
+          <h2 className="not-general-text">Already have an account?</h2>
           <button className="signup-button" onClick={() => navigate("/signup")}>
             Sign In
           </button>
