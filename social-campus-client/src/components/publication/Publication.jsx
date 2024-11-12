@@ -18,24 +18,22 @@ function Publication(props) {
 
   return (
     <div className="publication-container">
-      <div onClick={handlePublicationClick}>
-        <div className="short-info-container">
-          <ShortProfile
-            username={props.username}
-            login={props.login}
-            profileImage={props.profileImage}
-          />
-          <h4 className="creation-time not-general-text">
-            {props.creationTime || "Time of creation"}
-          </h4>
-        </div>
-        <div className="content-container">
-          <h2 className="description general-text">
-            {props.description || "Description"}
-          </h2>
-          <div className="image-wrapper">
-            {props.imageUrl && <img src={props.imageUrl} alt="Publication" />}
-          </div>
+      <div className="short-info-container">
+        <ShortProfile
+          username={props.username}
+          login={props.login}
+          profileImage={props.profileImage}
+        />
+        <h4 className="creation-time not-general-text">
+          {props.creationTime || "Time of creation"}
+        </h4>
+      </div>
+      <div className="content-container" onClick={handlePublicationClick}>
+        <h2 className="description general-text">
+          {props.description || "Description"}
+        </h2>
+        <div className="image-wrapper">
+          {props.imageUrl && <img src={props.imageUrl} alt="Publication" />}
         </div>
       </div>
       <div className="interaction-stat">
