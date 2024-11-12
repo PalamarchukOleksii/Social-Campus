@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Publication from "../../components/publication/Publication";
 import Comment from "../../components/comment/Comment";
-import "./PublicationDetail.css";
 import publicationDetailsData from "../../data/userData.json";
+import NavItem from "../../components/navItem/NavItem";
+import PublicationDetailItems from "../../utils/consts/PublicationDetailItems";
+import "./PublicationDetail.css";
 
 function PublicationDetail() {
   const { id } = useParams();
   const [publication, setPublication] = useState(null);
-  const [user, setUser] = useState(null); // Store the user object
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hoveredIcon, setHoveredIcon] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPublication = async () => {
       try {
-        // Find the publication by id and the user who posted it
         const foundPublication = publicationDetailsData
           .flatMap((user) => user.publications)
-          .find((pub) => pub.id === parseInt(id)); // Ensure 'id' is parsed to an integer
+          .find((pub) => pub.id === parseInt(id));
 
         if (foundPublication) {
-          // Find the user who posted the publication
           const foundUser = publicationDetailsData.find((user) =>
             user.publications.some((pub) => pub.id === foundPublication.id)
           );
           setPublication(foundPublication);
-          setUser(foundUser); // Set the user state
+          setUser(foundUser);
         }
       } catch (error) {
         console.error("Error fetching publication:", error);
@@ -44,6 +46,17 @@ function PublicationDetail() {
 
   return (
     <div className="publication-detail-container">
+      <div className="top-section">
+        <NavItem
+          label={PublicationDetailItems.label}
+          inactiveIcon={PublicationDetailItems.inactiveIcon}
+          activeIcon={PublicationDetailItems.activeIcon}
+          hoveredIcon={hoveredIcon}
+          setHoveredIcon={setHoveredIcon}
+          onClick={() => navigate(-1)}
+        />
+        <h1 className="general-text">Publication</h1>
+      </div>
       <Publication
         publicationId={publication.id}
         username={user.username}
@@ -55,7 +68,7 @@ function PublicationDetail() {
         likesCount={publication.likesCount}
         commentsCount={publication.comments.length}
       />
-      <h3 className="comment-section-text">Comments:</h3>
+      <h2 className="comment-section-text general-text">Comments</h2>
       <div className="comments-section">
         {publication.comments.length > 0 ? (
           publication.comments.map((comment, index) => (
@@ -65,7 +78,7 @@ function PublicationDetail() {
               login={comment.login}
               text={comment.text}
               likeCount={comment.likeCount}
-              creationTime={comment.creationTime}
+              creatingTime={comment.creationTime}
             />
           ))
         ) : (
