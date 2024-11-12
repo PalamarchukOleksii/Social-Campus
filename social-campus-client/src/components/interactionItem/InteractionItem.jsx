@@ -1,21 +1,15 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./InteractionItem.css";
-import { useNavigate, useLocation } from "react-router-dom";
 
 function InteractionItem(props) {
   const [isActive, setIsActive] = useState(false);
   const [count, setCount] = useState(props.label);
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const handleClick = () => {
-    if (
-      props.itemType === "comment" &&
-      location.pathname !== `/publication/${props.publicationId}`
-    ) {
-      navigate(`/publication/${props.publicationId}`);
-    } else if (props.itemType === "like") {
+    if (props.itemType === "comment") {
+      // TODO: add pop up window to add comment
+    } else {
       setIsActive((prev) => !prev);
       setCount((prev) => (isActive ? prev - 1 : prev + 1));
     }
@@ -42,7 +36,6 @@ InteractionItem.propTypes = {
   label: PropTypes.number.isRequired,
   icon: PropTypes.elementType.isRequired,
   activeIcon: PropTypes.elementType,
-  publicationId: PropTypes.number.isRequired,
 };
 
 export default InteractionItem;
