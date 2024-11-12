@@ -22,7 +22,7 @@ function Sidebar() {
     };
 
     fetchUserData();
-  }, [login]);
+  }, []);
 
   if (loading) {
     return <div className="sidebar-loading">Loading...</div>;

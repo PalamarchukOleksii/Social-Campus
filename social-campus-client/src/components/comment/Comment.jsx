@@ -11,7 +11,9 @@ function Comment(props) {
       <div className="comment-info">
         <div className="user-info">
           <ShortProfile username={props.username} login={props.login} />
-          <h4>{props.creatingTime}</h4>
+          <h4 className="creation-time not-general-text">
+            {props.creatingTime || "Time of creation"}
+          </h4>
         </div>
         <h2 className="comment-text">{props.text}</h2>
       </div>

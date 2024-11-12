@@ -3,11 +3,7 @@
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  padding: 20px;
-}
-
-.tabs .nav-item {
-  list-style: none;
+  padding: 20px 20px 10px 20px;
 }
 
 .tabs .link {
