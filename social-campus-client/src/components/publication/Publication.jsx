@@ -5,6 +5,7 @@ import ShortProfile from "../shortProfile/ShortProfile";
 import InteractionItem from "../interactionItem/InteractionItem";
 import InteractionItems from "../../utils/consts/InteractionItems";
 import "./Publication.css";
+import DateTime from "../dateTime/DateTime";
 
 function Publication(props) {
   const navigate = useNavigate();
@@ -24,9 +25,7 @@ function Publication(props) {
           login={props.login}
           profileImage={props.profileImage}
         />
-        <h4 className="creation-time not-general-text">
-          {props.creationTime || "Time of creation"}
-        </h4>
+        <DateTime dateTime={props.creationTime} locale="en-US" />
       </div>
       <div className="content-container" onClick={handlePublicationClick}>
         <h2 className="description general-text">

@@ -37,11 +37,6 @@
   margin: 0 0 20px 0;
 }
 
-.creation-time {
-  font-size: 14px;
-  margin: 0;
-}
-
 .short-info-container {
   display: flex;
   flex-direction: row;

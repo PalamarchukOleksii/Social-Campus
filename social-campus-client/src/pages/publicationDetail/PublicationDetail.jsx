@@ -78,7 +78,7 @@ function PublicationDetail() {
               login={comment.login}
               text={comment.text}
               likeCount={comment.likeCount}
-              creatingTime={comment.creationTime}
+              creationTime={comment.creationTime}
             />
           ))
         ) : (

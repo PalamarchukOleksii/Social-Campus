@@ -4,6 +4,7 @@ import "./Comment.css";
 import ShortProfile from "../shortProfile/ShortProfile";
 import InteractionItems from "../../utils/consts/InteractionItems";
 import InteractionItem from "../interactionItem/InteractionItem";
+import DateTime from "../dateTime/DateTime";
 
 function Comment(props) {
   return (
@@ -11,9 +12,7 @@ function Comment(props) {
       <div className="comment-info">
         <div className="user-info">
           <ShortProfile username={props.username} login={props.login} />
-          <h4 className="creation-time not-general-text">
-            {props.creatingTime || "Time of creation"}
-          </h4>
+          <DateTime dateTime={props.creationTime} locale="en-US" />
         </div>
         <h2 className="comment-text">{props.text}</h2>
       </div>
@@ -34,7 +33,7 @@ Comment.propTypes = {
   login: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   likeCount: PropTypes.number.isRequired,
-  creatingTime: PropTypes.string.isRequired,
+  creationTime: PropTypes.string.isRequired,
 };
 
 export default Comment;
