@@ -3,7 +3,9 @@
   flex-direction: row;
   gap: 20px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: 20px;
+  width: auto;
 }
 
 .short-info * {

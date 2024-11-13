@@ -1,9 +1,6 @@
 .landing-container {
   display: flex;
   flex-direction: row;
-  width: 80%;
-  height: calc(100vh - 55px);
-  margin: 0 auto;
 }
 
 .left-half,
@@ -15,7 +12,7 @@
 }
 
 .logo {
-  max-width: 70%;
+  width: 350px;
   height: auto;
 }
 
@@ -26,7 +23,6 @@
   justify-content: center;
   width: 450px;
   height: 350px;
-  background-color: var(--background-color);
   text-align: center;
   border-radius: 8px;
   padding: 10px;

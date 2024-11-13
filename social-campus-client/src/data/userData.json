@@ -23,6 +23,15 @@
         "bio": "Tech enthusiast and part-time gamer.",
         "profileImage": null,
         "isFollowing": false
+      },
+      {
+        "id": 6,
+        "email": "bobbrown@example.com",
+        "username": "Bob Brown",
+        "login": "bobbrown",
+        "bio": "Tech enthusiast and part-time gamer.",
+        "profileImage": null,
+        "isFollowing": false
       }
     ],
     "following": [
@@ -81,7 +90,7 @@
       {
         "id": 3,
         "description": "The Beauty and Significance of Nature\nNature, in all its magnificence, is a tapestry woven with the threads of life that encompasses every living being on our planet.",
-        "imageUrl": "https://img.freepik.com/free-photo/beautiful-natural-landscape_23-2151839181.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
+        "imageUrl": "https://img.freepik.com/free-photo/lake-mountains_1204-508.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
         "creationTime": "2024-11-01T08:45:00Z",
         "likesCount": 200,
         "comments": [
@@ -189,6 +198,62 @@
         "isFollowing": false
       }
     ],
+    "following": [
+      {
+        "id": 1,
+        "email": "johndoe@example.com",
+        "username": "John Doe",
+        "login": "johndoe",
+        "bio": "Software developer with a passion for open-source projects.",
+        "profileImage": null,
+        "isFollowing": true
+      }
+    ],
+    "publications": [
+      {
+        "id": 5,
+        "description": "Top 10 gadgets of 2024",
+        "imageUrl": "https://img.freepik.com/free-photo/technology-gadgets_181624-30478.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
+        "creationTime": "2024-10-25T13:45:00Z",
+        "likesCount": 500,
+        "comments": [
+          {
+            "username": "Jane Smith",
+            "login": "janesmith",
+            "profileImage": null,
+            "text": "This list is amazing! Can't wait to try some of these gadgets.",
+            "creationTime": "2024-10-25T14:00:00Z",
+            "likeCount": 15
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "description": "A day in the life of a gamer",
+        "imageUrl": "https://img.freepik.com/free-photo/gamer-playing-video-games_181624-31057.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
+        "creationTime": "2024-10-20T18:30:00Z",
+        "likesCount": 220,
+        "comments": [
+          {
+            "username": "John Doe",
+            "login": "johndoe",
+            "profileImage": null,
+            "text": "This looks like so much fun!",
+            "creationTime": "2024-10-20T19:00:00Z",
+            "likeCount": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "email": "bobbrown@example.com",
+    "username": "Bob Brown",
+    "login": "bobbrown",
+    "bio": "Tech enthusiast and part-time gamer.",
+    "profileImage": null,
+    "followers": [],
     "following": [
       {
         "id": 1,

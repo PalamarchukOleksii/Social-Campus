@@ -3,42 +3,55 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  scrollbar-gutter: stable;
 }
 
 .App {
   display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.page-container {
+  display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  width: 700px;
 }
 
 .main-container {
-  position: relative;
-  left: 260px;
+  display: flex;
   flex: 1;
+  width: 100%;
+}
+
+.footer-container {
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: auto;
+}
+
+.sidebar-container {
+  flex: 0 0 260px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 55px);
-  width: calc(100% - 520px);
 }
 
-.main-full-width {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.footer-main {
-  width: calc(100% - 520px);
-  position: relative;
-  left: 260px;
-  text-align: center;
-  bottom: 10px;
-  padding-top: 20px;
-}
-
-.footer {
-  position: relative;
-  text-align: center;
-  bottom: 10px;
-  padding-top: 20px;
+.recommendation-container {
+  flex: 0 0 260px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
