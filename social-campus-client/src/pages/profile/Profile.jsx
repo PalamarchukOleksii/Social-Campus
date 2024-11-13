@@ -17,6 +17,8 @@ function Profile() {
       setLoading(false);
     };
 
+    window.scrollTo(0, 0);
+
     fetchUserData();
   }, [login]);
 
