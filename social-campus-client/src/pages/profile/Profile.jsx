@@ -21,11 +21,11 @@ function Profile() {
   }, [login]);
 
   if (loading) {
-    return <p>Loading user data...</p>;
+    return <></>;
   }
 
   if (!user) {
-    return <p>User not found.</p>;
+    return <h1 className="not-found-text general-text">User not found</h1>;
   }
 
   return (

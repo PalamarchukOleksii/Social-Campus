@@ -43,8 +43,11 @@ function PublicationDetail() {
     }
   }, [id]);
 
-  if (loading) return <p>Loading publication...</p>;
-  if (!publication) return <p>Publication not found.</p>;
+  if (loading) return <></>;
+  if (!publication)
+    return (
+      <h1 className="not-found-text general-text">Publication not found</h1>
+    );
 
   return (
     <div className="publication-detail-container">
