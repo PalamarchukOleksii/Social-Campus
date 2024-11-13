@@ -27,16 +27,18 @@ function RecommendedProfiles() {
   }, []);
 
   if (loading) {
-    return <div className="sidebar-loading">Loading...</div>;
+    return <></>;
   }
 
   if (!recommendationList || recommendationList.length === 0) {
-    return <p>Recommendations not found.</p>;
+    return (
+      <h3 className="not-found-text general-text">Recommendations not found</h3>
+    );
   }
 
   return (
     <div className="recommendation">
-      <h2 className="text general-text">Recommendation</h2>
+      <h2 className="text general-text">Recommendations</h2>
       <div className="list-container">
         {recommendationList.map((profile) => (
           <ShortProfile

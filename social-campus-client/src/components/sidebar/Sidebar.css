@@ -46,3 +46,7 @@
 .exit-icon:hover {
   opacity: 1;
 }
+
+.not-found-text {
+  font-weight: normal;
+}
