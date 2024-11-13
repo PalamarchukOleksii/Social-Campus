@@ -10,6 +10,7 @@ function ShortProfile(props) {
   const handleProfileClick = () => {
     if (location.pathname !== `/profile/${props.login}`) {
       navigate(`/profile/${props.login}`);
+      window.scrollTo(0, 0);
     }
   };
 

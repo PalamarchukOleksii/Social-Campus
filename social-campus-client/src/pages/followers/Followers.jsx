@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import FollowItem from "../../components/followItem/FollowItem";
 import FollowTabs from "../../components/followTads/FollowTabs";
 import userData from "../../data/userData.json";
+import "./Followers.css";
 
 function Followers() {
   const { login } = useParams();
@@ -38,7 +39,7 @@ function Followers() {
   };
 
   return (
-    <div className="page-container">
+    <div className="container">
       <FollowTabs />
       {followers.length > 0 ? (
         followers.map((user) =>
@@ -67,7 +68,7 @@ function Followers() {
           )
         )
       ) : (
-        <h2>No followers yet.</h2>
+        <h2 className="no-follow-text general-text">No followers yet</h2>
       )}
     </div>
   );
