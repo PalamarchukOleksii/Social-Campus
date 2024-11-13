@@ -45,34 +45,36 @@ function Sidebar() {
 
   return (
     <div className="sidebar">
-      <div className="head">
-        <img src="/android-chrome-512x512.png" alt="logo" />
-        <span>Social Campus</span>
-      </div>
-      <div className="navigation">
-        <ul>
-          {SidebarItems.map(
-            ({
-              path,
-              label,
-              inactiveIcon: InactiveIcon,
-              activeIcon: ActiveIcon,
-            }) => {
-              return (
-                <li key={path}>
-                  <NavItem
-                    path={path}
-                    label={label}
-                    inactiveIcon={InactiveIcon}
-                    activeIcon={ActiveIcon}
-                    hoveredIcon={hoveredIcon}
-                    setHoveredIcon={setHoveredIcon}
-                  />
-                </li>
-              );
-            }
-          )}
-        </ul>
+      <div className="wrapper">
+        <div className="head">
+          <img src="/android-chrome-512x512.png" alt="logo" />
+          <span>Social Campus</span>
+        </div>
+        <div className="navigation">
+          <ul>
+            {SidebarItems.map(
+              ({
+                path,
+                label,
+                inactiveIcon: InactiveIcon,
+                activeIcon: ActiveIcon,
+              }) => {
+                return (
+                  <li key={path}>
+                    <NavItem
+                      path={path}
+                      label={label}
+                      inactiveIcon={InactiveIcon}
+                      activeIcon={ActiveIcon}
+                      hoveredIcon={hoveredIcon}
+                      setHoveredIcon={setHoveredIcon}
+                    />
+                  </li>
+                );
+              }
+            )}
+          </ul>
+        </div>
       </div>
       <div className="logout">
         <ShortProfile
