@@ -38,6 +38,8 @@ function PublicationDetail() {
 
     if (id) {
       fetchPublication();
+
+      window.scrollTo(0, 0);
     }
   }, [id]);
 
