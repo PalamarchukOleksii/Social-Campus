@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import FollowItem from "../../components/followItem/FollowItem";
 import FollowTabs from "../../components/followTads/FollowTabs";
 import userData from "../../data/userData.json";
+import "./Following.css";
 
 function Following() {
   const { login } = useParams();
@@ -29,7 +30,7 @@ function Following() {
   };
 
   return (
-    <div className="page-container">
+    <div className="container">
       <FollowTabs />
       {following.some((user) => user.isFollowing) ? (
         following.map(
@@ -48,7 +49,9 @@ function Following() {
             )
         )
       ) : (
-        <h2>Not following anyone yet.</h2>
+        <h2 className="no-follow-text general-text">
+          Not following anyone yet
+        </h2>
       )}
     </div>
   );

@@ -24,6 +24,12 @@ function App() {
   const notAuthorizePages = [ROUTES.LANDING, ROUTES.SIGN_IN, ROUTES.SIGN_UP];
   const showSidebar = !notAuthorizePages.includes(location.pathname);
   const showRecommendations = !notAuthorizePages.includes(location.pathname);
+  const pageContainer = notAuthorizePages.includes(location.pathname)
+    ? "bigger-page-container"
+    : "page-container";
+  const mainContainer = notAuthorizePages.includes(location.pathname)
+    ? "bigger-main-container"
+    : "main-container";
 
   return (
     <div className="App">
@@ -32,8 +38,8 @@ function App() {
           <Sidebar />
         </div>
       )}
-      <div className="page-container">
-        <div className="main-container">
+      <div className={pageContainer}>
+        <div className={mainContainer}>
           <Routes>
             <Route exact path={ROUTES.LANDING} element={<Landing />} />
             <Route path={ROUTES.HOME} element={<Home />} />

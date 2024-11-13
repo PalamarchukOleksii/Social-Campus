@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./SignIn.css";
 import { toast } from "react-toastify";
 
@@ -46,9 +46,9 @@ function SignIn() {
             </button>
           </div>
           <div className="goWelcom">
-            <a href="/" className="not-general-text">
+            <Link to="/" className="not-general-text">
               Go Back to Welcome Page
-            </a>
+            </Link>
           </div>
         </div>
       </div>
