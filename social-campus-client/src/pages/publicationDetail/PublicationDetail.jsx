@@ -87,7 +87,7 @@ function PublicationDetail() {
             />
           ))
         ) : (
-          <p>No comments available</p>
+          <h2 className="general-text no-comments">No comments available</h2>
         )}
       </div>
     </div>
