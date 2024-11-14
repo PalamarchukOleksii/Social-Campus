@@ -44,6 +44,14 @@ function Home() {
     );
   }
 
+  if (publications.length === 0) {
+    return (
+      <h1 className="no-publications-text general-text">
+        No followed publications found
+      </h1>
+    );
+  }
+
   return (
     <div className="home">
       <PublicationsList publications={publications} />
