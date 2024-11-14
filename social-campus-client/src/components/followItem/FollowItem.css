@@ -13,9 +13,14 @@
   justify-content: space-between;
 }
 
+.bottom-part {
+  text-align: left;
+}
+
 .bio {
   margin: 10px 0 0 0;
   font-size: 18px;
+  font-weight: normal;
 }
 
 .followed {
