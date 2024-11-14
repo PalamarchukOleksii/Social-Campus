@@ -13,6 +13,10 @@ body {
   --general-text-color: #3a3a3a;
 }
 
+div {
+  background-color: var(--background-color);
+}
+
 .general-text {
   color: var(--general-text-color);
 }
