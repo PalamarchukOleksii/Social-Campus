@@ -2,18 +2,36 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./Profile.css";
 import userData from "../../data/userData.json";
-import Publication from "../../components/publication/Publication";
+import PublicationsList from "../../components/publicationsList/PublicationsList";
 import ROUTES from "../../utils/consts/Routes";
+import Loading from "../../components/loading/Loading";
 
 function Profile() {
   const { login } = useParams();
   const [user, setUser] = useState(null);
+  const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = () => {
       const foundUser = userData.find((user) => user.login === login);
-      setUser(foundUser || null);
+
+      if (foundUser) {
+        setUser(foundUser);
+        setPublications(
+          foundUser.publications
+            .map((publication) => ({
+              ...publication,
+              username: foundUser.username,
+              login: foundUser.login,
+              profileImage: foundUser.profileImage || "/default-profile.png",
+            }))
+            .sort((a, b) => new Date(b.creationTime) - new Date(a.creationTime))
+        );
+      } else {
+        setUser(null);
+      }
+
       setLoading(false);
     };
 
@@ -21,7 +39,11 @@ function Profile() {
   }, [login]);
 
   if (loading) {
-    return <></>;
+    return (
+      <div className="loading-container">
+        <Loading />
+      </div>
+    );
   }
 
   if (!user) {
@@ -29,7 +51,7 @@ function Profile() {
   }
 
   return (
-    <div className="wraper">
+    <div className="wrapper">
       <div className="profile">
         <div className="profile-header">
           <img
@@ -53,20 +75,13 @@ function Profile() {
         </div>
       </div>
       <div className="publications">
-        {user.publications.map((publication, index) => (
-          <Publication
-            key={index}
-            publicationId={publication.id}
-            description={publication.description}
-            imageUrl={publication.imageUrl}
-            creationTime={publication.creationTime}
-            likesCount={publication.likesCount}
-            commentsCount={publication.comments.length}
-            username={user.username}
-            login={user.login}
-            profileImage={user.profileImage}
-          />
-        ))}
+        {publications.length > 0 ? (
+          <PublicationsList publications={publications} />
+        ) : (
+          <h2 className="no-publications-text general-text">
+            No publications yet
+          </h2>
+        )}
       </div>
     </div>
   );

@@ -21,3 +21,7 @@
   height: 50px;
   width: 50px;
 }
+
+.profile-info .login {
+  font-weight: normal;
+}

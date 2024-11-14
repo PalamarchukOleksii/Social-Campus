@@ -31,7 +31,7 @@
         "login": "bobbrown",
         "bio": "Tech enthusiast and part-time gamer.",
         "profileImage": null,
-        "isFollowing": false
+        "isFollowing": true
       }
     ],
     "following": [
@@ -40,6 +40,15 @@
         "username": "Jane Smith",
         "login": "janesmith",
         "bio": "Photographer capturing the essence of the wild.",
+        "profileImage": null,
+        "isFollowing": true
+      },
+      {
+        "id": 6,
+        "email": "bobbrown@example.com",
+        "username": "Bob Brown",
+        "login": "bobbrown",
+        "bio": "Tech enthusiast and part-time gamer.",
         "profileImage": null,
         "isFollowing": true
       }
@@ -91,7 +100,7 @@
         "id": 3,
         "description": "The Beauty and Significance of Nature\nNature, in all its magnificence, is a tapestry woven with the threads of life that encompasses every living being on our planet.",
         "imageUrl": "https://img.freepik.com/free-photo/lake-mountains_1204-508.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
-        "creationTime": "2024-11-01T08:45:00Z",
+        "creationTime": "2022-11-01T08:45:00Z",
         "likesCount": 200,
         "comments": [
           {
@@ -270,7 +279,7 @@
         "id": 5,
         "description": "Top 10 gadgets of 2024",
         "imageUrl": "https://img.freepik.com/free-photo/technology-gadgets_181624-30478.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
-        "creationTime": "2024-10-25T13:45:00Z",
+        "creationTime": "2022-10-25T13:45:00Z",
         "likesCount": 500,
         "comments": [
           {
