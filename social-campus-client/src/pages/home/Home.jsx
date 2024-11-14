@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import "./Home.css"; // Подключение CSS для страницы Home
-
 import userData from "../../data/userData.json";
-import Publication from "../../components/publication/Publication";
-
+import PublicationsList from "../../components/publicationsList/PublicationsList";
+import login from "../../utils/consts/AuthUserLogin";
+import Loading from "../../components/loading/Loading";
+import "./Home.css";
 
 function Home() {
   const [publications, setPublications] = useState([]);
@@ -11,16 +11,25 @@ function Home() {
 
   useEffect(() => {
     const fetchData = () => {
-      // Собираем все публикации всех пользователей
-      const allPublications = userData.flatMap(user =>
-        user.publications.map(publication => ({
-          ...publication,
-          username: user.username,
-          login: user.login,
-          profileImage: user.profileImage || "/default-profile.png" // Установка изображения профиля по умолчанию
-        }))
+      const currentUser = userData.find((user) => user.login === login);
+
+      const followingIds = currentUser.following.map(
+        (followingUser) => followingUser.id
       );
-      setPublications(allPublications);
+
+      const followedPublications = userData
+        .filter((user) => followingIds.includes(user.id))
+        .flatMap((user) =>
+          user.publications.map((publication) => ({
+            ...publication,
+            username: user.username,
+            login: user.login,
+            profileImage: user.profileImage || "/default-profile.png",
+          }))
+        )
+        .sort((a, b) => new Date(b.creationTime) - new Date(a.creationTime));
+
+      setPublications(followedPublications);
       setLoading(false);
     };
 
@@ -28,29 +37,18 @@ function Home() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Простое состояние загрузки
+    return (
+      <div className="loading-container">
+        <Loading />
+      </div>
+    );
   }
 
   return (
     <div className="home">
-      <h1>Home</h1>
-      <div className="publications">
-        {publications.map(publication => (
-          <Publication
-            key={publication.id}
-            publicationId={publication.id}
-            description={publication.description}
-            imageUrl={publication.imageUrl}
-            creationTime={publication.creationTime}
-            likesCount={publication.likesCount}
-            commentsCount={publication.comments.length}
-            username={publication.username}
-            login={publication.login}
-            profileImage={publication.profileImage}
-          />
-        ))}
-      </div>
+      <PublicationsList publications={publications} />
     </div>
   );
 }
+
 export default Home;

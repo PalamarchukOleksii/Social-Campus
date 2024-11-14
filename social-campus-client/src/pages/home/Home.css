@@ -1,10 +1,7 @@
-.home {
-    padding: 20px;
-  }
-  
-  .publications {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
