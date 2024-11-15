@@ -5,12 +5,17 @@ import userData from "../../data/userData.json";
 import PublicationsList from "../../components/publicationsList/PublicationsList";
 import ROUTES from "../../utils/consts/Routes";
 import Loading from "../../components/loading/Loading";
+import { useCreatePublication } from "../../context/CreatePublicationContext";
+import CreatePublication from "../../components/createPublication/CreatePublication";
+import getMaxPublicationId from "../../utils/helpers/GetMaxPublicationId";
 
 function Profile() {
   const { login } = useParams();
   const [user, setUser] = useState(null);
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const { isOpen, close } = useCreatePublication();
 
   useEffect(() => {
     const fetchUserData = () => {
@@ -24,7 +29,7 @@ function Profile() {
               ...publication,
               username: foundUser.username,
               login: foundUser.login,
-              profileImage: foundUser.profileImage || "/default-profile.png",
+              profileImage: foundUser.profileImage,
             }))
             .sort((a, b) => new Date(b.creationTime) - new Date(a.creationTime))
         );
@@ -52,6 +57,17 @@ function Profile() {
 
   return (
     <div className="wrapper">
+      {isOpen && (
+        <div className="create-publication-modal-overlay">
+          <CreatePublication
+            user={user}
+            publications={publications}
+            setPublications={setPublications}
+            getMaxPublicationId={getMaxPublicationId}
+            close={close}
+          />
+        </div>
+      )}
       <div className="profile">
         <div className="profile-header">
           <img

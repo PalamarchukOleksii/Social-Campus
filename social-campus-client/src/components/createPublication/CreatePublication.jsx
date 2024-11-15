@@ -2,12 +2,23 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import ShortProfile from "../shortProfile/ShortProfile";
+import {
+  IoImageOutline,
+  IoImage,
+  IoCloseOutline,
+  IoClose,
+  IoArrowBackCircleOutline,
+  IoArrowBackCircle,
+} from "react-icons/io5";
 import "./CreatePublication.css";
 
 function CreatePublication(props) {
   const [publicationText, setPublicationText] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isCloseHovered, setIsCloseHovered] = useState(false);
+  const [isExitHovered, setIsExitHovered] = useState(false);
 
   const handleInputChange = (e) => {
     setPublicationText(e.target.value);
@@ -45,13 +56,36 @@ function CreatePublication(props) {
       setPublicationText("");
       setImage(null);
       setImagePreview(null);
+      props.close();
+      window.scrollTo(0, 0);
     } else {
       toast("Publication text cannot be empty.");
     }
   };
 
+  const removeImage = () => {
+    setImage(null);
+    setImagePreview(null);
+  };
+
+  const closeCreatePublication = () => {
+    setPublicationText("");
+    setImage(null);
+    setImagePreview(null);
+    props.close();
+  };
+
   return (
     <div className="create-publication">
+      <div
+        className="close-creation-icon general-text"
+        onMouseEnter={() => setIsExitHovered(true)}
+        onMouseLeave={() => setIsExitHovered(false)}
+        onClick={closeCreatePublication}
+      >
+        {isExitHovered ? <IoArrowBackCircle /> : <IoArrowBackCircleOutline />}
+        <span className="general-text back-text">Back</span>
+      </div>
       <ShortProfile
         username={props.user.username}
         login={props.user.login}
@@ -62,25 +96,47 @@ function CreatePublication(props) {
         <textarea
           className="publication-text"
           type="text"
-          placeholder="Publication text"
+          placeholder="Your publication text..."
           value={publicationText}
           onChange={handleInputChange}
+          onInput={(e) => {
+            if (e.target.scrollHeight > e.target.clientHeight) {
+              e.target.style.height = "auto";
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }
+          }}
           required
+          autoFocus
         />
-        <div className="image-upload">
+        {imagePreview && (
+          <div className="image-preview-container">
+            <img src={imagePreview} alt="Preview" className="image-preview" />
+            <div
+              className="remove-image-icon general-text"
+              onMouseEnter={() => setIsCloseHovered(true)}
+              onMouseLeave={() => setIsCloseHovered(false)}
+              onClick={removeImage}
+            >
+              {isCloseHovered ? <IoClose /> : <IoCloseOutline />}
+            </div>
+          </div>
+        )}
+        <div className="controles">
+          <label
+            className="image-upload-icon general-text"
+            htmlFor="image-upload"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            {isHovered ? <IoImage /> : <IoImageOutline />}
+          </label>
           <input
+            id="image-upload"
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            id="file-input"
+            style={{ display: "none" }}
           />
-          {imagePreview && (
-            <div className="image-preview-container">
-              <img src={imagePreview} alt="Preview" className="image-preview" />
-            </div>
-          )}
-        </div>
-        <div className="controles">
           <button className="publish-button" type="submit">
             Publish
           </button>
@@ -111,6 +167,7 @@ CreatePublication.propTypes = {
   ).isRequired,
   setPublications: PropTypes.func.isRequired,
   getMaxPublicationId: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
 export default CreatePublication;

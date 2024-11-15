@@ -17,6 +17,7 @@ import Followers from "./pages/followers/Followers";
 import Following from "./pages/following/Following";
 import PublicationDetail from "./pages/publicationDetail/PublicationDetail";
 import RecommendedProfiles from "./components/recommendedProfiles/RecommendedProfiles";
+import { CreatePublicationContextProvider } from "./context/CreatePublicationContext";
 
 function App() {
   const location = useLocation();
@@ -33,39 +34,41 @@ function App() {
 
   return (
     <div className="App">
-      {showSidebar && (
-        <div className="sidebar-container">
-          <Sidebar />
+      <CreatePublicationContextProvider>
+        {showSidebar && (
+          <div className="sidebar-container">
+            <Sidebar />
+          </div>
+        )}
+        <div className={pageContainer}>
+          <div className={mainContainer}>
+            <Routes>
+              <Route exact path={ROUTES.LANDING} element={<Landing />} />
+              <Route path={ROUTES.HOME} element={<Home />} />
+              <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
+              <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+              <Route path={ROUTES.SEARCH} element={<Search />} />
+              <Route path={ROUTES.PROFILE} element={<Profile />} />
+              <Route path={ROUTES.MESSAGES} element={<Messages />} />
+              <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
+              <Route path={ROUTES.FOLLOWING} element={<Following />} />
+              <Route
+                path={ROUTES.PUBLICATIONDETAILS}
+                element={<PublicationDetail />}
+              />
+            </Routes>
+          </div>
+          <div className="footer-container">
+            <Footer />
+          </div>
         </div>
-      )}
-      <div className={pageContainer}>
-        <div className={mainContainer}>
-          <Routes>
-            <Route exact path={ROUTES.LANDING} element={<Landing />} />
-            <Route path={ROUTES.HOME} element={<Home />} />
-            <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
-            <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
-            <Route path={ROUTES.SEARCH} element={<Search />} />
-            <Route path={ROUTES.PROFILE} element={<Profile />} />
-            <Route path={ROUTES.MESSAGES} element={<Messages />} />
-            <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
-            <Route path={ROUTES.FOLLOWING} element={<Following />} />
-            <Route
-              path={ROUTES.PUBLICATIONDETAILS}
-              element={<PublicationDetail />}
-            />
-          </Routes>
-        </div>
-        <div className="footer-container">
-          <Footer />
-        </div>
-      </div>
-      {showRecommendations && (
-        <div className="recommendation-container">
-          <RecommendedProfiles />
-        </div>
-      )}
-      <ToastContainer progressStyle={{ background: "#3a3a3a" }} />
+        {showRecommendations && (
+          <div className="recommendation-container">
+            <RecommendedProfiles />
+          </div>
+        )}
+        <ToastContainer progressStyle={{ background: "#3a3a3a" }} />
+      </CreatePublicationContextProvider>
     </div>
   );
 }

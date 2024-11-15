@@ -7,12 +7,15 @@ import SidebarItems from "../../utils/consts/SidebarItems";
 import ShortProfile from "../shortProfile/ShortProfile";
 import userData from "../../data/userData.json";
 import login from "../../utils/consts/AuthUserLogin";
+import { useCreatePublication } from "../../context/CreatePublicationContext";
 
 function Sidebar() {
   const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState("");
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const { open } = useCreatePublication();
 
   useEffect(() => {
     const fetchUserData = () => {
@@ -27,12 +30,15 @@ function Sidebar() {
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      // Logout logic
       console.log("User logged out");
       navigate("/");
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handlePublishClick = () => {
+    open();
   };
 
   return (
@@ -64,6 +70,11 @@ function Sidebar() {
               )
             )}
           </ul>
+          <div className="button-wrapper">
+            <button className="add-publish" onClick={handlePublishClick}>
+              Publish
+            </button>
+          </div>
         </div>
       </div>
       {loading ? (

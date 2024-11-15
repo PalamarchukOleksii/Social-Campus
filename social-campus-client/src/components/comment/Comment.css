@@ -25,10 +25,6 @@
 .comment-text {
   font-size: 18px;
   color: var(--general-text-color);
-  margin: 5px 0;
-  line-height: 1.5;
-}
-
-.comment-interactions {
-  margin-top: 5px;
+  margin: 10px 0;
+  font-weight: normal;
 }
