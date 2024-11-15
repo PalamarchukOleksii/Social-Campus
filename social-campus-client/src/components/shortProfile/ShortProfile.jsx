@@ -8,7 +8,10 @@ function ShortProfile(props) {
   const location = useLocation();
 
   const handleProfileClick = () => {
-    if (location.pathname !== `/profile/${props.login}`) {
+    if (
+      props.redirectOnClick &&
+      location.pathname !== `/profile/${props.login}`
+    ) {
       navigate(`/profile/${props.login}`);
       window.scrollTo(0, 0);
     }
@@ -33,6 +36,11 @@ ShortProfile.propTypes = {
   profileImage: PropTypes.string,
   username: PropTypes.string.isRequired,
   login: PropTypes.string.isRequired,
+  redirectOnClick: PropTypes.bool,
+};
+
+ShortProfile.defaultProps = {
+  redirectOnClick: true,
 };
 
 export default ShortProfile;

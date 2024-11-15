@@ -4,16 +4,20 @@ import PublicationsList from "../../components/publicationsList/PublicationsList
 import login from "../../utils/consts/AuthUserLogin";
 import Loading from "../../components/loading/Loading";
 import "./Home.css";
+import CreatePublication from "../../components/createPublication/CreatePublication";
 
 function Home() {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const fetchData = () => {
-      const currentUser = userData.find((user) => user.login === login);
+      const user = userData.find((user) => user.login === login);
 
-      const followingIds = currentUser.following.map(
+      setCurrentUser(user);
+
+      const followingIds = user.following.map(
         (followingUser) => followingUser.id
       );
 
@@ -24,7 +28,7 @@ function Home() {
             ...publication,
             username: user.username,
             login: user.login,
-            profileImage: user.profileImage || "/default-profile.png",
+            profileImage: user.profileImage,
           }))
         )
         .sort((a, b) => new Date(b.creationTime) - new Date(a.creationTime));
@@ -35,6 +39,18 @@ function Home() {
 
     fetchData();
   }, []);
+
+  const getMaxPublicationId = () => {
+    let maxId = 0;
+    userData.forEach((user) => {
+      user.publications.forEach((pub) => {
+        if (pub.id > maxId) {
+          maxId = pub.id;
+        }
+      });
+    });
+    return maxId;
+  };
 
   if (loading) {
     return (
@@ -54,6 +70,12 @@ function Home() {
 
   return (
     <div className="home">
+      <CreatePublication
+        user={currentUser}
+        publications={publications}
+        setPublications={setPublications}
+        getMaxPublicationId={getMaxPublicationId}
+      />
       <PublicationsList publications={publications} />
     </div>
   );
