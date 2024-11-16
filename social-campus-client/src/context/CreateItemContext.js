@@ -4,13 +4,26 @@ import PropTypes from "prop-types";
 const CreateItemContext = createContext();
 
 export function CreateItemContextProvider({ children }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCreatePublicationOpen, setIsCreatePublicationOpen] = useState(false);
+  const [isCreateCommentOpen, setIsCreateCommentOpen] = useState(false);
 
-  const open = () => setIsOpen(true);
-  const close = () => setIsOpen(false);
+  const openCreatePublication = () => setIsCreatePublicationOpen(true);
+  const closeCreatePublication = () => setIsCreatePublicationOpen(false);
+
+  const openCreateComment = () => setIsCreateCommentOpen(true);
+  const closeCreateComment = () => setIsCreateCommentOpen(false);
 
   return (
-    <CreateItemContext.Provider value={{ isOpen, open, close }}>
+    <CreateItemContext.Provider
+      value={{
+        isCreatePublicationOpen,
+        openCreatePublication,
+        closeCreatePublication,
+        isCreateCommentOpen,
+        openCreateComment,
+        closeCreateComment,
+      }}
+    >
       {children}
     </CreateItemContext.Provider>
   );

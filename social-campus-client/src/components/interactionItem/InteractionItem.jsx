@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./InteractionItem.css";
+import { useCreateItem } from "../../context/CreateItemContext";
 
 function InteractionItem(props) {
   const [isActive, setIsActive] = useState(false);
   const [count, setCount] = useState(props.label);
 
+  const { openCreateComment } = useCreateItem();
+
   const handleClick = () => {
     if (props.itemType === "comment") {
-      // TODO: add pop up window to add comment
+      openCreateComment();
     } else {
       setIsActive((prev) => !prev);
       setCount((prev) => (isActive ? prev - 1 : prev + 1));

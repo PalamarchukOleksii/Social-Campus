@@ -13,7 +13,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
 
-  const { isOpen, close } = useCreateItem();
+  const { isCreatePublicationOpen, closeCreatePublication } = useCreateItem();
 
   useEffect(() => {
     const fetchData = () => {
@@ -73,14 +73,14 @@ function Home() {
 
   return (
     <div className="home">
-      {isOpen && (
+      {isCreatePublicationOpen && (
         <div className="create-publication-modal-overlay">
           <CreatePublication
             user={currentUser}
             publications={publications}
             setPublications={setPublications}
             getMaxPublicationId={getMaxPublicationId}
-            close={close}
+            close={closeCreatePublication}
           />
         </div>
       )}

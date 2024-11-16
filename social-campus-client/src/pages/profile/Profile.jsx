@@ -15,7 +15,7 @@ function Profile() {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const { isOpen, close } = useCreateItem();
+  const { isCreatePublicationOpen, closeCreatePublication } = useCreateItem();
 
   useEffect(() => {
     const fetchUserData = () => {
@@ -57,14 +57,14 @@ function Profile() {
 
   return (
     <div className="wrapper">
-      {isOpen && (
+      {isCreatePublicationOpen && (
         <div className="create-publication-modal-overlay">
           <CreatePublication
             user={user}
             publications={publications}
             setPublications={setPublications}
             getMaxPublicationId={getMaxPublicationId}
-            close={close}
+            close={closeCreatePublication}
           />
         </div>
       )}

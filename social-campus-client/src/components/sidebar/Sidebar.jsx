@@ -15,7 +15,7 @@ function Sidebar() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const { open } = useCreateItem();
+  const { openCreatePublication } = useCreateItem();
 
   useEffect(() => {
     const fetchUserData = () => {
@@ -38,7 +38,7 @@ function Sidebar() {
   };
 
   const handlePublishClick = () => {
-    open();
+    openCreatePublication();
   };
 
   return (
