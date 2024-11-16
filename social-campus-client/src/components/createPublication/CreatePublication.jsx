@@ -65,7 +65,7 @@ function CreatePublication(props) {
         profileImage: authUser.profileImage,
       };
 
-      if (props.publications.length != 0) {
+      if (props.publications.length !== 0) {
         props.setPublications([newPublication, ...props.publications]);
       }
 
