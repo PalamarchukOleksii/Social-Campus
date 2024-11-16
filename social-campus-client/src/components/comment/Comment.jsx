@@ -11,7 +11,11 @@ function Comment(props) {
     <div className="comment-container">
       <div className="comment-info">
         <div className="user-info">
-          <ShortProfile username={props.username} login={props.login} />
+          <ShortProfile
+            username={props.username}
+            login={props.login}
+            profileImage={props.profileImage}
+          />
           <DateTime dateTime={props.creationTime} locale="en-US" />
         </div>
         <h2 className="comment-text">{props.text}</h2>
@@ -31,6 +35,7 @@ function Comment(props) {
 Comment.propTypes = {
   username: PropTypes.string.isRequired,
   login: PropTypes.string.isRequired,
+  profileImage: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   likeCount: PropTypes.number.isRequired,
   creationTime: PropTypes.string.isRequired,

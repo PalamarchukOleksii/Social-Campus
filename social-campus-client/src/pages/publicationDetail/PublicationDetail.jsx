@@ -100,6 +100,7 @@ function PublicationDetail() {
                 key={comment.id}
                 username={comment.username}
                 login={comment.login}
+                profileImage={comment.profileImage}
                 text={comment.text}
                 likeCount={comment.likeCount}
                 creationTime={comment.creationTime}
