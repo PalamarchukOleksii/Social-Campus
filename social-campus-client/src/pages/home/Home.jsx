@@ -5,7 +5,7 @@ import login from "../../utils/consts/AuthUserLogin";
 import Loading from "../../components/loading/Loading";
 import "./Home.css";
 import CreatePublication from "../../components/createPublication/CreatePublication";
-import { useCreatePublication } from "../../context/CreatePublicationContext";
+import { useCreateItem } from "../../context/CreateItemContext";
 import getMaxPublicationId from "../../utils/helpers/GetMaxPublicationId";
 
 function Home() {
@@ -13,7 +13,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
 
-  const { isOpen, close } = useCreatePublication();
+  const { isOpen, close } = useCreateItem();
 
   useEffect(() => {
     const fetchData = () => {

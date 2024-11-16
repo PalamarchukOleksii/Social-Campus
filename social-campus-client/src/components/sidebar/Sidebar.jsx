@@ -7,7 +7,7 @@ import SidebarItems from "../../utils/consts/SidebarItems";
 import ShortProfile from "../shortProfile/ShortProfile";
 import userData from "../../data/userData.json";
 import login from "../../utils/consts/AuthUserLogin";
-import { useCreatePublication } from "../../context/CreatePublicationContext";
+import { useCreateItem } from "../../context/CreateItemContext";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ function Sidebar() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const { open } = useCreatePublication();
+  const { open } = useCreateItem();
 
   useEffect(() => {
     const fetchUserData = () => {

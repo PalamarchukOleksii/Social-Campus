@@ -5,7 +5,7 @@ import userData from "../../data/userData.json";
 import PublicationsList from "../../components/publicationsList/PublicationsList";
 import ROUTES from "../../utils/consts/Routes";
 import Loading from "../../components/loading/Loading";
-import { useCreatePublication } from "../../context/CreatePublicationContext";
+import { useCreateItem } from "../../context/CreateItemContext";
 import CreatePublication from "../../components/createPublication/CreatePublication";
 import getMaxPublicationId from "../../utils/helpers/GetMaxPublicationId";
 
@@ -15,7 +15,7 @@ function Profile() {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const { isOpen, close } = useCreatePublication();
+  const { isOpen, close } = useCreateItem();
 
   useEffect(() => {
     const fetchUserData = () => {

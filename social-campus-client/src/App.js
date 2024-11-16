@@ -17,7 +17,7 @@ import Followers from "./pages/followers/Followers";
 import Following from "./pages/following/Following";
 import PublicationDetail from "./pages/publicationDetail/PublicationDetail";
 import RecommendedProfiles from "./components/recommendedProfiles/RecommendedProfiles";
-import { CreatePublicationContextProvider } from "./context/CreatePublicationContext";
+import { CreateItemContextProvider } from "./context/CreateItemContext";
 
 function App() {
   const location = useLocation();
@@ -34,7 +34,7 @@ function App() {
 
   return (
     <div className="App">
-      <CreatePublicationContextProvider>
+      <CreateItemContextProvider>
         {showSidebar && (
           <div className="sidebar-container">
             <Sidebar />
@@ -68,7 +68,7 @@ function App() {
           </div>
         )}
         <ToastContainer progressStyle={{ background: "#3a3a3a" }} />
-      </CreatePublicationContextProvider>
+      </CreateItemContextProvider>
     </div>
   );
 }
