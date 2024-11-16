@@ -35,7 +35,7 @@ NavItem.propTypes = {
   activeIcon: PropTypes.elementType,
   inactiveIcon: PropTypes.elementType,
   label: PropTypes.string,
-  path: PropTypes.string.isRequired,
+  path: PropTypes.string,
   onClick: PropTypes.func,
   setHoveredIcon: PropTypes.func.isRequired,
   hoveredIcon: PropTypes.string.isRequired,

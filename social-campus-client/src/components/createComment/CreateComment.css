@@ -1,0 +1,62 @@
+.create-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: auto;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+
+.create-comment .comment-text {
+  width: auto;
+  min-height: 50px;
+  background-color: var(--background-color);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+  font-family: "Roboto";
+  font-size: 16px;
+  margin: 0;
+}
+
+.create-comment .create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.create-comment .controles {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.create-comment .publish-button {
+  width: 120px;
+  font-size: 16px;
+}
+
+.create-comment .close-creation-icon {
+  margin: 0;
+  opacity: 0.5;
+  color: var(--general-text-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.create-comment .close-creation-icon:hover {
+  opacity: 1;
+}
+
+.create-comment .close-creation-icon,
+.publish-button {
+  font-size: 26px;
+}
+
+.create-comment .back-text {
+  font-size: 20px;
+}
