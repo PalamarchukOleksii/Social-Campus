@@ -60,6 +60,8 @@
 
 .create-publication .image-preview-container {
   position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .create-publication .remove-image-icon {
