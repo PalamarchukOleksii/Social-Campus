@@ -39,8 +39,10 @@ function Publication(props) {
   };
 
   const handleCreateCommentOpenClick = () => {
-    openCreateComment();
-    setIsCreateOpen((prev) => !prev);
+    if (props.addCreateOpen) {
+      openCreateComment();
+      setIsCreateOpen((prev) => !prev);
+    }
   };
 
   const handleCreateCommentCloseClick = () => {
@@ -112,6 +114,11 @@ Publication.propTypes = {
     username: PropTypes.string.isRequired,
     login: PropTypes.string.isRequired,
   }).isRequired,
+  addCreateOpen: PropTypes.bool,
+};
+
+Publication.defaultProps = {
+  addCreateOpen: true,
 };
 
 export default Publication;

@@ -65,12 +65,6 @@ function PublicationDetail() {
     }
   }, [id]);
 
-  if (loading) return <></>;
-  if (!publication)
-    return (
-      <h1 className="not-found-text general-text">Publication not found</h1>
-    );
-
   return (
     <div className="publication-detail-container">
       <div className="top-section">
@@ -84,33 +78,40 @@ function PublicationDetail() {
         />
         <h1 className="general-text">Publication</h1>
       </div>
-      <Publication publication={publication} />
-      <CreateComment
-        user={currentUser}
-        comments={comments}
-        setComments={setComments}
-        getMaxCommentId={getMaxCommentId}
-      />
-      {comments.length > 0 && (
+      {loading ? (
+        <></>
+      ) : !publication ? (
+        <h1 className="not-found-text general-text">Publication not found</h1>
+      ) : (
         <>
-          <h2 className="comment-section-text general-text">Comments</h2>
-          <div className="comments-section">
-            {comments.map((comment) => (
-              <Comment
-                key={comment.id}
-                username={comment.username}
-                login={comment.login}
-                profileImage={comment.profileImage}
-                text={comment.text}
-                likeCount={comment.likeCount}
-                creationTime={comment.creationTime}
-              />
-            ))}
-          </div>
+          <Publication publication={publication} addCreateOpen={false} />
+          <CreateComment
+            user={currentUser}
+            comments={comments}
+            setComments={setComments}
+            getMaxCommentId={getMaxCommentId}
+          />
+          {comments.length > 0 ? (
+            <>
+              <h2 className="comment-section-text general-text">Comments</h2>
+              <div className="comments-section">
+                {comments.map((comment) => (
+                  <Comment
+                    key={comment.id}
+                    username={comment.username}
+                    login={comment.login}
+                    profileImage={comment.profileImage}
+                    text={comment.text}
+                    likeCount={comment.likeCount}
+                    creationTime={comment.creationTime}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <h2 className="general-text no-comments">No comments available</h2>
+          )}
         </>
-      )}
-      {comments.length === 0 && (
-        <h2 className="general-text no-comments">No comments available</h2>
       )}
     </div>
   );

@@ -89,7 +89,6 @@ function CreateComment(props) {
           value={commentText}
           onChange={handleInputChange}
           required
-          autoFocus
         />
         <div className="controles">
           <button className="publish-button" type="submit">

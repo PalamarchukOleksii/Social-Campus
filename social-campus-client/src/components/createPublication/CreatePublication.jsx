@@ -126,7 +126,6 @@ function CreatePublication(props) {
             }
           }}
           required
-          autoFocus
         />
         {imagePreview && (
           <div className="image-preview-container">
