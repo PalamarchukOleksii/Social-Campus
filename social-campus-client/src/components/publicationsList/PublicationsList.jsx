@@ -6,8 +6,8 @@ import "./PublicationsList.css";
 function PublicationsList(props) {
   return (
     <div className="publications">
-      {props.publications.map((publication, index) => (
-        <Publication key={index} publication={publication} />
+      {props.publications.map((publication) => (
+        <Publication key={publication.id} publication={publication} />
       ))}
     </div>
   );

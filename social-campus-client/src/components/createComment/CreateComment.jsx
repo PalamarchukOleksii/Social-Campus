@@ -25,7 +25,6 @@ function CreateComment(props) {
         profileImage: props.user.profileImage,
         likeCount: 0,
       };
-      console.log(newComment);
 
       props.setComments([newComment, ...props.comments]);
 
@@ -46,7 +45,7 @@ function CreateComment(props) {
   };
 
   return (
-    <div className="create-comment">
+    <div className={`create-comment ${props.addGoBack ? "go-back" : ""}`}>
       {props.addGoBack && (
         <div
           className="close-creation-icon general-text"

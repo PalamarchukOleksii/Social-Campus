@@ -3,11 +3,18 @@
   flex-direction: column;
   gap: 15px;
   height: auto;
-  width: 550px;
   padding: 20px;
   margin: 10px;
   border-radius: 10px;
   overflow: auto;
+}
+
+.create-comment.go-back {
+  width: 550px;
+}
+
+.create-comment:not(.go-back) {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .create-comment .comment-text {
