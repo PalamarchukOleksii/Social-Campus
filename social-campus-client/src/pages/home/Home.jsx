@@ -4,16 +4,24 @@ import PublicationsList from "../../components/publicationsList/PublicationsList
 import login from "../../utils/consts/AuthUserLogin";
 import Loading from "../../components/loading/Loading";
 import "./Home.css";
+import CreatePublication from "../../components/createPublication/CreatePublication";
+import { useCreateItem } from "../../context/CreateItemContext";
+import getMaxPublicationId from "../../utils/helpers/GetMaxPublicationId";
 
 function Home() {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const { isCreatePublicationOpen, closeCreatePublication } = useCreateItem();
 
   useEffect(() => {
     const fetchData = () => {
-      const currentUser = userData.find((user) => user.login === login);
+      const user = userData.find((user) => user.login === login);
 
-      const followingIds = currentUser.following.map(
+      setCurrentUser(user);
+
+      const followingIds = user.following.map(
         (followingUser) => followingUser.id
       );
 
@@ -24,12 +32,23 @@ function Home() {
             ...publication,
             username: user.username,
             login: user.login,
-            profileImage: user.profileImage || "/default-profile.png",
+            profileImage: user.profileImage,
           }))
-        )
-        .sort((a, b) => new Date(b.creationTime) - new Date(a.creationTime));
+        );
 
-      setPublications(followedPublications);
+      const currentUserPublications = user.publications.map((publication) => ({
+        ...publication,
+        username: user.username,
+        login: user.login,
+        profileImage: user.profileImage,
+      }));
+
+      const allPublications = [
+        ...currentUserPublications,
+        ...followedPublications,
+      ].sort((a, b) => new Date(b.creationTime) - new Date(a.creationTime));
+
+      setPublications(allPublications);
       setLoading(false);
     };
 
@@ -54,6 +73,17 @@ function Home() {
 
   return (
     <div className="home">
+      {isCreatePublicationOpen && (
+        <div className="create-publication-modal-overlay">
+          <CreatePublication
+            user={currentUser}
+            publications={publications}
+            setPublications={setPublications}
+            getMaxPublicationId={getMaxPublicationId}
+            close={closeCreatePublication}
+          />
+        </div>
+      )}
       <PublicationsList publications={publications} />
     </div>
   );

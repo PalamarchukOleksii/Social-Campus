@@ -6,18 +6,28 @@ import publicationDetailsData from "../../data/userData.json";
 import NavItem from "../../components/navItem/NavItem";
 import PublicationDetailItems from "../../utils/consts/PublicationDetailItems";
 import "./PublicationDetail.css";
+import CreateComment from "../../components/createComment/CreateComment";
+import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
+import login from "../../utils/consts/AuthUserLogin";
 
 function PublicationDetail() {
   const { id } = useParams();
   const [publication, setPublication] = useState(null);
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hoveredIcon, setHoveredIcon] = useState("");
   const navigate = useNavigate();
+  const [comments, setComments] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const fetchPublication = async () => {
       try {
+        const currentUser = publicationDetailsData.find(
+          (user) => user.login === login
+        );
+
+        setCurrentUser(currentUser);
+
         const foundPublication = publicationDetailsData
           .flatMap((user) => user.publications)
           .find((pub) => pub.id === parseInt(id));
@@ -26,8 +36,21 @@ function PublicationDetail() {
           const foundUser = publicationDetailsData.find((user) =>
             user.publications.some((pub) => pub.id === foundPublication.id)
           );
-          setPublication(foundPublication);
-          setUser(foundUser);
+
+          const publication = {
+            id: foundPublication.id,
+            description: foundPublication.description,
+            imageUrl: foundPublication.imageUrl,
+            creationTime: foundPublication.creationTime,
+            likesCount: foundPublication.likesCount,
+            comments: foundPublication.comments,
+            username: foundUser.username,
+            login: foundUser.login,
+            profileImage: foundUser.profileImage,
+          };
+
+          setPublication(publication);
+          setComments(foundPublication.comments);
         }
       } catch (error) {
         console.error("Error fetching publication:", error);
@@ -38,7 +61,6 @@ function PublicationDetail() {
 
     if (id) {
       fetchPublication();
-
       window.scrollTo(0, 0);
     }
   }, [id]);
@@ -62,34 +84,33 @@ function PublicationDetail() {
         />
         <h1 className="general-text">Publication</h1>
       </div>
-      <Publication
-        publicationId={publication.id}
-        username={user.username}
-        login={user.login}
-        profileImage={user.profileImage}
-        creationTime={publication.creationTime}
-        imageUrl={publication.imageUrl}
-        description={publication.description}
-        likesCount={publication.likesCount}
-        commentsCount={publication.comments.length}
+      <Publication publication={publication} />
+      <CreateComment
+        user={currentUser}
+        comments={comments}
+        setComments={setComments}
+        getMaxCommentId={getMaxCommentId}
       />
-      <h2 className="comment-section-text general-text">Comments</h2>
-      <div className="comments-section">
-        {publication.comments.length > 0 ? (
-          publication.comments.map((comment, index) => (
-            <Comment
-              key={index}
-              username={comment.username}
-              login={comment.login}
-              text={comment.text}
-              likeCount={comment.likeCount}
-              creationTime={comment.creationTime}
-            />
-          ))
-        ) : (
-          <h2 className="general-text no-comments">No comments available</h2>
-        )}
-      </div>
+      {comments.length > 0 && (
+        <>
+          <h2 className="comment-section-text general-text">Comments</h2>
+          <div className="comments-section">
+            {comments.map((comment) => (
+              <Comment
+                key={comment.id}
+                username={comment.username}
+                login={comment.login}
+                text={comment.text}
+                likeCount={comment.likeCount}
+                creationTime={comment.creationTime}
+              />
+            ))}
+          </div>
+        </>
+      )}
+      {comments.length === 0 && (
+        <h2 className="general-text no-comments">No comments available</h2>
+      )}
     </div>
   );
 }

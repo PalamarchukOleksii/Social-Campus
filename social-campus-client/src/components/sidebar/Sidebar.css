@@ -50,3 +50,15 @@
 .not-found-text {
   font-weight: normal;
 }
+
+.add-publish {
+  font-size: 18px;
+  width: 100%;
+  padding: 15px 0;
+}
+
+.button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

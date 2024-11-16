@@ -7,18 +7,7 @@ function PublicationsList(props) {
   return (
     <div className="publications">
       {props.publications.map((publication) => (
-        <Publication
-          key={publication.id}
-          publicationId={publication.id}
-          description={publication.description}
-          imageUrl={publication.imageUrl}
-          creationTime={publication.creationTime}
-          likesCount={publication.likesCount}
-          commentsCount={publication.comments.length}
-          username={publication.username}
-          login={publication.login}
-          profileImage={publication.profileImage}
-        />
+        <Publication key={publication.id} publication={publication} />
       ))}
     </div>
   );
