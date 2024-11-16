@@ -12,8 +12,8 @@ function Publication(props) {
   const location = useLocation();
 
   const handlePublicationClick = () => {
-    if (location.pathname !== `/publication/${props.publicationId}`) {
-      navigate(`/publication/${props.publicationId}`);
+    if (location.pathname !== `/publication/${props.publication.id}`) {
+      navigate(`/publication/${props.publication.id}`);
     }
   };
 
@@ -21,30 +21,32 @@ function Publication(props) {
     <div className="publication-container">
       <div className="short-info-container">
         <ShortProfile
-          username={props.username}
-          login={props.login}
-          profileImage={props.profileImage}
+          username={props.publication.username}
+          login={props.publication.login}
+          profileImage={props.publication.profileImage}
         />
-        <DateTime dateTime={props.creationTime} locale="en-US" />
+        <DateTime dateTime={props.publication.creationTime} locale="en-US" />
       </div>
       <div className="content-container" onClick={handlePublicationClick}>
         <h2 className="description general-text">
-          {props.description || "Description"}
+          {props.publication.description || "Description"}
         </h2>
         <div className="image-wrapper">
-          {props.imageUrl && <img src={props.imageUrl} alt="Publication" />}
+          {props.publication.imageUrl && (
+            <img src={props.publication.imageUrl} alt="Publication" />
+          )}
         </div>
       </div>
       <div className="interaction-stat">
         <InteractionItem
           itemType="like"
-          label={props.likesCount}
+          label={props.publication.likesCount}
           icon={InteractionItems.likeIcon}
           activeIcon={InteractionItems.activeLikeIcon}
         />
         <InteractionItem
           itemType="comment"
-          label={props.commentsCount}
+          label={props.publication.comments.length}
           icon={InteractionItems.commentIcon}
         />
       </div>
@@ -53,15 +55,17 @@ function Publication(props) {
 }
 
 Publication.propTypes = {
-  publicationId: PropTypes.number.isRequired,
-  description: PropTypes.string.isRequired,
-  imageUrl: PropTypes.string,
-  creationTime: PropTypes.string.isRequired,
-  likesCount: PropTypes.number.isRequired,
-  commentsCount: PropTypes.number.isRequired,
-  profileImage: PropTypes.string,
-  username: PropTypes.string.isRequired,
-  login: PropTypes.string.isRequired,
+  publication: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string,
+    creationTime: PropTypes.string.isRequired,
+    likesCount: PropTypes.number.isRequired,
+    comments: PropTypes.array.isRequired,
+    profileImage: PropTypes.string,
+    username: PropTypes.string.isRequired,
+    login: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Publication;
