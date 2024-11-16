@@ -20,6 +20,9 @@
 .short-info .profile-image {
   height: 50px;
   width: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  outline: 2px solid var(--secondary-text-color);
 }
 
 .profile-info .login {

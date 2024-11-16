@@ -70,11 +70,13 @@ function Profile() {
       )}
       <div className="profile">
         <div className="profile-header">
-          <img
-            src={user.profileImage || "/default-profile.png"}
-            alt="Profile"
-            className="profile-image"
-          />
+          <div className="profile-image-container">
+            <img
+              src={user.profileImage || "/default-profile.png"}
+              alt="Profile"
+              className="profile-image"
+            />
+          </div>
         </div>
         <div className="profile-info">
           <h2 className="profile-name general-text">{user.username}</h2>
