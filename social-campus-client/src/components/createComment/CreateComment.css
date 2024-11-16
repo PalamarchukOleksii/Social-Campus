@@ -53,6 +53,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 80px;
 }
 
 .create-comment .close-creation-icon:hover {

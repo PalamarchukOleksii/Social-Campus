@@ -17,8 +17,9 @@ function Publication(props) {
   const location = useLocation();
   const [comments, setComments] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  const { isCreateCommentOpen, closeCreateComment } = useCreateItem();
+  const { closeCreateComment, openCreateComment } = useCreateItem();
 
   useEffect(() => {
     const fetchData = () => {
@@ -37,16 +38,26 @@ function Publication(props) {
     }
   };
 
+  const handleCreateCommentOpenClick = () => {
+    openCreateComment();
+    setIsCreateOpen((prev) => !prev);
+  };
+
+  const handleCreateCommentCloseClick = () => {
+    closeCreateComment();
+    setIsCreateOpen((prev) => !prev);
+  };
+
   return (
     <div className="publication-container">
-      {isCreateCommentOpen && (
+      {isCreateOpen && (
         <div className="create-comment-modal-overlay">
           <CreateComment
             user={currentUser}
             comments={comments}
             setComments={setComments}
             getMaxCommentId={getMaxCommentId}
-            close={closeCreateComment}
+            onCloseClick={handleCreateCommentCloseClick}
             addGoBack={true}
           />
         </div>
@@ -81,6 +92,7 @@ function Publication(props) {
             itemType="comment"
             label={props.publication.comments.length}
             icon={InteractionItems.commentIcon}
+            onClick={handleCreateCommentOpenClick}
           />
         </div>
       </div>

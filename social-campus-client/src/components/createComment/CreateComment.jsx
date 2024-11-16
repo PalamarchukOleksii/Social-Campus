@@ -30,7 +30,7 @@ function CreateComment(props) {
 
       setCommentText("");
       if (props.addGoBack) {
-        props.close();
+        props.onCloseClick();
       }
     } else {
       toast("Comment text cannot be empty.");
@@ -40,7 +40,7 @@ function CreateComment(props) {
   const closeCreateComment = () => {
     setCommentText("");
     if (props.addGoBack) {
-      props.close();
+      props.onCloseClick();
     }
   };
 
@@ -102,7 +102,7 @@ CreateComment.propTypes = {
   ).isRequired,
   setComments: PropTypes.func.isRequired,
   getMaxCommentId: PropTypes.func.isRequired,
-  close: PropTypes.func,
+  onCloseClick: PropTypes.func,
   addGoBack: PropTypes.bool,
 };
 
