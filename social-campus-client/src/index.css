@@ -32,6 +32,11 @@ body {
   border-radius: 10px;
 }
 
+body.no-scroll {
+  overflow: hidden;
+  background: #7b7c7d;
+}
+
 div {
   background-color: var(--background-color);
 }

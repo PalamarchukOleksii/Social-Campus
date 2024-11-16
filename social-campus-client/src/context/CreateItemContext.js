@@ -7,11 +7,25 @@ export function CreateItemContextProvider({ children }) {
   const [isCreatePublicationOpen, setIsCreatePublicationOpen] = useState(false);
   const [isCreateCommentOpen, setIsCreateCommentOpen] = useState(false);
 
-  const openCreatePublication = () => setIsCreatePublicationOpen(true);
-  const closeCreatePublication = () => setIsCreatePublicationOpen(false);
+  const openCreatePublication = () => {
+    setIsCreatePublicationOpen(true);
+    document.body.classList.add("no-scroll");
+  };
 
-  const openCreateComment = () => setIsCreateCommentOpen(true);
-  const closeCreateComment = () => setIsCreateCommentOpen(false);
+  const closeCreatePublication = () => {
+    setIsCreatePublicationOpen(false);
+    document.body.classList.remove("no-scroll");
+  };
+
+  const openCreateComment = () => {
+    setIsCreateCommentOpen(true);
+    document.body.classList.add("no-scroll");
+  };
+
+  const closeCreateComment = () => {
+    setIsCreateCommentOpen(false);
+    document.body.classList.remove("no-scroll");
+  };
 
   return (
     <CreateItemContext.Provider
