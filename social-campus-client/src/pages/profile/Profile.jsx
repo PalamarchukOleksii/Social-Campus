@@ -8,6 +8,7 @@ import Loading from "../../components/loading/Loading";
 import { useCreateItem } from "../../context/CreateItemContext";
 import CreatePublication from "../../components/createPublication/CreatePublication";
 import getMaxPublicationId from "../../utils/helpers/GetMaxPublicationId";
+import authLogin from "../../utils/consts/AuthUserLogin";
 
 function Profile() {
   const { login } = useParams();
@@ -60,9 +61,8 @@ function Profile() {
       {isCreatePublicationOpen && (
         <div className="create-publication-modal-overlay">
           <CreatePublication
-            user={user}
-            publications={publications}
-            setPublications={setPublications}
+            publications={authLogin === login ? publications : []}
+            setPublications={authLogin === login ? setPublications : null}
             getMaxPublicationId={getMaxPublicationId}
             close={closeCreatePublication}
           />

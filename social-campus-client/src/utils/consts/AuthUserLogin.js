@@ -1,3 +1,3 @@
-const login = "johndoe";
+const authLogin = "johndoe";
 
-export default login;
+export default authLogin;

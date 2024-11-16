@@ -1,13 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import ShortProfile from "../shortProfile/ShortProfile";
 import { IoArrowBackCircleOutline, IoArrowBackCircle } from "react-icons/io5";
 import "./CreateComment.css";
+import login from "../../utils/consts/AuthUserLogin";
+import userData from "../../data/userData.json";
 
 function CreateComment(props) {
   const [commentText, setCommentText] = useState("");
   const [isExitHovered, setIsExitHovered] = useState(false);
+  const [authUser, setAuthUser] = useState();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      const foundUser = userData.find((user) => user.login === login);
+      setAuthUser(foundUser || null);
+      setLoading(false);
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleInputChange = (e) => {
     setCommentText(e.target.value);
@@ -20,9 +34,9 @@ function CreateComment(props) {
         id: props.getMaxCommentId() + 1,
         text: commentText,
         creationTime: new Date().toISOString(),
-        username: props.user.username,
-        login: props.user.login,
-        profileImage: props.user.profileImage,
+        username: authUser.username,
+        login: authUser.login,
+        profileImage: authUser.profileImage,
         likeCount: 0,
       };
 
@@ -44,6 +58,10 @@ function CreateComment(props) {
     }
   };
 
+  if (loading) {
+    return <></>;
+  }
+
   return (
     <div className={`create-comment ${props.addGoBack ? "go-back" : ""}`}>
       {props.addGoBack && (
@@ -58,9 +76,9 @@ function CreateComment(props) {
         </div>
       )}
       <ShortProfile
-        username={props.user.username}
-        login={props.user.login}
-        profileImage={props.user.profileImage}
+        username={authUser.username}
+        login={authUser.login}
+        profileImage={authUser.profileImage}
         redirectOnClick={false}
       />
       <form className="create-form" onSubmit={handleSubmit}>
@@ -84,11 +102,6 @@ function CreateComment(props) {
 }
 
 CreateComment.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    login: PropTypes.string.isRequired,
-    profileImage: PropTypes.string,
-  }).isRequired,
   comments: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,

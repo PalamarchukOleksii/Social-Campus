@@ -30,7 +30,7 @@ function Publication(props) {
     };
 
     fetchData();
-  }, [comments]);
+  });
 
   const handlePublicationClick = () => {
     if (location.pathname !== `/publication/${props.publication.id}`) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import ShortProfile from "../shortProfile/ShortProfile";
@@ -11,6 +11,8 @@ import {
   IoArrowBackCircle,
 } from "react-icons/io5";
 import "./CreatePublication.css";
+import login from "../../utils/consts/AuthUserLogin";
+import userData from "../../data/userData.json";
 
 function CreatePublication(props) {
   const [publicationText, setPublicationText] = useState("");
@@ -19,6 +21,18 @@ function CreatePublication(props) {
   const [isHovered, setIsHovered] = useState(false);
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [isExitHovered, setIsExitHovered] = useState(false);
+  const [authUser, setAuthUser] = useState();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      const foundUser = userData.find((user) => user.login === login);
+      setAuthUser(foundUser || null);
+      setLoading(false);
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleInputChange = (e) => {
     setPublicationText(e.target.value);
@@ -46,12 +60,14 @@ function CreatePublication(props) {
         creationTime: new Date().toISOString(),
         likesCount: 0,
         comments: [],
-        username: props.user.username,
-        login: props.user.login,
-        profileImage: props.user.profileImage,
+        username: authUser.username,
+        login: authUser.login,
+        profileImage: authUser.profileImage,
       };
 
-      props.setPublications([newPublication, ...props.publications]);
+      if (props.publications.length != 0) {
+        props.setPublications([newPublication, ...props.publications]);
+      }
 
       setPublicationText("");
       setImage(null);
@@ -75,6 +91,10 @@ function CreatePublication(props) {
     props.close();
   };
 
+  if (loading) {
+    return <></>;
+  }
+
   return (
     <div className="create-publication">
       <div
@@ -87,9 +107,9 @@ function CreatePublication(props) {
         <span className="general-text back-text">Back</span>
       </div>
       <ShortProfile
-        username={props.user.username}
-        login={props.user.login}
-        profileImage={props.user.profileImage}
+        username={authUser.username}
+        login={authUser.login}
+        profileImage={authUser.profileImage}
         redirectOnClick={false}
       />
       <form className="create-form" onSubmit={handleSubmit}>
@@ -147,11 +167,6 @@ function CreatePublication(props) {
 }
 
 CreatePublication.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    login: PropTypes.string.isRequired,
-    profileImage: PropTypes.string,
-  }).isRequired,
   publications: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
@@ -164,9 +179,9 @@ CreatePublication.propTypes = {
       login: PropTypes.string,
       profileImage: PropTypes.string,
     })
-  ).isRequired,
-  setPublications: PropTypes.func.isRequired,
-  getMaxPublicationId: PropTypes.func.isRequired,
+  ),
+  setPublications: PropTypes.func,
+  getMaxPublicationId: PropTypes.func,
   close: PropTypes.func.isRequired,
 };
 
