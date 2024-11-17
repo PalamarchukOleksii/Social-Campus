@@ -51,22 +51,26 @@ The target audience includes students, young people, and university staff aged 1
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/PalamarchukOleksii/Social-Campus.git
    ```
 
 2. Navigate to the project directory:
+
    ```bash
    cd Social-Campus
    ```
 
 3. Install dependencies for the frontend:
+
    ```bash
    cd social-campus-client
    npm install
    ```
 
 4. Install dependencies for the backend:
+
    ```bash
    cd ../social-campus-server
    dotnet restore
@@ -75,8 +79,10 @@ The target audience includes students, young people, and university staff aged 1
 5. Set up the database (if applicable) and run migrations.
 
 6. Start the backend server:
+
    ```bash
-   dotnet run
+   cd Presentation
+   dotnet watch run
    ```
 
 7. Start the frontend server:
@@ -99,4 +105,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-For inquiries or feedback, please reach out to [oleksiypalamarchuck@gmail.com](mailto:oleksiypalamarchuck@gmail.com).
+For inquiries or feedback, please reach out to [oleksiypalamarchuck@gmail.com](mailto:oleksiypalamarchuck@gmail.com?subject=Your%20Subject&body=Body%20text).

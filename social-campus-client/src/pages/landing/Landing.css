@@ -1,9 +1,6 @@
 .landing-container {
   display: flex;
   flex-direction: row;
-  width: 80%;
-  height: calc(100vh - 55px);
-  margin: 0 auto;
 }
 
 .left-half,
@@ -15,7 +12,7 @@
 }
 
 .logo {
-  max-width: 70%;
+  width: 350px;
   height: auto;
 }
 
@@ -26,11 +23,10 @@
   justify-content: center;
   width: 450px;
   height: 350px;
-  background-color: var(--background-color);
   text-align: center;
   border-radius: 8px;
   padding: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
 }
 
 h1 {
@@ -61,11 +57,7 @@ p {
 .google-button {
   background-color: #db4437;
   color: white;
-  border: none;
   padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
 }
 
 .google-button:hover {

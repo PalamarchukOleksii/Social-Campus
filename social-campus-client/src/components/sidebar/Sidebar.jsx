@@ -1,65 +1,107 @@
-import React from "react";
-import { CiHome, CiSearch, CiChat2, CiUser } from "react-icons/ci";
+import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
+import { IoExit, IoExitOutline } from "react-icons/io5";
+import NavItem from "../navItem/NavItem";
+import SidebarItems from "../../utils/consts/SidebarItems";
+import ShortProfile from "../shortProfile/ShortProfile";
+import userData from "../../data/userData.json";
+import login from "../../utils/consts/AuthUserLogin";
+import { useCreateItem } from "../../context/CreateItemContext";
 
 function Sidebar() {
   const navigate = useNavigate();
+  const [hoveredIcon, setHoveredIcon] = useState("");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleLoggout = async (e) => {
+  const { openCreatePublication } = useCreateItem();
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      const foundUser = userData.find((user) => user.login === login);
+      setUser(foundUser || null);
+      setLoading(false);
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      console.log("Sign up with Google");
+      console.log("User logged out");
       navigate("/");
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handlePublishClick = () => {
+    openCreatePublication();
+  };
+
   return (
     <div className="sidebar">
-      <div className="head">
-        <img src="/android-chrome-512x512.png" alt="logo"></img>
-        <span>Social Campus</span>
+      <div className="wrapper">
+        <div className="head">
+          <img src="/android-chrome-512x512.png" alt="logo" />
+          <span>Social Campus</span>
+        </div>
+        <div className="navigation">
+          <ul>
+            {SidebarItems.map(
+              ({
+                path,
+                label,
+                inactiveIcon: InactiveIcon,
+                activeIcon: ActiveIcon,
+              }) => (
+                <li key={path}>
+                  <NavItem
+                    path={path}
+                    label={label}
+                    inactiveIcon={InactiveIcon}
+                    activeIcon={ActiveIcon}
+                    hoveredIcon={hoveredIcon}
+                    setHoveredIcon={setHoveredIcon}
+                  />
+                </li>
+              )
+            )}
+          </ul>
+          <div className="button-wrapper">
+            <button className="add-publish" onClick={handlePublishClick}>
+              Publish
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="navigation">
-        <ul>
-          <li>
-            <a href="/home">
-              <CiHome className="icon" />
-              <span>Home</span>
-            </a>
-          </li>
-          <li>
-            <a href="/search">
-              <CiSearch className="icon" />
-              <span>Search</span>
-            </a>
-          </li>
-          <li>
-            <a href="/messages">
-              <CiChat2 className="icon" />
-              <span>Messages</span>
-            </a>
-          </li>
-          <li>
-            <a href="/profile">
-              <CiUser className="icon" />
-              <span>Profile</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div className="logout">
-        <img
-          src="https://via.placeholder.com/150"
-          alt="Profile"
-          className="profile-image"
-        />
-        <button className="loggout-btn" onClick={handleLoggout}>
-          Logout
-        </button>
-      </div>
+      {loading ? (
+        <></>
+      ) : user ? (
+        <div className="logout">
+          <ShortProfile
+            username={user.username}
+            login={user.login}
+            profileImage={user.profileImage}
+          />
+          <div
+            onClick={handleLogout}
+            className="logout-icon"
+            onMouseEnter={() => setHoveredIcon("logout")}
+            onMouseLeave={() => setHoveredIcon("")}
+          >
+            {hoveredIcon === "logout" ? (
+              <IoExit className="exit-icon" />
+            ) : (
+              <IoExitOutline className="exit-icon" />
+            )}
+          </div>
+        </div>
+      ) : (
+        <h3 className="not-found-text general-text">User not found</h3>
+      )}
     </div>
   );
 }

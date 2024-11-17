@@ -2,17 +2,43 @@
 
 body {
   font-family: "Roboto";
-  background-color: #faf7fe;
-  color: #4a4a4a;
 }
 
 :root {
-  --background-color: #ffff;
-  --button-color: #afb4c7;
+  --background-color: #f6f8fa;
+  --button-color: #b0b3b8;
   --secondary-text-color: #a0a3ab;
   --active-like-color: #8a8f99;
   --icon-panel-color: #6a687e;
   --general-text-color: #3a3a3a;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--button-color);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--active-like-color);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+  border-radius: 10px;
+}
+
+body.no-scroll {
+  overflow: hidden;
+  background: #7b7c7d;
+}
+
+div {
+  background-color: var(--background-color);
 }
 
 .general-text {
@@ -28,7 +54,7 @@ button {
   color: white;
   border: none;
   padding: 10px 20px;
-  border-radius: 4px;
+  border-radius: 360px;
   cursor: pointer;
   font-family: "Roboto";
   transition: transform 0.3s ease, background-color 0.3s ease;

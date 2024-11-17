@@ -1,0 +1,324 @@
+[
+  {
+    "id": 1,
+    "email": "johndoe@example.com",
+    "username": "John Doe",
+    "login": "johndoe",
+    "bio": "Software developer with a passion for open-source projects.",
+    "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+    "followers": [
+      {
+        "id": 4,
+        "username": "Jane Smith",
+        "login": "janesmith",
+        "bio": "Photographer capturing the essence of the wild.",
+        "profileImage": null,
+        "isFollowing": true
+      },
+      {
+        "id": 5,
+        "email": "mikebrown@example.com",
+        "username": "Mike Brown",
+        "login": "mikebrown",
+        "bio": "Tech enthusiast and part-time gamer.",
+        "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+        "isFollowing": false
+      },
+      {
+        "id": 6,
+        "email": "bobbrown@example.com",
+        "username": "Bob Brown",
+        "login": "bobbrown",
+        "bio": "Tech enthusiast and part-time gamer.",
+        "profileImage": null,
+        "isFollowing": true
+      }
+    ],
+    "following": [
+      {
+        "id": 4,
+        "username": "Jane Smith",
+        "login": "janesmith",
+        "bio": "Photographer capturing the essence of the wild.",
+        "profileImage": null,
+        "isFollowing": true
+      },
+      {
+        "id": 6,
+        "email": "bobbrown@example.com",
+        "username": "Bob Brown",
+        "login": "bobbrown",
+        "bio": "Tech enthusiast and part-time gamer.",
+        "profileImage": null,
+        "isFollowing": true
+      }
+    ],
+    "publications": [
+      {
+        "id": 1,
+        "description": "Exploring the beauty of nature",
+        "imageUrl": "https://img.freepik.com/free-photo/river-surrounded-by-forests-cloudy-sky-thuringia-germany_181624-30863.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
+        "creationTime": "2024-11-03T10:00:00Z",
+        "likesCount": 160,
+        "comments": [
+          {
+            "id": 1,
+            "username": "Jane Smith",
+            "login": "janesmith",
+            "profileImage": null,
+            "text": "Absolutely stunning! Nature is so beautiful.",
+            "creationTime": "2024-11-03T11:00:00Z",
+            "likeCount": 5
+          },
+          {
+            "id": 2,
+            "username": "Mike Brown",
+            "login": "mikebrown",
+            "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+            "text": "Can't wait to visit this place!",
+            "creationTime": "2024-11-03T12:30:00Z",
+            "likeCount": 3
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "description": "An insightful book review",
+        "imageUrl": null,
+        "creationTime": "2023-11-02T09:15:00Z",
+        "likesCount": 80,
+        "comments": [
+          {
+            "id": 3,
+            "username": "Mike Brown",
+            "login": "mikebrown",
+            "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+            "text": "Thanks for sharing this review!",
+            "creationTime": "2024-11-02T10:00:00Z",
+            "likeCount": 2
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "description": "The Beauty and Significance of Nature\nNature, in all its magnificence, is a tapestry woven with the threads of life that encompasses every living being on our planet.",
+        "imageUrl": "https://img.freepik.com/free-photo/lake-mountains_1204-508.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
+        "creationTime": "2022-11-01T08:45:00Z",
+        "likesCount": 200,
+        "comments": [
+          {
+            "id": 4,
+            "username": "Jane Smith",
+            "login": "janesmith",
+            "profileImage": null,
+            "text": "A beautifully written piece!",
+            "creationTime": "2024-11-01T09:00:00Z",
+            "likeCount": 10
+          },
+          {
+            "id": 5,
+            "username": "Mike Brown",
+            "login": "mikebrown",
+            "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+            "text": "I love this! Nature is truly magnificent.",
+            "creationTime": "2024-11-01T09:30:00Z",
+            "likeCount": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "email": "janesmith@example.com",
+    "username": "Jane Smith",
+    "login": "janesmith",
+    "bio": "Photographer capturing the essence of the wild.",
+    "profileImage": null,
+    "followers": [
+      {
+        "id": 5,
+        "email": "mikebrown@example.com",
+        "username": "Mike Brown",
+        "login": "mikebrown",
+        "bio": "Tech enthusiast and part-time gamer.",
+        "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+        "isFollowing": false
+      },
+      {
+        "id": 1,
+        "email": "johndoe@example.com",
+        "username": "John Doe",
+        "login": "johndoe",
+        "bio": "Software developer with a passion for open-source projects.",
+        "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+        "isFollowing": true
+      }
+    ],
+    "following": [
+      {
+        "id": 1,
+        "email": "johndoe@example.com",
+        "username": "John Doe",
+        "login": "johndoe",
+        "bio": "Software developer with a passion for open-source projects.",
+        "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+        "isFollowing": true
+      }
+    ],
+    "publications": [
+      {
+        "id": 4,
+        "description": "A breathtaking sunrise over the mountains",
+        "imageUrl": "https://img.freepik.com/free-photo/sunrise-over-mountain-range_181624-31059.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
+        "creationTime": "2024-10-30T06:30:00Z",
+        "likesCount": 300,
+        "comments": [
+          {
+            "id": 6,
+            "username": "Mike Brown",
+            "login": "mikebrown",
+            "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+            "text": "This is so calming!",
+            "creationTime": "2024-10-30T07:00:00Z",
+            "likeCount": 6
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "email": "mikebrown@example.com",
+    "username": "Mike Brown",
+    "login": "mikebrown",
+    "bio": "Tech enthusiast and part-time gamer.",
+    "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+    "followers": [
+      {
+        "id": 1,
+        "email": "johndoe@example.com",
+        "username": "John Doe",
+        "login": "johndoe",
+        "bio": "Software developer with a passion for open-source projects.",
+        "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+        "isFollowing": true
+      },
+      {
+        "id": 4,
+        "username": "Jane Smith",
+        "login": "janesmith",
+        "bio": "Photographer capturing the essence of the wild.",
+        "profileImage": null,
+        "isFollowing": false
+      }
+    ],
+    "following": [
+      {
+        "id": 1,
+        "email": "johndoe@example.com",
+        "username": "John Doe",
+        "login": "johndoe",
+        "bio": "Software developer with a passion for open-source projects.",
+        "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+        "isFollowing": true
+      }
+    ],
+    "publications": [
+      {
+        "id": 5,
+        "description": "Top 10 gadgets of 2024",
+        "imageUrl": "https://img.freepik.com/free-photo/technology-gadgets_181624-30478.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
+        "creationTime": "2024-10-25T13:45:00Z",
+        "likesCount": 500,
+        "comments": [
+          {
+            "id": 7,
+            "username": "Jane Smith",
+            "login": "janesmith",
+            "profileImage": null,
+            "text": "This list is amazing! Can't wait to try some of these gadgets.",
+            "creationTime": "2024-10-25T14:00:00Z",
+            "likeCount": 15
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "description": "A day in the life of a gamer",
+        "imageUrl": "https://img.freepik.com/free-photo/gamer-playing-video-games_181624-31057.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
+        "creationTime": "2024-10-20T18:30:00Z",
+        "likesCount": 220,
+        "comments": [
+          {
+            "id": 8,
+            "username": "John Doe",
+            "login": "johndoe",
+            "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+            "text": "This looks like so much fun!",
+            "creationTime": "2024-10-20T19:00:00Z",
+            "likeCount": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "email": "bobbrown@example.com",
+    "username": "Bob Brown",
+    "login": "bobbrown",
+    "bio": "Tech enthusiast and part-time gamer.",
+    "profileImage": null,
+    "followers": [],
+    "following": [
+      {
+        "id": 1,
+        "email": "johndoe@example.com",
+        "username": "John Doe",
+        "login": "johndoe",
+        "bio": "Software developer with a passion for open-source projects.",
+        "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+        "isFollowing": true
+      }
+    ],
+    "publications": [
+      {
+        "id": 5,
+        "description": "Top 10 gadgets of 2024",
+        "imageUrl": "https://img.freepik.com/free-photo/technology-gadgets_181624-30478.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
+        "creationTime": "2022-10-25T13:45:00Z",
+        "likesCount": 500,
+        "comments": [
+          {
+            "id": 9,
+            "username": "Jane Smith",
+            "login": "janesmith",
+            "profileImage": null,
+            "text": "This list is amazing! Can't wait to try some of these gadgets.",
+            "creationTime": "2024-10-25T14:00:00Z",
+            "likeCount": 15
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "description": "A day in the life of a gamer",
+        "imageUrl": "https://img.freepik.com/free-photo/gamer-playing-video-games_181624-31057.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
+        "creationTime": "2024-10-20T18:30:00Z",
+        "likesCount": 220,
+        "comments": [
+          {
+            "id": 10,
+            "username": "John Doe",
+            "login": "johndoe",
+            "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
+            "text": "This looks like so much fun!",
+            "creationTime": "2024-10-20T19:00:00Z",
+            "likeCount": 8
+          }
+        ]
+      }
+    ]
+  }
+]

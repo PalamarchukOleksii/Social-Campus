@@ -1,0 +1,49 @@
+.comment-section-text {
+  margin: 20px;
+}
+
+.top-section {
+  padding: 20px 20px 10px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.top-section .link {
+  text-decoration: none;
+  color: var(--general-text-color);
+  opacity: 0.5;
+  font-size: 18px;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.top-section .link.active {
+  opacity: 1;
+  font-weight: bold;
+  border-bottom: 3px solid var(--general-text-color);
+}
+
+.top-section .icon {
+  font-size: 30px;
+  padding: 0;
+}
+
+.top-section .link:hover {
+  opacity: 1;
+}
+
+.not-found-text {
+  text-align: center;
+  padding: 50px;
+}
+
+.no-comments {
+  text-align: left;
+  padding: 20px;
+  margin: 0;
+}

@@ -1,9 +1,6 @@
 .signin-container {
   display: flex;
   flex-direction: row;
-  width: 80%;
-  height: calc(100vh - 55px);
-  margin: 0 auto;
 }
 
 .left-half,
@@ -15,7 +12,7 @@
 }
 
 .logo {
-  max-width: 70%;
+  width: 450px;
   height: auto;
 }
 
@@ -23,14 +20,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   width: 450px;
-  height: 350px;
-  background-color: var(--background-color);
+  height: 375px;
   text-align: center;
   border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
 }
 
 input {
@@ -44,13 +40,12 @@ input {
 }
 
 .signin h1 {
-  margin: 10px;
   font-size: 24px;
 }
 
 .signin h2 {
-  margin: 35px 0 10px 0;
   font-size: 18px;
+  margin: 10px;
 }
 
 .signin button {

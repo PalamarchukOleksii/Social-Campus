@@ -1,0 +1,24 @@
+.interaction-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  font-size: 20px;
+  color: var(--icon-panel-color);
+  opacity: 0.5;
+  transition: all 0.3s;
+  font-size: 16px;
+}
+
+.interaction-item:hover {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.interaction-item .icon {
+  font-size: 25px;
+}
+
+.interaction-item .active {
+  opacity: 1;
+}

@@ -1,0 +1,52 @@
+.item-container {
+  padding: 20px;
+  margin: 10px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.top-part {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bottom-part {
+  text-align: left;
+}
+
+.bio {
+  margin: 10px 0 0 0;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.followed {
+  width: 100px;
+}
+
+.following {
+  width: 100px;
+  background-color: transparent;
+  border: 2px solid var(--general-text-color);
+  color: var(--general-text-color);
+}
+
+.following.unfollow {
+  background-color: rgba(219, 68, 55, 0.3);
+  width: 100px;
+  color: #db4437;
+  border-color: #db4437;
+}
+
+.followed.follow {
+  background-color: #02af02;
+  width: 100px;
+
+  background-color: rgba(2, 175, 2, 0.3);
+  width: 100px;
+  color: #02af02;
+  border: 2px solid #02af02;
+}
