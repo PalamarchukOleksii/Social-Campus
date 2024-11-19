@@ -46,11 +46,11 @@ namespace Application.Users.Commands.LoginCommand
             }
             else
             {
-                RefreshToken refreshToken = await tokenRepository.AddAsync(tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
+                RefreshToken refreshToken = await tokenRepository.AddAsync(tokens.RefreshToken, tokens.RefreshTokenExpirationInDays, user.Id);
                 user.RefreshTokenId = refreshToken.Id;
             }
 
-            await unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new LoginCommandResponse
             (

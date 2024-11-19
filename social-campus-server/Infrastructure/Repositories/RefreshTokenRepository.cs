@@ -7,12 +7,13 @@ namespace Infrastructure.Repositories
 {
     public class RefreshTokenRepository(ApplicationDbContext context) : IRefreshTokenRepository
     {
-        public async Task<RefreshToken> AddAsync(string token, int expiryTimeInDays)
+        public async Task<RefreshToken> AddAsync(string token, int expiryTimeInDays, int userId)
         {
-            RefreshToken refreshToken = new RefreshToken
+            RefreshToken refreshToken = new()
             {
                 Token = token,
-                TokenExpiryTime = DateTime.UtcNow.AddDays(expiryTimeInDays)
+                TokenExpiryTime = DateTime.UtcNow.AddDays(expiryTimeInDays),
+                UserId = userId
             };
 
             await context.AddAsync(refreshToken);
