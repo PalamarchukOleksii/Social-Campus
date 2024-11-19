@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.Models.RefreshTokenModel;
+using Domain.Models.UserModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,8 +12,12 @@ namespace Infrastructure.Configurations
             builder.HasKey(rt => rt.Id);
 
             builder.Property(rt => rt.Id)
-                .IsRequired()
-                .ValueGeneratedOnAdd();
+                .HasConversion(refreshTokenId => refreshTokenId.Value, value => new RefreshTokenId(value))
+                .IsRequired();
+
+            builder.Property(rt => rt.UserId)
+                .HasConversion(userId => userId.Value, value => new UserId(value))
+                .IsRequired();
 
             builder.Property(rt => rt.Token)
                 .IsRequired()
@@ -23,8 +28,7 @@ namespace Infrastructure.Configurations
 
             builder.HasOne(rt => rt.User)
                 .WithOne(u => u.RefreshToken)
-                .HasForeignKey<RefreshToken>(rt => rt.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey<RefreshToken>(rt => rt.UserId);
 
             builder.HasIndex(rt => rt.UserId).IsUnique();
 

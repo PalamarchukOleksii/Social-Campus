@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.Models.FollowModel;
+using Domain.Models.UserModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,8 +12,16 @@ namespace Infrastructure.Configurations
             builder.HasKey(f => f.Id);
 
             builder.Property(f => f.Id)
-                .IsRequired()
-                .ValueGeneratedOnAdd();
+                .HasConversion(followId => followId.Value, value => new FollowId(value))
+                .IsRequired();
+
+            builder.Property(f => f.UserId)
+                .HasConversion(userId => userId.Value, value => new UserId(value))
+                .IsRequired();
+
+            builder.Property(f => f.FollowedUserId)
+                .HasConversion(followedUserId => followedUserId.Value, value => new UserId(value))
+                .IsRequired();
 
             builder.HasOne(f => f.User)
                 .WithMany(u => u.FollowedUsers)
