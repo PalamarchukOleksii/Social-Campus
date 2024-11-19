@@ -1,5 +1,6 @@
 ﻿using Domain.Abstractions.Repositories;
-using Domain.Entities;
+using Domain.Models.FollowModel;
+using Domain.Models.UserModel;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,18 +8,14 @@ namespace Infrastructure.Repositories
 {
     public class FollowRepository(ApplicationDbContext context) : IFollowRepository
     {
-        public async void AddAsync(int userId, int followUserId)
+        public async Task AddAsync(UserId userId, UserId followUserId)
         {
-            Follow newFollow = new()
-            {
-                UserId = userId,
-                FollowedUserId = followUserId,
-            };
+            Follow newFollow = new(userId, followUserId);
 
             await context.Follows.AddAsync(newFollow);
         }
 
-        public async void DeleteAsync(int userId, int followUserId)
+        public async Task DeleteAsync(UserId userId, UserId followUserId)
         {
             Follow? follow = await context.Follows.FirstOrDefaultAsync(f => f.UserId == userId && f.FollowedUserId == followUserId);
             if (follow != null)
@@ -27,7 +24,7 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<List<User?>> GetFollowersByIdAsync(int userId)
+        public async Task<List<User?>> GetFollowersByIdAsync(UserId userId)
         {
             return await context.Follows
                 .Where(f => f.FollowedUserId == userId)
@@ -35,7 +32,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<User?>> GetFollowingByIdAsync(int userId)
+        public async Task<List<User?>> GetFollowingByIdAsync(UserId userId)
         {
             return await context.Follows
                 .Where(f => f.UserId == userId)
@@ -43,7 +40,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<bool> IsFollowing(int userId, int followUserid)
+        public async Task<bool> IsFollowing(UserId userId, UserId followUserid)
         {
             return await context.Follows.AnyAsync(f => f.UserId == userId && f.FollowedUserId == followUserid);
         }

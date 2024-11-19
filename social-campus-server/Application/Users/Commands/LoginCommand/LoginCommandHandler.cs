@@ -1,8 +1,9 @@
 ﻿using Application.Abstractions.Data;
 using Application.Abstractions.Security;
 using Domain.Abstractions.Repositories;
-using Domain.Entities;
-using Domain.Models;
+using Domain.Models.RefreshTokenModel;
+using Domain.Models.TokensModel;
+using Domain.Models.UserModel;
 using MediatR;
 
 namespace Application.Users.Commands.LoginCommand
@@ -21,8 +22,8 @@ namespace Application.Users.Commands.LoginCommand
             {
                 return new LoginCommandResponse(
                     IsSuccess: false,
-                    AccessToken: default,
-                    RefreshToken: default,
+                    AccessToken: null,
+                    RefreshToken: null,
                     ErrorMessage: "User with that email does not exist."
                 );
             }
@@ -32,32 +33,39 @@ namespace Application.Users.Commands.LoginCommand
             {
                 return new LoginCommandResponse(
                     IsSuccess: false,
-                    AccessToken: default,
-                    RefreshToken: default,
+                    AccessToken: null,
+                    RefreshToken: null,
                     ErrorMessage: "Incorrect password."
                 );
             }
 
-            TokensModel tokens = jwtProvider.GenerateTokens(user);
-            RefreshToken? existingRefreshToken = await tokenRepository.GetByIdAsync(user.RefreshTokenId);
-            if (existingRefreshToken != null)
+            Tokens tokens = jwtProvider.GenerateTokens(user);
+            if (user.RefreshTokenId != null)
             {
-                tokenRepository.UpdateAsync(existingRefreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
+                RefreshToken? existingRefreshToken = await tokenRepository.GetByIdAsync(user.RefreshTokenId);
+                if (existingRefreshToken != null)
+                {
+                    tokenRepository.Update(existingRefreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
+                }
+                else
+                {
+                    RefreshToken refreshToken = await tokenRepository.AddAsync(tokens.RefreshToken, tokens.RefreshTokenExpirationInDays, user.Id);
+                    user.SetRefreshTokenId(refreshToken.Id);
+                }
             }
             else
             {
                 RefreshToken refreshToken = await tokenRepository.AddAsync(tokens.RefreshToken, tokens.RefreshTokenExpirationInDays, user.Id);
-                user.RefreshTokenId = refreshToken.Id;
+                user.SetRefreshTokenId(refreshToken.Id);
             }
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return new LoginCommandResponse
-            (
+            return new LoginCommandResponse(
                 IsSuccess: true,
                 AccessToken: tokens.AccessToken,
                 RefreshToken: tokens.RefreshToken,
-                ErrorMessage: default
+                ErrorMessage: null
             );
         }
     }

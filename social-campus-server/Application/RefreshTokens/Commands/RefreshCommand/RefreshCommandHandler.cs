@@ -1,8 +1,9 @@
 ﻿using Application.Abstractions.Data;
 using Application.Abstractions.Security;
 using Domain.Abstractions.Repositories;
-using Domain.Entities;
-using Domain.Models;
+using Domain.Models.RefreshTokenModel;
+using Domain.Models.TokensModel;
+using Domain.Models.UserModel;
 using MediatR;
 using System.Security.Claims;
 
@@ -24,7 +25,8 @@ namespace Application.RefreshTokens.Commands.RefreshCommand
                     IsSuccess: false,
                     AccessToken: default,
                     RefreshToken: default,
-                    ErrorMessage: "Invalid access token.");
+                    ErrorMessage: "Invalid access token."
+                );
             }
 
             User? user = await userRepository.GetByEmailAsync(email);
@@ -34,20 +36,33 @@ namespace Application.RefreshTokens.Commands.RefreshCommand
                     IsSuccess: false,
                     AccessToken: default,
                     RefreshToken: default,
-                    ErrorMessage: "Invalid access token.");
+                    ErrorMessage: "Invalid access token."
+                );
+            }
+
+            if (user.RefreshTokenId == null)
+            {
+                return new RefreshCommandResponse(
+                    IsSuccess: false,
+                    AccessToken: default,
+                    RefreshToken: default,
+                    ErrorMessage: "No refresh token found for the user."
+                );
             }
 
             RefreshToken? refreshToken = await tokenRepository.GetByIdAsync(user.RefreshTokenId);
             if (refreshToken == null || refreshToken.Token != request.RefreshToken || refreshToken.TokenExpiryTime <= DateTime.Now)
             {
                 return new RefreshCommandResponse(
-                    IsSuccess: false, AccessToken: default,
+                    IsSuccess: false,
+                    AccessToken: default,
                     RefreshToken: default,
-                    ErrorMessage: "Invalid refresh token.");
+                    ErrorMessage: "Invalid refresh token."
+                );
             }
 
-            TokensModel tokens = jwtProvider.GenerateTokens(user);
-            tokenRepository.UpdateAsync(refreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
+            Tokens tokens = jwtProvider.GenerateTokens(user);
+            tokenRepository.Update(refreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -55,7 +70,8 @@ namespace Application.RefreshTokens.Commands.RefreshCommand
                 IsSuccess: true,
                 AccessToken: tokens.AccessToken,
                 RefreshToken: tokens.RefreshToken,
-                ErrorMessage: default);
+                ErrorMessage: default
+            );
         }
     }
 }
