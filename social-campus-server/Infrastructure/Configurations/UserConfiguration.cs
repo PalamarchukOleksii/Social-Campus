@@ -34,6 +34,9 @@ namespace Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
+            builder.HasIndex(u => u.Id)
+                .IsUnique();
+
             builder.HasIndex(u => u.Email)
                 .IsUnique();
 
@@ -42,7 +45,8 @@ namespace Infrastructure.Configurations
 
             builder.HasOne(u => u.RefreshToken)
                 .WithOne(rt => rt.User)
-                .HasForeignKey<RefreshToken>(rt => rt.UserId);
+                .HasForeignKey<RefreshToken>(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -25,6 +25,10 @@ namespace Infrastructure.Configurations
                 .WithOne(u => u.RefreshToken)
                 .HasForeignKey<RefreshToken>(rt => rt.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(rt => rt.UserId).IsUnique();
+
+            builder.HasIndex(rt => rt.Id).IsUnique();
         }
     }
 }

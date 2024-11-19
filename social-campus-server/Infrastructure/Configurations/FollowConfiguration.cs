@@ -23,6 +23,10 @@ namespace Infrastructure.Configurations
                 .WithMany(u => u.Followers)
                 .HasForeignKey(f => f.FollowedUserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(f => f.UserId);
+
+            builder.HasIndex(f => f.FollowedUserId);
         }
     }
 }
