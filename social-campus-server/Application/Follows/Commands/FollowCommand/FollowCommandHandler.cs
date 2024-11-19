@@ -10,8 +10,8 @@ namespace Application.Follows.Commands.FollowCommand
     {
         public async Task<FollowCommandResponse> Handle(FollowCommandRequest request, CancellationToken cancellationToken)
         {
-            bool followAlreadyFollowing = await followRepository.IsFollowing(request.UserId, request.FollowUserId);
-            if (followAlreadyFollowing)
+            bool isAlreadyFollowing = await followRepository.IsFollowing(request.UserId, request.FollowUserId);
+            if (isAlreadyFollowing)
             {
                 return new FollowCommandResponse(
                     IsSuccess: false,
