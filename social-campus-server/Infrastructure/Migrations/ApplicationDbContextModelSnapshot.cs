@@ -22,19 +22,16 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Follow", b =>
+            modelBuilder.Entity("Domain.Models.FollowModel.Follow", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("FollowedUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("FollowedUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -45,13 +42,10 @@ namespace Infrastructure.Migrations
                     b.ToTable("Follows");
                 });
 
-            modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
+            modelBuilder.Entity("Domain.Models.RefreshTokenModel.RefreshToken", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Token")
                         .IsRequired()
@@ -61,10 +55,13 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("TokenExpiryTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -72,13 +69,10 @@ namespace Infrastructure.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Domain.Entities.User", b =>
+            modelBuilder.Entity("Domain.Models.UserModel.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -105,12 +99,15 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<int>("RefreshTokenId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RefreshTokenId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Id")
                         .IsUnique();
 
                     b.HasIndex("Login")
@@ -119,15 +116,15 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Follow", b =>
+            modelBuilder.Entity("Domain.Models.FollowModel.Follow", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "FollowedUser")
+                    b.HasOne("Domain.Models.UserModel.User", "FollowedUser")
                         .WithMany("Followers")
                         .HasForeignKey("FollowedUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.User", "User")
+                    b.HasOne("Domain.Models.UserModel.User", "User")
                         .WithMany("FollowedUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -138,18 +135,18 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
+            modelBuilder.Entity("Domain.Models.RefreshTokenModel.RefreshToken", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "User")
+                    b.HasOne("Domain.Models.UserModel.User", "User")
                         .WithOne("RefreshToken")
-                        .HasForeignKey("Domain.Entities.RefreshToken", "UserId")
+                        .HasForeignKey("Domain.Models.RefreshTokenModel.RefreshToken", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.User", b =>
+            modelBuilder.Entity("Domain.Models.UserModel.User", b =>
                 {
                     b.Navigation("FollowedUsers");
 

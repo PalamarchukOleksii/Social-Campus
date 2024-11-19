@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using Domain.Models.FollowModel;
+using Domain.Models.RefreshTokenModel;
+using Domain.Models.UserModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
