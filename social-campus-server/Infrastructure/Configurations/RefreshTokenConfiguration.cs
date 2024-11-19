@@ -8,18 +8,23 @@ namespace Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
-            builder.HasKey(e => e.Id);
+            builder.HasKey(rt => rt.Id);
 
-            builder.Property(u => u.Id)
+            builder.Property(rt => rt.Id)
                 .IsRequired()
                 .ValueGeneratedOnAdd();
 
-            builder.Property(e => e.Token)
+            builder.Property(rt => rt.Token)
                 .IsRequired()
-                .HasMaxLength(128);
+                .HasMaxLength(172);
 
-            builder.Property(e => e.TokenExpiryTime)
-                    .IsRequired();
+            builder.Property(rt => rt.TokenExpiryTime)
+                .IsRequired();
+
+            builder.HasOne(rt => rt.User)
+                .WithOne(u => u.RefreshToken)
+                .HasForeignKey<RefreshToken>(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

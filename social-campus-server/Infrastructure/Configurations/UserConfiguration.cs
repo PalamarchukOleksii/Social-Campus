@@ -18,6 +18,10 @@ namespace Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
+            builder.Property(u => u.PasswordHash)
+                .IsRequired()
+                .HasMaxLength(128);
+
             builder.Property(u => u.Email)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -38,7 +42,7 @@ namespace Infrastructure.Configurations
 
             builder.HasOne(u => u.RefreshToken)
                 .WithOne(rt => rt.User)
-                .HasForeignKey<User>(rt => rt.RefreshTokenId);
+                .HasForeignKey<RefreshToken>(rt => rt.UserId);
         }
     }
 }
