@@ -18,8 +18,8 @@ namespace Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(1000);
 
-            builder.Property(p => p.ImageData)
-                .HasColumnType("varbinary(max)")
+            builder.Property(p => p.Base64ImageData)
+                .HasColumnType("nvarchar(max)")
                 .IsRequired(false);
 
             builder.Property(p => p.CreationDateTime)
