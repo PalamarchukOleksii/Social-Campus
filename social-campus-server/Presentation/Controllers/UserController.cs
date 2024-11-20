@@ -1,6 +1,6 @@
-﻿using Application.Users.Commands.Login;
+﻿using Application.Dtos;
+using Application.Users.Commands.Login;
 using Application.Users.Commands.Register;
-using Domain.Dtos;
 using Domain.Shared;
 using FluentValidation;
 using FluentValidation.Results;

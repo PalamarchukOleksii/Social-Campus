@@ -1,8 +1,8 @@
 ﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
+using Application.Dtos;
 using Domain.Abstractions.Repositories;
-using Domain.Dtos;
 using Domain.Models.RefreshTokenModel;
 using Domain.Models.UserModel;
 using Domain.Shared;

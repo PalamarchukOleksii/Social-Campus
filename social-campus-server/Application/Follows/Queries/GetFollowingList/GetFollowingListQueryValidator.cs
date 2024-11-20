@@ -9,6 +9,7 @@ namespace Application.Follows.Queries.GetFollowingList
         {
             RuleFor(f => f.UserId)
                 .NotEmpty().WithMessage("UserId is required")
+                .Must(id => id.Value != Guid.Empty).WithMessage("UserId must be a valid GUID")
                 .MustAsync(async (userId, _) => await userRepository.IsExistByIdAsync(userId))
                 .WithMessage((context, _) => $"User with UserId {context.UserId.Value} do not exist");
         }

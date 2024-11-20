@@ -1,5 +1,5 @@
 ﻿using Application.Abstractions.Security;
-using Domain.Dtos;
+using Application.Dtos;
 using Domain.Models.UserModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;

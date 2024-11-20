@@ -1,6 +1,6 @@
 ﻿using Domain.Models.UserModel;
 
-namespace Domain.Dtos
+namespace Application.Dtos
 {
     public class UserFollowDto
     {

@@ -1,8 +1,8 @@
-﻿using Application.Follows.Commands.Follow;
+﻿using Application.Dtos;
+using Application.Follows.Commands.Follow;
 using Application.Follows.Commands.Unfollow;
 using Application.Follows.Queries.GetFollowersList;
 using Application.Follows.Queries.GetFollowingList;
-using Domain.Dtos;
 using Domain.Models.UserModel;
 using Domain.Shared;
 using FluentValidation;

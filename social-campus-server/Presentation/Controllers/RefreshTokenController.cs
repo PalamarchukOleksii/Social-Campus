@@ -1,6 +1,6 @@
-﻿using Application.RefreshTokens.Commands.Refresh;
+﻿using Application.Dtos;
+using Application.RefreshTokens.Commands.Refresh;
 using Application.RefreshTokens.Commands.Revoke;
-using Domain.Dtos;
 using Domain.Shared;
 using FluentValidation;
 using FluentValidation.Results;

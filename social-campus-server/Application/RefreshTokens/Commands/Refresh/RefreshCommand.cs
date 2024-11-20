@@ -1,5 +1,5 @@
 ﻿using Application.Abstractions.Messaging;
-using Domain.Dtos;
+using Application.Dtos;
 
 namespace Application.RefreshTokens.Commands.Refresh
 {
