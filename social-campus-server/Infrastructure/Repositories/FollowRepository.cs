@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions.Repositories;
+using Domain.Dtos;
 using Domain.Models.FollowModel;
 using Domain.Models.UserModel;
 using Infrastructure.Data;
@@ -24,19 +25,33 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<List<User?>> GetFollowersByIdAsync(UserId userId)
+        public async Task<IReadOnlyList<UserFollowDto?>> GetFollowersByIdAsync(UserId userId)
         {
             return await context.Follows
                 .Where(f => f.FollowedUserId == userId)
-                .Select(f => f.User)
+                .Select(f => f.User == null ? null : new UserFollowDto
+                {
+                    Id = f.User.Id,
+                    Login = f.User.Login,
+                    FirstName = f.User.FirstName,
+                    LastName = f.User.LastName,
+                    Bio = f.User.Bio
+                })
                 .ToListAsync();
         }
 
-        public async Task<List<User?>> GetFollowingByIdAsync(UserId userId)
+        public async Task<IReadOnlyList<UserFollowDto?>> GetFollowingByIdAsync(UserId userId)
         {
             return await context.Follows
                 .Where(f => f.UserId == userId)
-                .Select(f => f.FollowedUser)
+                .Select(f => f.FollowedUser == null ? null : new UserFollowDto
+                {
+                    Id = f.FollowedUser.Id,
+                    Login = f.FollowedUser.Login,
+                    FirstName = f.FollowedUser.FirstName,
+                    LastName = f.FollowedUser.LastName,
+                    Bio = f.FollowedUser.Bio
+                })
                 .ToListAsync();
         }
 

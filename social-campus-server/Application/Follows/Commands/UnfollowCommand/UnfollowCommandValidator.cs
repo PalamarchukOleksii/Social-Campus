@@ -1,8 +1,7 @@
-﻿using Application.Follows.Commands.UnfollowCommand;
-using Domain.Abstractions.Repositories;
+﻿using Domain.Abstractions.Repositories;
 using FluentValidation;
 
-namespace Application.Follows.Commands.FollowCommand
+namespace Application.Follows.Commands.UnfollowCommand
 {
     public class UnfollowCommandValidator : AbstractValidator<UnfollowCommandRequest>
     {

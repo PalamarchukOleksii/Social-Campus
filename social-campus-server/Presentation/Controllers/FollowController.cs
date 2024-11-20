@@ -1,5 +1,8 @@
 ﻿using Application.Follows.Commands.FollowCommand;
 using Application.Follows.Commands.UnfollowCommand;
+using Application.Follows.Queries.GetFollowingListQuery;
+using Domain.Dtos;
+using Domain.Models.UserModel;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -15,7 +18,8 @@ namespace Presentation.Controllers
     public class FollowController(
         IMediator mediator,
         IValidator<FollowCommandRequest> followValidator,
-        IValidator<UnfollowCommandRequest> unfollowValidator) : ControllerBase
+        IValidator<UnfollowCommandRequest> unfollowValidator,
+        IValidator<GetFollowingListQueryRequest> getFollowingListValidator) : ControllerBase
     {
         [HttpPost("follow")]
         public async Task<IActionResult> Follow([FromBody] FollowDto request)
@@ -69,6 +73,33 @@ namespace Presentation.Controllers
             }
 
             return Ok(new { message = "Stop following successfully." });
+        }
+
+        [HttpGet("{userId:guid}/following")]
+        public async Task<ActionResult<IReadOnlyList<UserFollowDto?>>> GetFollowingList([FromRoute] Guid userId)
+        {
+            GetFollowingListQueryRequest commandRequest = new(new UserId(userId));
+
+            ValidationResult result = await getFollowingListValidator.ValidateAsync(commandRequest);
+            if (!result.IsValid)
+            {
+                var errors = result.Errors
+                    .GroupBy(failure => failure.PropertyName)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group.Select(failure => failure.ErrorMessage).ToArray()
+                    );
+
+                return ValidationProblem(new ValidationProblemDetails(errors));
+            }
+
+            IReadOnlyList<UserFollowDto?> response = await mediator.Send(commandRequest);
+            if (!response.Any())
+            {
+                return NotFound(new { message = "No followers found." });
+            }
+
+            return Ok(response);
         }
     }
 }
