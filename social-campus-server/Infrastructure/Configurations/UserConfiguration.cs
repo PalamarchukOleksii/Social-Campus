@@ -22,6 +22,9 @@ namespace Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
+            builder.Property(u => u.Bio)
+                .HasMaxLength(500);
+
             builder.Property(u => u.PasswordHash)
                 .IsRequired()
                 .HasMaxLength(128);

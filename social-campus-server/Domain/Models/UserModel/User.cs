@@ -28,6 +28,7 @@ namespace Domain.Models.UserModel
         public string Email { get; private set; } = string.Empty;
         public string FirstName { get; private set; } = string.Empty;
         public string LastName { get; private set; } = string.Empty;
+        public string Bio { get; private set; } = string.Empty;
         public RefreshTokenId RefreshTokenId { get; private set; } = new RefreshTokenId(Guid.Empty);
         public virtual RefreshToken? RefreshToken { get; set; }
         public virtual ICollection<Follow>? Followers { get; }
