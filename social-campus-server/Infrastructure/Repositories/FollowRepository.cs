@@ -35,7 +35,8 @@ namespace Infrastructure.Repositories
                     Login = f.User.Login,
                     FirstName = f.User.FirstName,
                     LastName = f.User.LastName,
-                    Bio = f.User.Bio
+                    Bio = f.User.Bio,
+                    ProfileImageData = f.User.ProfileImageData,
                 })
                 .ToListAsync();
         }
@@ -50,7 +51,8 @@ namespace Infrastructure.Repositories
                     Login = f.FollowedUser.Login,
                     FirstName = f.FollowedUser.FirstName,
                     LastName = f.FollowedUser.LastName,
-                    Bio = f.FollowedUser.Bio
+                    Bio = f.FollowedUser.Bio,
+                    ProfileImageData = f.FollowedUser.ProfileImageData,
                 })
                 .ToListAsync();
         }

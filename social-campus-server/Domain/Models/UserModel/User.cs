@@ -1,11 +1,12 @@
 ﻿using Domain.Models.FollowModel;
+using Domain.Models.PublicationModel;
 using Domain.Models.RefreshTokenModel;
 
 namespace Domain.Models.UserModel
 {
     public class User
     {
-        public User() { }
+        private User() { }
 
         public User(
             string login,
@@ -29,10 +30,12 @@ namespace Domain.Models.UserModel
         public string FirstName { get; private set; } = string.Empty;
         public string LastName { get; private set; } = string.Empty;
         public string Bio { get; private set; } = string.Empty;
+        public byte[]? ProfileImageData { get; }
         public RefreshTokenId RefreshTokenId { get; private set; } = new RefreshTokenId(Guid.Empty);
-        public virtual RefreshToken? RefreshToken { get; set; }
+        public virtual RefreshToken? RefreshToken { get; }
         public virtual ICollection<Follow>? Followers { get; }
         public virtual ICollection<Follow>? FollowedUsers { get; }
+        public virtual ICollection<Publication>? Publications { get; }
 
         public void SetRefreshTokenId(RefreshTokenId refreshTokenId) => RefreshTokenId = refreshTokenId;
 
