@@ -24,14 +24,11 @@ namespace Presentation.Controllers
             ValidationResult result = await refreshValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
             {
-                var errors = result.Errors
-                    .GroupBy(failure => failure.PropertyName)
-                    .ToDictionary(
-                        group => group.Key,
-                        group => group.Select(failure => failure.ErrorMessage).ToArray()
-                    );
-
-                return ValidationProblem(new ValidationProblemDetails(errors));
+                return ValidationProblem(new ValidationProblemDetails(
+                    result.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
+                ));
             }
 
             RefreshCommandResponse response = await mediator.Send(commandRequest);
@@ -52,14 +49,11 @@ namespace Presentation.Controllers
             ValidationResult result = await revokeValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
             {
-                var errors = result.Errors
-                    .GroupBy(failure => failure.PropertyName)
-                    .ToDictionary(
-                        group => group.Key,
-                        group => group.Select(failure => failure.ErrorMessage).ToArray()
-                    );
-
-                return ValidationProblem(new ValidationProblemDetails(errors));
+                return ValidationProblem(new ValidationProblemDetails(
+                    result.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
+                ));
             }
 
             RevokeCommandResponse response = await mediator.Send(commandRequest);

@@ -1,4 +1,8 @@
 ﻿namespace Presentation.Dtos
 {
-    public record RefreshDto(string AccessToken, string RefreshToken);
+    public class RefreshDto
+    {
+        public string AccessToken { get; set; } = string.Empty;
+        public string RefreshToken { get; set; } = string.Empty;
+    }
 }

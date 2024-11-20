@@ -2,5 +2,9 @@
 
 namespace Presentation.Dtos
 {
-    public record FollowDto(UserId UserId, UserId FollowUserId);
+    public class FollowDto
+    {
+        public UserId UserId { get; set; } = new UserId(Guid.Empty);
+        public UserId FollowUserId { get; set; } = new UserId(Guid.Empty);
+    }
 }

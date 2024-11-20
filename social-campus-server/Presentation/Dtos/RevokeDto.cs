@@ -1,4 +1,7 @@
 ﻿namespace Presentation.Dtos
 {
-    public record RevokeDto(string RefreshToken);
+    public class RevokeDto
+    {
+        public string RefreshToken { get; set; } = string.Empty;
+    }
 }

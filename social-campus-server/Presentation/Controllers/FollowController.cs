@@ -1,5 +1,6 @@
 ﻿using Application.Follows.Commands.FollowCommand;
 using Application.Follows.Commands.UnfollowCommand;
+using Application.Follows.Queries.GetFollowersListQuery;
 using Application.Follows.Queries.GetFollowingListQuery;
 using Domain.Dtos;
 using Domain.Models.UserModel;
@@ -19,7 +20,8 @@ namespace Presentation.Controllers
         IMediator mediator,
         IValidator<FollowCommandRequest> followValidator,
         IValidator<UnfollowCommandRequest> unfollowValidator,
-        IValidator<GetFollowingListQueryRequest> getFollowingListValidator) : ControllerBase
+        IValidator<GetFollowingListQueryRequest> getFollowingListValidator,
+        IValidator<GetFollowersListQueryRequest> getFollowersListValidator) : ControllerBase
     {
         [HttpPost("follow")]
         public async Task<IActionResult> Follow([FromBody] FollowDto request)
@@ -29,14 +31,11 @@ namespace Presentation.Controllers
             ValidationResult result = await followValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
             {
-                var errors = result.Errors
-                    .GroupBy(failure => failure.PropertyName)
-                    .ToDictionary(
-                        group => group.Key,
-                        group => group.Select(failure => failure.ErrorMessage).ToArray()
-                    );
-
-                return ValidationProblem(new ValidationProblemDetails(errors));
+                return ValidationProblem(new ValidationProblemDetails(
+                    result.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
+                ));
             }
 
             FollowCommandResponse response = await mediator.Send(commandRequest);
@@ -56,14 +55,11 @@ namespace Presentation.Controllers
             ValidationResult result = await unfollowValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
             {
-                var errors = result.Errors
-                    .GroupBy(failure => failure.PropertyName)
-                    .ToDictionary(
-                        group => group.Key,
-                        group => group.Select(failure => failure.ErrorMessage).ToArray()
-                    );
-
-                return ValidationProblem(new ValidationProblemDetails(errors));
+                return ValidationProblem(new ValidationProblemDetails(
+                    result.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
+                ));
             }
 
             UnfollowCommandResponse response = await mediator.Send(commandRequest);
@@ -83,20 +79,41 @@ namespace Presentation.Controllers
             ValidationResult result = await getFollowingListValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
             {
-                var errors = result.Errors
-                    .GroupBy(failure => failure.PropertyName)
-                    .ToDictionary(
-                        group => group.Key,
-                        group => group.Select(failure => failure.ErrorMessage).ToArray()
-                    );
-
-                return ValidationProblem(new ValidationProblemDetails(errors));
+                return ValidationProblem(new ValidationProblemDetails(
+                    result.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
+                ));
             }
 
             IReadOnlyList<UserFollowDto?> response = await mediator.Send(commandRequest);
             if (!response.Any())
             {
-                return NotFound(new { message = "No followers found." });
+                return Ok(new { message = "No following found." });
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet("{userId:guid}/followers")]
+        public async Task<ActionResult<IReadOnlyList<UserFollowDto?>>> GetFollowersList([FromRoute] Guid userId)
+        {
+            GetFollowersListQueryRequest commandRequest = new(new UserId(userId));
+
+            ValidationResult result = await getFollowersListValidator.ValidateAsync(commandRequest);
+            if (!result.IsValid)
+            {
+                return ValidationProblem(new ValidationProblemDetails(
+                    result.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
+                ));
+            }
+
+            IReadOnlyList<UserFollowDto?> response = await mediator.Send(commandRequest);
+            if (!response.Any())
+            {
+                return Ok(new { message = "No followers found." });
             }
 
             return Ok(response);
