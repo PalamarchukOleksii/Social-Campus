@@ -1,10 +1,13 @@
-﻿using Application.RefreshTokens.Commands.RefreshCommand;
-using Application.RefreshTokens.Commands.RevokeCommand;
+﻿using Application.RefreshTokens.Commands.Refresh;
+using Application.RefreshTokens.Commands.Revoke;
+using Domain.Models.TokensModel;
+using Domain.Shared;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Abstractions;
 using Presentation.Dtos;
 
 namespace Presentation.Controllers
@@ -12,14 +15,14 @@ namespace Presentation.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class RefreshTokenController(
-        IValidator<RefreshCommandRequest> refreshValidator,
-        IValidator<RevokeCommandRequest> revokeValidator,
-        IMediator mediator) : ControllerBase
+        IValidator<RefreshCommand> refreshValidator,
+        IValidator<RevokeCommand> revokeValidator,
+        ISender sender) : ApiController(sender)
     {
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh([FromBody] RefreshDto request)
         {
-            RefreshCommandRequest commandRequest = new(request.AccessToken, request.RefreshToken);
+            RefreshCommand commandRequest = new(request.AccessToken, request.RefreshToken);
 
             ValidationResult result = await refreshValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
@@ -31,20 +34,16 @@ namespace Presentation.Controllers
                 ));
             }
 
-            RefreshCommandResponse response = await mediator.Send(commandRequest);
-            if (!response.IsSuccess)
-            {
-                return Unauthorized(new { message = response.ErrorMessage });
-            }
+            Result<Tokens> response = await _sender.Send(commandRequest);
 
-            return Ok(new { response.AccessToken, response.RefreshToken });
+            return response.IsSuccess ? Ok(response.Value) : BadRequest(response.Error);
         }
 
         [Authorize]
         [HttpDelete("revoke")]
         public async Task<IActionResult> Revoke([FromBody] RevokeDto request)
         {
-            RevokeCommandRequest commandRequest = new(request.RefreshToken);
+            RevokeCommand commandRequest = new(request.RefreshToken);
 
             ValidationResult result = await revokeValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
@@ -56,13 +55,9 @@ namespace Presentation.Controllers
                 ));
             }
 
-            RevokeCommandResponse response = await mediator.Send(commandRequest);
-            if (!response.IsSuccess)
-            {
-                return Unauthorized(new { message = response.ErrorMessage });
-            }
+            Result response = await _sender.Send(commandRequest);
 
-            return Ok();
+            return response.IsSuccess ? Ok() : BadRequest(response.Error);
         }
     }
 }

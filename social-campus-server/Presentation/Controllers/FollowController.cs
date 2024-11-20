@@ -1,14 +1,16 @@
-﻿using Application.Follows.Commands.FollowCommand;
-using Application.Follows.Commands.UnfollowCommand;
-using Application.Follows.Queries.GetFollowersListQuery;
-using Application.Follows.Queries.GetFollowingListQuery;
+﻿using Application.Follows.Commands.Follow;
+using Application.Follows.Commands.Unfollow;
+using Application.Follows.Queries.GetFollowersList;
+using Application.Follows.Queries.GetFollowingList;
 using Domain.Dtos;
 using Domain.Models.UserModel;
+using Domain.Shared;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Abstractions;
 using Presentation.Dtos;
 
 namespace Presentation.Controllers
@@ -17,16 +19,16 @@ namespace Presentation.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class FollowController(
-        IMediator mediator,
-        IValidator<FollowCommandRequest> followValidator,
-        IValidator<UnfollowCommandRequest> unfollowValidator,
-        IValidator<GetFollowingListQueryRequest> getFollowingListValidator,
-        IValidator<GetFollowersListQueryRequest> getFollowersListValidator) : ControllerBase
+        ISender sender,
+        IValidator<FollowCommand> followValidator,
+        IValidator<UnfollowCommand> unfollowValidator,
+        IValidator<GetFollowingListQuery> getFollowingListValidator,
+        IValidator<GetFollowersListQuery> getFollowersListValidator) : ApiController(sender)
     {
         [HttpPost("follow")]
         public async Task<IActionResult> Follow([FromBody] FollowDto request)
         {
-            FollowCommandRequest commandRequest = new(request.UserId, request.FollowUserId);
+            FollowCommand commandRequest = new(request.UserId, request.FollowUserId);
 
             ValidationResult result = await followValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
@@ -38,19 +40,15 @@ namespace Presentation.Controllers
                 ));
             }
 
-            FollowCommandResponse response = await mediator.Send(commandRequest);
-            if (!response.IsSuccess)
-            {
-                return Unauthorized(new { message = response.ErrorMessage });
-            }
+            Result response = await _sender.Send(commandRequest);
 
-            return Ok(new { message = "Start following successfully." });
+            return response.IsSuccess ? Ok() : BadRequest(response.Error);
         }
 
         [HttpDelete("unfollow")]
         public async Task<IActionResult> Unfollow([FromBody] FollowDto request)
         {
-            UnfollowCommandRequest commandRequest = new(request.UserId, request.FollowUserId);
+            UnfollowCommand commandRequest = new(request.UserId, request.FollowUserId);
 
             ValidationResult result = await unfollowValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
@@ -62,19 +60,15 @@ namespace Presentation.Controllers
                 ));
             }
 
-            UnfollowCommandResponse response = await mediator.Send(commandRequest);
-            if (!response.IsSuccess)
-            {
-                return Unauthorized(new { message = response.ErrorMessage });
-            }
+            Result response = await _sender.Send(commandRequest);
 
-            return Ok(new { message = "Stop following successfully." });
+            return response.IsSuccess ? Ok() : BadRequest(response.Error);
         }
 
         [HttpGet("{userId:guid}/following")]
         public async Task<ActionResult<IReadOnlyList<UserFollowDto?>>> GetFollowingList([FromRoute] Guid userId)
         {
-            GetFollowingListQueryRequest commandRequest = new(new UserId(userId));
+            GetFollowingListQuery commandRequest = new(new UserId(userId));
 
             ValidationResult result = await getFollowingListValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
@@ -86,19 +80,25 @@ namespace Presentation.Controllers
                 ));
             }
 
-            IReadOnlyList<UserFollowDto?> response = await mediator.Send(commandRequest);
-            if (!response.Any())
+            Result<IReadOnlyList<UserFollowDto?>> response = await _sender.Send(commandRequest);
+
+            if (response.IsFailure)
             {
-                return Ok(new { message = "No following found." });
+                return BadRequest(response.Error);
             }
 
-            return Ok(response);
+            if (response.Value == null || !response.Value.Any())
+            {
+                return Ok(new { message = "No following found" });
+            }
+
+            return Ok(response.Value);
         }
 
         [HttpGet("{userId:guid}/followers")]
         public async Task<ActionResult<IReadOnlyList<UserFollowDto?>>> GetFollowersList([FromRoute] Guid userId)
         {
-            GetFollowersListQueryRequest commandRequest = new(new UserId(userId));
+            GetFollowersListQuery commandRequest = new(new UserId(userId));
 
             ValidationResult result = await getFollowersListValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
@@ -110,13 +110,18 @@ namespace Presentation.Controllers
                 ));
             }
 
-            IReadOnlyList<UserFollowDto?> response = await mediator.Send(commandRequest);
-            if (!response.Any())
+            Result<IReadOnlyList<UserFollowDto?>> response = await _sender.Send(commandRequest);
+            if (response.IsFailure)
             {
-                return Ok(new { message = "No followers found." });
+                return BadRequest(response.Error);
             }
 
-            return Ok(response);
+            if (response.Value == null || !response.Value.Any())
+            {
+                return Ok(new { message = "No followers found" });
+            }
+
+            return Ok(response.Value);
         }
     }
 }

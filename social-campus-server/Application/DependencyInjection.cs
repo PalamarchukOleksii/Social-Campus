@@ -1,4 +1,4 @@
-﻿using Application.Users.Commands.RegisterCommand;
+﻿using Application.Users.Commands.Register;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 

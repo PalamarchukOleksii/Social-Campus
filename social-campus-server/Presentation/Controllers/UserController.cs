@@ -1,9 +1,12 @@
-﻿using Application.Users.Commands.LoginCommand;
-using Application.Users.Commands.RegisterCommand;
+﻿using Application.Users.Commands.Login;
+using Application.Users.Commands.Register;
+using Domain.Models.TokensModel;
+using Domain.Shared;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Abstractions;
 using Presentation.Dtos;
 
 namespace Presentation.Controllers
@@ -11,14 +14,14 @@ namespace Presentation.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class UserController(
-        IMediator mediator,
-        IValidator<RegisterCommandRequest> registerValidator,
-        IValidator<LoginCommandRequest> loginValidator) : ControllerBase
+        IValidator<RegisterCommand> registerValidator,
+        IValidator<LoginCommand> loginValidator,
+        ISender sender) : ApiController(sender)
     {
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto request)
         {
-            RegisterCommandRequest commandRequest = new(
+            RegisterCommand commandRequest = new(
                 request.Login,
                 request.FirstName,
                 request.LastName,
@@ -35,15 +38,15 @@ namespace Presentation.Controllers
                 ));
             }
 
-            await mediator.Send(commandRequest);
+            Result response = await _sender.Send(commandRequest);
 
-            return Ok(new { message = "Registered successfully." });
+            return response.IsSuccess ? Ok() : BadRequest(response.Error);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto request)
         {
-            LoginCommandRequest commandRequest = new(request.Email, request.Password);
+            LoginCommand commandRequest = new(request.Email, request.Password);
 
             ValidationResult result = await loginValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
@@ -55,13 +58,9 @@ namespace Presentation.Controllers
                 ));
             }
 
-            LoginCommandResponse response = await mediator.Send(commandRequest);
-            if (!response.IsSuccess)
-            {
-                return Unauthorized(new { message = response.ErrorMessage });
-            }
+            Result<Tokens> response = await _sender.Send(commandRequest);
 
-            return Ok(new { response.AccessToken, response.RefreshToken });
+            return response.IsSuccess ? Ok(response.Value) : BadRequest(response.Error);
         }
     }
 }
