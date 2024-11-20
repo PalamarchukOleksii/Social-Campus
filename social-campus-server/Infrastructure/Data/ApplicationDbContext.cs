@@ -1,4 +1,5 @@
 ﻿using Domain.Models.FollowModel;
+using Domain.Models.PublicationModel;
 using Domain.Models.RefreshTokenModel;
 using Domain.Models.UserModel;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +8,11 @@ namespace Infrastructure.Data
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
-        public DbSet<User> Users { get; set; } = null!;
-        public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
-        public DbSet<Follow> Follows { get; set; } = null!;
+        public required DbSet<User> Users { get; set; }
+        public required DbSet<RefreshToken> RefreshTokens { get; set; }
+        public required DbSet<Follow> Follows { get; set; }
+        public required DbSet<Publication> Publications { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);

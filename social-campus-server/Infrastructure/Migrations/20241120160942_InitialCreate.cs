@@ -22,6 +22,7 @@ namespace Infrastructure.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Bio = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    ProfileImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     RefreshTokenId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -44,14 +45,33 @@ namespace Infrastructure.Migrations
                         name: "FK_Follows_Users_FollowedUserId",
                         column: x => x.FollowedUserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Follows_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Publications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Publications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Publications_Users_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,6 +105,17 @@ namespace Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Publications_CreatorId",
+                table: "Publications",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Publications_Id",
+                table: "Publications",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_Id",
                 table: "RefreshTokens",
                 column: "Id",
@@ -113,6 +144,12 @@ namespace Infrastructure.Migrations
                 table: "Users",
                 column: "Login",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_RefreshTokenId",
+                table: "Users",
+                column: "RefreshTokenId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -120,6 +157,9 @@ namespace Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Follows");
+
+            migrationBuilder.DropTable(
+                name: "Publications");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");

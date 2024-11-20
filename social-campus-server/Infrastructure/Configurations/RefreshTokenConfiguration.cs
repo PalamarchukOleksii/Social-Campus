@@ -30,9 +30,11 @@ namespace Infrastructure.Configurations
                 .WithOne(u => u.RefreshToken)
                 .HasForeignKey<RefreshToken>(rt => rt.UserId);
 
-            builder.HasIndex(rt => rt.UserId).IsUnique();
+            builder.HasIndex(rt => rt.UserId)
+                .IsUnique();
 
-            builder.HasIndex(rt => rt.Id).IsUnique();
+            builder.HasIndex(rt => rt.Id)
+                .IsUnique();
         }
     }
 }

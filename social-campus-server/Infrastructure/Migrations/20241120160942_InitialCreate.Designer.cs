@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241120135247_InitialCreate")]
+    [Migration("20241120160942_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -43,6 +43,35 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Follows");
+                });
+
+            modelBuilder.Entity("Domain.Models.PublicationModel.Publication", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.ToTable("Publications");
                 });
 
             modelBuilder.Entity("Domain.Models.RefreshTokenModel.RefreshToken", b =>
@@ -107,6 +136,9 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<byte[]>("ProfileImageData")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<Guid>("RefreshTokenId")
                         .HasColumnType("uniqueidentifier");
 
@@ -121,6 +153,9 @@ namespace Infrastructure.Migrations
                     b.HasIndex("Login")
                         .IsUnique();
 
+                    b.HasIndex("RefreshTokenId")
+                        .IsUnique();
+
                     b.ToTable("Users");
                 });
 
@@ -129,18 +164,29 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Models.UserModel.User", "FollowedUser")
                         .WithMany("Followers")
                         .HasForeignKey("FollowedUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Domain.Models.UserModel.User", "User")
                         .WithMany("FollowedUsers")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("FollowedUser");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Models.PublicationModel.Publication", b =>
+                {
+                    b.HasOne("Domain.Models.UserModel.User", "Creator")
+                        .WithMany("Publications")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("Domain.Models.RefreshTokenModel.RefreshToken", b =>
@@ -159,6 +205,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("FollowedUsers");
 
                     b.Navigation("Followers");
+
+                    b.Navigation("Publications");
 
                     b.Navigation("RefreshToken");
                 });

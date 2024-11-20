@@ -41,8 +41,14 @@ namespace Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
+            builder.Property(u => u.ProfileImageData)
+                .HasColumnType("varbinary(max)")
+                .IsRequired(false);
+
             builder.HasIndex(u => u.Id)
                 .IsUnique();
+
+            builder.HasIndex(u => u.RefreshTokenId);
 
             builder.HasIndex(u => u.Email)
                 .IsUnique();
@@ -51,8 +57,20 @@ namespace Infrastructure.Configurations
                 .IsUnique();
 
             builder.HasOne(u => u.RefreshToken)
-                .WithOne(rt => rt.User)
-                .HasForeignKey<RefreshToken>(rt => rt.UserId);
+                 .WithOne(rt => rt.User)
+                 .HasForeignKey<RefreshToken>(rt => rt.UserId);
+
+            builder.HasMany(u => u.FollowedUsers)
+                .WithOne(f => f.User)
+                .HasForeignKey(f => f.UserId);
+
+            builder.HasMany(u => u.Followers)
+                .WithOne(f => f.FollowedUser)
+                .HasForeignKey(f => f.FollowedUserId);
+
+            builder.HasMany(u => u.Publications)
+                .WithOne(p => p.Creator)
+                .HasForeignKey(p => p.CreatorId);
         }
     }
 }
