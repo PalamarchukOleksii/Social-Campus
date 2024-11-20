@@ -2,8 +2,8 @@
 using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
 using Domain.Abstractions.Repositories;
+using Domain.Dtos;
 using Domain.Models.RefreshTokenModel;
-using Domain.Models.TokensModel;
 using Domain.Models.UserModel;
 using Domain.Shared;
 
@@ -14,14 +14,14 @@ namespace Application.Users.Commands.Login
         IUserRepository userRepository,
         IRefreshTokenRepository tokenRepository,
         IPasswordHasher passwordHasher,
-        IUnitOfWork unitOfWork) : ICommandHandler<LoginCommand, Tokens>
+        IUnitOfWork unitOfWork) : ICommandHandler<LoginCommand, TokensDto>
     {
-        public async Task<Result<Tokens>> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<Result<TokensDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             User? user = await userRepository.GetByEmailAsync(request.Email);
             if (user is null)
             {
-                return Result.Failure<Tokens>(new Error(
+                return Result.Failure<TokensDto>(new Error(
                     "User.NotFound",
                     $"User with that email {request.Email} was not found"));
             }
@@ -29,12 +29,12 @@ namespace Application.Users.Commands.Login
             bool isPasswordValid = passwordHasher.Verify(request.Password, user.PasswordHash);
             if (!isPasswordValid)
             {
-                return Result.Failure<Tokens>(new Error(
+                return Result.Failure<TokensDto>(new Error(
                     "User.IncorrectPassword",
                     "Incorrect password"));
             }
 
-            Tokens tokens = jwtProvider.GenerateTokens(user);
+            TokensDto tokens = jwtProvider.GenerateTokens(user);
             if (user.RefreshTokenId != null)
             {
                 RefreshToken? existingRefreshToken = await tokenRepository.GetByIdAsync(user.RefreshTokenId);

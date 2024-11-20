@@ -1,7 +1,7 @@
 ﻿using Application.Abstractions.Messaging;
-using Domain.Models.TokensModel;
+using Domain.Dtos;
 
 namespace Application.RefreshTokens.Commands.Refresh
 {
-    public record RefreshCommand(string AccessToken, string RefreshToken) : ICommand<Tokens>;
+    public record RefreshCommand(string AccessToken, string RefreshToken) : ICommand<TokensDto>;
 }

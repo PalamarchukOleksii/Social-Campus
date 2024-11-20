@@ -1,6 +1,6 @@
 ﻿using Application.Users.Commands.Login;
 using Application.Users.Commands.Register;
-using Domain.Models.TokensModel;
+using Domain.Dtos;
 using Domain.Shared;
 using FluentValidation;
 using FluentValidation.Results;
@@ -58,7 +58,7 @@ namespace Presentation.Controllers
                 ));
             }
 
-            Result<Tokens> response = await _sender.Send(commandRequest);
+            Result<TokensDto> response = await _sender.Send(commandRequest);
 
             return response.IsSuccess ? Ok(response.Value) : BadRequest(response.Error);
         }

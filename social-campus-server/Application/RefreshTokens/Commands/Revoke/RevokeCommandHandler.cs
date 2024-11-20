@@ -1,8 +1,8 @@
 ﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Abstractions.Repositories;
+using Domain.Dtos;
 using Domain.Models.RefreshTokenModel;
-using Domain.Models.TokensModel;
 using Domain.Models.UserModel;
 using Domain.Shared;
 
@@ -18,7 +18,7 @@ namespace Application.RefreshTokens.Commands.Revoke
             RefreshToken? refreshToken = await tokenRepository.GetByRefreshTokenAsync(request.RefreshToken);
             if (refreshToken == null || refreshToken.TokenExpiryTime <= DateTime.Now)
             {
-                return Result.Failure<Tokens>(new Error(
+                return Result.Failure<TokensDto>(new Error(
                     "RefreshToke.InvalidToken",
                     "Invalid refresh token"));
             }
@@ -26,7 +26,7 @@ namespace Application.RefreshTokens.Commands.Revoke
             User? user = await userRepository.GetByRefreshTokenIdAsync(refreshToken.Id);
             if (user == null)
             {
-                return Result.Failure<Tokens>(new Error(
+                return Result.Failure<TokensDto>(new Error(
                     "User.NotFound",
                     "User for the corresponding access token was not found"));
             }

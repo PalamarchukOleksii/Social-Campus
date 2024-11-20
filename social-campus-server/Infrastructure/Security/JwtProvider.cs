@@ -1,5 +1,5 @@
 ﻿using Application.Abstractions.Security;
-using Domain.Models.TokensModel;
+using Domain.Dtos;
 using Domain.Models.UserModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -12,17 +12,18 @@ namespace Infrastructure.Security
 {
     public class JwtProvider(IConfiguration configuration) : IJwtProvider
     {
-        public Tokens GenerateTokens(User user)
+        public TokensDto GenerateTokens(User user)
         {
             var accessToken = GenerateAccessToken(user);
             var refreshToken = GenerateRefreshToken();
 
-            return new(
-                accessToken,
-                configuration.GetValue<int>("Jwt:AccessTokenExpirationInMinutes"),
-                refreshToken,
-                configuration.GetValue<int>("Jwt:RefreshTokenExpirationInDays")
-            );
+            return new TokensDto
+            {
+                AccessToken = accessToken,
+                AccessTokenExpirationInMinutes = configuration.GetValue<int>("Jwt:AccessTokenExpirationInMinutes"),
+                RefreshToken = refreshToken,
+                RefreshTokenExpirationInDays = configuration.GetValue<int>("Jwt:RefreshTokenExpirationInDays")
+            };
         }
         public async Task<ClaimsPrincipal> GetPrincipalFromExpiredTokenAsync(string token)
         {

@@ -1,7 +1,7 @@
 ﻿using Application.Abstractions.Messaging;
-using Domain.Models.TokensModel;
+using Domain.Dtos;
 
 namespace Application.Users.Commands.Login
 {
-    public record LoginCommand(string Email, string Password) : ICommand<Tokens>;
+    public record LoginCommand(string Email, string Password) : ICommand<TokensDto>;
 }
