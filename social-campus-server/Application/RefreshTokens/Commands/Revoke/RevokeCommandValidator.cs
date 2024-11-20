@@ -7,8 +7,8 @@ namespace Application.RefreshTokens.Commands.Revoke
         public RevokeCommandValidator()
         {
             RuleFor(x => x.RefreshToken)
-                .NotEmpty().WithMessage("Refresh token is required.")
-                .MinimumLength(128).WithMessage("Refresh token format is invalid.");
+                .NotEmpty().WithMessage("Refresh token is required")
+                .MinimumLength(128).WithMessage("Refresh token format is invalid");
         }
     }
 }

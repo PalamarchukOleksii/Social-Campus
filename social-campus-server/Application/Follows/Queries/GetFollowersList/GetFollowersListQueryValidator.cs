@@ -8,9 +8,9 @@ namespace Application.Follows.Queries.GetFollowersList
         public GetFollowersListQueryValidator(IUserRepository userRepository)
         {
             RuleFor(f => f.UserId)
-                .NotEmpty().WithMessage("UserId is required.")
+                .NotEmpty().WithMessage("UserId is required")
                 .MustAsync(async (userId, _) => await userRepository.IsExistByIdAsync(userId))
-                .WithMessage((context, _) => $"User with UserId {context.UserId.Value} do not exist.");
+                .WithMessage((context, _) => $"User with UserId {context.UserId.Value} do not exist");
         }
     }
 }
