@@ -1,4 +1,4 @@
-﻿using Application.Publications.Commands.Create;
+﻿using Application.Publications.Commands.CreatePublication;
 using Domain.Shared;
 using FluentValidation;
 using FluentValidation.Results;

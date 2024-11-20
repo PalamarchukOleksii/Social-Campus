@@ -1,7 +1,7 @@
 ﻿using Domain.Abstractions.Repositories;
 using FluentValidation;
 
-namespace Application.Publications.Commands.Create
+namespace Application.Publications.Commands.CreatePublication
 {
     public class CreatePublicationCommandValidator : AbstractValidator<CreatePublicationCommand>
     {

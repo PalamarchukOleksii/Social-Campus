@@ -3,7 +3,7 @@ using Application.Abstractions.Messaging;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
 
-namespace Application.Publications.Commands.Create
+namespace Application.Publications.Commands.CreatePublication
 {
     public class CreatePublicationCommandHandler(
         IPublicationRepository publicationRepository,
