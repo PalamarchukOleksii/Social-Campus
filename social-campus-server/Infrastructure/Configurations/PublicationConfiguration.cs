@@ -19,7 +19,6 @@ namespace Infrastructure.Configurations
                 .HasMaxLength(1000);
 
             builder.Property(p => p.Base64ImageData)
-                .HasColumnType("nvarchar(max)")
                 .IsRequired(false);
 
             builder.Property(p => p.CreationDateTime)

@@ -42,7 +42,6 @@ namespace Infrastructure.Configurations
                 .HasMaxLength(50);
 
             builder.Property(u => u.ProfileImageData)
-                .HasColumnType("varbinary(max)")
                 .IsRequired(false);
 
             builder.HasIndex(u => u.Id)

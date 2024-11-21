@@ -80,8 +80,7 @@ namespace Presentation.Controllers
                 ));
             }
 
-            Result<IReadOnlyList<UserFollowDto?>> response = await _sender.Send(commandRequest);
-
+            Result<IReadOnlyList<UserFollowDto>> response = await _sender.Send(commandRequest);
             if (response.IsFailure)
             {
                 return BadRequest(response.Error);
@@ -110,7 +109,7 @@ namespace Presentation.Controllers
                 ));
             }
 
-            Result<IReadOnlyList<UserFollowDto?>> response = await _sender.Send(commandRequest);
+            Result<IReadOnlyList<UserFollowDto>> response = await _sender.Send(commandRequest);
             if (response.IsFailure)
             {
                 return BadRequest(response.Error);

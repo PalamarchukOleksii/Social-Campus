@@ -15,15 +15,15 @@ namespace Infrastructure.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Login = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    ProfileImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    RefreshTokenId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Login = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Bio = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    ProfileImageData = table.Column<byte[]>(type: "BLOB", nullable: true),
+                    RefreshTokenId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,9 +34,9 @@ namespace Infrastructure.Migrations
                 name: "Follows",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FollowedUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    FollowedUserId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,11 +57,11 @@ namespace Infrastructure.Migrations
                 name: "Publications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
+                    Base64ImageData = table.Column<string>(type: "TEXT", nullable: true),
+                    CreationDateTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,10 +78,10 @@ namespace Infrastructure.Migrations
                 name: "RefreshTokens",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Token = table.Column<string>(type: "nvarchar(172)", maxLength: 172, nullable: false),
-                    TokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Token = table.Column<string>(type: "TEXT", maxLength: 172, nullable: false),
+                    TokenExpiryTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -148,8 +148,7 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RefreshTokenId",
                 table: "Users",
-                column: "RefreshTokenId",
-                unique: true);
+                column: "RefreshTokenId");
         }
 
         /// <inheritdoc />
