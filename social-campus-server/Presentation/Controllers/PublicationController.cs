@@ -20,7 +20,7 @@ namespace Presentation.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreatePublicationDto request)
         {
-            CreatePublicationCommand commandRequest = new(request.Description, request.CreatorId, request.Base64ImageData);
+            CreatePublicationCommand commandRequest = new(request.Description, request.CreatorId, request.ImageData);
 
             ValidationResult result = await createPublicationValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)

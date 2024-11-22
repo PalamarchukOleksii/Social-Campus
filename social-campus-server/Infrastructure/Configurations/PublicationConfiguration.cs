@@ -18,7 +18,7 @@ namespace Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(1000);
 
-            builder.Property(p => p.Base64ImageData)
+            builder.Property(p => p.ImageData)
                 .IsRequired(false);
 
             builder.Property(p => p.CreationDateTime)

@@ -30,7 +30,7 @@ namespace Domain.Models.UserModel
         public string FirstName { get; private set; } = string.Empty;
         public string LastName { get; private set; } = string.Empty;
         public string Bio { get; private set; } = string.Empty;
-        public byte[]? ProfileImageData { get; }
+        public string ProfileImageData { get; private set; } = string.Empty;
         public RefreshTokenId RefreshTokenId { get; private set; } = new RefreshTokenId(Guid.Empty);
         public virtual RefreshToken? RefreshToken { get; }
         public virtual ICollection<Follow>? Followers { get; }

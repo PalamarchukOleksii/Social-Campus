@@ -9,6 +9,6 @@ namespace Application.Dtos
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Bio { get; set; } = string.Empty;
-        public byte[]? ProfileImageData { get; set; }
+        public string ProfileImageData { get; set; } = string.Empty;
     }
 }

@@ -11,7 +11,7 @@ namespace Application.Publications.Commands.CreatePublication
     {
         public async Task<Result> Handle(CreatePublicationCommand request, CancellationToken cancellationToken)
         {
-            await publicationRepository.AddAsync(request.Description, request.CreatorId, request.Base64ImageData);
+            await publicationRepository.AddAsync(request.Description, request.CreatorId, request.ImageData);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

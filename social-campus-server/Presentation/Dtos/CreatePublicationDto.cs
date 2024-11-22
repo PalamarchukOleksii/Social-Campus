@@ -6,6 +6,6 @@ namespace Presentation.Dtos
     {
         public string Description { get; set; } = string.Empty;
         public UserId CreatorId { get; set; } = new UserId(Guid.Empty);
-        public string? Base64ImageData { get; set; }
+        public string ImageData { get; set; } = string.Empty;
     }
 }

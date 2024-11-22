@@ -8,9 +8,9 @@ namespace Infrastructure.Repositories
 {
     public class PublicationRepository(ApplicationDbContext context) : IPublicationRepository
     {
-        public async Task AddAsync(string description, UserId creatorId, string? base64ImageData)
+        public async Task AddAsync(string description, UserId creatorId, string imageData)
         {
-            Publication newPublication = new(description, creatorId, base64ImageData);
+            Publication newPublication = new(description, creatorId, imageData);
 
             await context.Publications.AddAsync(newPublication);
         }
