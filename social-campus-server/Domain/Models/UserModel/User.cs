@@ -40,5 +40,15 @@ namespace Domain.Models.UserModel
         public void SetRefreshTokenId(RefreshTokenId refreshTokenId) => RefreshTokenId = refreshTokenId;
 
         public void DropRefreshTokenIdOnRevoke() => RefreshTokenId = new RefreshTokenId(Guid.Empty);
+
+        public void Update(string login, string email, string firstName, string lastName, string bio, string profileImageData)
+        {
+            Login = login;
+            Email = email;
+            FirstName = firstName;
+            LastName = lastName;
+            Bio = bio;
+            ProfileImageData = profileImageData;
+        }
     }
 }

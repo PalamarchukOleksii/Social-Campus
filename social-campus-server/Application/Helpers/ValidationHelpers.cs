@@ -6,9 +6,16 @@ namespace Application.Helpers
     {
         public static bool IsDomainValid(string email)
         {
-            string[] allowedDomains = EmailDomains.AllowedDomains;
-            string domain = email.Split('@')[1];
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
 
+            var parts = email.Split('@');
+            if (parts.Length != 2 || string.IsNullOrWhiteSpace(parts[1]))
+                return false;
+
+            string[] allowedDomains = EmailDomains.AllowedDomains;
+
+            string domain = parts[1];
             return allowedDomains.Contains(domain);
         }
     }

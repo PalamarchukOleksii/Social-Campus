@@ -19,6 +19,11 @@ namespace Infrastructure.Repositories
             return await context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<User?> GetByIdAsync(UserId id)
+        {
+            return await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
         public async Task<User?> GetByRefreshTokenIdAsync(RefreshTokenId refreshTokenId)
         {
             return await context.Users.FirstOrDefaultAsync(u => u.RefreshTokenId == refreshTokenId);
@@ -37,6 +42,13 @@ namespace Infrastructure.Repositories
         public async Task<bool> IsLoginUniqueAsync(string login)
         {
             return !await context.Users.AnyAsync(u => u.Login == login);
+        }
+
+        public void Update(User user, string login, string email, string firstName, string lastName, string bio, string profileImageData)
+        {
+            user.Update(login, email, firstName, lastName, bio, profileImageData);
+
+            context.Update(user);
         }
     }
 }
