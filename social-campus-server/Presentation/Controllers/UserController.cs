@@ -1,7 +1,7 @@
 ﻿using Application.Dtos;
 using Application.Users.Commands.Login;
 using Application.Users.Commands.Register;
-using Application.Users.Commands.Update;
+using Application.Users.Commands.UpdateUser;
 using Domain.Shared;
 using FluentValidation;
 using FluentValidation.Results;

@@ -1,12 +1,16 @@
 ﻿using Application.Helpers;
 using FluentValidation;
 
-namespace Application.Users.Commands.Update
+namespace Application.Users.Commands.UpdateUser
 {
     public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     {
         public UpdateUserCommandValidator()
         {
+            RuleFor(u => u.Id)
+                .NotEmpty().WithMessage("UserId is required")
+                .Must(id => id.Value != Guid.Empty).WithMessage("UserId must be a valid GUID");
+
             RuleFor(u => u.Email)
                 .NotEmpty().WithMessage("Email is required")
                 .EmailAddress().WithMessage("A valid email address is required")

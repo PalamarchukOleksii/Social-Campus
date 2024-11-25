@@ -1,7 +1,7 @@
 ﻿using Application.Abstractions.Messaging;
 using Domain.Models.UserModel;
 
-namespace Application.Users.Commands.Update
+namespace Application.Users.Commands.UpdateUser
 {
     public record UpdateUserCommand(
         UserId Id,

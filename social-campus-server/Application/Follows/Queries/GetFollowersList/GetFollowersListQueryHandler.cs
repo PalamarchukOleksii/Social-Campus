@@ -7,10 +7,19 @@ using Domain.Shared;
 namespace Application.Follows.Queries.GetFollowersList
 {
     public class GetFollowersListQueryHandler(
-        IFollowRepository followRepository) : IQueryHandler<GetFollowersListQuery, IReadOnlyList<UserFollowDto>>
+        IFollowRepository followRepository,
+        IUserRepository userRepository) : IQueryHandler<GetFollowersListQuery, IReadOnlyList<UserFollowDto>>
     {
         public async Task<Result<IReadOnlyList<UserFollowDto>>> Handle(GetFollowersListQuery request, CancellationToken cancellationToken)
         {
+            User? user = await userRepository.GetByIdAsync(request.UserId);
+            if (user is null)
+            {
+                return Result.Failure<IReadOnlyList<UserFollowDto>>(new Error(
+                    "User.NotFound",
+                    $"User with UserId {request.UserId} was not found"));
+            }
+
             IReadOnlyList<User> response = await followRepository.GetFollowersUsersByIdAsync(request.UserId);
 
             IReadOnlyList<UserFollowDto> followersDto = response

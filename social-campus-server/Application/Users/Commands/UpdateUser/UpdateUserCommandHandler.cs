@@ -4,7 +4,7 @@ using Domain.Abstractions.Repositories;
 using Domain.Models.UserModel;
 using Domain.Shared;
 
-namespace Application.Users.Commands.Update
+namespace Application.Users.Commands.UpdateUser
 {
     public class UpdateUserCommandHandler(
         IUserRepository userRepository,
