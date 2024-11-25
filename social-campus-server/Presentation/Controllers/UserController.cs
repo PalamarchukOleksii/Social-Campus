@@ -2,6 +2,7 @@
 using Application.Users.Commands.Login;
 using Application.Users.Commands.Register;
 using Application.Users.Commands.UpdateUser;
+using Application.Users.Queries.GetUserProfileByLogin;
 using Domain.Shared;
 using FluentValidation;
 using FluentValidation.Results;
@@ -19,6 +20,7 @@ namespace Presentation.Controllers
         IValidator<RegisterCommand> registerValidator,
         IValidator<LoginCommand> loginValidator,
         IValidator<UpdateUserCommand> updateValidator,
+        IValidator<GetUserProfileByLoginQuery> getUserValidator,
         ISender sender) : ApiController(sender)
     {
         [HttpPost("register")]
@@ -92,6 +94,27 @@ namespace Presentation.Controllers
             Result response = await _sender.Send(commandRequest);
 
             return response.IsSuccess ? Ok() : BadRequest(response.Error);
+        }
+
+        [Authorize]
+        [HttpGet("{login}")]
+        public async Task<ActionResult<UserProfileDto>> GetUserProfileByLogin([FromRoute] string login)
+        {
+            GetUserProfileByLoginQuery queryRequest = new(login);
+
+            ValidationResult result = await getUserValidator.ValidateAsync(queryRequest);
+            if (!result.IsValid)
+            {
+                return ValidationProblem(new ValidationProblemDetails(
+                    result.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
+                ));
+            }
+
+            Result<UserProfileDto> response = await _sender.Send(queryRequest);
+
+            return response.IsSuccess ? Ok(response.Value) : BadRequest(response.Error);
         }
     }
 }

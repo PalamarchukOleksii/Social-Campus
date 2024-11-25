@@ -66,7 +66,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{userId:guid}/following")]
-        public async Task<ActionResult<IReadOnlyList<UserFollowDto?>>> GetFollowingList([FromRoute] Guid userId)
+        public async Task<ActionResult<IReadOnlyList<UserFollowDto>>> GetFollowingList([FromRoute] Guid userId)
         {
             GetFollowingListQuery commandRequest = new(new UserId(userId));
 
