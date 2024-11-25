@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Application.Users.Commands.Update
 {
-    public class UpdateCommandValidator : AbstractValidator<UpdateCommand>
+    public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     {
-        public UpdateCommandValidator()
+        public UpdateUserCommandValidator()
         {
             RuleFor(u => u.Email)
                 .NotEmpty().WithMessage("Email is required")

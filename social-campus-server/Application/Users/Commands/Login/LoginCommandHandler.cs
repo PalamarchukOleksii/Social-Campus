@@ -23,7 +23,7 @@ namespace Application.Users.Commands.Login
             {
                 return Result.Failure<TokensDto>(new Error(
                     "User.NotFound",
-                    $"User with that email {request.Email} was not found"));
+                    $"User with email {request.Email} was not found"));
             }
 
             bool isPasswordValid = passwordHasher.Verify(request.Password, user.PasswordHash);

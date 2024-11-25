@@ -6,11 +6,11 @@ using Domain.Shared;
 
 namespace Application.Users.Commands.Update
 {
-    public class UpdateCommandHandler(
+    public class UpdateUserCommandHandler(
         IUserRepository userRepository,
-        IUnitOfWork unitOfWork) : ICommandHandler<UpdateCommand>
+        IUnitOfWork unitOfWork) : ICommandHandler<UpdateUserCommand>
     {
-        public async Task<Result> Handle(UpdateCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             User? user = await userRepository.GetByIdAsync(request.Id);
             if (user is null)

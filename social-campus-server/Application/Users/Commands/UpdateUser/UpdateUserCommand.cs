@@ -3,7 +3,7 @@ using Domain.Models.UserModel;
 
 namespace Application.Users.Commands.Update
 {
-    public record UpdateCommand(
+    public record UpdateUserCommand(
         UserId Id,
         string Login,
         string Email,

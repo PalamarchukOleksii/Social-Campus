@@ -18,7 +18,7 @@ namespace Presentation.Controllers
     public class UserController(
         IValidator<RegisterCommand> registerValidator,
         IValidator<LoginCommand> loginValidator,
-        IValidator<UpdateCommand> updateValidator,
+        IValidator<UpdateUserCommand> updateValidator,
         ISender sender) : ApiController(sender)
     {
         [HttpPost("register")]
@@ -70,7 +70,7 @@ namespace Presentation.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> Update([FromBody] UpdateUserDto request)
         {
-            UpdateCommand commandRequest = new(
+            UpdateUserCommand commandRequest = new(
                 request.Id,
                 request.Login,
                 request.Email,
