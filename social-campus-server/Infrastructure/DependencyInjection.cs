@@ -38,6 +38,7 @@ namespace Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IFollowRepository, FollowRepository>();
             services.AddScoped<IPublicationRepository, PublicationRepository>();
+            services.AddScoped<IPublicationLikeRepositories, PublicationLikeRepositories>();
 
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddSingleton<IJwtProvider, JwtProvider>();
