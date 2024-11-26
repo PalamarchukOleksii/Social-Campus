@@ -1,4 +1,5 @@
 ﻿using Domain.Models.FollowModel;
+using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
 using Domain.Models.RefreshTokenModel;
 
@@ -36,6 +37,7 @@ namespace Domain.Models.UserModel
         public virtual ICollection<Follow>? Followers { get; }
         public virtual ICollection<Follow>? FollowedUsers { get; }
         public virtual ICollection<Publication>? Publications { get; }
+        public virtual ICollection<PublicationLike>? PublicationLikes { get; }
 
         public void SetRefreshTokenId(RefreshTokenId refreshTokenId) => RefreshTokenId = refreshTokenId;
 

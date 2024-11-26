@@ -1,4 +1,5 @@
-﻿using Domain.Models.UserModel;
+﻿using Domain.Models.PublicationLikeModel;
+using Domain.Models.UserModel;
 
 namespace Domain.Models.PublicationModel
 {
@@ -21,5 +22,6 @@ namespace Domain.Models.PublicationModel
         public DateTime CreationDateTime { get; private set; }
         public UserId CreatorId { get; private set; } = new UserId(Guid.Empty);
         public virtual User? Creator { get; }
+        public virtual ICollection<PublicationLike>? PublicationLikes { get; }
     }
 }
