@@ -7,7 +7,7 @@ namespace Domain.Abstractions.Repositories
     {
         public Task AddAsync(UserId userId, PublicationId publicationId);
         public Task DeleteAsync(UserId userId, PublicationId publicationId);
-        public Task<IReadOnlyList<Publication>> GetPublicationLikesUsersByIdAsync(PublicationId publicationId);
+        public Task<IReadOnlyList<Publication>> GetByIdAsync(PublicationId publicationId);
         public Task<bool> IsLike(UserId userId, PublicationId publicationId);
     }
 }

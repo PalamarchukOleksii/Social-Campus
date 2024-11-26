@@ -27,7 +27,7 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<IReadOnlyList<Publication>> GetPublicationLikesUsersByIdAsync(PublicationId publicationId)
+        public async Task<IReadOnlyList<Publication>> GetByIdAsync(PublicationId publicationId)
         {
             return await context.PublicationLikes
                 .Where(pl => pl.PublicationId == publicationId)

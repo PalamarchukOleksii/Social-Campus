@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync() as IReadOnlyList<Publication>;
         }
 
-        public async Task<Publication?> GetPublicationByIdAsync(PublicationId publicationId)
+        public async Task<Publication?> GetByIdAsync(PublicationId publicationId)
         {
             return await context.Publications.FirstOrDefaultAsync(p => p.Id == publicationId);
         }
