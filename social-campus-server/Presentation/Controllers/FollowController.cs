@@ -67,9 +67,9 @@ namespace Presentation.Controllers
         [HttpGet("{login}/following")]
         public async Task<ActionResult<IReadOnlyList<ShortUserDto>>> GetFollowingList([FromRoute] string login)
         {
-            GetFollowingListQuery commandRequest = new(login);
+            GetFollowingListQuery queryRequest = new(login);
 
-            ValidationResult result = await getFollowingListValidator.ValidateAsync(commandRequest);
+            ValidationResult result = await getFollowingListValidator.ValidateAsync(queryRequest);
             if (!result.IsValid)
             {
                 return ValidationProblem(new ValidationProblemDetails(
@@ -79,7 +79,7 @@ namespace Presentation.Controllers
                 ));
             }
 
-            Result<IReadOnlyList<ShortUserDto>> response = await _sender.Send(commandRequest);
+            Result<IReadOnlyList<ShortUserDto>> response = await _sender.Send(queryRequest);
             if (response.IsFailure)
             {
                 return BadRequest(response.Error);
@@ -96,9 +96,9 @@ namespace Presentation.Controllers
         [HttpGet("{login}/followers")]
         public async Task<ActionResult<IReadOnlyList<ShortUserDto?>>> GetFollowersList([FromRoute] string login)
         {
-            GetFollowersListQuery commandRequest = new(login);
+            GetFollowersListQuery queryRequest = new(login);
 
-            ValidationResult result = await getFollowersListValidator.ValidateAsync(commandRequest);
+            ValidationResult result = await getFollowersListValidator.ValidateAsync(queryRequest);
             if (!result.IsValid)
             {
                 return ValidationProblem(new ValidationProblemDetails(
@@ -108,7 +108,7 @@ namespace Presentation.Controllers
                 ));
             }
 
-            Result<IReadOnlyList<ShortUserDto>> response = await _sender.Send(commandRequest);
+            Result<IReadOnlyList<ShortUserDto>> response = await _sender.Send(queryRequest);
             if (response.IsFailure)
             {
                 return BadRequest(response.Error);

@@ -14,5 +14,6 @@ namespace Application.Dtos
         public IReadOnlyList<ShortPublicationDto>? Publications { get; set; }
         public int FollowingCount { get; set; }
         public int FollowersCount { get; set; }
+        public IReadOnlyList<UserId>? FollowersIds { get; set; }
     }
 }

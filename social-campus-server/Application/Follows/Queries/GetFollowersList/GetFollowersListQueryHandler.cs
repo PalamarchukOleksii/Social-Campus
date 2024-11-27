@@ -32,7 +32,7 @@ namespace Application.Follows.Queries.GetFollowersList
                     Bio = user.Bio,
                     ProfileImageData = user.ProfileImageData,
                     FollowersIds = (await followRepository.GetFollowersUsersByUserIdAsync(user.Id))
-                        .Select(f => f.Login)
+                        .Select(f => f.Id)
                         .ToList() as IReadOnlyList<UserId>
                 }));
 

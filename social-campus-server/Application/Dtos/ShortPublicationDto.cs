@@ -9,6 +9,7 @@ namespace Application.Dtos
         public string Description { get; set; } = string.Empty;
         public string ImageData { get; set; } = string.Empty;
         public DateTime CreationDateTime { get; set; }
+        public ShortUserDto CreatorInfo { get; set; } = new ShortUserDto();
         public IReadOnlyList<UserId>? UserWhoLikedIds { get; set; }
     }
 }
