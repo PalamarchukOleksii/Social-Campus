@@ -10,6 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Abstractions;
+using Presentation.Dtos;
 
 namespace Presentation.Controllers
 {
@@ -24,9 +25,9 @@ namespace Presentation.Controllers
         IValidator<GetFollowersListQuery> getFollowersListValidator) : ApiController(sender)
     {
         [HttpPost("follow")]
-        public async Task<IActionResult> Follow([FromBody] Dtos.FollowDto request)
+        public async Task<IActionResult> Follow([FromBody] FollowDto request)
         {
-            FollowCommand commandRequest = new(request.UserId, request.FollowUserId);
+            FollowCommand commandRequest = new(request.UserLogin, request.FollowUserLogin);
 
             ValidationResult result = await followValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
@@ -44,9 +45,9 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete("unfollow")]
-        public async Task<IActionResult> Unfollow([FromBody] Dtos.FollowDto request)
+        public async Task<IActionResult> Unfollow([FromBody] FollowDto request)
         {
-            UnfollowCommand commandRequest = new(request.UserId, request.FollowUserId);
+            UnfollowCommand commandRequest = new(request.UserLogin, request.FollowUserLogin);
 
             ValidationResult result = await unfollowValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
@@ -64,7 +65,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{login}/following")]
-        public async Task<ActionResult<IReadOnlyList<UserFollowDto>>> GetFollowingList([FromRoute] string login)
+        public async Task<ActionResult<IReadOnlyList<ShortUserDto>>> GetFollowingList([FromRoute] string login)
         {
             GetFollowingListQuery commandRequest = new(login);
 
@@ -78,7 +79,7 @@ namespace Presentation.Controllers
                 ));
             }
 
-            Result<IReadOnlyList<UserFollowDto>> response = await _sender.Send(commandRequest);
+            Result<IReadOnlyList<ShortUserDto>> response = await _sender.Send(commandRequest);
             if (response.IsFailure)
             {
                 return BadRequest(response.Error);
@@ -93,7 +94,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{login}/followers")]
-        public async Task<ActionResult<IReadOnlyList<UserFollowDto?>>> GetFollowersList([FromRoute] string login)
+        public async Task<ActionResult<IReadOnlyList<ShortUserDto?>>> GetFollowersList([FromRoute] string login)
         {
             GetFollowersListQuery commandRequest = new(login);
 
@@ -107,7 +108,7 @@ namespace Presentation.Controllers
                 ));
             }
 
-            Result<IReadOnlyList<UserFollowDto>> response = await _sender.Send(commandRequest);
+            Result<IReadOnlyList<ShortUserDto>> response = await _sender.Send(commandRequest);
             if (response.IsFailure)
             {
                 return BadRequest(response.Error);

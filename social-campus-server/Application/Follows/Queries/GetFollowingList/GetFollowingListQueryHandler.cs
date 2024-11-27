@@ -8,22 +8,22 @@ namespace Application.Follows.Queries.GetFollowingList
 {
     public class GetFollowingListQueryHandler(
         IFollowRepository followRepository,
-        IUserRepository userRepository) : IQueryHandler<GetFollowingListQuery, IReadOnlyList<UserFollowDto>>
+        IUserRepository userRepository) : IQueryHandler<GetFollowingListQuery, IReadOnlyList<ShortUserDto>>
     {
-        public async Task<Result<IReadOnlyList<UserFollowDto>>> Handle(GetFollowingListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IReadOnlyList<ShortUserDto>>> Handle(GetFollowingListQuery request, CancellationToken cancellationToken)
         {
             User? user = await userRepository.GetByLoginAsync(request.Login);
             if (user is null)
             {
-                return Result.Failure<IReadOnlyList<UserFollowDto>>(new Error(
+                return Result.Failure<IReadOnlyList<ShortUserDto>>(new Error(
                     "User.NotFound",
                     $"User with login {request.Login} was not found"));
             }
 
             IReadOnlyList<User> response = await followRepository.GetFollowingUsersByUserIdAsync(user.Id);
 
-            IReadOnlyList<UserFollowDto> followingDto = response
-                .Select(user => new UserFollowDto
+            IReadOnlyList<ShortUserDto> followingDto = await Task.WhenAll(response
+                .Select(async user => new ShortUserDto
                 {
                     Id = user.Id,
                     Login = user.Login,
@@ -31,8 +31,10 @@ namespace Application.Follows.Queries.GetFollowingList
                     LastName = user.LastName,
                     Bio = user.Bio,
                     ProfileImageData = user.ProfileImageData,
-                })
-                .ToList();
+                    FollowersIds = (await followRepository.GetFollowersUsersByUserIdAsync(user.Id))
+                        .Select(f => f.Id)
+                        .ToList() as IReadOnlyList<UserId>
+                }));
 
             return Result.Success(followingDto);
         }

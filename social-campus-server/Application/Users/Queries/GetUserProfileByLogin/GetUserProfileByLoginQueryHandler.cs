@@ -19,28 +19,18 @@ namespace Application.Users.Queries.GetUserProfileByLogin
                     $"User with login {request.Login} was not found"));
             }
 
-            IEnumerable<Task<ShortPublicationDto>>? publicationsDto = user.Publications?
+            IReadOnlyList<ShortPublicationDto> readOnlyPublicationsDto = user.Publications is null ? [] : await Task.WhenAll(user.Publications
                 .Select(async p => new ShortPublicationDto
                 {
                     Id = p.Id,
                     Description = p.Description,
                     ImageData = p.ImageData,
                     CreationDateTime = p.CreationDateTime,
-                    Likes = (await publicationLikeRepositories
+                    UserWhoLikedIds = (await publicationLikeRepositories
                         .GetPublicationLikesListByPublicationIdAsync(p.Id))
-                        .Select(like => new LikeDto
-                        {
-                            UserId = like.UserId,
-                            PublicationId = like.PublicationId
-                        })
-                        .ToList() as IReadOnlyList<LikeDto>
-                });
-
-            var publicationsDtoList = publicationsDto != null
-                ? await Task.WhenAll(publicationsDto)
-                : [];
-
-            IReadOnlyList<ShortPublicationDto> readOnlyPublicationsDto = publicationsDtoList;
+                        .Select(like => like.UserId)
+                        .ToList() as IReadOnlyList<UserId>
+                }));
 
             UserProfileDto userProfile = new()
             {

@@ -3,5 +3,5 @@ using Application.Dtos;
 
 namespace Application.Follows.Queries.GetFollowingList
 {
-    public record GetFollowingListQuery(string Login) : IQuery<IReadOnlyList<UserFollowDto>>;
+    public record GetFollowingListQuery(string Login) : IQuery<IReadOnlyList<ShortUserDto>>;
 }

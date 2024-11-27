@@ -13,31 +13,31 @@ namespace Application.Follows.Commands.Follow
     {
         public async Task<Result> Handle(FollowCommand request, CancellationToken cancellationToken)
         {
-            User? user = await userRepository.GetByIdAsync(request.UserId);
+            User? user = await userRepository.GetByLoginAsync(request.UserLogin);
             if (user is null)
             {
                 return Result.Failure(new Error(
                     "User.NotFound",
-                    $"User with UserId {request.UserId.Value} was not found"));
+                    $"User with login {request.UserLogin} was not found"));
             }
 
-            user = await userRepository.GetByIdAsync(request.FollowUserId);
-            if (user is null)
+            User? followUser = await userRepository.GetByLoginAsync(request.FollowUserLogin);
+            if (followUser is null)
             {
                 return Result.Failure(new Error(
                     "User.NotFound",
-                    $"User with FollowUserId {request.FollowUserId.Value} was not found"));
+                    $"User with FollowUserId {request.FollowUserLogin} was not found"));
             }
 
-            bool isAlreadyFollowing = await followRepository.IsFollowing(request.UserId, request.FollowUserId);
+            bool isAlreadyFollowing = await followRepository.IsFollowing(user.Id, followUser.Id);
             if (isAlreadyFollowing)
             {
                 return Result.Failure(new Error(
                     "Follow.AlreadyFollowing",
-                    $"User with UserId {request.UserId.Value} already following user with FollowUserId {request.FollowUserId.Value}"));
+                    $"User with UserId {user.Id.Value} already following user with FollowUserId {followUser.Id.Value}"));
             }
 
-            await followRepository.AddAsync(request.UserId, request.FollowUserId);
+            await followRepository.AddAsync(user.Id, followUser.Id);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

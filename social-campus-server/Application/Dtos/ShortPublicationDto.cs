@@ -1,4 +1,5 @@
 ﻿using Domain.Models.PublicationModel;
+using Domain.Models.UserModel;
 
 namespace Application.Dtos
 {
@@ -8,6 +9,6 @@ namespace Application.Dtos
         public string Description { get; set; } = string.Empty;
         public string ImageData { get; set; } = string.Empty;
         public DateTime CreationDateTime { get; set; }
-        public IReadOnlyList<LikeDto>? Likes { get; set; }
+        public IReadOnlyList<UserId>? UserWhoLikedIds { get; set; }
     }
 }

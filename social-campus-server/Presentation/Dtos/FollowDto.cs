@@ -1,10 +1,8 @@
-﻿using Domain.Models.UserModel;
-
-namespace Presentation.Dtos
+﻿namespace Presentation.Dtos
 {
     public class FollowDto
     {
-        public UserId UserId { get; set; } = new UserId(Guid.Empty);
-        public UserId FollowUserId { get; set; } = new UserId(Guid.Empty);
+        public string UserLogin { get; set; } = string.Empty;
+        public string FollowUserLogin { get; set; } = string.Empty;
     }
 }
