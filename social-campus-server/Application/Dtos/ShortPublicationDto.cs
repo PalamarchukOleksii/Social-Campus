@@ -1,4 +1,5 @@
-﻿using Domain.Models.PublicationModel;
+﻿using Domain.Models.PublicationLikeModel;
+using Domain.Models.PublicationModel;
 
 namespace Application.Dtos
 {
@@ -8,5 +9,6 @@ namespace Application.Dtos
         public string Description { get; set; } = string.Empty;
         public string ImageData { get; set; } = string.Empty;
         public DateTime CreationDateTime { get; set; }
+        public IReadOnlyList<PublicationLike> PublicationLikes { get; set; } = [];
     }
 }

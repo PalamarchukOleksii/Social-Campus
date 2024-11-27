@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
             await context.Publications.AddAsync(newPublication);
         }
 
-        public async Task<IReadOnlyList<Publication>> GetAllPublicationsByUserIdasync(UserId creatorId)
+        public async Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(UserId creatorId)
         {
             return await context.Publications
                 .Where(p => p.CreatorId == creatorId)

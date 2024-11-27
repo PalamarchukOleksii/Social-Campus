@@ -18,7 +18,7 @@ namespace Application.Follows.Commands.Follow
             {
                 return Result.Failure(new Error(
                     "User.NotFound",
-                    $"User with UserId {request.UserId} was not found"));
+                    $"User with UserId {request.UserId.Value} was not found"));
             }
 
             user = await userRepository.GetByIdAsync(request.FollowUserId);
@@ -26,7 +26,7 @@ namespace Application.Follows.Commands.Follow
             {
                 return Result.Failure(new Error(
                     "User.NotFound",
-                    $"User with FollowUserId {request.FollowUserId} was not found"));
+                    $"User with FollowUserId {request.FollowUserId.Value} was not found"));
             }
 
             bool isAlreadyFollowing = await followRepository.IsFollowing(request.UserId, request.FollowUserId);

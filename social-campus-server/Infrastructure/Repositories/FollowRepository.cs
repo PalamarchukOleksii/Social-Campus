@@ -24,7 +24,7 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<IReadOnlyList<User>> GetFollowersUsersByIdAsync(UserId userId)
+        public async Task<IReadOnlyList<User>> GetFollowersUsersByUserIdAsync(UserId userId)
         {
             return await context.Follows
                 .Where(f => f.FollowedUserId == userId)
@@ -33,7 +33,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync() as IReadOnlyList<User>;
         }
 
-        public async Task<IReadOnlyList<User>> GetFollowingUsersByIdAsync(UserId userId)
+        public async Task<IReadOnlyList<User>> GetFollowingUsersByUserIdAsync(UserId userId)
         {
             return await context.Follows
                 .Where(f => f.UserId == userId)

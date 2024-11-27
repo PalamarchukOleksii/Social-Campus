@@ -18,7 +18,7 @@ namespace Application.Publications.Commands.CreatePublication
             {
                 return Result.Failure<TokensDto>(new Error(
                     "User.NotFound",
-                    $"User with id {request.CreatorId} was not found"));
+                    $"User with id {request.CreatorId.Value} was not found"));
             }
 
             await publicationRepository.AddAsync(request.Description, request.CreatorId, request.ImageData);

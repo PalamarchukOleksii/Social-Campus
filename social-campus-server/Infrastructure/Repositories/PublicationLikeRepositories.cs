@@ -27,13 +27,11 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<IReadOnlyList<Publication>> GetByIdAsync(PublicationId publicationId)
+        public async Task<IReadOnlyList<PublicationLike>> GetPublicationLikesListByPublicationIdAsync(PublicationId publicationId)
         {
             return await context.PublicationLikes
                 .Where(pl => pl.PublicationId == publicationId)
-                .Select(p => p.Publication)
-                .Where(publication => publication != null)
-                .ToListAsync() as IReadOnlyList<Publication>;
+                .ToListAsync() as IReadOnlyList<PublicationLike>;
         }
 
         public async Task<bool> IsLike(UserId userId, PublicationId publicationId)

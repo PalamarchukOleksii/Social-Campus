@@ -17,7 +17,7 @@ namespace Application.Users.Commands.UpdateUser
             {
                 return Result.Failure(new Error(
                     "User.NotFound",
-                    $"User with id {request.Id} was not found"));
+                    $"User with id {request.Id.Value} was not found"));
             }
 
             bool isEmailUnique = await userRepository.IsEmailUniqueAsync(request.Email);

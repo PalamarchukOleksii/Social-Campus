@@ -17,10 +17,10 @@ namespace Application.Follows.Queries.GetFollowersList
             {
                 return Result.Failure<IReadOnlyList<UserFollowDto>>(new Error(
                     "User.NotFound",
-                    $"User with UserId {request.UserId} was not found"));
+                    $"User with UserId {request.UserId.Value} was not found"));
             }
 
-            IReadOnlyList<User> response = await followRepository.GetFollowersUsersByIdAsync(request.UserId);
+            IReadOnlyList<User> response = await followRepository.GetFollowersUsersByUserIdAsync(request.UserId);
 
             IReadOnlyList<UserFollowDto> followersDto = response
                 .Select(user => new UserFollowDto
