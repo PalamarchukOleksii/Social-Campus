@@ -12,15 +12,15 @@ namespace Application.Follows.Queries.GetFollowersList
     {
         public async Task<Result<IReadOnlyList<UserFollowDto>>> Handle(GetFollowersListQuery request, CancellationToken cancellationToken)
         {
-            User? user = await userRepository.GetByIdAsync(request.UserId);
+            User? user = await userRepository.GetByLoginAsync(request.Login);
             if (user is null)
             {
                 return Result.Failure<IReadOnlyList<UserFollowDto>>(new Error(
                     "User.NotFound",
-                    $"User with UserId {request.UserId.Value} was not found"));
+                    $"User with login {request.Login} was not found"));
             }
 
-            IReadOnlyList<User> response = await followRepository.GetFollowersUsersByUserIdAsync(request.UserId);
+            IReadOnlyList<User> response = await followRepository.GetFollowersUsersByUserIdAsync(user.Id);
 
             IReadOnlyList<UserFollowDto> followersDto = response
                 .Select(user => new UserFollowDto

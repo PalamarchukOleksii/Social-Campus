@@ -3,7 +3,6 @@ using Application.Follows.Commands.Follow;
 using Application.Follows.Commands.Unfollow;
 using Application.Follows.Queries.GetFollowersList;
 using Application.Follows.Queries.GetFollowingList;
-using Domain.Models.UserModel;
 using Domain.Shared;
 using FluentValidation;
 using FluentValidation.Results;
@@ -11,7 +10,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Abstractions;
-using Presentation.Dtos;
 
 namespace Presentation.Controllers
 {
@@ -26,7 +24,7 @@ namespace Presentation.Controllers
         IValidator<GetFollowersListQuery> getFollowersListValidator) : ApiController(sender)
     {
         [HttpPost("follow")]
-        public async Task<IActionResult> Follow([FromBody] FollowDto request)
+        public async Task<IActionResult> Follow([FromBody] Dtos.FollowDto request)
         {
             FollowCommand commandRequest = new(request.UserId, request.FollowUserId);
 
@@ -46,7 +44,7 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete("unfollow")]
-        public async Task<IActionResult> Unfollow([FromBody] FollowDto request)
+        public async Task<IActionResult> Unfollow([FromBody] Dtos.FollowDto request)
         {
             UnfollowCommand commandRequest = new(request.UserId, request.FollowUserId);
 
@@ -65,10 +63,10 @@ namespace Presentation.Controllers
             return response.IsSuccess ? Ok() : BadRequest(response.Error);
         }
 
-        [HttpGet("{userId:guid}/following")]
-        public async Task<ActionResult<IReadOnlyList<UserFollowDto>>> GetFollowingList([FromRoute] Guid userId)
+        [HttpGet("{login}/following")]
+        public async Task<ActionResult<IReadOnlyList<UserFollowDto>>> GetFollowingList([FromRoute] string login)
         {
-            GetFollowingListQuery commandRequest = new(new UserId(userId));
+            GetFollowingListQuery commandRequest = new(login);
 
             ValidationResult result = await getFollowingListValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)
@@ -94,10 +92,10 @@ namespace Presentation.Controllers
             return Ok(response.Value);
         }
 
-        [HttpGet("{userId:guid}/followers")]
-        public async Task<ActionResult<IReadOnlyList<UserFollowDto?>>> GetFollowersList([FromRoute] Guid userId)
+        [HttpGet("{login}/followers")]
+        public async Task<ActionResult<IReadOnlyList<UserFollowDto?>>> GetFollowersList([FromRoute] string login)
         {
-            GetFollowersListQuery commandRequest = new(new UserId(userId));
+            GetFollowersListQuery commandRequest = new(login);
 
             ValidationResult result = await getFollowersListValidator.ValidateAsync(commandRequest);
             if (!result.IsValid)

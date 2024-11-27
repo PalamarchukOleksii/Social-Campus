@@ -26,7 +26,11 @@ namespace Infrastructure.Repositories
 
         public async Task<User?> GetByLoginAsync(string login)
         {
-            return await context.Users.FirstOrDefaultAsync(u => u.Login == login);
+            return await context.Users
+                .Include(u => u.Publications)
+                .Include(u => u.Followers)
+                .Include(u => u.FollowedUsers)
+                .FirstOrDefaultAsync(u => u.Login == login);
         }
 
         public async Task<User?> GetByRefreshTokenIdAsync(RefreshTokenId refreshTokenId)

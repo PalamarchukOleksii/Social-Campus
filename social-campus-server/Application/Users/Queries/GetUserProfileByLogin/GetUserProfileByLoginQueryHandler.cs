@@ -1,17 +1,13 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
-using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 using Domain.Shared;
-
 namespace Application.Users.Queries.GetUserProfileByLogin
 {
-    public class GetUserProfileByLoginQueryHandler(
+    public class GetUserProfileByLoginHandler(
         IUserRepository userRepository,
-        IPublicationRepository publicationRepository,
-        IPublicationLikeRepositories publicationLikeRepositories,
-        IFollowRepository followRepository) : IQueryHandler<GetUserProfileByLoginQuery, UserProfileDto>
+        IPublicationLikeRepositories publicationLikeRepositories) : IQueryHandler<GetUserProfileByLoginQuery, UserProfileDto>
     {
         public async Task<Result<UserProfileDto>> Handle(GetUserProfileByLoginQuery request, CancellationToken cancellationToken)
         {
@@ -23,20 +19,28 @@ namespace Application.Users.Queries.GetUserProfileByLogin
                     $"User with login {request.Login} was not found"));
             }
 
-            IReadOnlyList<Publication> publications = await publicationRepository.GetUserPublicationsByUserIdAsync(user.Id);
-            IReadOnlyList<ShortPublicationDto>? publicationsDto = publications
+            IEnumerable<Task<ShortPublicationDto>>? publicationsDto = user.Publications?
                 .Select(async p => new ShortPublicationDto
                 {
                     Id = p.Id,
                     Description = p.Description,
                     ImageData = p.ImageData,
                     CreationDateTime = p.CreationDateTime,
-                    PublicationLikes = await publicationLikeRepositories.GetPublicationLikesListByPublicationIdAsync(p.Id),
-                })
-                .ToList() as IReadOnlyList<ShortPublicationDto>;
+                    Likes = (await publicationLikeRepositories
+                        .GetPublicationLikesListByPublicationIdAsync(p.Id))
+                        .Select(like => new LikeDto
+                        {
+                            UserId = like.UserId,
+                            PublicationId = like.PublicationId
+                        })
+                        .ToList() as IReadOnlyList<LikeDto>
+                });
 
-            IReadOnlyList<User> followers = await followRepository.GetFollowersUsersByUserIdAsync(user.Id);
-            IReadOnlyList<User> following = await followRepository.GetFollowingUsersByUserIdAsync(user.Id);
+            var publicationsDtoList = publicationsDto != null
+                ? await Task.WhenAll(publicationsDto)
+                : [];
+
+            IReadOnlyList<ShortPublicationDto> readOnlyPublicationsDto = publicationsDtoList;
 
             UserProfileDto userProfile = new()
             {
@@ -47,9 +51,9 @@ namespace Application.Users.Queries.GetUserProfileByLogin
                 LastName = user.LastName,
                 Bio = user.Bio,
                 ProfileImageData = user.ProfileImageData,
-                Publications = publicationsDto,
-                FollowersCount = followers.Count,
-                FollowingCount = following.Count,
+                Publications = readOnlyPublicationsDto,
+                FollowersCount = user.Followers?.Count ?? 0,
+                FollowingCount = user.FollowedUsers?.Count ?? 0,
             };
 
             return Result.Success(userProfile);

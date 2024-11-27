@@ -6,9 +6,8 @@ namespace Application.Follows.Queries.GetFollowingList
     {
         public GetFollowingListQueryValidator()
         {
-            RuleFor(f => f.UserId)
-                .NotEmpty().WithMessage("UserId is required")
-                .Must(id => id.Value != Guid.Empty).WithMessage("UserId must be a valid GUID");
+            RuleFor(f => f.Login)
+                .NotEmpty().WithMessage("Login is required");
         }
     }
 }
