@@ -26,5 +26,12 @@ namespace Infrastructure.Repositories
         {
             return await context.Publications.FirstOrDefaultAsync(p => p.Id == publicationId);
         }
+
+        public void Update(Publication publication, string description, string imageData)
+        {
+            publication.Update(description, imageData);
+
+            context.Update(publication);
+        }
     }
 }

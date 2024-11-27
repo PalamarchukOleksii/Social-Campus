@@ -23,5 +23,11 @@ namespace Domain.Models.PublicationModel
         public UserId CreatorId { get; private set; } = new UserId(Guid.Empty);
         public virtual User? Creator { get; }
         public virtual ICollection<PublicationLike>? PublicationLikes { get; }
+
+        public void Update(string description, string imageData)
+        {
+            Description = description;
+            ImageData = imageData;
+        }
     }
 }

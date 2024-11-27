@@ -19,7 +19,7 @@ namespace Presentation.Controllers
         IValidator<AddPublicationLikeCommand> addLikeValidator,
         IValidator<RemovePublicationLikeCommand> removeLikeValidator) : ApiController(sender)
     {
-        [HttpPost("publication/like/add")]
+        [HttpPost("like/add")]
         public async Task<IActionResult> Follow([FromBody] PublicationLikeDto request)
         {
             AddPublicationLikeCommand commandRequest = new(request.UserId, request.PublicationId);
@@ -39,7 +39,7 @@ namespace Presentation.Controllers
             return response.IsSuccess ? Ok() : BadRequest(response.Error);
         }
 
-        [HttpDelete("publication/like/remove")]
+        [HttpDelete("like/remove")]
         public async Task<IActionResult> Unfollow([FromBody] PublicationLikeDto request)
         {
             RemovePublicationLikeCommand commandRequest = new(request.UserId, request.PublicationId);

@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Publications.Commands.CreatePublication;
+using Application.Publications.Commands.UpdatePublication;
 using Application.Publications.Queries.GetPublication;
 using Domain.Models.PublicationModel;
 using Domain.Shared;
@@ -19,7 +20,8 @@ namespace Presentation.Controllers
     public class PublicationController(
         ISender sender,
         IValidator<CreatePublicationCommand> createPublicationValidator,
-        IValidator<GetPublicationQuery> getPublicationValidator) : ApiController(sender)
+        IValidator<GetPublicationQuery> getPublicationValidator,
+        IValidator<UpdatePublicationCommand> updatePublicationValidator) : ApiController(sender)
     {
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreatePublicationDto request)
@@ -59,6 +61,30 @@ namespace Presentation.Controllers
             Result<ShortPublicationDto> response = await _sender.Send(queryRequest);
 
             return response.IsSuccess ? Ok(response.Value) : BadRequest(response.Error);
+        }
+
+        [HttpPatch("update")]
+        public async Task<IActionResult> Update([FromBody] UpdatePublicationDto updatePublicationDto)
+        {
+            UpdatePublicationCommand commandRequest = new(
+                updatePublicationDto.CallerId,
+                updatePublicationDto.PublicationId,
+                updatePublicationDto.Description,
+                updatePublicationDto.ImageData);
+
+            ValidationResult result = await updatePublicationValidator.ValidateAsync(commandRequest);
+            if (!result.IsValid)
+            {
+                return ValidationProblem(new ValidationProblemDetails(
+                    result.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
+                ));
+            }
+
+            Result response = await _sender.Send(commandRequest);
+
+            return response.IsSuccess ? Ok() : BadRequest(response.Error);
         }
     }
 }

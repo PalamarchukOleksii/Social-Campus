@@ -69,11 +69,12 @@ namespace Presentation.Controllers
         }
 
         [Authorize]
-        [HttpPut("update")]
+        [HttpPatch("update")]
         public async Task<IActionResult> Update([FromBody] UpdateUserDto request)
         {
             UpdateUserCommand commandRequest = new(
-                request.Id,
+                request.CallerId,
+                request.UserId,
                 request.Login,
                 request.Email,
                 request.FirstName,

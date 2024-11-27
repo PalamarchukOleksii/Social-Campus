@@ -4,7 +4,8 @@ using Domain.Models.UserModel;
 namespace Application.Users.Commands.UpdateUser
 {
     public record UpdateUserCommand(
-        UserId Id,
+        UserId CallerId,
+        UserId UserId,
         string Login,
         string Email,
         string FirstName,
