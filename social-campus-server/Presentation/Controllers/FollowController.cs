@@ -4,8 +4,6 @@ using Application.Follows.Commands.Unfollow;
 using Application.Follows.Queries.GetFollowersList;
 using Application.Follows.Queries.GetFollowingList;
 using Domain.Shared;
-using FluentValidation;
-using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,31 +15,16 @@ namespace Presentation.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class FollowController(
-        ISender sender,
-        IValidator<FollowCommand> followValidator,
-        IValidator<UnfollowCommand> unfollowValidator,
-        IValidator<GetFollowingListQuery> getFollowingListValidator,
-        IValidator<GetFollowersListQuery> getFollowersListValidator) : ApiController(sender)
+    public class FollowController(ISender sender) : ApiController(sender)
     {
         [HttpPost("follow")]
         public async Task<IActionResult> Follow([FromBody] FollowDto request)
         {
             FollowCommand commandRequest = new(request.UserLogin, request.FollowUserLogin);
 
-            ValidationResult result = await followValidator.ValidateAsync(commandRequest);
-            if (!result.IsValid)
-            {
-                return ValidationProblem(new ValidationProblemDetails(
-                    result.Errors
-                        .GroupBy(e => e.PropertyName)
-                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
-                ));
-            }
-
             Result response = await _sender.Send(commandRequest);
 
-            return response.IsSuccess ? Ok() : BadRequest(response.Error);
+            return response.IsSuccess ? Ok() : HandleFailure(response);
         }
 
         [HttpDelete("unfollow")]
@@ -49,19 +32,9 @@ namespace Presentation.Controllers
         {
             UnfollowCommand commandRequest = new(request.UserLogin, request.FollowUserLogin);
 
-            ValidationResult result = await unfollowValidator.ValidateAsync(commandRequest);
-            if (!result.IsValid)
-            {
-                return ValidationProblem(new ValidationProblemDetails(
-                    result.Errors
-                        .GroupBy(e => e.PropertyName)
-                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
-                ));
-            }
-
             Result response = await _sender.Send(commandRequest);
 
-            return response.IsSuccess ? Ok() : BadRequest(response.Error);
+            return response.IsSuccess ? Ok() : HandleFailure(response);
         }
 
         [HttpGet("{login}/following")]
@@ -69,20 +42,10 @@ namespace Presentation.Controllers
         {
             GetFollowingListQuery queryRequest = new(login);
 
-            ValidationResult result = await getFollowingListValidator.ValidateAsync(queryRequest);
-            if (!result.IsValid)
-            {
-                return ValidationProblem(new ValidationProblemDetails(
-                    result.Errors
-                        .GroupBy(e => e.PropertyName)
-                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
-                ));
-            }
-
             Result<IReadOnlyList<ShortUserDto>> response = await _sender.Send(queryRequest);
             if (response.IsFailure)
             {
-                return BadRequest(response.Error);
+                return HandleFailure<IReadOnlyList<ShortUserDto>>(response);
             }
 
             if (response.Value == null || !response.Value.Any())
@@ -94,24 +57,14 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{login}/followers")]
-        public async Task<ActionResult<IReadOnlyList<ShortUserDto?>>> GetFollowersList([FromRoute] string login)
+        public async Task<ActionResult<IReadOnlyList<ShortUserDto>>> GetFollowersList([FromRoute] string login)
         {
             GetFollowersListQuery queryRequest = new(login);
-
-            ValidationResult result = await getFollowersListValidator.ValidateAsync(queryRequest);
-            if (!result.IsValid)
-            {
-                return ValidationProblem(new ValidationProblemDetails(
-                    result.Errors
-                        .GroupBy(e => e.PropertyName)
-                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
-                ));
-            }
 
             Result<IReadOnlyList<ShortUserDto>> response = await _sender.Send(queryRequest);
             if (response.IsFailure)
             {
-                return BadRequest(response.Error);
+                return HandleFailure<IReadOnlyList<ShortUserDto>>(response);
             }
 
             if (response.Value == null || !response.Value.Any())
