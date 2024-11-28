@@ -27,12 +27,12 @@ namespace Infrastructure.Configurations
             builder.HasOne(pl => pl.User)
                 .WithMany(u => u.PublicationLikes)
                 .HasForeignKey(pl => pl.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.HasOne(pl => pl.Publication)
                 .WithMany(p => p.PublicationLikes)
                 .HasForeignKey(pl => pl.PublicationId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.HasIndex(f => f.UserId);
 

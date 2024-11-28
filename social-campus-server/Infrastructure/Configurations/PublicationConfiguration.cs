@@ -1,4 +1,5 @@
 ﻿using Domain.Models.PublicationModel;
+using Domain.Models.UserModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,6 +13,10 @@ namespace Infrastructure.Configurations
 
             builder.Property(p => p.Id)
                 .HasConversion(id => id.Value, value => new PublicationId(value))
+                .IsRequired();
+
+            builder.Property(p => p.CreatorId)
+                .HasConversion(creatorId => creatorId.Value, value => new UserId(value))
                 .IsRequired();
 
             builder.Property(p => p.Description)

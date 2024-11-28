@@ -1,4 +1,5 @@
-﻿using Domain.Models.PublicationLikeModel;
+﻿using Domain.Models.CommentModel;
+using Domain.Models.PublicationLikeModel;
 using Domain.Models.UserModel;
 
 namespace Domain.Models.PublicationModel
@@ -23,6 +24,7 @@ namespace Domain.Models.PublicationModel
         public UserId CreatorId { get; private set; } = new UserId(Guid.Empty);
         public virtual User? Creator { get; }
         public virtual ICollection<PublicationLike>? PublicationLikes { get; }
+        public virtual ICollection<Comment>? Comments { get; }
 
         public void Update(string description, string imageData)
         {
