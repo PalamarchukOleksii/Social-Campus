@@ -51,7 +51,15 @@ namespace Application.RefreshTokens.Commands.Refresh
             }
 
             TokensDto tokens = jwtProvider.GenerateTokens(user);
-            tokenRepository.Update(refreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
+            if (refreshToken.Token == request.RefreshToken && refreshToken.IsValid())
+            {
+                tokens.RefreshToken = refreshToken.Token;
+                tokens.RefreshTokenExpirationInDays = refreshToken.DaysUntilExpiration();
+            }
+            else
+            {
+                tokenRepository.Update(refreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
+            }
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -25,6 +25,17 @@ namespace Domain.Models.RefreshTokenModel
             Token = newToken;
             TokenExpiryTime = tokenExpiryDateTime;
         }
+
+        public bool IsValid()
+        {
+            return DateTime.UtcNow < TokenExpiryTime;
+        }
+
+        public int DaysUntilExpiration()
+        {
+            var remainingTime = TokenExpiryTime - DateTime.UtcNow;
+            return remainingTime.Days;
+        }
     }
 
 }

@@ -35,10 +35,15 @@ namespace Application.Users.Commands.Login
             }
 
             TokensDto tokens = jwtProvider.GenerateTokens(user);
-            if (user.RefreshTokenId != null)
+            if (user.RefreshTokenId.Value != Guid.Empty)
             {
                 RefreshToken? existingRefreshToken = await tokenRepository.GetByIdAsync(user.RefreshTokenId);
-                if (existingRefreshToken != null)
+                if (existingRefreshToken != null && existingRefreshToken.IsValid())
+                {
+                    tokens.RefreshTokenExpirationInDays = existingRefreshToken.DaysUntilExpiration();
+                    tokens.RefreshToken = existingRefreshToken.Token;
+                }
+                else if (existingRefreshToken != null)
                 {
                     tokenRepository.Update(existingRefreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
                 }
