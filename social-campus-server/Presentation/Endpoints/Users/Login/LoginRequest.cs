@@ -1,4 +1,4 @@
-﻿namespace Presentation.Endpoints.User.Login
+﻿namespace Presentation.Endpoints.Users.Login
 {
     public class LoginRequest
     {

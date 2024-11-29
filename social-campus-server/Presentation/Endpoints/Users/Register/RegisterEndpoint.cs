@@ -4,7 +4,7 @@ using MediatR;
 using Presentation.Abstractions;
 using Presentation.Consts;
 
-namespace Presentation.Endpoints.User.Register
+namespace Presentation.Endpoints.Users.Register
 {
     public class RegisterEndpoint : BaseEndpoint, IEndpoint
     {

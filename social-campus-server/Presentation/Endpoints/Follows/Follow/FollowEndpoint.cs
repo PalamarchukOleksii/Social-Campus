@@ -1,24 +1,24 @@
-﻿using Application.RefreshTokens.Commands.Revoke;
+﻿using Application.Follows.Commands.Follow;
 using Domain.Shared;
 using MediatR;
 using Presentation.Abstractions;
 using Presentation.Consts;
 
-namespace Presentation.Endpoints.RefreshToken.Revoke
+namespace Presentation.Endpoints.Follows.Follow
 {
-    public class RevokeEndpoint : BaseEndpoint, IEndpoint
+    public class FollowEndpoint : BaseEndpoint, IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapDelete("resreshtokens/revoke", async (ISender sender, string refreshToken) =>
+            app.MapPost("follows/follow", async (ISender sender, FollowRequest request) =>
             {
-                RevokeCommand commandRequest = new(refreshToken);
+                FollowCommand commandRequest = new(request.UserLogin, request.FollowUserLogin);
 
                 Result response = await sender.Send(commandRequest);
 
                 return response.IsSuccess ? Results.Ok() : HandleFailure(response);
             })
-            .WithTags(Tags.ResreshTokens)
+            .WithTags(Tags.Follows)
             .RequireAuthorization();
         }
     }

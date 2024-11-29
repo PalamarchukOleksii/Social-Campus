@@ -1,4 +1,4 @@
-﻿namespace Presentation.Endpoints.User.Register
+﻿namespace Presentation.Endpoints.Users.Register
 {
     public class RegisterRequest
     {

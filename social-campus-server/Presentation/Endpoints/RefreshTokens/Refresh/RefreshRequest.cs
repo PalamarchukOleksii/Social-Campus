@@ -1,4 +1,4 @@
-﻿namespace Presentation.Endpoints.RefreshToken.Refresh
+﻿namespace Presentation.Endpoints.RefreshTokens.Refresh
 {
     public class RefreshRequest
     {

@@ -5,7 +5,7 @@ using MediatR;
 using Presentation.Abstractions;
 using Presentation.Consts;
 
-namespace Presentation.Endpoints.User.Login
+namespace Presentation.Endpoints.Users.Login
 {
     public class LoginEndpoint : BaseEndpoint, IEndpoint
     {

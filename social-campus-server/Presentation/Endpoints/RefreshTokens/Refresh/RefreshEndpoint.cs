@@ -5,7 +5,7 @@ using MediatR;
 using Presentation.Abstractions;
 using Presentation.Consts;
 
-namespace Presentation.Endpoints.RefreshToken.Refresh
+namespace Presentation.Endpoints.RefreshTokens.Refresh
 {
     public class RefreshEndpoint : BaseEndpoint, IEndpoint
     {

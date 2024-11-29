@@ -5,13 +5,13 @@ using MediatR;
 using Presentation.Abstractions;
 using Presentation.Consts;
 
-namespace Presentation.Endpoints.User.GetProfileByLogin
+namespace Presentation.Endpoints.Users.GetProfileByLogin
 {
     public class GetProfileByLoginEndpoint : BaseEndpoint, IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapGet("users/{login}", async (ISender sender, string login) =>
+            app.MapGet("users/{login:required}", async (ISender sender, string login) =>
             {
                 GetUserProfileByLoginQuery queryRequest = new(login);
 
