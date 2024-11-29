@@ -1,8 +1,8 @@
 ﻿using Domain.Models.UserModel;
 
-namespace Presentation.Dtos
+namespace Presentation.Endpoints.User.Update
 {
-    public class UpdateUserDto
+    public class UpdateRequest
     {
         public UserId CallerId { get; set; } = new UserId(Guid.Empty);
         public UserId UserId { get; set; } = new UserId(Guid.Empty);

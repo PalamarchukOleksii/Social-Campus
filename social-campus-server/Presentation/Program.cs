@@ -2,6 +2,7 @@ using Application;
 using Infrastructure;
 using Presentation.Extensions;
 using Scalar.AspNetCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApiWithAuth();
+
+builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
@@ -30,5 +33,10 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+RouteGroupBuilder baseGroup = app
+    .MapGroup("api");
+
+app.MapEndpoints(baseGroup);
 
 await app.RunAsync();

@@ -1,6 +1,6 @@
-﻿namespace Presentation.Dtos
+﻿namespace Presentation.Endpoints.User.Register
 {
-    public class RegisterDto
+    public class RegisterRequest
     {
         public string Login { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;

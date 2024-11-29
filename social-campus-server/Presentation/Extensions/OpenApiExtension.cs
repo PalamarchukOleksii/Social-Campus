@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 
 namespace Presentation.Extensions
 {
-    public static class ServiceCollectionExtensions
+    public static class OpenApiExtension
     {
         public static IServiceCollection AddOpenApiWithAuth(this IServiceCollection services)
         {
@@ -15,6 +15,7 @@ namespace Presentation.Extensions
 
             return services;
         }
+
         internal sealed class BearerSecuritySchemeTransformer(IAuthenticationSchemeProvider authenticationSchemeProvider) : IOpenApiDocumentTransformer
         {
             public async Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
