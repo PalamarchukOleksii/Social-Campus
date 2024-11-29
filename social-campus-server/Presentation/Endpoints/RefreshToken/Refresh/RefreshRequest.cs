@@ -1,6 +1,6 @@
-﻿namespace Presentation.Dtos
+﻿namespace Presentation.Endpoints.RefreshToken.Refresh
 {
-    public class RefreshDto
+    public class RefreshRequest
     {
         public string AccessToken { get; set; } = string.Empty;
         public string RefreshToken { get; set; } = string.Empty;
