@@ -1,5 +1,4 @@
-﻿using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Domain.Abstractions.Repositories;
 using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
@@ -10,8 +9,7 @@ namespace Application.PublicationLikes.Commands.AddPublicationLike
     public class AddPublicationLikeCommandHandler(
         IPublicationLikeRepositories publicationLikeRepositories,
         IUserRepository userRepository,
-        IPublicationRepository publicationRepository,
-        IUnitOfWork unitOfWork) : ICommandHandler<AddPublicationLikeCommand>
+        IPublicationRepository publicationRepository) : ICommandHandler<AddPublicationLikeCommand>
     {
         public async Task<Result> Handle(AddPublicationLikeCommand request, CancellationToken cancellationToken)
         {
@@ -40,8 +38,6 @@ namespace Application.PublicationLikes.Commands.AddPublicationLike
             }
 
             await publicationLikeRepositories.AddAsync(request.UserId, request.PublicationId);
-
-            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

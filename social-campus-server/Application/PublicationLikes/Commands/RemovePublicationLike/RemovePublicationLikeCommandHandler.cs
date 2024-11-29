@@ -1,5 +1,4 @@
-﻿using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Domain.Abstractions.Repositories;
 using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
@@ -10,8 +9,7 @@ namespace Application.PublicationLikes.Commands.RemovePublicationLike
     public class RemovePublicationLikeCommandHandler(
         IUserRepository userRepository,
         IPublicationRepository publicationRepository,
-        IPublicationLikeRepositories publicationLikeRepositories,
-        IUnitOfWork unitOfWork) : ICommandHandler<RemovePublicationLikeCommand>
+        IPublicationLikeRepositories publicationLikeRepositories) : ICommandHandler<RemovePublicationLikeCommand>
     {
         public async Task<Result> Handle(RemovePublicationLikeCommand request, CancellationToken cancellationToken)
         {
@@ -40,8 +38,6 @@ namespace Application.PublicationLikes.Commands.RemovePublicationLike
             }
 
             await publicationLikeRepositories.DeleteAsync(request.UserId, request.PublicationId);
-
-            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

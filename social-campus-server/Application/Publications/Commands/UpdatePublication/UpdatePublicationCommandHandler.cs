@@ -1,5 +1,4 @@
-﻿using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Models.PublicationModel;
@@ -9,8 +8,7 @@ namespace Application.Publications.Commands.UpdatePublication
 {
     public class UpdatePublicationCommandHandler(
         IPublicationRepository publicationRepository,
-        IUserRepository userRepository,
-        IUnitOfWork unitOfWork) : ICommandHandler<UpdatePublicationCommand>
+        IUserRepository userRepository) : ICommandHandler<UpdatePublicationCommand>
     {
         public async Task<Result> Handle(UpdatePublicationCommand request, CancellationToken cancellationToken)
         {
@@ -37,8 +35,6 @@ namespace Application.Publications.Commands.UpdatePublication
             }
 
             publicationRepository.Update(publication, request.Description, request.ImageData);
-
-            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

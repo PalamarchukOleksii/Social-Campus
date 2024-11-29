@@ -1,5 +1,4 @@
-﻿using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
@@ -13,8 +12,7 @@ namespace Application.Users.Commands.Login
         IJwtProvider jwtProvider,
         IUserRepository userRepository,
         IRefreshTokenRepository tokenRepository,
-        IPasswordHasher passwordHasher,
-        IUnitOfWork unitOfWork) : ICommandHandler<LoginCommand, TokensDto>
+        IPasswordHasher passwordHasher) : ICommandHandler<LoginCommand, TokensDto>
     {
         public async Task<Result<TokensDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
@@ -58,8 +56,6 @@ namespace Application.Users.Commands.Login
                 RefreshToken refreshToken = await tokenRepository.AddAsync(tokens.RefreshToken, tokens.RefreshTokenExpirationInDays, user.Id);
                 user.SetRefreshTokenId(refreshToken.Id);
             }
-
-            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success(tokens);
         }

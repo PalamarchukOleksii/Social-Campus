@@ -1,5 +1,4 @@
-﻿using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Domain.Abstractions.Repositories;
 using Domain.Models.UserModel;
 using Domain.Shared;
@@ -7,7 +6,6 @@ using Domain.Shared;
 namespace Application.Follows.Commands.Follow
 {
     public class FollowCommandHandler(
-        IUnitOfWork unitOfWork,
         IUserRepository userRepository,
         IFollowRepository followRepository) : ICommandHandler<FollowCommand>
     {
@@ -38,8 +36,6 @@ namespace Application.Follows.Commands.Follow
             }
 
             await followRepository.AddAsync(user.Id, followUser.Id);
-
-            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

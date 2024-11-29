@@ -1,5 +1,4 @@
-﻿using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Domain.Abstractions.Repositories;
 using Domain.Models.UserModel;
 using Domain.Shared;
@@ -7,7 +6,6 @@ using Domain.Shared;
 namespace Application.Follows.Commands.Unfollow
 {
     public class UnfollowCommandHandler(
-            IUnitOfWork unitOfWork,
             IUserRepository userRepository,
             IFollowRepository followRepository) : ICommandHandler<UnfollowCommand>
     {
@@ -39,8 +37,6 @@ namespace Application.Follows.Commands.Unfollow
             }
 
             await followRepository.DeleteAsync(user.Id, followUser.Id);
-
-            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

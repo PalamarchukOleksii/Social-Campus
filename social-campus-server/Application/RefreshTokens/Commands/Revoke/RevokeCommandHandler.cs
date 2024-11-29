@@ -1,5 +1,4 @@
-﻿using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Models.RefreshTokenModel;
@@ -10,8 +9,7 @@ namespace Application.RefreshTokens.Commands.Revoke
 {
     public class RevokeCommandHandler(
         IRefreshTokenRepository tokenRepository,
-        IUserRepository userRepository,
-        IUnitOfWork unitOfWork) : ICommandHandler<RevokeCommand>
+        IUserRepository userRepository) : ICommandHandler<RevokeCommand>
     {
         public async Task<Result> Handle(RevokeCommand request, CancellationToken cancellationToken)
         {
@@ -32,8 +30,6 @@ namespace Application.RefreshTokens.Commands.Revoke
             }
 
             await tokenRepository.DeleteByIdAsync(refreshToken.Id);
-
-            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

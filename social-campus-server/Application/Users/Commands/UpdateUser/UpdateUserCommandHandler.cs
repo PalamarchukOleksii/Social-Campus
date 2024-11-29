@@ -1,5 +1,4 @@
-﻿using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Models.UserModel;
@@ -8,8 +7,7 @@ using Domain.Shared;
 namespace Application.Users.Commands.UpdateUser
 {
     public class UpdateUserCommandHandler(
-        IUserRepository userRepository,
-        IUnitOfWork unitOfWork) : ICommandHandler<UpdateUserCommand>
+        IUserRepository userRepository) : ICommandHandler<UpdateUserCommand>
     {
         public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
@@ -59,8 +57,6 @@ namespace Application.Users.Commands.UpdateUser
                 request.LastName,
                 request.Bio,
                 request.ProfileImageData);
-
-            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

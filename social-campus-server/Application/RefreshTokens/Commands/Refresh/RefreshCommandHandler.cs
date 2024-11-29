@@ -1,5 +1,4 @@
-﻿using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
@@ -13,8 +12,7 @@ namespace Application.RefreshTokens.Commands.Refresh
     public class RefreshCommandHandler(
         IUserRepository userRepository,
         IJwtProvider jwtProvider,
-        IRefreshTokenRepository tokenRepository,
-        IUnitOfWork unitOfWork) : ICommandHandler<RefreshCommand, TokensDto>
+        IRefreshTokenRepository tokenRepository) : ICommandHandler<RefreshCommand, TokensDto>
     {
         public async Task<Result<TokensDto>> Handle(RefreshCommand request, CancellationToken cancellationToken)
         {
@@ -60,8 +58,6 @@ namespace Application.RefreshTokens.Commands.Refresh
             {
                 tokenRepository.Update(refreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
             }
-
-            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success(tokens);
         }
