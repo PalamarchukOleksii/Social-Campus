@@ -10,11 +10,6 @@ namespace Application.Behaviors
     {
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            if (!nameof(TRequest).EndsWith("Command"))
-            {
-                return await next();
-            }
-
             using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
             var response = await next();

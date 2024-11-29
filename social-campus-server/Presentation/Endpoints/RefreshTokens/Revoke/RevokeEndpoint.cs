@@ -10,7 +10,7 @@ namespace Presentation.Endpoints.RefreshTokens.Revoke
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapDelete("refreshtokens/revoke/{refreshToken:required}", async (ISender sender, string refreshToken) =>
+            app.MapDelete("refreshtokens/revoke", async (ISender sender, string refreshToken) =>
             {
                 RevokeCommand commandRequest = new(refreshToken);
 
