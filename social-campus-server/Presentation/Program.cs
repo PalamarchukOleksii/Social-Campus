@@ -10,9 +10,7 @@ builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddApplication();
 
-builder.Services.AddControllers();
 builder.Services.AddOpenApiWithAuth();
-
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
@@ -32,7 +30,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
 
 RouteGroupBuilder baseGroup = app
     .MapGroup("api");

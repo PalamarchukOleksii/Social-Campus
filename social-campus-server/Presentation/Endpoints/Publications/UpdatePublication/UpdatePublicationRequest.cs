@@ -1,9 +1,9 @@
 ﻿using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 
-namespace Presentation.Dtos
+namespace Presentation.Endpoints.Publications.UpdatePublication
 {
-    public class UpdatePublicationDto
+    public class UpdatePublicationRequest
     {
         public UserId CallerId { get; set; } = new UserId(Guid.Empty);
         public PublicationId PublicationId { get; set; } = new PublicationId(Guid.Empty);
