@@ -1,6 +1,4 @@
 ﻿using Application.Abstractions.Data;
-using Application.Abstractions.Messaging;
-using Domain.Shared;
 using MediatR;
 using System.Transactions;
 
@@ -8,26 +6,24 @@ namespace Application.Behaviors
 {
     public class UnitOfWorkPipelineBehavior<TRequest, TResponse>(IUnitOfWork unitOfWork)
         : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
-        where TResponse : Result
+        where TRequest : notnull
     {
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            if (!typeof(TRequest).GetInterfaces().Any(i => i == typeof(ICommand)))
+            if (!nameof(TRequest).EndsWith("Command"))
             {
                 return await next();
             }
 
-            using (var transactionScope = new TransactionScope())
-            {
-                var response = await next();
+            using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+            var response = await next();
 
-                transactionScope.Complete();
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
-                return response;
-            }
+            transactionScope.Complete();
+
+            return response;
         }
     }
 }

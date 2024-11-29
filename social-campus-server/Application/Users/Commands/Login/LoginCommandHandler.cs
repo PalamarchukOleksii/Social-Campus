@@ -24,7 +24,7 @@ namespace Application.Users.Commands.Login
                     $"User with email {request.Email} was not found"));
             }
 
-            bool isPasswordValid = passwordHasher.Verify(request.Password, user.PasswordHash);
+            bool isPasswordValid = await passwordHasher.VerifyAsync(request.Password, user.PasswordHash);
             if (!isPasswordValid)
             {
                 return Result.Failure<TokensDto>(new Error(

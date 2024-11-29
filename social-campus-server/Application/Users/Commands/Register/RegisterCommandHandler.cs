@@ -27,7 +27,7 @@ namespace Application.Users.Commands.Register
                 $"User with login {request.Login} has already exist"));
             }
 
-            string passwordHash = passwordHasher.Hash(request.Password);
+            string passwordHash = await passwordHasher.HashAsync(request.Password);
 
             await userRepository.AddAsync(request.Login, passwordHash, request.Email, request.FirstName, request.LastName);
 

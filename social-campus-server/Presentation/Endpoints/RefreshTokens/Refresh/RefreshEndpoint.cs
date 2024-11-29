@@ -11,7 +11,7 @@ namespace Presentation.Endpoints.RefreshTokens.Refresh
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("resreshtokens/refresh", async (ISender sender, RefreshRequest request) =>
+            app.MapPost("refreshtokens/refresh", async (ISender sender, RefreshRequest request) =>
             {
                 RefreshCommand commandRequest = new(request.AccessToken, request.RefreshToken);
 
@@ -19,7 +19,7 @@ namespace Presentation.Endpoints.RefreshTokens.Refresh
 
                 return response.IsSuccess ? Results.Ok(response.Value) : HandleFailure(response);
             })
-            .WithTags(Tags.ResreshTokens);
+            .WithTags(Tags.RefreshTokens);
         }
     }
 }
