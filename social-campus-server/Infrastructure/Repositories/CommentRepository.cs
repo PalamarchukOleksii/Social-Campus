@@ -18,6 +18,11 @@ namespace Infrastructure.Repositories
             await context.Comments.AddAsync(comment);
         }
 
+        public async Task<Comment?> GetByIdAsync(CommentId commentId)
+        {
+            return await context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
+        }
+
         public async Task<IReadOnlyList<Comment>> GetPublicationCommentsByPublicationIdAsync(PublicationId publicationId)
         {
             return await context.Comments

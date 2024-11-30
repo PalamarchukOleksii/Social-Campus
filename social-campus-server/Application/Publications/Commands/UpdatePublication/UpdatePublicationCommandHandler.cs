@@ -31,7 +31,7 @@ namespace Application.Publications.Commands.UpdatePublication
             {
                 return Result.Failure<ShortPublicationDto>(new Error(
                     "User.NoUpdatePermission",
-                    $"User with UserId {request.CallerId.Value} do not have permission to updatep publication with PublicationId {request.PublicationId.Value}"));
+                    $"User with UserId {request.CallerId.Value} do not have permission to update publication with PublicationId {request.PublicationId.Value}"));
             }
 
             publicationRepository.Update(publication, request.Description, request.ImageData);
