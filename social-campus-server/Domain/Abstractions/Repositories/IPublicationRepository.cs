@@ -9,5 +9,6 @@ namespace Domain.Abstractions.Repositories
         public Task<Publication?> GetByIdAsync(PublicationId publicationId);
         public Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(UserId creatorId);
         public void Update(Publication publication, string description, string imageData);
+        public Task<bool> IsExistByIdAsync(PublicationId publicationId);
     }
 }

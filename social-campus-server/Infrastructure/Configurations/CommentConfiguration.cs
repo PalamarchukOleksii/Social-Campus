@@ -20,7 +20,10 @@ namespace Infrastructure.Configurations
                 .IsRequired();
 
             builder.Property(c => c.ReplyToCommentId)
-                .HasConversion(relComId => relComId.Value, value => new CommentId(value))
+                .HasConversion(
+                    relComId => relComId.Value != Guid.Empty ? relComId.Value : null as Guid?,
+                    value => value.HasValue ? new CommentId(value.Value) : new CommentId(Guid.Empty)
+                )
                 .IsRequired(false);
 
             builder.Property(c => c.Description)

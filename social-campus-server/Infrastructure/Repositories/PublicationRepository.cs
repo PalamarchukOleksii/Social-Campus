@@ -33,5 +33,10 @@ namespace Infrastructure.Repositories
 
             context.Update(publication);
         }
+
+        public async Task<bool> IsExistByIdAsync(PublicationId publicationId)
+        {
+            return await context.Publications.AnyAsync(u => u.Id == publicationId);
+        }
     }
 }

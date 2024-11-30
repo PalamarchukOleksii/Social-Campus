@@ -1,5 +1,4 @@
 ﻿using Application.Abstractions.Messaging;
-using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
 
@@ -14,7 +13,7 @@ namespace Application.Publications.Commands.CreatePublication
             bool isUserExist = await userRepository.IsExistByIdAsync(request.CreatorId);
             if (!isUserExist)
             {
-                return Result.Failure<TokensDto>(new Error(
+                return Result.Failure(new Error(
                     "User.NotFound",
                     $"User with id {request.CreatorId.Value} was not found"));
             }
