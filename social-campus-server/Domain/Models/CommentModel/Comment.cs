@@ -45,5 +45,10 @@ namespace Domain.Models.CommentModel
         public virtual Comment? ReplyToComment { get; }
         public virtual ICollection<Comment>? RepliedComments { get; }
         public virtual ICollection<CommentLike>? CommentLikes { get; }
+
+        public void Update(string description)
+        {
+            Description = description;
+        }
     }
 }
