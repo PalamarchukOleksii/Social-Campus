@@ -1,4 +1,5 @@
-﻿using Domain.Models.CommentModel;
+﻿using Domain.Models.CommentLikeModel;
+using Domain.Models.CommentModel;
 using Domain.Models.FollowModel;
 using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
@@ -16,6 +17,7 @@ namespace Infrastructure.Data
         public required DbSet<Publication> Publications { get; set; }
         public required DbSet<PublicationLike> PublicationLikes { get; set; }
         public required DbSet<Comment> Comments { get; set; }
+        public required DbSet<CommentLike> CommentLikes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

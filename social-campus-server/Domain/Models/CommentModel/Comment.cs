@@ -1,4 +1,5 @@
-﻿using Domain.Models.PublicationModel;
+﻿using Domain.Models.CommentLikeModel;
+using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 
 namespace Domain.Models.CommentModel
@@ -43,5 +44,6 @@ namespace Domain.Models.CommentModel
         public CommentId ReplyToCommentId { get; private set; } = new CommentId(Guid.Empty);
         public virtual Comment? ReplyToComment { get; }
         public virtual ICollection<Comment>? RepliedComments { get; }
+        public virtual ICollection<CommentLike>? CommentLikes { get; }
     }
 }

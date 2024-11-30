@@ -1,4 +1,5 @@
-﻿using Domain.Models.CommentModel;
+﻿using Domain.Models.CommentLikeModel;
+using Domain.Models.CommentModel;
 using Domain.Models.FollowModel;
 using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
@@ -40,6 +41,7 @@ namespace Domain.Models.UserModel
         public virtual ICollection<Publication>? Publications { get; }
         public virtual ICollection<PublicationLike>? PublicationLikes { get; }
         public virtual ICollection<Comment>? Comments { get; }
+        public virtual ICollection<CommentLike>? CommentLikes { get; }
 
         public void SetRefreshTokenId(RefreshTokenId refreshTokenId) => RefreshTokenId = refreshTokenId;
 
