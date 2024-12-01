@@ -43,6 +43,11 @@ namespace Infrastructure.Repositories
                 .ToListAsync() as IReadOnlyList<Comment>;
         }
 
+        public async Task<bool> IsExistByIdAsync(CommentId commentId)
+        {
+            return await context.Comments.AnyAsync(u => u.Id == commentId);
+        }
+
         public void Update(Comment comment, string description)
         {
             comment.Update(description);
