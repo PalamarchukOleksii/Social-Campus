@@ -40,6 +40,7 @@ namespace Infrastructure
             services.AddScoped<IPublicationRepository, PublicationRepository>();
             services.AddScoped<IPublicationLikeRepositories, PublicationLikeRepositories>();
             services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
 
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddSingleton<IJwtProvider, JwtProvider>();

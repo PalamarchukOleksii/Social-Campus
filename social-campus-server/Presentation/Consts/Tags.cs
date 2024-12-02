@@ -8,5 +8,6 @@
         public const string Follows = "follows";
         public const string Publications = "publications";
         public const string Comments = "comments";
+        public const string CommentLikes = "commentlikes";
     }
 }

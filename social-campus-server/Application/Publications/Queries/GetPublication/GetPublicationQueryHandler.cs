@@ -39,7 +39,7 @@ namespace Application.Publications.Queries.GetPublication
             IReadOnlyList<User> followers = await followRepository.GetFollowersUsersByUserIdAsync(user.Id);
             IReadOnlyList<Comment> comments = await commentRepository.GetPublicationCommentsByPublicationIdAsync(publication.Id);
 
-            IReadOnlyList<CommentDto> commentDtos = await Task.WhenAll(comments.Where(c => c.ReplyToCommentId is not null)
+            IReadOnlyList<CommentDto> commentDtos = await Task.WhenAll(comments.Where(c => c.ReplyToCommentId is null)
                 .Select(async comment =>
                 {
                     IReadOnlyList<User> followers = await followRepository.GetFollowersUsersByUserIdAsync(comment.CreatorId);

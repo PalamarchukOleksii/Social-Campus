@@ -8,7 +8,7 @@ using Presentation.Consts;
 
 namespace Presentation.Endpoints.PublicationLikes.RemoveLike
 {
-    public class RemoveLikeEndpoint : BaseEndpoint, IEndpoint
+    public class RemovePublicationLikeEndpoint : BaseEndpoint, IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {

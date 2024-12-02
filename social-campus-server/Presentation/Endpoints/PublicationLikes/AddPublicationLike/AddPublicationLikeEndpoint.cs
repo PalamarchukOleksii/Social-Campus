@@ -6,11 +6,11 @@ using Presentation.Consts;
 
 namespace Presentation.Endpoints.PublicationLikes.AddLike
 {
-    public class AddLikeEndpoint : BaseEndpoint, IEndpoint
+    public class AddPublicationLikeEndpoint : BaseEndpoint, IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("publicationlikes/add", async (ISender sender, AddLikeRequest request) =>
+            app.MapPost("publicationlikes/add", async (ISender sender, AddPublicationLikeRequest request) =>
             {
                 AddPublicationLikeCommand commandRequest = new(request.UserId, request.PublicationId);
 
