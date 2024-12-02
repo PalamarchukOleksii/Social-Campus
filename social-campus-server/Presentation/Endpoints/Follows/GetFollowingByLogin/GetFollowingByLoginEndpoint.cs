@@ -21,11 +21,6 @@ namespace Presentation.Endpoints.Follows.GetFollowingByLogin
                     return HandleFailure(response);
                 }
 
-                if (response.Value == null || !response.Value.Any())
-                {
-                    return Results.Ok(new { message = "No following found" });
-                }
-
                 return Results.Ok(response.Value);
             })
             .WithTags(Tags.Follows)
