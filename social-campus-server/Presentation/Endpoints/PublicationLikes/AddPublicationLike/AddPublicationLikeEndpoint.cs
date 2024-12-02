@@ -4,7 +4,7 @@ using MediatR;
 using Presentation.Abstractions;
 using Presentation.Consts;
 
-namespace Presentation.Endpoints.PublicationLikes.AddLike
+namespace Presentation.Endpoints.PublicationLikes.AddPublicationLike
 {
     public class AddPublicationLikeEndpoint : BaseEndpoint, IEndpoint
     {

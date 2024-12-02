@@ -6,7 +6,7 @@ using MediatR;
 using Presentation.Abstractions;
 using Presentation.Consts;
 
-namespace Presentation.Endpoints.PublicationLikes.RemoveLike
+namespace Presentation.Endpoints.PublicationLikes.RemovePublicationLike
 {
     public class RemovePublicationLikeEndpoint : BaseEndpoint, IEndpoint
     {

@@ -1,7 +1,7 @@
 ﻿using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 
-namespace Presentation.Endpoints.PublicationLikes.AddLike
+namespace Presentation.Endpoints.PublicationLikes.AddPublicationLike
 {
     public class AddPublicationLikeRequest
     {
