@@ -25,6 +25,8 @@ if (app.Environment.IsDevelopment())
             .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
             .WithPreferredScheme("Bearer");
     });
+
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();
