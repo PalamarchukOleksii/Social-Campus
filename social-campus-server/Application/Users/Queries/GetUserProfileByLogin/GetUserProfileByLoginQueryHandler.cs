@@ -10,7 +10,8 @@ namespace Application.Users.Queries.GetUserProfileByLogin
         IUserRepository userRepository,
         IPublicationLikeRepositories publicationLikeRepositories,
         IPublicationRepository publicationRepository,
-        IFollowRepository followRepository) : IQueryHandler<GetUserProfileByLoginQuery, UserProfileDto>
+        IFollowRepository followRepository,
+        ICommentRepository commentRepository) : IQueryHandler<GetUserProfileByLoginQuery, UserProfileDto>
     {
         public async Task<Result<UserProfileDto>> Handle(GetUserProfileByLoginQuery request, CancellationToken cancellationToken)
         {
@@ -48,7 +49,8 @@ namespace Application.Users.Queries.GetUserProfileByLogin
                     UserWhoLikedIds = (await publicationLikeRepositories
                         .GetPublicationLikesListByPublicationIdAsync(p.Id))
                         .Select(like => like.UserId)
-                        .ToList() as IReadOnlyList<UserId>
+                        .ToList() as IReadOnlyList<UserId>,
+                    CommentsCount = await commentRepository.GetPublicationCommentsCountByPublicationIdAsync(p.Id)
                 }));
 
             UserProfileDto userProfile = new()

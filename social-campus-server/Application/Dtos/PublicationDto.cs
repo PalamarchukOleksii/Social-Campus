@@ -3,7 +3,7 @@ using Domain.Models.UserModel;
 
 namespace Application.Dtos
 {
-    public class ShortPublicationDto
+    public class PublicationDto
     {
         public PublicationId Id { get; set; } = new PublicationId(Guid.Empty);
         public string Description { get; set; } = string.Empty;
@@ -11,6 +11,6 @@ namespace Application.Dtos
         public DateTime CreationDateTime { get; set; }
         public ShortUserDto CreatorInfo { get; set; } = new ShortUserDto();
         public IReadOnlyList<UserId>? UserWhoLikedIds { get; set; }
-        public int CommentsCount { get; set; }
+        public IReadOnlyList<CommentDto>? Comments { get; set; }
     }
 }

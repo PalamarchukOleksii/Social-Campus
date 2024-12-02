@@ -44,7 +44,7 @@ namespace Application.Comments.Queries.GetRepliesToComment
                         FollowersIds = followers.Select(f => f.Id).ToList() as IReadOnlyList<UserId>
                     },
                     UserWhoLikedIds = c.CommentLikes?
-                        .Select(like => like.UserId).ToList() as IReadOnlyList<UserId> ?? []
+                        .Select(like => like.UserId).ToList() as IReadOnlyList<UserId>
                 };
             }));
 

@@ -26,11 +26,16 @@ namespace Infrastructure.Repositories
         public async Task<IReadOnlyList<Comment>> GetPublicationCommentsByPublicationIdAsync(PublicationId publicationId)
         {
             return await context.Comments
-                .Where(comment => comment.RelatedPublicationId == publicationId)
-                .Include(comment => comment.Creator)
-                .Include(comment => comment.CommentLikes)
+                .Where(c => c.RelatedPublicationId == publicationId)
+                .Include(c => c.Creator)
+                .Include(c => c.CommentLikes)
                 .AsSplitQuery()
                 .ToListAsync() as IReadOnlyList<Comment>;
+        }
+
+        public async Task<int> GetPublicationCommentsCountByPublicationIdAsync(PublicationId publicationId)
+        {
+            return (await context.Comments.Where(c => c.RelatedPublicationId == publicationId).ToListAsync()).Count;
         }
 
         public async Task<IReadOnlyList<Comment>> GetRepliedCommentsByCommentIdAsync(CommentId commentId)

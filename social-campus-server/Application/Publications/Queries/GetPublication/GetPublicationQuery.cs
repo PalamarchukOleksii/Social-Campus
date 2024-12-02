@@ -4,5 +4,5 @@ using Domain.Models.PublicationModel;
 
 namespace Application.Publications.Queries.GetPublication
 {
-    public record GetPublicationQuery(PublicationId PublicationId) : IQuery<ShortPublicationDto>;
+    public record GetPublicationQuery(PublicationId PublicationId) : IQuery<PublicationDto>;
 }

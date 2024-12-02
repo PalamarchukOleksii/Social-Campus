@@ -16,7 +16,7 @@ namespace Presentation.Endpoints.Publications.GetPublicationById
             {
                 GetPublicationQuery queryRequest = new(new PublicationId(publicationId));
 
-                Result<ShortPublicationDto> response = await sender.Send(queryRequest);
+                Result<PublicationDto> response = await sender.Send(queryRequest);
 
                 return response.IsSuccess ? Results.Ok(response.Value) : HandleFailure(response);
             })
