@@ -82,6 +82,12 @@ function Profile() {
           <h2 className="profile-name general-text">{user.username}</h2>
           <p className="profile-login not-general-text">@{user.login}</p>
           <p className="profile-bio general-text">{user.bio}</p>
+          {}
+  {authLogin === user.login && (
+    <Link to={`/profile/${user.login}/edit`} className="edit-profile-link">
+      Edit Profile
+    </Link>
+  )}
         </div>
         <div className="profile-stats">
           <Link to={ROUTES.FOLLOWERS.replace(":login", user.login)}>

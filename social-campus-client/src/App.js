@@ -9,6 +9,7 @@ import Messages from "./pages/messages/Messages";
 import SignIn from "./pages/signin/SignIn";
 import Sidebar from "./components/sidebar/Sidebar";
 import Landing from "./pages/landing/Landing";
+import EditProfile from "./pages/editProfile/EditProfile";
 import Footer from "./components/footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -52,6 +53,7 @@ function App() {
               <Route path={ROUTES.MESSAGES} element={<Messages />} />
               <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
               <Route path={ROUTES.FOLLOWING} element={<Following />} />
+              <Route path={ROUTES.EDIT_PROFILE} element={<EditProfile />} />
               <Route
                 path={ROUTES.PUBLICATIONDETAILS}
                 element={<PublicationDetail />}
