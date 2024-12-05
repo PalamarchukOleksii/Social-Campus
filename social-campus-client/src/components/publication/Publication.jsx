@@ -6,11 +6,10 @@ import InteractionItem from "../interactionItem/InteractionItem";
 import InteractionItems from "../../utils/consts/InteractionItems";
 import "./Publication.css";
 import DateTime from "../dateTime/DateTime";
-import { useCreateItem } from "../../context/CreateItemContext";
 import CreateComment from "../createComment/CreateComment";
-import login from "../../utils/consts/AuthUserLogin";
 import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
 import userData from "../../data/userData.json";
+import login from "../../utils/consts/AuthUserLogin";
 
 function Publication(props) {
   const navigate = useNavigate();
@@ -18,37 +17,52 @@ function Publication(props) {
   const [comments, setComments] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-
-  const { closeCreateComment, openCreateComment } = useCreateItem();
+  const [isEditing, setIsEditing] = useState(false);
+  const [description, setDescription] = useState(props.publication.description);
+  const [imageUrl, setImageUrl] = useState(props.publication.imageUrl);
 
   useEffect(() => {
-    const fetchData = () => {
-      const user = userData.find((user) => user.login === login);
-      setCurrentUser(user);
-
-      setComments(props.publication.comments);
-    };
-
-    fetchData();
-  });
-
-  const handlePublicationClick = () => {
-    if (location.pathname !== `/publication/${props.publication.id}`) {
-      navigate(`/publication/${props.publication.id}`);
-    }
-  };
+    const user = userData.find((user) => user.login === login);
+    setCurrentUser(user);
+    setComments(props.publication.comments);
+  }, [props.publication.comments]);
 
   const handleCreateCommentOpenClick = () => {
-    if (props.addCreateOpen) {
-      openCreateComment();
-      setIsCreateOpen((prev) => !prev);
-    }
+    setIsCreateOpen(true);
   };
 
   const handleCreateCommentCloseClick = () => {
-    closeCreateComment();
-    setIsCreateOpen((prev) => !prev);
+    setIsCreateOpen(false);
   };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveClick = () => {
+    setIsEditing(false);
+    console.log("Updated Description:", description);
+    console.log("Updated Image URL:", imageUrl);
+  };
+
+  const handleCancelClick = () => {
+    setIsEditing(false);
+    setDescription(props.publication.description);
+    setImageUrl(props.publication.imageUrl);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const canEdit = currentUser && currentUser.login === props.publication.login;
 
   return (
     <div className="publication-container">
@@ -73,15 +87,28 @@ function Publication(props) {
           />
           <DateTime dateTime={props.publication.creationTime} locale="en-US" />
         </div>
-        <div className="content-container" onClick={handlePublicationClick}>
-          <h2 className="description general-text">
-            {props.publication.description || "Description"}
-          </h2>
-          <div className="image-wrapper">
-            {props.publication.imageUrl && (
-              <img src={props.publication.imageUrl} alt="Publication" />
-            )}
-          </div>
+        <div className="content-container">
+          {isEditing ? (
+            <>
+              <textarea
+                className="edit-description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <div className="image-upload">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="description general-text">{description || "Description"}</h2>
+              {imageUrl && <img src={imageUrl} alt="Publication" />}
+            </>
+          )}
         </div>
         <div className="interaction-stat">
           <InteractionItem
@@ -97,6 +124,21 @@ function Publication(props) {
             onClick={handleCreateCommentOpenClick}
           />
         </div>
+        {canEdit && isEditing && (
+          <div className="edit-buttons">
+            <button className="save-btn" onClick={handleSaveClick}>
+              Save
+            </button>
+            <button className="cancel-btn" onClick={handleCancelClick}>
+              Cancel
+            </button>
+          </div>
+        )}
+        {canEdit && !isEditing && (
+          <button className="edit-btn" onClick={handleEditClick}>
+            Edit
+          </button>
+        )}
       </div>
     </div>
   );
@@ -114,11 +156,7 @@ Publication.propTypes = {
     username: PropTypes.string.isRequired,
     login: PropTypes.string.isRequired,
   }).isRequired,
-  addCreateOpen: PropTypes.bool,
-};
-
-Publication.defaultProps = {
-  addCreateOpen: true,
 };
 
 export default Publication;
+
