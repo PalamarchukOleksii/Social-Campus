@@ -1,14 +1,14 @@
-.sidebar {
+.compact-sidebar {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: start;
-  width: 220px;
+  width: 40px;
   margin: 20px;
   height: calc(100vh - 40px);
 }
 
-.sidebar ul {
+.compact-sidebar ul {
   list-style: none;
   padding: 0;
 }
@@ -23,17 +23,13 @@
   height: 40px;
 }
 
-.head span {
-  font-size: 25px;
-  font-weight: bold;
-}
-
-.logout {
+.compact-logout {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  width: 220px;
+  justify-content: center;
+  width: 100%;
+  padding-top: 20px;
 }
 
 .exit-icon {

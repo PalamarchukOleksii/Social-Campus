@@ -42,7 +42,7 @@ function CompactSidebar() {
   };
 
   return (
-    <div className="sidebar">
+    <div className="compact-sidebar">
       <div className="wrapper">
         <div className="head">
           <img src="/android-chrome-512x512.png" alt="logo" />
@@ -80,7 +80,7 @@ function CompactSidebar() {
       {loading ? (
         <></>
       ) : user ? (
-        <div className="logout">
+        <div className="compact-logout">
           <div
             onClick={handleLogout}
             className="logout-icon"

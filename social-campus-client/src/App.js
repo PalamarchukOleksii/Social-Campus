@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/home/Home";
@@ -18,6 +18,7 @@ import Following from "./pages/following/Following";
 import PublicationDetail from "./pages/publicationDetail/PublicationDetail";
 import RecommendedProfiles from "./components/recommendedProfiles/RecommendedProfiles";
 import { CreateItemContextProvider } from "./context/CreateItemContext";
+import CompactSidebar from "./components/compactSidebar/CompactSidebar";
 
 function App() {
   const location = useLocation();
@@ -25,42 +26,48 @@ function App() {
   const notAuthorizePages = [ROUTES.LANDING, ROUTES.SIGN_IN, ROUTES.SIGN_UP];
   const showSidebar = !notAuthorizePages.includes(location.pathname);
   const showRecommendations = !notAuthorizePages.includes(location.pathname);
-  const pageContainer = notAuthorizePages.includes(location.pathname)
-    ? "bigger-page-container"
-    : "page-container";
-  const mainContainer = notAuthorizePages.includes(location.pathname)
-    ? "bigger-main-container"
-    : "main-container";
+
+  const [isCompactSidebar, setIsCompactSidebar] = useState(
+    window.innerWidth <= 1230
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsCompactSidebar(window.innerWidth <= 1230);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="App">
       <CreateItemContextProvider>
         {showSidebar && (
           <div className="sidebar-container">
-            <Sidebar />
+            {isCompactSidebar ? <CompactSidebar /> : <Sidebar />}
           </div>
         )}
-        <div className={pageContainer}>
-          <div className={mainContainer}>
-            <Routes>
-              <Route exact path={ROUTES.LANDING} element={<Landing />} />
-              <Route path={ROUTES.HOME} element={<Home />} />
-              <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
-              <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
-              <Route path={ROUTES.SEARCH} element={<Search />} />
-              <Route path={ROUTES.PROFILE} element={<Profile />} />
-              <Route path={ROUTES.MESSAGES} element={<Messages />} />
-              <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
-              <Route path={ROUTES.FOLLOWING} element={<Following />} />
-              <Route
-                path={ROUTES.PUBLICATIONDETAILS}
-                element={<PublicationDetail />}
-              />
-            </Routes>
-          </div>
-          <div className="footer-container">
-            <Footer />
-          </div>
+        <div className="main-container">
+          <Routes>
+            <Route exact path={ROUTES.LANDING} element={<Landing />} />
+            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
+            <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+            <Route path={ROUTES.SEARCH} element={<Search />} />
+            <Route path={ROUTES.PROFILE} element={<Profile />} />
+            <Route path={ROUTES.MESSAGES} element={<Messages />} />
+            <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
+            <Route path={ROUTES.FOLLOWING} element={<Following />} />
+            <Route
+              path={ROUTES.PUBLICATIONDETAILS}
+              element={<PublicationDetail />}
+            />
+          </Routes>
+          <Footer />
         </div>
         {showRecommendations && (
           <div className="recommendation-container">
