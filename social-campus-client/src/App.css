@@ -46,6 +46,16 @@ body {
   border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.bottom-navbar {
+  display: none;
+  grid-area: navbar;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
 @media (max-width: 1230px) {
   .App {
     grid-template-columns: 80px 700px 260px;
@@ -78,6 +88,33 @@ body {
   .App {
     grid-template-columns: 80px 1fr;
     grid-template-areas: "sidebar main";
+  }
+
+  .main-container {
+    border: none;
+  }
+}
+
+@media (max-width: 450px) {
+  .App {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 70px;
+    grid-template-areas:
+      "main"
+      "navbar";
     width: 100%;
+  }
+
+  .sidebar-container {
+    display: none;
+  }
+
+  .bottom-navbar {
+    display: block;
+  }
+
+  .footer-container {
+    display: none;
   }
 }

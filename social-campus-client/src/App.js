@@ -19,6 +19,7 @@ import PublicationDetail from "./pages/publicationDetail/PublicationDetail";
 import RecommendedProfiles from "./components/recommendedProfiles/RecommendedProfiles";
 import { CreateItemContextProvider } from "./context/CreateItemContext";
 import CompactSidebar from "./components/compactSidebar/CompactSidebar";
+import HorizontalNavbar from "./components/horizontalNavbar/HorizontalNavbar";
 
 function App() {
   const location = useLocation();
@@ -67,13 +68,18 @@ function App() {
               element={<PublicationDetail />}
             />
           </Routes>
-          <Footer />
+          <div className="footer-container">
+            <Footer />
+          </div>
         </div>
         {showRecommendations && (
           <div className="recommendation-container">
             <RecommendedProfiles />
           </div>
         )}
+        <div className="bottom-navbar">
+          <HorizontalNavbar />
+        </div>
         <ToastContainer progressStyle={{ background: "#3a3a3a" }} />
       </CreateItemContextProvider>
     </div>
