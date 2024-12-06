@@ -21,7 +21,6 @@ function Followers() {
   }, [login]);
 
   const handleFollowClick = (username) => {
-    console.log(`Followed ${username}`);
     setFollowers((prev) =>
       prev.map((user) =>
         user.username === username ? { ...user, isFollowing: true } : user
@@ -30,7 +29,6 @@ function Followers() {
   };
 
   const handleUnfollowClick = (username) => {
-    console.log(`Unfollowed ${username}`);
     setFollowers((prev) =>
       prev.map((user) =>
         user.username === username ? { ...user, isFollowing: false } : user

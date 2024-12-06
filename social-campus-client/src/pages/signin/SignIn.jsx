@@ -9,12 +9,10 @@ function SignIn() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      // Handle sign-in logic here
-      console.log("Sign in normally");
       navigate("/home");
       toast("Welcome back! You have successfully signed in.");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

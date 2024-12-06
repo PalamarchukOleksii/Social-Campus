@@ -30,10 +30,9 @@ function CompactSidebar() {
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      console.log("User logged out");
       navigate("/");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

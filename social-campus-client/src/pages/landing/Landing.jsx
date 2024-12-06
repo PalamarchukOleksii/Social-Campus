@@ -9,11 +9,10 @@ function Landing() {
   const handleGoogle = async (e) => {
     e.preventDefault();
     try {
-      console.log("Sign up with Google");
       navigate("/home");
       toast("Your account has been successfully created! Welcome aboard!");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
