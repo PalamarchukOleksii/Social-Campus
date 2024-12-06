@@ -1,6 +1,6 @@
 .signup-container {
-  display: grid;
-  grid-template-columns: 500px 500px;
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   overflow-y: auto;
@@ -17,12 +17,14 @@
   justify-content: flex-end;
   justify-content: center;
   align-items: center;
+  padding-right: 50px;
 }
 
 .right-half {
   justify-content: flex-start;
   justify-content: center;
   align-items: center;
+  padding-left: 50px;
 }
 
 .logo {
@@ -79,9 +81,8 @@ input {
 
 @media (max-width: 980px) {
   .signup-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 100px 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 20px;
   }
 
@@ -98,8 +99,8 @@ input {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 490px) {
   .signup {
-    width: 320px;
+    width: auto;
   }
 }

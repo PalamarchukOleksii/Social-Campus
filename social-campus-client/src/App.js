@@ -41,14 +41,20 @@ function App() {
   const [isCompactSidebar, setIsCompactSidebar] = useState(
     window.innerWidth <= 1230
   );
+  const [isPhone, setIsPhone] = useState(window.innerWidth <= 450);
 
   const fullContainer = authorizePages.includes(location.pathname)
     ? "full-container"
     : "";
 
+  const centerPage = authorizePages.includes(location.pathname)
+    ? "center-container"
+    : "";
+
   useEffect(() => {
     const handleResize = () => {
       setIsCompactSidebar(window.innerWidth <= 1230);
+      setIsPhone(window.innerWidth <= 450);
     };
 
     window.addEventListener("resize", handleResize);
@@ -57,6 +63,9 @@ function App() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const showFooter =
+    (authorizePages.includes(location.pathname) && isPhone) || !isPhone;
 
   return (
     <div className="App">
@@ -67,7 +76,7 @@ function App() {
           </div>
         )}
         <div className={`main-container ${fullContainer}`}>
-          <>
+          <div className={centerPage}>
             {showHorizontalRecommendations && (
               <div className="horizontal-recommendations-container">
                 <HorizontalRecommendedProfiles />
@@ -88,10 +97,12 @@ function App() {
                 element={<PublicationDetail />}
               />
             </Routes>
-          </>
-          <div className="footer-container">
-            <Footer />
           </div>
+          {showFooter && (
+            <div className="footer-container">
+              <Footer />
+            </div>
+          )}
         </div>
         {showRecommendations && (
           <div className="recommendation-container">
