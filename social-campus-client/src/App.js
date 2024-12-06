@@ -25,7 +25,7 @@ import HorizontalRecommendedProfiles from "./components/horizontalRecommendedPro
 function App() {
   const location = useLocation();
 
-  const notAuthorizePages = [ROUTES.LANDING, ROUTES.SIGN_IN, ROUTES.SIGN_UP];
+  const authorizePages = [ROUTES.LANDING, ROUTES.SIGN_IN, ROUTES.SIGN_UP];
   const authorizedHorizontalRecommendations = [
     ROUTES.HOME,
     ROUTES.SEARCH,
@@ -33,14 +33,18 @@ function App() {
     ROUTES.MESSAGES,
   ];
 
-  const showSidebar = !notAuthorizePages.includes(location.pathname);
-  const showRecommendations = !notAuthorizePages.includes(location.pathname);
+  const showSidebar = !authorizePages.includes(location.pathname);
+  const showRecommendations = !authorizePages.includes(location.pathname);
   const showHorizontalRecommendations =
     authorizedHorizontalRecommendations.includes(location.pathname);
 
   const [isCompactSidebar, setIsCompactSidebar] = useState(
     window.innerWidth <= 1230
   );
+
+  const fullContainer = authorizePages.includes(location.pathname)
+    ? "full-container"
+    : "";
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,27 +66,29 @@ function App() {
             {isCompactSidebar ? <CompactSidebar /> : <Sidebar />}
           </div>
         )}
-        <div className="main-container">
-          {showHorizontalRecommendations && (
-            <div className="horizontal-recommendations-container">
-              <HorizontalRecommendedProfiles />
-            </div>
-          )}
-          <Routes>
-            <Route exact path={ROUTES.LANDING} element={<Landing />} />
-            <Route path={ROUTES.HOME} element={<Home />} />
-            <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
-            <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
-            <Route path={ROUTES.SEARCH} element={<Search />} />
-            <Route path={ROUTES.PROFILE} element={<Profile />} />
-            <Route path={ROUTES.MESSAGES} element={<Messages />} />
-            <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
-            <Route path={ROUTES.FOLLOWING} element={<Following />} />
-            <Route
-              path={ROUTES.PUBLICATIONDETAILS}
-              element={<PublicationDetail />}
-            />
-          </Routes>
+        <div className={`main-container ${fullContainer}`}>
+          <>
+            {showHorizontalRecommendations && (
+              <div className="horizontal-recommendations-container">
+                <HorizontalRecommendedProfiles />
+              </div>
+            )}
+            <Routes>
+              <Route exact path={ROUTES.LANDING} element={<Landing />} />
+              <Route path={ROUTES.HOME} element={<Home />} />
+              <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
+              <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+              <Route path={ROUTES.SEARCH} element={<Search />} />
+              <Route path={ROUTES.PROFILE} element={<Profile />} />
+              <Route path={ROUTES.MESSAGES} element={<Messages />} />
+              <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
+              <Route path={ROUTES.FOLLOWING} element={<Following />} />
+              <Route
+                path={ROUTES.PUBLICATIONDETAILS}
+                element={<PublicationDetail />}
+              />
+            </Routes>
+          </>
           <div className="footer-container">
             <Footer />
           </div>
