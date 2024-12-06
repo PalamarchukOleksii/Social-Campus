@@ -26,8 +26,17 @@ function App() {
   const location = useLocation();
 
   const notAuthorizePages = [ROUTES.LANDING, ROUTES.SIGN_IN, ROUTES.SIGN_UP];
+  const authorizedHorizontalRecommendations = [
+    ROUTES.HOME,
+    ROUTES.SEARCH,
+    ROUTES.PROFILE,
+    ROUTES.MESSAGES,
+  ];
+
   const showSidebar = !notAuthorizePages.includes(location.pathname);
   const showRecommendations = !notAuthorizePages.includes(location.pathname);
+  const showHorizontalRecommendations =
+    authorizedHorizontalRecommendations.includes(location.pathname);
 
   const [isCompactSidebar, setIsCompactSidebar] = useState(
     window.innerWidth <= 1230
@@ -54,9 +63,11 @@ function App() {
           </div>
         )}
         <div className="main-container">
-          <div className="horizontal-recommendations-container">
-            <HorizontalRecommendedProfiles />
-          </div>
+          {showHorizontalRecommendations && (
+            <div className="horizontal-recommendations-container">
+              <HorizontalRecommendedProfiles />
+            </div>
+          )}
           <Routes>
             <Route exact path={ROUTES.LANDING} element={<Landing />} />
             <Route path={ROUTES.HOME} element={<Home />} />
@@ -81,9 +92,11 @@ function App() {
             <RecommendedProfiles />
           </div>
         )}
-        <div className="bottom-navbar">
-          <HorizontalNavbar />
-        </div>
+        {showSidebar && (
+          <div className="bottom-navbar">
+            <HorizontalNavbar />
+          </div>
+        )}
         <ToastContainer progressStyle={{ background: "#3a3a3a" }} />
       </CreateItemContextProvider>
     </div>
