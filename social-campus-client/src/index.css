@@ -37,10 +37,6 @@ body.no-scroll {
   background: #7b7c7d;
 }
 
-div {
-  background-color: var(--background-color);
-}
-
 .general-text {
   color: var(--general-text-color);
 }
