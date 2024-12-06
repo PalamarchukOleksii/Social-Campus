@@ -20,6 +20,7 @@ import RecommendedProfiles from "./components/recommendedProfiles/RecommendedPro
 import { CreateItemContextProvider } from "./context/CreateItemContext";
 import CompactSidebar from "./components/compactSidebar/CompactSidebar";
 import HorizontalNavbar from "./components/horizontalNavbar/HorizontalNavbar";
+import HorizontalRecommendedProfiles from "./components/horizontalRecommendedProfiles/HorizontalRecommendedProfiles";
 
 function App() {
   const location = useLocation();
@@ -53,6 +54,9 @@ function App() {
           </div>
         )}
         <div className="main-container">
+          <div className="horizontal-recommendations-container">
+            <HorizontalRecommendedProfiles />
+          </div>
           <Routes>
             <Route exact path={ROUTES.LANDING} element={<Landing />} />
             <Route path={ROUTES.HOME} element={<Home />} />

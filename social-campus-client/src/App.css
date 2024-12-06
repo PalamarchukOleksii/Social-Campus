@@ -44,13 +44,19 @@ body {
   top: 0;
   height: 100vh;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.horizontal-recommendations-container {
+  display: none;
 }
 
 .bottom-navbar {
   display: none;
   grid-area: navbar;
   position: fixed;
-  bottom: 0;
+  bottom: -5px;
   left: 0;
   width: 100vw;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -82,15 +88,23 @@ body {
   .main-container {
     border-right: 1px solid rgba(0, 0, 0, 0.1);
   }
+
+  .horizontal-recommendations-container {
+    display: block;
+  }
 }
 
 @media (max-width: 790px) {
   .App {
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 80px minmax(0, 700px);
     grid-template-areas: "sidebar main";
   }
 
   .main-container {
+    border: none;
+  }
+
+  .sidebar-container {
     border: none;
   }
 }
@@ -98,16 +112,13 @@ body {
 @media (max-width: 450px) {
   .App {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 440px);
     grid-template-rows: 1fr 70px;
     grid-template-areas:
       "main"
       "navbar";
     width: 100%;
-  }
-
-  .sidebar-container {
-    display: none;
+    margin: 0 auto;
   }
 
   .bottom-navbar {
@@ -115,6 +126,10 @@ body {
   }
 
   .footer-container {
+    display: none;
+  }
+
+  .sidebar-container {
     display: none;
   }
 }
