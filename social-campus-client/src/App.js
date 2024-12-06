@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/home/Home";
@@ -18,30 +18,70 @@ import Following from "./pages/following/Following";
 import PublicationDetail from "./pages/publicationDetail/PublicationDetail";
 import RecommendedProfiles from "./components/recommendedProfiles/RecommendedProfiles";
 import { CreateItemContextProvider } from "./context/CreateItemContext";
+import CompactSidebar from "./components/compactSidebar/CompactSidebar";
+import HorizontalNavbar from "./components/horizontalNavbar/HorizontalNavbar";
+import HorizontalRecommendedProfiles from "./components/horizontalRecommendedProfiles/HorizontalRecommendedProfiles";
 
 function App() {
   const location = useLocation();
 
-  const notAuthorizePages = [ROUTES.LANDING, ROUTES.SIGN_IN, ROUTES.SIGN_UP];
-  const showSidebar = !notAuthorizePages.includes(location.pathname);
-  const showRecommendations = !notAuthorizePages.includes(location.pathname);
-  const pageContainer = notAuthorizePages.includes(location.pathname)
-    ? "bigger-page-container"
-    : "page-container";
-  const mainContainer = notAuthorizePages.includes(location.pathname)
-    ? "bigger-main-container"
-    : "main-container";
+  const authorizePages = [ROUTES.LANDING, ROUTES.SIGN_IN, ROUTES.SIGN_UP];
+  const authorizedHorizontalRecommendations = [
+    ROUTES.HOME,
+    ROUTES.SEARCH,
+    ROUTES.PROFILE,
+    ROUTES.MESSAGES,
+  ];
+
+  const showSidebar = !authorizePages.includes(location.pathname);
+  const showRecommendations = !authorizePages.includes(location.pathname);
+  const showHorizontalRecommendations =
+    authorizedHorizontalRecommendations.includes(location.pathname);
+
+  const [isCompactSidebar, setIsCompactSidebar] = useState(
+    window.innerWidth <= 1230
+  );
+  const [isPhone, setIsPhone] = useState(window.innerWidth <= 450);
+
+  const fullContainer = authorizePages.includes(location.pathname)
+    ? "full-container"
+    : "";
+
+  const centerPage = authorizePages.includes(location.pathname)
+    ? "center-container"
+    : "";
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsCompactSidebar(window.innerWidth <= 1230);
+      setIsPhone(window.innerWidth <= 450);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const showFooter =
+    (authorizePages.includes(location.pathname) && isPhone) || !isPhone;
 
   return (
     <div className="App">
       <CreateItemContextProvider>
         {showSidebar && (
           <div className="sidebar-container">
-            <Sidebar />
+            {isCompactSidebar ? <CompactSidebar /> : <Sidebar />}
           </div>
         )}
-        <div className={pageContainer}>
-          <div className={mainContainer}>
+        <div className={`main-container ${fullContainer}`}>
+          <div className={centerPage}>
+            {showHorizontalRecommendations && (
+              <div className="horizontal-recommendations-container">
+                <HorizontalRecommendedProfiles />
+              </div>
+            )}
             <Routes>
               <Route exact path={ROUTES.LANDING} element={<Landing />} />
               <Route path={ROUTES.HOME} element={<Home />} />
@@ -58,13 +98,20 @@ function App() {
               />
             </Routes>
           </div>
-          <div className="footer-container">
-            <Footer />
-          </div>
+          {showFooter && (
+            <div className="footer-container">
+              <Footer />
+            </div>
+          )}
         </div>
         {showRecommendations && (
           <div className="recommendation-container">
             <RecommendedProfiles />
+          </div>
+        )}
+        {showSidebar && (
+          <div className="bottom-navbar">
+            <HorizontalNavbar />
           </div>
         )}
         <ToastContainer progressStyle={{ background: "#3a3a3a" }} />

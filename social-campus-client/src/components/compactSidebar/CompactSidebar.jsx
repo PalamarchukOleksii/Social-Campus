@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import "./Sidebar.css";
+import "./CompactSidebar.css";
 import { useNavigate } from "react-router-dom";
 import { IoExit, IoExitOutline } from "react-icons/io5";
 import NavItem from "../navItem/NavItem";
 import SidebarItems from "../../utils/consts/SidebarItems";
-import ShortProfile from "../shortProfile/ShortProfile";
 import userData from "../../data/userData.json";
 import login from "../../utils/consts/AuthUserLogin";
 import { useCreateItem } from "../../context/CreateItemContext";
+import { IoAdd } from "react-icons/io5";
 
-function Sidebar() {
+function CompactSidebar() {
   const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState("");
   const [user, setUser] = useState(null);
@@ -41,11 +41,10 @@ function Sidebar() {
   };
 
   return (
-    <div className="sidebar">
+    <div className="compact-sidebar">
       <div className="wrapper">
         <div className="head">
           <img src="/android-chrome-512x512.png" alt="logo" />
-          <span>Social Campus</span>
         </div>
         <div className="navigation">
           <ul>
@@ -64,14 +63,15 @@ function Sidebar() {
                     activeIcon={ActiveIcon}
                     hoveredIcon={hoveredIcon}
                     setHoveredIcon={setHoveredIcon}
+                    showLabel={false}
                   />
                 </li>
               )
             )}
           </ul>
           <div className="button-wrapper">
-            <button className="add-publish" onClick={handlePublishClick}>
-              Publish
+            <button className="add-publish-short" onClick={handlePublishClick}>
+              <IoAdd />
             </button>
           </div>
         </div>
@@ -79,12 +79,7 @@ function Sidebar() {
       {loading ? (
         <></>
       ) : user ? (
-        <div className="logout">
-          <ShortProfile
-            username={user.username}
-            login={user.login}
-            profileImage={user.profileImage}
-          />
+        <div className="compact-logout">
           <div
             onClick={handleLogout}
             className="logout-icon"
@@ -105,4 +100,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default CompactSidebar;

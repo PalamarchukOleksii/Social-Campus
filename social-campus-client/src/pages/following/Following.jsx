@@ -21,7 +21,6 @@ function Following() {
   }, [login]);
 
   const handleUnfollowClick = (username) => {
-    console.log(`Unfollowed ${username}`);
     setFollowing((prev) =>
       prev.map((user) =>
         user.username === username ? { ...user, isFollowing: false } : user

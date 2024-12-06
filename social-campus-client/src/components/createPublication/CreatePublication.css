@@ -6,8 +6,10 @@
   height: auto;
   max-height: 600px;
   padding: 20px;
+  margin: 10px;
   border-radius: 10px;
   overflow: auto;
+  background-color: var(--background-color);
 }
 
 .create-publication .publication-text {

@@ -24,7 +24,7 @@ function NavItem(props) {
           ) : props.inactiveIcon ? (
             <props.inactiveIcon className="icon" />
           ) : null}
-          {props.label && <span>{props.label}</span>}
+          {props.showLabel && props.label && <span>{props.label}</span>}
         </>
       </Link>
     </div>
@@ -39,6 +39,11 @@ NavItem.propTypes = {
   onClick: PropTypes.func,
   setHoveredIcon: PropTypes.func.isRequired,
   hoveredIcon: PropTypes.string.isRequired,
+  showLabel: PropTypes.bool,
+};
+
+NavItem.defaultProps = {
+  showLabel: true,
 };
 
 export default NavItem;
