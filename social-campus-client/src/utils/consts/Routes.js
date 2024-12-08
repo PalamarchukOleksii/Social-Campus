@@ -9,6 +9,7 @@ const ROUTES = {
   FOLLOWERS: "/profile/:login/followers",
   FOLLOWING: "/profile/:login/following",
   PUBLICATIONDETAILS: "/publication/:id",
+  EDIT_PROFILE: "/profile/:login/edit",
 };
 
 export default ROUTES;

@@ -46,6 +46,13 @@
   padding: 20px;
 }
 
+.short-info-cont {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .profile-name {
   font-size: 30px;
   margin: 0;
@@ -99,4 +106,16 @@
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
+}
+
+.edit-profile-link {
+  font-size: 16px;
+  background-color: transparent;
+  border: 2px solid var(--general-text-color);
+  color: var(--general-text-color);
+  padding: 10px 20px;
+}
+
+.edit-profile-link:hover {
+  background-color: rgba(176, 179, 184, 0.2);
 }
