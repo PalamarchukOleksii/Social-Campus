@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import "./Profile.css";
 import userData from "../../data/userData.json";
 import PublicationsList from "../../components/publicationsList/PublicationsList";
@@ -15,6 +15,8 @@ function Profile() {
   const [user, setUser] = useState(null);
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const { isCreatePublicationOpen, closeCreatePublication } = useCreateItem();
 
@@ -79,15 +81,21 @@ function Profile() {
           </div>
         </div>
         <div className="profile-info">
-          <h2 className="profile-name general-text">{user.username}</h2>
-          <p className="profile-login not-general-text">@{user.login}</p>
+          <div className="short-info">
+            <div>
+              <h2 className="profile-name general-text">{user.username}</h2>
+              <p className="profile-login not-general-text">@{user.login}</p>
+            </div>
+            {authLogin === user.login && (
+              <button
+                onClick={() => navigate(`/profile/${user.login}/edit`)}
+                className="edit-profile-link"
+              >
+                Edit Profile
+              </button>
+            )}
+          </div>
           <p className="profile-bio general-text">{user.bio}</p>
-          {}
-  {authLogin === user.login && (
-    <Link to={`/profile/${user.login}/edit`} className="edit-profile-link">
-      Edit Profile
-    </Link>
-  )}
         </div>
         <div className="profile-stats">
           <Link to={ROUTES.FOLLOWERS.replace(":login", user.login)}>
