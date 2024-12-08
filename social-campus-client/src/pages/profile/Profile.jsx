@@ -81,7 +81,7 @@ function Profile() {
           </div>
         </div>
         <div className="profile-info">
-          <div className="short-info">
+          <div className="short-info-cont">
             <div>
               <h2 className="profile-name general-text">{user.username}</h2>
               <p className="profile-login not-general-text">@{user.login}</p>

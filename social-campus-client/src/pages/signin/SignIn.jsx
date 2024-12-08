@@ -36,7 +36,6 @@ function SignIn() {
             </form>
           </div>
           <div>
-            {" "}
             <h2 className="not-general-text">Don&apos;t have an account?</h2>
             <button
               className="signup-button"

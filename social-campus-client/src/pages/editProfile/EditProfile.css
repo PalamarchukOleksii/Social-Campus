@@ -1,131 +1,109 @@
-/* Основной контейнер */
 .edit-profile {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
   padding: 20px;
-  background-color: var(--background-color);
+  margin: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
 }
 
-.edit-profile h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: var(--secondary-text-color);
-  text-align: center;
+.navigate-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* Стиль для формы */
-form {
+.navigate-container .save-button {
+  font-size: 16px;
+}
+
+.edit-profile-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
-/* Стиль для меток и полей ввода */
-label {
-  font-size: 16px;
-  color: #333;
+.edit-profile-text {
+  margin: 0;
+  padding: 0;
 }
 
-input[type="text"],
-textarea {
-  width: 100%;
+.bio-text {
+  min-height: 100px;
   padding: 12px;
-  font-size: 16px;
-  border: 1px solid var(--secondary-text-color);
-  border-radius: 8px;
-  background-color: #f5f8fa;
-  transition: all 0.3s ease;
-}
-
-input[type="text"]:focus,
-textarea:focus {
-  border-color: var(--secondary-text-color);
-  outline: none;
-}
-
-/* Стиль для текста биографии */
-textarea {
-  height: 150px;
+  margin: 10px 0px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   resize: none;
-}
-
-/* Стиль для загрузки изображения */
-label[for="file-input"] {
+  font-family: "Roboto";
   font-size: 16px;
-  color: #333;
-  cursor: pointer;
 }
 
-input[type="file"] {
-  display: none;
-}
-
-.image-preview {
-  margin-top: 15px;
-  max-width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.image-preview img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--secondary-text-color);
-}
-
-
-button[type="submit"] {
-  background-color: var(--secondary-text-color);
-  color: var(--background-color);
-  font-size: 16px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease-in-out;
-}
-
-button[type="submit"]:hover {
-  background-color: var(--secondary-text-color);
-  transform: scale(1.05);
-}
-
-button[type="submit"]:disabled {
-  background-color: #e0e0e0;
-  cursor: not-allowed;
-}
-
-
-.back-button {
-  margin-top: 20px;
-  background-color: var(--secondary-text-color);
-  color: white;
-  font-size: 16px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 30px;
+.navigate-container .close-creation-icon {
+  margin: 0;
+  opacity: 0.5;
+  color: var(--general-text-color);
   display: flex;
   align-items: center;
   gap: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+  width: 80px;
+  font-size: 26px;
 }
 
-.back-button:hover {
-  background-color: var(--secondary-text-color);
-  transform: scale(1.05);
+.navigate-container .back-text {
+  font-size: 20px;
 }
 
-.back-button:focus {
-  outline: none;
+.navigate-container .close-creation-icon:hover {
+  opacity: 1;
 }
 
-.back-button svg {
-  font-size: 18px;
+.edit-profile-form .wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-picture-container {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 7px solid var(--background-color);
+  background-color: var(--background-color);
+  position: relative;
+}
+
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  outline: 2px solid var(--secondary-text-color);
+}
+
+.upload-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  height: 30%;
+  background-color: rgba(58, 58, 58, 0.4);
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.upload-overlay:hover {
+  background-color: rgba(58, 58, 58, 0.6);
+}
+
+.upload-overlay label {
+  font-size: 30px;
+  height: 30px;
+  width: 30px;
+  color: whitesmoke;
 }
