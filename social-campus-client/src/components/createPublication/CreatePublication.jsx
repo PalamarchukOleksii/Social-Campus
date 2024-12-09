@@ -15,9 +15,13 @@ import login from "../../utils/consts/AuthUserLogin";
 import userData from "../../data/userData.json";
 
 function CreatePublication(props) {
-  const [publicationText, setPublicationText] = useState("");
+  const [publicationText, setPublicationText] = useState(
+    props.isForEdit ? props.publicationDescription || "" : ""
+  );
   const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(
+    props.isForEdit ? props.publicationImgUrl || null : null
+  );
   const [isHovered, setIsHovered] = useState(false);
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [isExitHovered, setIsExitHovered] = useState(false);
@@ -55,7 +59,9 @@ function CreatePublication(props) {
     if (publicationText.trim()) {
       if (props.isForEdit) {
         props.setPublicationDescription(publicationText);
-        props.setPublicationImgUrl(image ? URL.createObjectURL(image) : null);
+        props.setPublicationImgUrl(
+          image ? URL.createObjectURL(image) : imagePreview
+        );
       } else {
         const newPublication = {
           id: props.getMaxPublicationId() + 1,
@@ -162,7 +168,7 @@ function CreatePublication(props) {
             style={{ display: "none" }}
           />
           <button className="publish-button" type="submit">
-            Publish
+            {props.isForEdit ? "Save Changes" : "Publish"}
           </button>
         </div>
       </form>

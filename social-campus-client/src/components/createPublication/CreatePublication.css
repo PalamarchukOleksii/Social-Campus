@@ -35,7 +35,7 @@
 }
 
 .create-publication .publish-button {
-  width: 100px;
+  width: auto;
   font-size: 16px;
 }
 

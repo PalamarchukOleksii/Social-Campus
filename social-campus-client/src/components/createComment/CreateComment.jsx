@@ -8,7 +8,9 @@ import login from "../../utils/consts/AuthUserLogin";
 import userData from "../../data/userData.json";
 
 function CreateComment(props) {
-  const [commentText, setCommentText] = useState("");
+  const [commentText, setCommentText] = useState(
+    props.isForEdit ? props.text || "" : ""
+  );
   const [isExitHovered, setIsExitHovered] = useState(false);
   const [authUser, setAuthUser] = useState();
   const [loading, setLoading] = useState(true);
@@ -96,7 +98,7 @@ function CreateComment(props) {
         />
         <div className="controles">
           <button className="publish-button" type="submit">
-            Comment
+            {props.isForEdit ? "Save Changes" : "Comment"}
           </button>
         </div>
       </form>
