@@ -113,7 +113,7 @@
   background-color: transparent;
   border: 2px solid var(--general-text-color);
   color: var(--general-text-color);
-  padding: 10px 20px;
+  padding: 10px 15px;
 }
 
 .edit-profile-link:hover {

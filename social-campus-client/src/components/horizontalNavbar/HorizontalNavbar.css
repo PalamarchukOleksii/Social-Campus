@@ -12,13 +12,6 @@
   padding: 0;
 }
 
-.horizontal-navbar .nav-items {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  padding: 0;
-}
-
 .exit-icon {
   opacity: 0.5;
   font-size: 30px;

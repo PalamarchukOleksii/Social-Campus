@@ -31,28 +31,26 @@ function HorizontalNavbar() {
       <button className="add-publish-short" onClick={handlePublishClick}>
         <IoAdd />
       </button>
-      <div className="nav-items">
-        {SidebarItems.map(
-          ({
-            path,
-            label,
-            inactiveIcon: InactiveIcon,
-            activeIcon: ActiveIcon,
-          }) => (
-            <>
-              <NavItem
-                path={path}
-                label={label}
-                inactiveIcon={InactiveIcon}
-                activeIcon={ActiveIcon}
-                hoveredIcon={hoveredIcon}
-                setHoveredIcon={setHoveredIcon}
-                showLabel={false}
-              />
-            </>
-          )
-        )}
-      </div>
+      {SidebarItems.map(
+        ({
+          path,
+          label,
+          inactiveIcon: InactiveIcon,
+          activeIcon: ActiveIcon,
+        }) => (
+          <>
+            <NavItem
+              path={path}
+              label={label}
+              inactiveIcon={InactiveIcon}
+              activeIcon={ActiveIcon}
+              hoveredIcon={hoveredIcon}
+              setHoveredIcon={setHoveredIcon}
+              showLabel={false}
+            />
+          </>
+        )
+      )}
       <div
         onClick={handleLogout}
         className="logout-icon"
