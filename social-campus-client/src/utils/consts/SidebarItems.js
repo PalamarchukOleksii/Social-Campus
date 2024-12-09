@@ -19,7 +19,7 @@ const SidebarItems = [
     activeIcon: IoHome,
   },
   {
-    path: "/search/trends",
+    path: "/search/users",
     label: "Search",
     inactiveIcon: IoSearchOutline,
     activeIcon: IoSearch,

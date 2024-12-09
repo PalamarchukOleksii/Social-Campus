@@ -3,7 +3,6 @@ const ROUTES = {
   HOME: "/home",
   SIGN_IN: "/signin",
   SIGN_UP: "/signup",
-  SEARCH: "/search/trends",
   USERS_SEARCH: "/search/users",
   TAGS_SEARCH: "/search/tags",
   PROFILE: "/profile/:login",
@@ -12,6 +11,7 @@ const ROUTES = {
   FOLLOWING: "/profile/:login/following",
   PUBLICATIONDETAILS: "/publication/:id",
   EDIT_PROFILE: "/profile/:login/edit",
+  TAGDETAILS: "/tag/:tag",
 };
 
 export default ROUTES;

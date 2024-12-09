@@ -37,7 +37,7 @@ function UsersSearch() {
     <div className="search-page-container">
       <input
         type="text"
-        placeholder="Type to search..."
+        placeholder="Type to search for users..."
         className="search-input"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}

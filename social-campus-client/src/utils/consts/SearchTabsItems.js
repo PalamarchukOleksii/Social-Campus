@@ -2,10 +2,6 @@ import ROUTES from "./Routes";
 
 const SearchTabsItems = [
   {
-    path: ROUTES.SEARCH,
-    label: "Trends",
-  },
-  {
     path: ROUTES.USERS_SEARCH,
     label: "Users",
   },
