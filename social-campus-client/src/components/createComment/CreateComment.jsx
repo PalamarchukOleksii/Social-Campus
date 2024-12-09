@@ -30,17 +30,21 @@ function CreateComment(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (commentText.trim()) {
-      const newComment = {
-        id: props.getMaxCommentId() + 1,
-        text: commentText,
-        creationTime: new Date().toISOString(),
-        username: authUser.username,
-        login: authUser.login,
-        profileImage: authUser.profileImage,
-        likeCount: 0,
-      };
+      if (props.isForEdit) {
+        props.setText(commentText);
+      } else {
+        const newComment = {
+          id: props.getMaxCommentId() + 1,
+          text: commentText,
+          creationTime: new Date().toISOString(),
+          username: authUser.username,
+          login: authUser.login,
+          profileImage: authUser.profileImage,
+          likeCount: 0,
+        };
 
-      props.setComments([newComment, ...props.comments]);
+        props.setComments([newComment, ...props.comments]);
+      }
 
       setCommentText("");
       if (props.addGoBack) {
@@ -111,11 +115,14 @@ CreateComment.propTypes = {
       profileImage: PropTypes.string,
       likeCount: PropTypes.number,
     })
-  ).isRequired,
-  setComments: PropTypes.func.isRequired,
-  getMaxCommentId: PropTypes.func.isRequired,
+  ),
+  setComments: PropTypes.func,
+  getMaxCommentId: PropTypes.func,
   onCloseClick: PropTypes.func,
   addGoBack: PropTypes.bool,
+  text: PropTypes.string,
+  setText: PropTypes.func,
+  isForEdit: PropTypes.bool,
 };
 
 CreateComment.defaultProps = {
