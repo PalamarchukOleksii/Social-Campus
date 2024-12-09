@@ -22,7 +22,7 @@ import { CreateItemContextProvider } from "./context/CreateItemContext";
 import CompactSidebar from "./components/compactSidebar/CompactSidebar";
 import HorizontalNavbar from "./components/horizontalNavbar/HorizontalNavbar";
 import HorizontalRecommendedProfiles from "./components/horizontalRecommendedProfiles/HorizontalRecommendedProfiles";
-import UsersSearch from "./pages/userіSearch/UsersSearch";
+import UsersSearch from "./pages/usersSearch/UsersSearch";
 import TagsSearch from "./pages/tagsSearch/TagsSearch";
 
 function App() {
