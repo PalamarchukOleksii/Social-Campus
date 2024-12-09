@@ -91,3 +91,7 @@ a:hover {
   color: var(--icon-panel-color);
   text-decoration: underline;
 }
+
+div {
+  background: var(--background-color);
+}
