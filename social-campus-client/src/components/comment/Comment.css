@@ -12,14 +12,14 @@
 .comment-info {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
-.user-info {
+.comment-info .user-info {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  gap: 20px;
+  justify-content: space-between;
 }
 
 .comment-text {
@@ -27,4 +27,22 @@
   color: var(--general-text-color);
   margin: 10px 0;
   font-weight: normal;
+}
+
+.commenter-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.edit-comment-icon {
+  font-size: 23px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  color: var(--icon-panel-color);
+}
+
+.edit-comment-icon:hover {
+  opacity: 1;
 }

@@ -15,9 +15,13 @@ import login from "../../utils/consts/AuthUserLogin";
 import userData from "../../data/userData.json";
 
 function CreatePublication(props) {
-  const [publicationText, setPublicationText] = useState("");
+  const [publicationText, setPublicationText] = useState(
+    props.isForEdit ? props.publicationDescription || "" : ""
+  );
   const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(
+    props.isForEdit ? props.publicationImgUrl || null : null
+  );
   const [isHovered, setIsHovered] = useState(false);
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [isExitHovered, setIsExitHovered] = useState(false);
@@ -53,20 +57,27 @@ function CreatePublication(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (publicationText.trim()) {
-      const newPublication = {
-        id: props.getMaxPublicationId() + 1,
-        description: publicationText,
-        imageUrl: image ? URL.createObjectURL(image) : null,
-        creationTime: new Date().toISOString(),
-        likesCount: 0,
-        comments: [],
-        username: authUser.username,
-        login: authUser.login,
-        profileImage: authUser.profileImage,
-      };
+      if (props.isForEdit) {
+        props.setPublicationDescription(publicationText);
+        props.setPublicationImgUrl(
+          image ? URL.createObjectURL(image) : imagePreview
+        );
+      } else {
+        const newPublication = {
+          id: props.getMaxPublicationId() + 1,
+          description: publicationText,
+          imageUrl: image ? URL.createObjectURL(image) : null,
+          creationTime: new Date().toISOString(),
+          likesCount: 0,
+          comments: [],
+          username: authUser.username,
+          login: authUser.login,
+          profileImage: authUser.profileImage,
+        };
 
-      if (props.publications.length !== 0) {
-        props.setPublications([newPublication, ...props.publications]);
+        if (props.publications.length !== 0) {
+          props.setPublications([newPublication, ...props.publications]);
+        }
       }
 
       setPublicationText("");
@@ -157,7 +168,7 @@ function CreatePublication(props) {
             style={{ display: "none" }}
           />
           <button className="publish-button" type="submit">
-            Publish
+            {props.isForEdit ? "Save Changes" : "Publish"}
           </button>
         </div>
       </form>
@@ -182,6 +193,11 @@ CreatePublication.propTypes = {
   setPublications: PropTypes.func,
   getMaxPublicationId: PropTypes.func,
   close: PropTypes.func.isRequired,
+  isForEdit: PropTypes.bool,
+  publicationImgUrl: PropTypes.string,
+  setPublicationImgUrl: PropTypes.func,
+  publicationDescription: PropTypes.string,
+  setPublicationDescription: PropTypes.func,
 };
 
 export default CreatePublication;
