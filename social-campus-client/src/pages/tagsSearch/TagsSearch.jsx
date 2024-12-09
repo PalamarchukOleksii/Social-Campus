@@ -1,8 +1,8 @@
 import React from "react";
-import "./Search.css";
+import "./TagsSearch.css";
 import SearchTabs from "../../components/searchTabs/SearchTabs";
 
-function Search() {
+function TagsSearch() {
   return (
     <div className="search-page-container">
       <input
@@ -15,4 +15,4 @@ function Search() {
   );
 }
 
-export default Search;
+export default TagsSearch;

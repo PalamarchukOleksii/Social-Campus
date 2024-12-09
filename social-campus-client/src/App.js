@@ -22,6 +22,8 @@ import { CreateItemContextProvider } from "./context/CreateItemContext";
 import CompactSidebar from "./components/compactSidebar/CompactSidebar";
 import HorizontalNavbar from "./components/horizontalNavbar/HorizontalNavbar";
 import HorizontalRecommendedProfiles from "./components/horizontalRecommendedProfiles/HorizontalRecommendedProfiles";
+import UsersSearch from "./pages/userіSearch/UsersSearch";
+import TagsSearch from "./pages/tagsSearch/TagsSearch";
 
 function App() {
   const location = useLocation();
@@ -30,6 +32,8 @@ function App() {
   const authorizedHorizontalRecommendations = [
     ROUTES.HOME,
     ROUTES.SEARCH,
+    ROUTES.USERS_SEARCH,
+    ROUTES.TAGS_SEARCH,
     ROUTES.PROFILE,
     ROUTES.MESSAGES,
   ];
@@ -89,6 +93,8 @@ function App() {
               <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
               <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
               <Route path={ROUTES.SEARCH} element={<Search />} />
+              <Route path={ROUTES.USERS_SEARCH} element={<UsersSearch />} />
+              <Route path={ROUTES.TAGS_SEARCH} element={<TagsSearch />} />
               <Route path={ROUTES.PROFILE} element={<Profile />} />
               <Route path={ROUTES.MESSAGES} element={<Messages />} />
               <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
