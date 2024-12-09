@@ -3,7 +3,6 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/home/Home";
 import SignUp from "./pages/signup/SignUp";
-import Search from "./pages/search/Search";
 import Profile from "./pages/profile/Profile";
 import Messages from "./pages/messages/Messages";
 import SignIn from "./pages/signin/SignIn";
@@ -22,6 +21,9 @@ import { CreateItemContextProvider } from "./context/CreateItemContext";
 import CompactSidebar from "./components/compactSidebar/CompactSidebar";
 import HorizontalNavbar from "./components/horizontalNavbar/HorizontalNavbar";
 import HorizontalRecommendedProfiles from "./components/horizontalRecommendedProfiles/HorizontalRecommendedProfiles";
+import UsersSearch from "./pages/usersSearch/UsersSearch";
+import TagsSearch from "./pages/tagsSearch/TagsSearch";
+import TagDetail from "./pages/tagDetail/TagDetail";
 
 function App() {
   const location = useLocation();
@@ -30,6 +32,8 @@ function App() {
   const authorizedHorizontalRecommendations = [
     ROUTES.HOME,
     ROUTES.SEARCH,
+    ROUTES.USERS_SEARCH,
+    ROUTES.TAGS_SEARCH,
     ROUTES.PROFILE,
     ROUTES.MESSAGES,
   ];
@@ -88,7 +92,8 @@ function App() {
               <Route path={ROUTES.HOME} element={<Home />} />
               <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
               <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
-              <Route path={ROUTES.SEARCH} element={<Search />} />
+              <Route path={ROUTES.USERS_SEARCH} element={<UsersSearch />} />
+              <Route path={ROUTES.TAGS_SEARCH} element={<TagsSearch />} />
               <Route path={ROUTES.PROFILE} element={<Profile />} />
               <Route path={ROUTES.MESSAGES} element={<Messages />} />
               <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
@@ -98,6 +103,7 @@ function App() {
                 path={ROUTES.PUBLICATIONDETAILS}
                 element={<PublicationDetail />}
               />
+              <Route path={ROUTES.TAGDETAILS} element={<TagDetail />} />
             </Routes>
           </div>
           {showFooter && (

@@ -41,7 +41,7 @@ function Publication(props) {
     };
 
     fetchData();
-  });
+  }, [props.publication.comments]);
 
   const handlePublicationClick = () => {
     if (location.pathname !== `/publication/${props.publication.id}`) {
@@ -69,6 +69,41 @@ function Publication(props) {
   const handleEditPublicationCloseClick = () => {
     document.body.classList.remove("no-scroll");
     setIsEditOpen((prev) => !prev);
+  };
+
+  const handleTagClick = (e, tagName) => {
+    e.stopPropagation();
+    const tagWithoutHash = tagName.replace("#", "");
+
+    const currentPath = location.pathname;
+    if (currentPath !== `/tag/${tagWithoutHash}`) {
+      navigate(`/tag/${tagWithoutHash}`);
+      window.scrollTo(0, 0);
+    }
+  };
+
+  const renderDescriptionWithTags = (description) => {
+    const regex = /#\w+/g;
+    const parts = description.split(regex);
+    const tags = description.match(regex);
+
+    return (
+      <span>
+        {parts.map((part, index) => (
+          <React.Fragment key={index}>
+            {part}
+            {tags && tags[index] && (
+              <span
+                className="tag"
+                onClick={(e) => handleTagClick(e, tags[index])}
+              >
+                {tags[index]}
+              </span>
+            )}
+          </React.Fragment>
+        ))}
+      </span>
+    );
   };
 
   if (loading) {
@@ -116,7 +151,7 @@ function Publication(props) {
           </div>
           {currentUser.login === props.publication.login && (
             <div
-              className="edit-comment-icon general-text"
+              className="edit-pub-icon general-text"
               onMouseEnter={() => setIsEditHovered(true)}
               onMouseLeave={() => setIsEditHovered(false)}
               onClick={handleEditPublicationOpenClick}
@@ -127,7 +162,7 @@ function Publication(props) {
         </div>
         <div className="content-container" onClick={handlePublicationClick}>
           <h2 className="description general-text">
-            {publicationDescription || "Description"}
+            {renderDescriptionWithTags(publicationDescription) || "Description"}
           </h2>
           <div className="image-wrapper">
             {publicationImgUrl && (
@@ -141,12 +176,14 @@ function Publication(props) {
             label={props.publication.likesCount}
             icon={InteractionItems.likeIcon}
             activeIcon={InteractionItems.activeLikeIcon}
+            className="like-element"
           />
           <InteractionItem
             itemType="comment"
             label={props.publication.comments.length}
             icon={InteractionItems.commentIcon}
             onClick={handleCreateCommentOpenClick}
+            className="comment-element"
           />
         </div>
       </div>
