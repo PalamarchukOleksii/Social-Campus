@@ -3,7 +3,7 @@ const ROUTES = {
   HOME: "/home",
   SIGN_IN: "/signin",
   SIGN_UP: "/signup",
-  SEARCH: "/search/trending",
+  SEARCH: "/search/trends",
   USERS_SEARCH: "/search/users",
   TAGS_SEARCH: "/search/tags",
   PROFILE: "/profile/:login",

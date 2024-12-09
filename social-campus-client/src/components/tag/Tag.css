@@ -1,0 +1,20 @@
+.tag-container {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tag-container:hover {
+  background-color: #eeeded;
+}
+
+.tag-container * {
+  padding: 0;
+  margin: 0 10px;
+}
+
+.posts-count {
+  font-weight: 300;
+}
