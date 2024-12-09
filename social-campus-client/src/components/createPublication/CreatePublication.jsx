@@ -53,20 +53,25 @@ function CreatePublication(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (publicationText.trim()) {
-      const newPublication = {
-        id: props.getMaxPublicationId() + 1,
-        description: publicationText,
-        imageUrl: image ? URL.createObjectURL(image) : null,
-        creationTime: new Date().toISOString(),
-        likesCount: 0,
-        comments: [],
-        username: authUser.username,
-        login: authUser.login,
-        profileImage: authUser.profileImage,
-      };
+      if (props.isForEdit) {
+        props.setPublicationDescription(publicationText);
+        props.setPublicationImgUrl(image ? URL.createObjectURL(image) : null);
+      } else {
+        const newPublication = {
+          id: props.getMaxPublicationId() + 1,
+          description: publicationText,
+          imageUrl: image ? URL.createObjectURL(image) : null,
+          creationTime: new Date().toISOString(),
+          likesCount: 0,
+          comments: [],
+          username: authUser.username,
+          login: authUser.login,
+          profileImage: authUser.profileImage,
+        };
 
-      if (props.publications.length !== 0) {
-        props.setPublications([newPublication, ...props.publications]);
+        if (props.publications.length !== 0) {
+          props.setPublications([newPublication, ...props.publications]);
+        }
       }
 
       setPublicationText("");
@@ -182,6 +187,11 @@ CreatePublication.propTypes = {
   setPublications: PropTypes.func,
   getMaxPublicationId: PropTypes.func,
   close: PropTypes.func.isRequired,
+  isForEdit: PropTypes.bool,
+  publicationImgUrl: PropTypes.string,
+  setPublicationImgUrl: PropTypes.func,
+  publicationDescription: PropTypes.string,
+  setPublicationDescription: PropTypes.func,
 };
 
 export default CreatePublication;
