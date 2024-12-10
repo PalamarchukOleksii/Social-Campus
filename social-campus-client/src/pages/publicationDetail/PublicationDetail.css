@@ -1,5 +1,5 @@
 .comment-section-text {
-  margin: 20px;
+  margin: 20px 20px 10px 20px;
 }
 
 .top-section {
@@ -46,4 +46,10 @@
   text-align: left;
   padding: 20px;
   margin: 0;
+}
+
+.comments-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }

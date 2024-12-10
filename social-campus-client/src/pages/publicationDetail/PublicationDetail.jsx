@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Publication from "../../components/publication/Publication";
-import Comment from "../../components/comment/Comment";
 import publicationDetailsData from "../../data/userData.json";
 import NavItem from "../../components/navItem/NavItem";
 import PublicationDetailItems from "../../utils/consts/PublicationDetailItems";
@@ -92,7 +91,7 @@ function PublicationDetail() {
             setComments={setComments}
             getMaxCommentId={getMaxCommentId}
           />
-          {!!comments?.length ? (
+          {comments?.length ? (
             <>
               <h2 className="comment-section-text general-text">Comments</h2>
               <div className="comments-section">
