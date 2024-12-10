@@ -17,8 +17,23 @@ function Comment(props) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [commentText, setCommentText] = useState(props.text);
   const [loading, setLoading] = useState(true);
+  const [isReplyOpen, setIsReplyOpen] = useState(false);
 
   const { closeCreateComment, openCreateComment } = useCreateItem();
+
+  const handleCreateCommentOpenClick = () => {
+    openCreateComment();
+    setIsEditOpen((prev) => !prev);
+  };
+
+  const handleCreateCommentCloseClick = () => {
+    if (isReplyOpen) {
+      setIsReplyOpen(false);
+    } else {
+      closeCreateComment();
+      setIsEditOpen((prev) => !prev);
+    }
+  };
 
   useEffect(() => {
     const fetchData = () => {
@@ -29,16 +44,6 @@ function Comment(props) {
 
     fetchData();
   }, []);
-
-  const handleCreateCommentOpenClick = () => {
-    openCreateComment();
-    setIsEditOpen((prev) => !prev);
-  };
-
-  const handleCreateCommentCloseClick = () => {
-    closeCreateComment();
-    setIsEditOpen((prev) => !prev);
-  };
 
   if (loading) {
     return <></>;
@@ -88,6 +93,15 @@ function Comment(props) {
           activeIcon={InteractionItems.activeLikeIcon}
           itemType="like"
         />
+        {!props.hideReplyButton && (
+          <InteractionItem
+            label={props?.replies?.length || 0}
+            icon={InteractionItems.replyIcon}
+            itemType="comment"
+            onClick={props.onReplyClick}
+            hoverIcon={InteractionItems.replyIconActive}
+          />
+        )}
       </div>
     </div>
   );
@@ -100,6 +114,9 @@ Comment.propTypes = {
   text: PropTypes.string.isRequired,
   likeCount: PropTypes.number.isRequired,
   creationTime: PropTypes.string.isRequired,
+  hideReplyButton: PropTypes.bool,
+  onReplyClick: PropTypes.func,
+  replies: PropTypes.array,
 };
 
 export default Comment;
