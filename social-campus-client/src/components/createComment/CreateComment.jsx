@@ -87,7 +87,7 @@ function CreateComment(props) {
         profileImage={authUser.profileImage}
         redirectOnClick={false}
       />
-      <form className="create-form" onSubmit={handleSubmit}>
+      <form className="create-form" onSubmit={props.onSubmit ? () => props.onSubmit(commentText) : handleSubmit}>
         <textarea
           className="comment-text"
           type="text"

@@ -46,3 +46,16 @@
 .edit-comment-icon:hover {
   opacity: 1;
 }
+
+.comment-interactions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.replies-section {
+  margin-left: 20px;
+  border-left: 1px solid #ccc;
+  padding-left: 10px;
+}

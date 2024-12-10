@@ -49,9 +49,13 @@ function TagsSearch() {
       />
       <SearchTabs />
       <div className="tags-container">
-        {filteredTags.map((tagObj, index) => (
-          <Tag key={index} tagName={tagObj.tag} postsCount={tagObj.count} />
-        ))}
+        {filteredTags.length === 0 ? (
+          <h2 className="not-found-users general-text">No tags found.</h2>
+        ) : (
+          filteredTags.map((tagObj, index) => (
+            <Tag key={index} tagName={tagObj.tag} postsCount={tagObj.count} />
+          ))
+        )}
       </div>
     </div>
   );
