@@ -28,13 +28,11 @@ function Comment(props) {
 
   const handleCreateCommentCloseClick = () => {
     if (isReplyOpen) {
-      setIsReplyOpen(false)
-
+      setIsReplyOpen(false);
     } else {
       closeCreateComment();
       setIsEditOpen((prev) => !prev);
     }
-
   };
 
   useEffect(() => {
@@ -52,58 +50,60 @@ function Comment(props) {
   }
 
   return (
-      <div className="comment-container">
-        {isEditOpen && (
-          <div className="create-comment-modal-overlay">
-            <CreateComment
-              user={currentUser}
-              text={commentText}
-              setText={setCommentText}
-              onCloseClick={handleCreateCommentCloseClick}
-              addGoBack={true}
-              isForEdit={true}
-            />
-          </div>
-        )}
-        <div className="comment-info">
-          <div className="user-info">
-            <div className="commenter-info">
-              <ShortProfile
-                username={props.username}
-                login={props.login}
-                profileImage={props.profileImage}
-              />
-              <DateTime dateTime={props.creationTime} locale="en-US"/>
-            </div>
-            {currentUser.login === props.login && (
-              <div
-                className="edit-comment-icon general-text"
-                onMouseEnter={() => setIsEditHovered(true)}
-                onMouseLeave={() => setIsEditHovered(false)}
-                onClick={handleCreateCommentOpenClick}
-              >
-                {isEditHovered ? <IoCreate/> : <IoCreateOutline/>}
-              </div>
-            )}
-          </div>
-          <h2 className="comment-text">{commentText}</h2>
-        </div>
-        <div className="comment-interactions">
-          <InteractionItem
-            label={props.likeCount}
-            icon={InteractionItems.likeIcon}
-            activeIcon={InteractionItems.activeLikeIcon}
-            itemType="like"
+    <div className="comment-container">
+      {isEditOpen && (
+        <div className="create-comment-modal-overlay">
+          <CreateComment
+            user={currentUser}
+            text={commentText}
+            setText={setCommentText}
+            onCloseClick={handleCreateCommentCloseClick}
+            addGoBack={true}
+            isForEdit={true}
           />
-          {!props.hideReplyButton && <InteractionItem
+        </div>
+      )}
+      <div className="comment-info">
+        <div className="user-info">
+          <div className="commenter-info">
+            <ShortProfile
+              username={props.username}
+              login={props.login}
+              profileImage={props.profileImage}
+            />
+            <DateTime dateTime={props.creationTime} locale="en-US" />
+          </div>
+          {currentUser.login === props.login && (
+            <div
+              className="edit-comment-icon general-text"
+              onMouseEnter={() => setIsEditHovered(true)}
+              onMouseLeave={() => setIsEditHovered(false)}
+              onClick={handleCreateCommentOpenClick}
+            >
+              {isEditHovered ? <IoCreate /> : <IoCreateOutline />}
+            </div>
+          )}
+        </div>
+        <h2 className="comment-text">{commentText}</h2>
+      </div>
+      <div className="comment-interactions">
+        <InteractionItem
+          label={props.likeCount}
+          icon={InteractionItems.likeIcon}
+          activeIcon={InteractionItems.activeLikeIcon}
+          itemType="like"
+        />
+        {!props.hideReplyButton && (
+          <InteractionItem
             label={props?.replies?.length || 0}
             icon={InteractionItems.replyIcon}
             itemType="comment"
             onClick={props.onReplyClick}
             hoverIcon={InteractionItems.replyIconActive}
-          />}
-        </div>
+          />
+        )}
       </div>
+    </div>
   );
 }
 
@@ -114,6 +114,9 @@ Comment.propTypes = {
   text: PropTypes.string.isRequired,
   likeCount: PropTypes.number.isRequired,
   creationTime: PropTypes.string.isRequired,
+  hideReplyButton: PropTypes.bool,
+  onReplyClick: PropTypes.func,
+  replies: PropTypes.array,
 };
 
 export default Comment;

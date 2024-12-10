@@ -46,7 +46,7 @@ function CommentReplyManager({ comment, currentUser, comments, setComments }) {
           <CreateComment
             user={currentUser}
             onSubmit={handleReplySubmit}
-            onCloseClick ={() => setIsReplying(false)}
+            onCloseClick={() => setIsReplying(false)}
             addGoBack
             getMaxCommentId={getMaxCommentId}
             comments={comments}
@@ -85,13 +85,15 @@ CommentReplyManager.propTypes = {
     id: PropTypes.number.isRequired,
     username: PropTypes.string.isRequired,
     login: PropTypes.string.isRequired,
-    profileImage: PropTypes.string.isRequired,
+    profileImage: PropTypes.string,
     text: PropTypes.string.isRequired,
     likeCount: PropTypes.number.isRequired,
     creationTime: PropTypes.string.isRequired,
     replies: PropTypes.array,
   }).isRequired,
   currentUser: PropTypes.object.isRequired,
+  comments: PropTypes.array,
+  setComments: PropTypes.func,
 };
 
 export default CommentReplyManager;
