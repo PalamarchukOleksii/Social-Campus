@@ -1,5 +1,6 @@
 ﻿using Domain.Abstractions.Repositories;
-using Domain.Entities;
+using Domain.Models.RefreshTokenModel;
+using Domain.Models.UserModel;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,47 +8,41 @@ namespace Infrastructure.Repositories
 {
     public class RefreshTokenRepository(ApplicationDbContext context) : IRefreshTokenRepository
     {
-        public async Task<RefreshToken> AddAsync(string token, int expiryTimeInDays)
+        public async Task<RefreshToken> AddAsync(string token, int expiryTimeInDays, UserId userId)
         {
-            RefreshToken refreshToken = new RefreshToken
-            {
-                Token = token,
-                TokenExpiryTime = DateTime.UtcNow.AddDays(expiryTimeInDays)
-            };
+            DateTime expirationDateTime = DateTime.UtcNow.AddDays(expiryTimeInDays);
+            RefreshToken newRefreshToken = new(token, expirationDateTime, userId);
 
-            await context.AddAsync(refreshToken);
+            await context.AddAsync(newRefreshToken);
 
-            return refreshToken;
+            return newRefreshToken;
         }
 
-        public async void DeleteByIdAsync(int id)
+        public async Task DeleteByIdAsync(RefreshTokenId id)
         {
             RefreshToken? refreshToken = await context.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Id == id);
             if (refreshToken != null)
             {
-                if (refreshToken.User != null)
-                {
-                    refreshToken.User.RefreshTokenId = 0;
-                }
+                refreshToken.User?.DropRefreshTokenIdOnRevoke();
 
                 context.RefreshTokens.Remove(refreshToken);
             }
         }
 
-        public async Task<RefreshToken?> GetByIdAsync(int id)
+        public async Task<RefreshToken?> GetByIdAsync(RefreshTokenId id)
         {
             return await context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Id == id);
         }
 
-        public async Task<RefreshToken?> GetByTokenAsync(string token)
+        public async Task<RefreshToken?> GetByRefreshTokenAsync(string refreshToken)
         {
-            return await context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
+            return await context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == refreshToken);
         }
 
-        public void UpdateAsync(RefreshToken refreshToken, string newToken, int expiryTimeInDays)
+        public void Update(RefreshToken refreshToken, string newToken, int expiryTimeInDays)
         {
-            refreshToken.Token = newToken;
-            refreshToken.TokenExpiryTime = DateTime.UtcNow.AddDays(expiryTimeInDays);
+            DateTime expirationDateTime = DateTime.UtcNow.AddDays(expiryTimeInDays);
+            refreshToken.UpdateTokenOnRefresh(newToken, expirationDateTime);
         }
     }
 }

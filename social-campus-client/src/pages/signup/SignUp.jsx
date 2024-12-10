@@ -9,12 +9,10 @@ function SignUp() {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      // Handle sign-up logic here
-      console.log("Sign up normally");
       navigate("/home");
       toast("Your account has been successfully created! Welcome aboard!");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

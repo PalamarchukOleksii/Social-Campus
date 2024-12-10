@@ -9,12 +9,10 @@ function SignIn() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      // Handle sign-in logic here
-      console.log("Sign in normally");
       navigate("/home");
       toast("Welcome back! You have successfully signed in.");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -36,7 +34,6 @@ function SignIn() {
             </form>
           </div>
           <div>
-            {" "}
             <h2 className="not-general-text">Don&apos;t have an account?</h2>
             <button
               className="signup-button"

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Publication from "../../components/publication/Publication";
-import Comment from "../../components/comment/Comment";
 import publicationDetailsData from "../../data/userData.json";
 import NavItem from "../../components/navItem/NavItem";
 import PublicationDetailItems from "../../utils/consts/PublicationDetailItems";
@@ -9,6 +8,7 @@ import "./PublicationDetail.css";
 import CreateComment from "../../components/createComment/CreateComment";
 import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
 import login from "../../utils/consts/AuthUserLogin";
+import CommentReplyManager from "../../components/comment/CommentReplyManager";
 
 function PublicationDetail() {
   const { id } = useParams();
@@ -91,19 +91,17 @@ function PublicationDetail() {
             setComments={setComments}
             getMaxCommentId={getMaxCommentId}
           />
-          {comments.length > 0 ? (
+          {comments?.length ? (
             <>
               <h2 className="comment-section-text general-text">Comments</h2>
               <div className="comments-section">
                 {comments.map((comment) => (
-                  <Comment
+                  <CommentReplyManager
                     key={comment.id}
-                    username={comment.username}
-                    login={comment.login}
-                    profileImage={comment.profileImage}
-                    text={comment.text}
-                    likeCount={comment.likeCount}
-                    creationTime={comment.creationTime}
+                    comment={comment}
+                    currentUser={currentUser}
+                    comments={comments}
+                    setComments={setComments}
                   />
                 ))}
               </div>

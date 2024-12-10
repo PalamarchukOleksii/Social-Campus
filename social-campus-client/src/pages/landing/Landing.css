@@ -1,6 +1,9 @@
 .landing-container {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
 }
 
 .left-half,
@@ -8,12 +11,27 @@
   flex: 1;
   display: flex;
   align-items: center;
+}
+
+.left-half {
+  justify-content: flex-end;
   justify-content: center;
+  align-items: center;
+  padding-right: 50px;
+}
+
+.right-half {
+  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
+  padding-left: 50px;
 }
 
 .logo {
   width: 350px;
   height: auto;
+  padding: 0;
+  margin: 0;
 }
 
 .welcom {
@@ -26,7 +44,8 @@
   text-align: center;
   border-radius: 8px;
   padding: 10px;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+  margin: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -62,4 +81,31 @@ p {
 
 .google-button:hover {
   background-color: #c1351d;
+}
+
+@media (max-width: 980px) {
+  .landing-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .left-half,
+  .right-half {
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  .logo {
+    width: 100px;
+  }
+}
+
+@media (max-width: 490px) {
+  .welcom {
+    height: 375px;
+    width: auto;
+  }
 }

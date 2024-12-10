@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.Models.RefreshTokenModel;
+using Domain.Models.UserModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,18 +9,32 @@ namespace Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
-            builder.HasKey(e => e.Id);
+            builder.HasKey(rt => rt.Id);
 
-            builder.Property(u => u.Id)
+            builder.Property(rt => rt.Id)
+                .HasConversion(refreshTokenId => refreshTokenId.Value, value => new RefreshTokenId(value))
+                .IsRequired();
+
+            builder.Property(rt => rt.UserId)
+                .HasConversion(userId => userId.Value, value => new UserId(value))
+                .IsRequired();
+
+            builder.Property(rt => rt.Token)
                 .IsRequired()
-                .ValueGeneratedOnAdd();
+                .HasMaxLength(172);
 
-            builder.Property(e => e.Token)
-                .IsRequired()
-                .HasMaxLength(128);
+            builder.Property(rt => rt.TokenExpiryTime)
+                .IsRequired();
 
-            builder.Property(e => e.TokenExpiryTime)
-                    .IsRequired();
+            builder.HasOne(rt => rt.User)
+                .WithOne(u => u.RefreshToken)
+                .HasForeignKey<RefreshToken>(rt => rt.UserId);
+
+            builder.HasIndex(rt => rt.UserId)
+                .IsUnique();
+
+            builder.HasIndex(rt => rt.Id)
+                .IsUnique();
         }
     }
 }

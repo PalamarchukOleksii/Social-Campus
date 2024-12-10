@@ -4,6 +4,7 @@ import "./InteractionItem.css";
 
 function InteractionItem(props) {
   const [isActive, setIsActive] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [count, setCount] = useState(props.label);
 
   const handleClick = () => {
@@ -15,9 +16,19 @@ function InteractionItem(props) {
     }
   };
 
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
+
   return (
-    <div className="interaction-item" onClick={handleClick}>
-      {isActive ? (
+    <div
+      className="interaction-item"
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {isHovered && props.hoverIcon ? (
+        <props.hoverIcon className="hover icon" />
+      ) : isActive ? (
         props.activeIcon ? (
           <props.activeIcon className="active icon" />
         ) : (
@@ -36,6 +47,7 @@ InteractionItem.propTypes = {
   label: PropTypes.number.isRequired,
   icon: PropTypes.elementType.isRequired,
   activeIcon: PropTypes.elementType,
+  hoverIcon: PropTypes.elementType,
   onClick: PropTypes.func,
 };
 

@@ -56,7 +56,7 @@
     "publications": [
       {
         "id": 1,
-        "description": "Exploring the beauty of nature",
+        "description": "Exploring the beauty of nature #nature",
         "imageUrl": "https://img.freepik.com/free-photo/river-surrounded-by-forests-cloudy-sky-thuringia-germany_181624-30863.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
         "creationTime": "2024-11-03T10:00:00Z",
         "likesCount": 160,
@@ -68,7 +68,27 @@
             "profileImage": null,
             "text": "Absolutely stunning! Nature is so beautiful.",
             "creationTime": "2024-11-03T11:00:00Z",
-            "likeCount": 5
+            "likeCount": 5,
+            "replies": [
+              {
+                "id": 1,
+                "username": "Jane Smith",
+                "login": "janesmith",
+                "profileImage": null,
+                "text": "Absolutely stunning! Nature is so beautiful.",
+                "creationTime": "2024-11-03T11:00:00Z",
+                "likeCount": 5
+              },
+              {
+                "id": 1,
+                "username": "Jane Smith",
+                "login": "janesmith",
+                "profileImage": null,
+                "text": "Absolutely stunning! Nature is so beautiful.",
+                "creationTime": "2024-11-03T11:00:00Z",
+                "likeCount": 5
+              }
+            ]
           },
           {
             "id": 2,
@@ -77,13 +97,14 @@
             "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
             "text": "Can't wait to visit this place!",
             "creationTime": "2024-11-03T12:30:00Z",
-            "likeCount": 3
+            "likeCount": 3,
+            "replies": []
           }
         ]
       },
       {
         "id": 2,
-        "description": "An insightful book review",
+        "description": "An insightful book review #books #reading",
         "imageUrl": null,
         "creationTime": "2023-11-02T09:15:00Z",
         "likesCount": 80,
@@ -101,7 +122,7 @@
       },
       {
         "id": 3,
-        "description": "The Beauty and Significance of Nature\nNature, in all its magnificence, is a tapestry woven with the threads of life that encompasses every living being on our planet.",
+        "description": "The Beauty and Significance of Nature\nNature, in all its magnificence, is a tapestry woven with the threads of life that encompasses every living being on our planet. #nature",
         "imageUrl": "https://img.freepik.com/free-photo/lake-mountains_1204-508.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
         "creationTime": "2022-11-01T08:45:00Z",
         "likesCount": 200,
@@ -113,7 +134,8 @@
             "profileImage": null,
             "text": "A beautifully written piece!",
             "creationTime": "2024-11-01T09:00:00Z",
-            "likeCount": 10
+            "likeCount": 10,
+            "replies": []
           },
           {
             "id": 5,
@@ -122,7 +144,8 @@
             "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
             "text": "I love this! Nature is truly magnificent.",
             "creationTime": "2024-11-01T09:30:00Z",
-            "likeCount": 8
+            "likeCount": 8,
+            "replies": []
           }
         ]
       }
@@ -169,7 +192,7 @@
     "publications": [
       {
         "id": 4,
-        "description": "A breathtaking sunrise over the mountains",
+        "description": "A breathtaking sunrise over the mountains #nature",
         "imageUrl": "https://img.freepik.com/free-photo/sunrise-over-mountain-range_181624-31059.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
         "creationTime": "2024-10-30T06:30:00Z",
         "likesCount": 300,
@@ -181,7 +204,8 @@
             "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
             "text": "This is so calming!",
             "creationTime": "2024-10-30T07:00:00Z",
-            "likeCount": 6
+            "likeCount": 6,
+            "replies": []
           }
         ]
       }
@@ -227,7 +251,7 @@
     "publications": [
       {
         "id": 5,
-        "description": "Top 10 gadgets of 2024",
+        "description": "Top 10 gadgets of 2024 #technology",
         "imageUrl": "https://img.freepik.com/free-photo/technology-gadgets_181624-30478.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
         "creationTime": "2024-10-25T13:45:00Z",
         "likesCount": 500,
@@ -239,13 +263,14 @@
             "profileImage": null,
             "text": "This list is amazing! Can't wait to try some of these gadgets.",
             "creationTime": "2024-10-25T14:00:00Z",
-            "likeCount": 15
+            "likeCount": 15,
+            "replies": []
           }
         ]
       },
       {
         "id": 6,
-        "description": "A day in the life of a gamer",
+        "description": "A day in the life of a gamer #games",
         "imageUrl": "https://img.freepik.com/free-photo/gamer-playing-video-games_181624-31057.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
         "creationTime": "2024-10-20T18:30:00Z",
         "likesCount": 220,
@@ -257,7 +282,8 @@
             "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
             "text": "This looks like so much fun!",
             "creationTime": "2024-10-20T19:00:00Z",
-            "likeCount": 8
+            "likeCount": 8,
+            "replies": []
           }
         ]
       }
@@ -285,7 +311,7 @@
     "publications": [
       {
         "id": 5,
-        "description": "Top 10 gadgets of 2024",
+        "description": "Top 10 gadgets of 2024 #technology",
         "imageUrl": "https://img.freepik.com/free-photo/technology-gadgets_181624-30478.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
         "creationTime": "2022-10-25T13:45:00Z",
         "likesCount": 500,
@@ -297,13 +323,14 @@
             "profileImage": null,
             "text": "This list is amazing! Can't wait to try some of these gadgets.",
             "creationTime": "2024-10-25T14:00:00Z",
-            "likeCount": 15
+            "likeCount": 15,
+            "replies": []
           }
         ]
       },
       {
         "id": 6,
-        "description": "A day in the life of a gamer",
+        "description": "A day in the life of a gamer #games",
         "imageUrl": "https://img.freepik.com/free-photo/gamer-playing-video-games_181624-31057.jpg?ga=GA1.1.1925874756.1730155714&semt=ais_hybrid",
         "creationTime": "2024-10-20T18:30:00Z",
         "likesCount": 220,
@@ -315,7 +342,8 @@
             "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid",
             "text": "This looks like so much fun!",
             "creationTime": "2024-10-20T19:00:00Z",
-            "likeCount": 8
+            "likeCount": 8,
+            "replies": []
           }
         ]
       }

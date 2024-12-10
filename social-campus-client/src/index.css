@@ -14,8 +14,8 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -35,10 +35,6 @@ body {
 body.no-scroll {
   overflow: hidden;
   background: #7b7c7d;
-}
-
-div {
-  background-color: var(--background-color);
 }
 
 .general-text {
@@ -94,4 +90,8 @@ a {
 a:hover {
   color: var(--icon-panel-color);
   text-decoration: underline;
+}
+
+div {
+  background: var(--background-color);
 }
