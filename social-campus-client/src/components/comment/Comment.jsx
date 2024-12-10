@@ -17,8 +17,25 @@ function Comment(props) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [commentText, setCommentText] = useState(props.text);
   const [loading, setLoading] = useState(true);
+  const [isReplyOpen, setIsReplyOpen] = useState(false);
 
   const { closeCreateComment, openCreateComment } = useCreateItem();
+
+  const handleCreateCommentOpenClick = () => {
+    openCreateComment();
+    setIsEditOpen((prev) => !prev);
+  };
+
+  const handleCreateCommentCloseClick = () => {
+    if (isReplyOpen) {
+      setIsReplyOpen(false)
+
+    } else {
+      closeCreateComment();
+      setIsEditOpen((prev) => !prev);
+    }
+
+  };
 
   useEffect(() => {
     const fetchData = () => {
@@ -30,66 +47,63 @@ function Comment(props) {
     fetchData();
   }, []);
 
-  const handleCreateCommentOpenClick = () => {
-    openCreateComment();
-    setIsEditOpen((prev) => !prev);
-  };
-
-  const handleCreateCommentCloseClick = () => {
-    closeCreateComment();
-    setIsEditOpen((prev) => !prev);
-  };
-
   if (loading) {
     return <></>;
   }
 
   return (
-    <div className="comment-container">
-      {isEditOpen && (
-        <div className="create-comment-modal-overlay">
-          <CreateComment
-            user={currentUser}
-            text={commentText}
-            setText={setCommentText}
-            onCloseClick={handleCreateCommentCloseClick}
-            addGoBack={true}
-            isForEdit={true}
-          />
-        </div>
-      )}
-      <div className="comment-info">
-        <div className="user-info">
-          <div className="commenter-info">
-            <ShortProfile
-              username={props.username}
-              login={props.login}
-              profileImage={props.profileImage}
+      <div className="comment-container">
+        {isEditOpen && (
+          <div className="create-comment-modal-overlay">
+            <CreateComment
+              user={currentUser}
+              text={commentText}
+              setText={setCommentText}
+              onCloseClick={handleCreateCommentCloseClick}
+              addGoBack={true}
+              isForEdit={true}
             />
-            <DateTime dateTime={props.creationTime} locale="en-US" />
           </div>
-          {currentUser.login === props.login && (
-            <div
-              className="edit-comment-icon general-text"
-              onMouseEnter={() => setIsEditHovered(true)}
-              onMouseLeave={() => setIsEditHovered(false)}
-              onClick={handleCreateCommentOpenClick}
-            >
-              {isEditHovered ? <IoCreate /> : <IoCreateOutline />}
+        )}
+        <div className="comment-info">
+          <div className="user-info">
+            <div className="commenter-info">
+              <ShortProfile
+                username={props.username}
+                login={props.login}
+                profileImage={props.profileImage}
+              />
+              <DateTime dateTime={props.creationTime} locale="en-US"/>
             </div>
-          )}
+            {currentUser.login === props.login && (
+              <div
+                className="edit-comment-icon general-text"
+                onMouseEnter={() => setIsEditHovered(true)}
+                onMouseLeave={() => setIsEditHovered(false)}
+                onClick={handleCreateCommentOpenClick}
+              >
+                {isEditHovered ? <IoCreate/> : <IoCreateOutline/>}
+              </div>
+            )}
+          </div>
+          <h2 className="comment-text">{commentText}</h2>
         </div>
-        <h2 className="comment-text">{commentText}</h2>
+        <div className="comment-interactions">
+          <InteractionItem
+            label={props.likeCount}
+            icon={InteractionItems.likeIcon}
+            activeIcon={InteractionItems.activeLikeIcon}
+            itemType="like"
+          />
+          {!props.hideReplyButton && <InteractionItem
+            label={props?.replies?.length || 0}
+            icon={InteractionItems.replyIcon}
+            itemType="comment"
+            onClick={props.onReplyClick}
+            hoverIcon={InteractionItems.replyIconActive}
+          />}
+        </div>
       </div>
-      <div className="comment-interactions">
-        <InteractionItem
-          label={props.likeCount}
-          icon={InteractionItems.likeIcon}
-          activeIcon={InteractionItems.activeLikeIcon}
-          itemType="like"
-        />
-      </div>
-    </div>
   );
 }
 
