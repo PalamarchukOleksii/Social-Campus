@@ -48,6 +48,10 @@ body {
   flex-grow: 1;
 }
 
+.page-container {
+  flex: 1;
+}
+
 .main-container {
   grid-area: main;
   padding: 10px;
