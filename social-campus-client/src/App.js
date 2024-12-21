@@ -24,6 +24,7 @@ import HorizontalRecommendedProfiles from "./components/horizontalRecommendedPro
 import UsersSearch from "./pages/usersSearch/UsersSearch";
 import TagsSearch from "./pages/tagsSearch/TagsSearch";
 import TagDetail from "./pages/tagDetail/TagDetail";
+import MessageBubble from "./components/messageBubble/MessageBubble";
 
 function App() {
   const location = useLocation();
