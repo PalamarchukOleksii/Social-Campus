@@ -13,7 +13,7 @@ function Messages() {
           username={message.sender.username}
           login={message.sender.login}
           text={message.text}
-          timestamp={new Date(message.timestamp).toLocaleString()}
+          timestamp={message.timestamp}
         />
       ))}
     </div>

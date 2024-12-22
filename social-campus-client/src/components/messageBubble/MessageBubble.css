@@ -1,24 +1,29 @@
 .message-bubble-container {
+  width: 100%;
   display: flex;
-  align-items: flex-start;
-  margin: 10px 0;
-  padding: 10px;
-  max-width: 100%;
-  word-wrap: break-word;
-  word-break: break-word;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .message-bubble-sender {
-  align-self: flex-end;
-  background-color: var(--background-color);
+  justify-content: flex-end;
 }
 
 .message-bubble-receiver {
-  align-self: flex-start;
-  background-color: var(--background-color);
-  border: 1px solid var(--background-color);
+  justify-content: flex-start;
+}
+
+.message-bubble-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px;
+  margin: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 50%;
 }
 
 .message-avatar {
@@ -31,27 +36,23 @@
 .message-content-container {
   display: flex;
   flex-direction: column;
-  max-width: 100%;
-  background-color: transparent;
+  gap: 5px;
 }
 
 .message-sender-name {
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #555;
+  padding: 0;
+  margin: 0;
 }
 
 .message-text {
-  font-size: 1rem;
-  line-height: 1.5;
-  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  font-weight: lighter;
 }
 
 .message-timestamp {
-  font-size: 0.7rem;
-  margin-top: 5px;
+  padding: 0;
+  margin: 0;
   text-align: right;
-  color: #999;
-  background-color: transparent;
+  font-weight: lighter;
 }
