@@ -1,29 +1,31 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./MessageBubble.css"; 
+import "./MessageBubble.css";
 
-const MessageBubble = ({ text, sender, avatar, timestamp, isSender }) => {
+function MessageBubble(props) {
   return (
     <div
       className={`message-bubble-container ${
-        isSender ? "message-bubble-sender" : "message-bubble-receiver"
+        props.isSender ? "message-bubble-sender" : "message-bubble-receiver"
       }`}
     >
-      {!isSender && avatar && (
+      {!props.isSender && props.avatar && (
         <img
-          src={avatar}
-          alt={`${sender}'s avatar`}
+          src={props.avatar}
+          alt={`${props.sender}'s avatar`}
           className="message-avatar"
         />
       )}
       <div className="message-content-container">
-        {!isSender && <div className="message-sender-name">{sender}</div>}
-        <div className="message-text">{text}</div>
-        <div className="message-timestamp">{timestamp}</div>
+        {!props.isSender && (
+          <div className="message-sender-name">{props.sender}</div>
+        )}
+        <div className="message-text">{props.text}</div>
+        <div className="message-timestamp">{props.timestamp}</div>
       </div>
     </div>
   );
-};
+}
 
 MessageBubble.propTypes = {
   text: PropTypes.string.isRequired,
