@@ -1,0 +1,121 @@
+[
+  {
+    "id": 1,
+    "sender": {
+      "id": 1,
+      "username": "John Doe",
+      "login": "johndoe",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "receiver": {
+      "id": 4,
+      "username": "Jane Smith",
+      "login": "janesmith",
+      "profileImage": null
+    },
+    "text": "Hi Jane, are you available for a quick chat about the project?",
+    "timestamp": "2024-11-22T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "sender": {
+      "id": 4,
+      "username": "Jane Smith",
+      "login": "janesmith",
+      "profileImage": null
+    },
+    "receiver": {
+      "id": 1,
+      "username": "John Doe",
+      "login": "johndoe",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "text": "Hey John, sure thing! What do you need?",
+    "timestamp": "2024-12-22T10:05:00Z"
+  },
+  {
+    "id": 3,
+    "sender": {
+      "id": 1,
+      "username": "John Doe",
+      "login": "johndoe",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "receiver": {
+      "id": 5,
+      "username": "Mike Brown",
+      "login": "mikebrown",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "text": "Hey Mike, do you have the updated tech stack list ready?",
+    "timestamp": "2024-12-22T10:10:00Z"
+  },
+  {
+    "id": 4,
+    "sender": {
+      "id": 5,
+      "username": "Mike Brown",
+      "login": "mikebrown",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "receiver": {
+      "id": 1,
+      "username": "John Doe",
+      "login": "johndoe",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "text": "Hi John, yes, I’ll send it over in a few minutes.",
+    "timestamp": "2024-12-22T10:15:00Z"
+  },
+  {
+    "id": 5,
+    "sender": {
+      "id": 4,
+      "username": "Jane Smith",
+      "login": "janesmith",
+      "profileImage": null
+    },
+    "receiver": {
+      "id": 1,
+      "username": "John Doe",
+      "login": "johndoe",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "text": "By the way, John, let me know if you need help with the presentation slides.",
+    "timestamp": "2024-12-22T10:20:00Z"
+  },
+  {
+    "id": 6,
+    "sender": {
+      "id": 1,
+      "username": "John Doe",
+      "login": "johndoe",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "receiver": {
+      "id": 4,
+      "username": "Jane Smith",
+      "login": "janesmith",
+      "profileImage": null
+    },
+    "text": "Thanks, Jane! I’ll reach out if I need assistance.",
+    "timestamp": "2024-12-22T10:25:00Z"
+  },
+  {
+    "id": 7,
+    "sender": {
+      "id": 1,
+      "username": "John Doe",
+      "login": "johndoe",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "receiver": {
+      "id": 5,
+      "username": "Mike Brown",
+      "login": "mikebrown",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "text": "Thanks, Mike! Let’s review it during our call later today.",
+    "timestamp": "2024-12-22T10:30:00Z"
+  }
+]

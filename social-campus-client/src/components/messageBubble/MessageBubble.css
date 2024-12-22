@@ -1,0 +1,58 @@
+.message-bubble-container {
+  width: 100%;
+  display: flex;
+}
+
+.message-bubble-sender {
+  justify-content: flex-end;
+}
+
+.message-bubble-receiver {
+  justify-content: flex-start;
+}
+
+.message-bubble-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px;
+  margin: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 50%;
+}
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  outline: 2px solid var(--secondary-text-color);
+}
+
+.message-content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.message-sender-name {
+  padding: 0;
+  margin: 0;
+}
+
+.message-text {
+  padding: 0;
+  margin: 0;
+  font-weight: lighter;
+}
+
+.message-timestamp {
+  padding: 0;
+  margin: 0;
+  text-align: right;
+  font-weight: lighter;
+}

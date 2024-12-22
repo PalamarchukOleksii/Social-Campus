@@ -1,12 +1,22 @@
 import React from "react";
-import Loading from "../../components/loading/Loading";
+import MessageBubble from "../../components/messageBubble/MessageBubble";
+import messages from "../../data/chatsData.json";
 
 function Messages() {
   return (
-    <>
+    <div className="chat">
       <h1>Messages</h1>
-      <Loading />
-    </>
+      {messages.map((message) => (
+        <MessageBubble
+          key={message.id}
+          profileImage={message.sender.profileImage}
+          username={message.sender.username}
+          login={message.sender.login}
+          text={message.text}
+          timestamp={message.timestamp}
+        />
+      ))}
+    </div>
   );
 }
 
