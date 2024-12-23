@@ -7,11 +7,13 @@
 .message-bubble-container.highlight {
   background-color: rgba(0, 0, 0, 0.1);
   transition: background-color 0.5s ease-in-out;
+  border-radius: 10px;
 }
 
 .message-bubble-container.fade-out {
   background-color: rgba(0, 0, 0, 0);
   transition: background-color 1s ease-in-out;
+  border-radius: 10px;
 }
 
 .message-bubble-sender {
@@ -52,24 +54,21 @@
   border: 1px solid #ccc;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.025);
   background-color: rgba(0, 0, 0, 0.05);
-  max-height: 100px;
   overflow: hidden;
-}
-
-@media (max-width: 450px) {
-  .reply-info {
-    max-height: 70px;
-  }
 }
 
 .message-info {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
   gap: 10px;
-  align-items: flex-start;
   word-wrap: break-word;
   word-break: break-word;
+}
+
+.reply-info .message-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .message-avatar {
@@ -83,6 +82,7 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  width: 100%;
 }
 
 .message-sender-name {

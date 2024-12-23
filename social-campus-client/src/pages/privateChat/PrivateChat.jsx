@@ -6,6 +6,8 @@ import {
   IoArrowBackCircle,
   IoSend,
   IoSendOutline,
+  IoClose,
+  IoCloseOutline,
 } from "react-icons/io5";
 import userData from "../../data/userData.json";
 import MessageBubble from "../../components/messageBubble/MessageBubble";
@@ -23,6 +25,8 @@ function PrivateChat() {
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [replyToMessage, setReplyToMessage] = useState(null);
+  const [isRemoveReplyHovered, setIsRemoveReplyHovered] = useState(false);
+  const [countOfNewMessages, setCountOfNewMessages] = useState(0);
 
   const messageContainerRef = useRef(null);
 
@@ -57,10 +61,12 @@ function PrivateChat() {
   const handleSendMessage = () => {
     if (messageInput.trim() === "") return;
 
+    setCountOfNewMessages((prev) => (prev += 1));
+
     const newMessage = {
-      id: messages.length + 1,
+      id: messagesData.length + countOfNewMessages + 1,
       sender: {
-        id: 1,
+        id: authUser.id,
         username: authUser.username,
         login: authUser.login,
         profileImage: authUser.profileImage,
@@ -70,7 +76,6 @@ function PrivateChat() {
       timestamp: new Date().toISOString(),
       likes: 0,
       repliesCount: 0,
-      replies: [],
       replyTo: replyToMessage,
     };
 
@@ -81,10 +86,6 @@ function PrivateChat() {
     if (textarea) {
       textarea.style.height = "auto";
     }
-  };
-
-  const handleReplyClick = (message) => {
-    setReplyToMessage(message);
   };
 
   if (loading) {
@@ -132,18 +133,10 @@ function PrivateChat() {
         </div>
         <h1 className="chat-user-name general-text">{chatUser.username}</h1>
       </div>
-      {replyToMessage && (
-        <div className="reply-info">
-          <p>
-            Replying to: <strong>{replyToMessage.sender?.username}</strong>:
-            {replyToMessage.text}
-          </p>
-        </div>
-      )}
       <div className="message-container" ref={messageContainerRef}>
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <MessageBubble
-            key={message.id}
+            key={index}
             messageId={message.id}
             profileImage={message.sender.profileImage}
             username={message.sender.username}
@@ -152,33 +145,55 @@ function PrivateChat() {
             timestamp={message.timestamp}
             likeCount={message.likes}
             replies={message.repliesCount}
-            handleReplyClick={() => handleReplyClick(message)}
+            handleReplyClick={() => setReplyToMessage(message)}
             replyTo={message.replyTo}
           />
         ))}
       </div>
       <div className="message-input-container">
-        <textarea
-          className="message-input"
-          placeholder="Type a message..."
-          value={messageInput}
-          onChange={(e) => setMessageInput(e.target.value)}
-          onInput={(e) => {
-            e.target.style.height = "auto";
-            e.target.style.height = `${e.target.scrollHeight}px`;
-          }}
-          required
-        />
-        {messageInput.trim() && (
-          <div
-            className="send-icon general-text"
-            onMouseEnter={() => setIsSendHovered(true)}
-            onMouseLeave={() => setIsSendHovered(false)}
-            onClick={handleSendMessage}
-          >
-            {isSendHovered ? <IoSend /> : <IoSendOutline />}
+        {replyToMessage && (
+          <div className="reply-preview">
+            <div className="reply-preview-info">
+              <h4 className="message-sender-name general-text">
+                Reply to {replyToMessage.sender.username}
+              </h4>
+              <h4 className="message-text general-text">
+                {replyToMessage.text}
+              </h4>
+            </div>
+            <div
+              className="remove-reply remove-image-icon general-text"
+              onMouseEnter={() => setIsRemoveReplyHovered(true)}
+              onMouseLeave={() => setIsRemoveReplyHovered(false)}
+              onClick={() => setReplyToMessage(null)}
+            >
+              {isRemoveReplyHovered ? <IoClose /> : <IoCloseOutline />}
+            </div>
           </div>
         )}
+        <div className="message-preview">
+          <textarea
+            className="message-input"
+            placeholder="Type a message..."
+            value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }}
+            required
+          />
+          {messageInput.trim() && (
+            <div
+              className="send-icon general-text"
+              onMouseEnter={() => setIsSendHovered(true)}
+              onMouseLeave={() => setIsSendHovered(false)}
+              onClick={handleSendMessage}
+            >
+              {isSendHovered ? <IoSend /> : <IoSendOutline />}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
