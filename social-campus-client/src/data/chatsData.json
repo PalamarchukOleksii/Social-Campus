@@ -17,27 +17,7 @@
     "timestamp": "2024-11-22T10:00:00Z",
     "likes": 5,
     "repliesCount": 2,
-    "replies": [
-      {
-        "id": 2,
-        "sender": {
-          "id": 4,
-          "username": "Jane Smith",
-          "login": "janesmith",
-          "profileImage": null
-        },
-        "receiver": {
-          "id": 1,
-          "username": "John Doe",
-          "login": "johndoe",
-          "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
-        },
-        "text": "Hey John, sure thing! What do you need?",
-        "timestamp": "2024-12-22T10:05:00Z",
-        "likes": 3,
-        "repliesCount": 1
-      }
-    ]
+    "replyTo": null
   },
   {
     "id": 2,
@@ -57,30 +37,69 @@
     "timestamp": "2024-12-22T10:05:00Z",
     "likes": 3,
     "repliesCount": 1,
-    "replies": [
-      {
-        "id": 6,
-        "sender": {
-          "id": 1,
-          "username": "John Doe",
-          "login": "johndoe",
-          "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
-        },
-        "receiver": {
-          "id": 4,
-          "username": "Jane Smith",
-          "login": "janesmith",
-          "profileImage": null
-        },
-        "text": "Thanks, Jane! I’ll reach out if I need assistance.",
-        "timestamp": "2024-12-22T10:25:00Z",
-        "likes": 2,
-        "repliesCount": 1
-      }
-    ]
+    "replyTo": null
   },
   {
     "id": 3,
+    "sender": {
+      "id": 1,
+      "username": "John Doe",
+      "login": "johndoe",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "receiver": {
+      "id": 4,
+      "username": "Jane Smith",
+      "login": "janesmith",
+      "profileImage": null
+    },
+    "text": "I was wondering if you could help me clarify a few points on the new module we discussed. Would you have time later this afternoon?",
+    "timestamp": "2024-12-22T10:10:00Z",
+    "likes": 2,
+    "repliesCount": 1,
+    "replyTo": {
+      "id": 2,
+      "sender": {
+        "id": 4,
+        "username": "Jane Smith",
+        "login": "janesmith",
+        "profileImage": null
+      },
+      "receiver": {
+        "id": 1,
+        "username": "John Doe",
+        "login": "johndoe",
+        "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+      },
+      "text": "Hey John, sure thing! What do you need?",
+      "timestamp": "2024-12-22T10:05:00Z",
+      "likes": 3,
+      "repliesCount": 1,
+      "replyTo": null
+    }
+  },
+  {
+    "id": 4,
+    "sender": {
+      "id": 4,
+      "username": "Jane Smith",
+      "login": "janesmith",
+      "profileImage": null
+    },
+    "receiver": {
+      "id": 1,
+      "username": "John Doe",
+      "login": "johndoe",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "text": "Of course! I have a break around 2 PM. Does that work for you?",
+    "timestamp": "2024-12-22T10:20:00Z",
+    "likes": 1,
+    "repliesCount": 1,
+    "replyTo": null
+  },
+  {
+    "id": 5,
     "sender": {
       "id": 1,
       "username": "John Doe",
@@ -97,10 +116,10 @@
     "timestamp": "2024-12-22T10:10:00Z",
     "likes": 7,
     "repliesCount": 0,
-    "replies": []
+    "replyTo": null
   },
   {
-    "id": 4,
+    "id": 6,
     "sender": {
       "id": 5,
       "username": "Mike Brown",
@@ -117,26 +136,65 @@
     "timestamp": "2024-12-22T10:15:00Z",
     "likes": 4,
     "repliesCount": 1,
-    "replies": [
-      {
-        "id": 7,
-        "sender": {
-          "id": 1,
-          "username": "John Doe",
-          "login": "johndoe",
-          "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
-        },
-        "receiver": {
-          "id": 5,
-          "username": "Mike Brown",
-          "login": "mikebrown",
-          "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
-        },
-        "text": "Thanks, Mike! Let’s review it during our call later today.",
-        "timestamp": "2024-12-22T10:30:00Z",
-        "likes": 8,
-        "repliesCount": 2
-      }
-    ]
+    "replyTo": null
+  },
+  {
+    "id": 7,
+    "sender": {
+      "id": 1,
+      "username": "John Doe",
+      "login": "johndoe",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "receiver": {
+      "id": 5,
+      "username": "Mike Brown",
+      "login": "mikebrown",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "text": "Great! Just need to verify the latest changes before we proceed with the deployment. Are you free for a quick call?",
+    "timestamp": "2024-12-22T10:20:00Z",
+    "likes": 6,
+    "repliesCount": 1,
+    "replyTo": null
+  },
+  {
+    "id": 8,
+    "sender": {
+      "id": 5,
+      "username": "Mike Brown",
+      "login": "mikebrown",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "receiver": {
+      "id": 1,
+      "username": "John Doe",
+      "login": "johndoe",
+      "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+    },
+    "text": "Sure! I’m available in 15 minutes. Let’s do it then.",
+    "timestamp": "2024-12-22T10:25:00Z",
+    "likes": 3,
+    "repliesCount": 1,
+    "replyTo": {
+      "id": 7,
+      "sender": {
+        "id": 1,
+        "username": "John Doe",
+        "login": "johndoe",
+        "profileImage": "https://img.freepik.com/free-vector/blond-man-portrait-icon-isolated_24911-100833.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+      },
+      "receiver": {
+        "id": 5,
+        "username": "Mike Brown",
+        "login": "mikebrown",
+        "profileImage": "https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?ga=GA1.1.435982531.1698268990&semt=ais_hybrid"
+      },
+      "text": "Great! Just need to verify the latest changes before we proceed with the deployment. Are you free for a quick call?",
+      "timestamp": "2024-12-22T10:20:00Z",
+      "likes": 6,
+      "repliesCount": 1,
+      "replyTo": null
+    }
   }
 ]

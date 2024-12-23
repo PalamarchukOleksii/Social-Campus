@@ -18,6 +18,23 @@ function MessageBubble(props) {
     }
   };
 
+  const scrollToReplyMessage = () => {
+    const element = document.getElementById(`message-${props.replyTo.id}`);
+    if (element) {
+      element.scrollIntoView({ block: "center", behavior: "smooth" });
+      element.classList.add("highlight");
+
+      setTimeout(() => {
+        element.classList.remove("highlight");
+        element.classList.add("fade-out");
+
+        setTimeout(() => {
+          element.classList.remove("fade-out");
+        }, 1000);
+      }, 1000);
+    }
+  };
+
   return (
     <div
       className={`message-bubble-container ${
@@ -25,26 +42,37 @@ function MessageBubble(props) {
           ? "message-bubble-sender"
           : "message-bubble-receiver"
       }`}
+      id={`message-${props.messageId}`}
     >
       <div className="message-bubble-content">
-        {props.login !== AuthLogin && (
-          <img
-            src={props.profileImage || "/default-profile.png"}
-            alt={`${props.username}'s avatar`}
-            className="message-avatar"
-            onClick={handleAvatarClick}
-          />
-        )}
-        <div className="message-content-container">
-          {props.login !== AuthLogin && (
+        {props.replyTo && (
+          <div className="reply-info" onClick={scrollToReplyMessage}>
             <h4 className="message-sender-name general-text">
-              {props.username}
+              {props.replyTo.sender.username}
             </h4>
+            <h4 className="message-text general-text">{props.replyTo.text}</h4>
+          </div>
+        )}
+        <div className="message-info">
+          {props.login !== AuthLogin && (
+            <img
+              src={props.profileImage || "/default-profile.png"}
+              alt={`${props.username}'s avatar`}
+              className="message-avatar"
+              onClick={handleAvatarClick}
+            />
           )}
-          <h4 className="message-text general-text">{props.text}</h4>
-          <h5 className="message-timestamp not-general-text">
-            {FormatTimestampForMessage(props.timestamp)}
-          </h5>
+          <div className="message-content-container">
+            {props.login !== AuthLogin && (
+              <h4 className="message-sender-name general-text">
+                {props.username}
+              </h4>
+            )}
+            <h4 className="message-text general-text">{props.text}</h4>
+            <h5 className="message-timestamp not-general-text">
+              {FormatTimestampForMessage(props.timestamp)}
+            </h5>
+          </div>
         </div>
       </div>
       <div className="message-interactions">
@@ -55,7 +83,7 @@ function MessageBubble(props) {
           itemType="like"
         />
         <InteractionItem
-          label={props?.replies?.length || 0}
+          label={props?.replies || 0}
           icon={InteractionItems.replyIcon}
           hoverIcon={InteractionItems.replyIconActive}
           itemType="reply"
@@ -73,8 +101,10 @@ MessageBubble.propTypes = {
   text: PropTypes.string.isRequired,
   timestamp: PropTypes.string.isRequired,
   likeCount: PropTypes.number.isRequired,
-  replies: PropTypes.array,
+  replies: PropTypes.number,
   handleReplyClick: PropTypes.func,
+  replyTo: PropTypes.object,
+  messageId: PropTypes.number.isRequired,
 };
 
 export default MessageBubble;

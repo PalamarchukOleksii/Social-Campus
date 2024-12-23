@@ -22,6 +22,7 @@ function PrivateChat() {
   const [loading, setLoading] = useState(true);
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const [replyToMessage, setReplyToMessage] = useState(null);
 
   const messageContainerRef = useRef(null);
 
@@ -55,29 +56,35 @@ function PrivateChat() {
 
   const handleSendMessage = () => {
     if (messageInput.trim() === "") return;
-    setMessages([
-      ...messages,
-      {
-        id: messages.length + 1,
-        sender: {
-          id: 1,
-          username: authUser.username,
-          login: authUser.login,
-          profileImage: authUser.profileImage,
-        },
-        receiver: chatUser,
-        text: messageInput,
-        timestamp: new Date().toISOString(),
-        likes: 0,
-        repliesCount: 0,
-        replies: [],
+
+    const newMessage = {
+      id: messages.length + 1,
+      sender: {
+        id: 1,
+        username: authUser.username,
+        login: authUser.login,
+        profileImage: authUser.profileImage,
       },
-    ]);
+      receiver: chatUser,
+      text: messageInput,
+      timestamp: new Date().toISOString(),
+      likes: 0,
+      repliesCount: 0,
+      replies: [],
+      replyTo: replyToMessage,
+    };
+
+    setMessages([...messages, newMessage]);
     setMessageInput("");
+    setReplyToMessage(null);
     const textarea = document.querySelector(".message-input");
     if (textarea) {
       textarea.style.height = "auto";
     }
+  };
+
+  const handleReplyClick = (message) => {
+    setReplyToMessage(message);
   };
 
   if (loading) {
@@ -125,10 +132,19 @@ function PrivateChat() {
         </div>
         <h1 className="chat-user-name general-text">{chatUser.username}</h1>
       </div>
+      {replyToMessage && (
+        <div className="reply-info">
+          <p>
+            Replying to: <strong>{replyToMessage.sender?.username}</strong>:
+            {replyToMessage.text}
+          </p>
+        </div>
+      )}
       <div className="message-container" ref={messageContainerRef}>
         {messages.map((message) => (
           <MessageBubble
             key={message.id}
+            messageId={message.id}
             profileImage={message.sender.profileImage}
             username={message.sender.username}
             login={message.sender.login}
@@ -136,6 +152,8 @@ function PrivateChat() {
             timestamp={message.timestamp}
             likeCount={message.likes}
             replies={message.repliesCount}
+            handleReplyClick={() => handleReplyClick(message)}
+            replyTo={message.replyTo}
           />
         ))}
       </div>

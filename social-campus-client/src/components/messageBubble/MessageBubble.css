@@ -4,6 +4,16 @@
   gap: 5px;
 }
 
+.message-bubble-container.highlight {
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: background-color 0.5s ease-in-out;
+}
+
+.message-bubble-container.fade-out {
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 1s ease-in-out;
+}
+
 .message-bubble-sender {
   flex-direction: row-reverse;
   justify-content: flex-start;
@@ -18,17 +28,48 @@
 
 .message-bubble-content {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  flex-direction: column;
   gap: 10px;
-  align-items: flex-start;
   padding: 10px;
   margin: 5px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  max-width: 50%;
+}
+
+@media (max-width: 450px) {
+  .message-bubble-content {
+    max-width: 60%;
+  }
+}
+
+.reply-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.025);
+  background-color: rgba(0, 0, 0, 0.05);
+  max-height: 100px;
+  overflow: hidden;
+}
+
+@media (max-width: 450px) {
+  .reply-info {
+    max-height: 70px;
+  }
+}
+
+.message-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 10px;
+  align-items: flex-start;
   word-wrap: break-word;
   word-break: break-word;
-  max-width: 50%;
 }
 
 .message-avatar {
