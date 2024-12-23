@@ -88,6 +88,13 @@ function PrivateChat() {
     }
   };
 
+  const sendMessageOnEnter = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   if (loading) {
     return <></>;
   }
@@ -134,21 +141,30 @@ function PrivateChat() {
         <h1 className="chat-user-name general-text">{chatUser.username}</h1>
       </div>
       <div className="message-container" ref={messageContainerRef}>
-        {messages.map((message, index) => (
-          <MessageBubble
-            key={index}
-            messageId={message.id}
-            profileImage={message.sender.profileImage}
-            username={message.sender.username}
-            login={message.sender.login}
-            text={message.text}
-            timestamp={message.timestamp}
-            likeCount={message.likes}
-            replies={message.repliesCount}
-            handleReplyClick={() => setReplyToMessage(message)}
-            replyTo={message.replyTo}
-          />
-        ))}
+        {messages.length === 0 ? (
+          <div className="no-messages">
+            <h2 className="no-messages-text general-text">
+              No messages yet.
+              <br /> Start a conversation!
+            </h2>
+          </div>
+        ) : (
+          messages.map((message, index) => (
+            <MessageBubble
+              key={index}
+              messageId={message.id}
+              profileImage={message.sender.profileImage}
+              username={message.sender.username}
+              login={message.sender.login}
+              text={message.text}
+              timestamp={message.timestamp}
+              likeCount={message.likes}
+              replies={message.repliesCount}
+              handleReplyClick={() => setReplyToMessage(message)}
+              replyTo={message.replyTo}
+            />
+          ))
+        )}
       </div>
       <div className="message-input-container">
         {replyToMessage && (
@@ -181,6 +197,7 @@ function PrivateChat() {
               e.target.style.height = "auto";
               e.target.style.height = `${e.target.scrollHeight}px`;
             }}
+            onKeyDown={sendMessageOnEnter}
             required
           />
           {messageInput.trim() && (

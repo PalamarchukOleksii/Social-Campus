@@ -1,7 +1,7 @@
 .message-bubble-container {
   width: 100%;
   display: flex;
-  gap: 5px;
+  gap: 10px;
 }
 
 .message-bubble-container.highlight {
@@ -37,12 +37,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   max-width: 50%;
-}
-
-@media (max-width: 450px) {
-  .message-bubble-content {
-    max-width: 60%;
-  }
 }
 
 .reply-info {
