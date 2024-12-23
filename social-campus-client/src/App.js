@@ -24,6 +24,7 @@ import HorizontalRecommendedProfiles from "./components/horizontalRecommendedPro
 import UsersSearch from "./pages/usersSearch/UsersSearch";
 import TagsSearch from "./pages/tagsSearch/TagsSearch";
 import TagDetail from "./pages/tagDetail/TagDetail";
+import PrivateChat from "./pages/privateChat/PrivateChat";
 
 function App() {
   const location = useLocation();
@@ -54,7 +55,7 @@ function App() {
 
   const centerPage = authorizePages.includes(location.pathname)
     ? "center-container"
-    : "";
+    : "page-container";
 
   useEffect(() => {
     const handleResize = () => {
@@ -104,6 +105,7 @@ function App() {
                 element={<PublicationDetail />}
               />
               <Route path={ROUTES.TAGDETAILS} element={<TagDetail />} />
+              <Route path={ROUTES.PRIVATECHAT} element={<PrivateChat />} />
             </Routes>
           </div>
           {showFooter && (
