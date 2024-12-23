@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import "./MessageBubble.css";
 import AuthLogin from "../../utils/consts/AuthUserLogin";
 import FormatTimestampForMessage from "../../utils/helpers/FormatTimestampForMessage";
+import InteractionItems from "../../utils/consts/InteractionItems";
+import InteractionItem from "../interactionItem/InteractionItem";
 
 function MessageBubble(props) {
   const navigate = useNavigate();
@@ -45,6 +47,21 @@ function MessageBubble(props) {
           </h5>
         </div>
       </div>
+      <div className="message-interactions">
+        <InteractionItem
+          label={props.likeCount}
+          icon={InteractionItems.likeIcon}
+          activeIcon={InteractionItems.activeLikeIcon}
+          itemType="like"
+        />
+        <InteractionItem
+          label={props?.replies?.length || 0}
+          icon={InteractionItems.replyIcon}
+          hoverIcon={InteractionItems.replyIconActive}
+          itemType="reply"
+          onClick={props.handleReplyClick}
+        />
+      </div>
     </div>
   );
 }
@@ -55,6 +72,9 @@ MessageBubble.propTypes = {
   login: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   timestamp: PropTypes.string.isRequired,
+  likeCount: PropTypes.number.isRequired,
+  replies: PropTypes.array,
+  handleReplyClick: PropTypes.func,
 };
 
 export default MessageBubble;

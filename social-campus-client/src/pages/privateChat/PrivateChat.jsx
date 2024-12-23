@@ -68,6 +68,9 @@ function PrivateChat() {
         receiver: chatUser,
         text: messageInput,
         timestamp: new Date().toISOString(),
+        likes: 0,
+        repliesCount: 0,
+        replies: [],
       },
     ]);
     setMessageInput("");
@@ -131,6 +134,8 @@ function PrivateChat() {
             login={message.sender.login}
             text={message.text}
             timestamp={message.timestamp}
+            likeCount={message.likes}
+            replies={message.repliesCount}
           />
         ))}
       </div>

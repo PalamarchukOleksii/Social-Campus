@@ -1,14 +1,19 @@
 .message-bubble-container {
   width: 100%;
   display: flex;
+  gap: 5px;
 }
 
 .message-bubble-sender {
-  justify-content: flex-end;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .message-bubble-receiver {
+  flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .message-bubble-content {
@@ -55,4 +60,14 @@
   margin: 0;
   text-align: right;
   font-weight: lighter;
+}
+
+.message-interactions {
+  display: none;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.message-bubble-container:hover .message-interactions {
+  display: flex;
 }
