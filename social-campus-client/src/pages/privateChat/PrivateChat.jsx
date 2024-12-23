@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./PrivateChat.css";
 import { useParams, useNavigate } from "react-router-dom";
-import { IoArrowBackCircleOutline, IoArrowBackCircle } from "react-icons/io5";
+import {
+  IoArrowBackCircleOutline,
+  IoArrowBackCircle,
+  IoSend,
+  IoSendOutline,
+} from "react-icons/io5";
 import userData from "../../data/userData.json";
 import MessageBubble from "../../components/messageBubble/MessageBubble";
 import messagesData from "../../data/chatsData.json";
@@ -10,6 +15,7 @@ import authLogin from "../../utils/consts/AuthUserLogin";
 function PrivateChat() {
   const { login } = useParams();
   const [isExitHovered, setIsExitHovered] = useState(false);
+  const [isSendHovered, setIsSendHovered] = useState(false);
   const navigate = useNavigate();
   const [chatUser, setChatUser] = useState(null);
   const [authUser, setAuthUser] = useState(null);
@@ -141,9 +147,14 @@ function PrivateChat() {
           required
         />
         {messageInput.trim() && (
-          <button className="send-button" onClick={handleSendMessage}>
-            Send
-          </button>
+          <div
+            className="send-icon general-text"
+            onMouseEnter={() => setIsSendHovered(true)}
+            onMouseLeave={() => setIsSendHovered(false)}
+            onClick={handleSendMessage}
+          >
+            {isSendHovered ? <IoSend /> : <IoSendOutline />}
+          </div>
         )}
       </div>
     </div>
