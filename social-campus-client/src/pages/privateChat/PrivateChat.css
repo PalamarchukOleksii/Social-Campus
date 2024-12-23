@@ -5,8 +5,13 @@
   margin: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  height: calc(100% - 60px);
-  max-height: calc(100% - 60px);
+  height: calc(100vh - 115px);
+}
+
+@media (max-width: 450px) {
+  .private-chat-container {
+    height: calc(100vh - 150px);
+  }
 }
 
 .top-bar {
@@ -37,10 +42,14 @@
   opacity: 1;
 }
 
+.chat-user-name {
+  padding: 0;
+  margin: 0;
+}
+
 .message-container {
-  flex: 1;
-  overflow-y: auto;
-  max-height: 100%;
+  overflow-y: scroll;
+  height: calc(100% - 104px);
 }
 
 .message-input-container {

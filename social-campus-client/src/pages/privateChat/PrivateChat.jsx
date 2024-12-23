@@ -1,22 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./PrivateChat.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { IoArrowBackCircleOutline, IoArrowBackCircle } from "react-icons/io5";
-import ShortProfile from "../../components/shortProfile/ShortProfile";
 import userData from "../../data/userData.json";
+import MessageBubble from "../../components/messageBubble/MessageBubble";
+import messagesData from "../../data/chatsData.json";
+import authLogin from "../../utils/consts/AuthUserLogin";
 
 function PrivateChat() {
   const { login } = useParams();
   const [isExitHovered, setIsExitHovered] = useState(false);
   const navigate = useNavigate();
   const [chatUser, setChatUser] = useState(null);
+  const [authUser, setAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState([]);
 
+  const messageContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop =
+        messageContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   useEffect(() => {
     const fetchUserData = () => {
       const foundUser = userData.find((user) => user.login === login);
+      const authUser = userData.find((user) => user.login === authLogin);
+
+      setAuthUser(authUser || null);
       setChatUser(foundUser || null);
       setLoading(false);
     };
@@ -24,9 +39,31 @@ function PrivateChat() {
     fetchUserData();
   }, [login]);
 
+  useEffect(() => {
+    const filteredMessages = messagesData.filter(
+      (message) =>
+        message.sender.login === login || message.receiver.login === login
+    );
+    setMessages(filteredMessages);
+  }, [login]);
+
   const handleSendMessage = () => {
     if (messageInput.trim() === "") return;
-    setMessages([...messages, { text: messageInput, sender: "me" }]);
+    setMessages([
+      ...messages,
+      {
+        id: messages.length + 1,
+        sender: {
+          id: 1,
+          username: authUser.username,
+          login: authUser.login,
+          profileImage: authUser.profileImage,
+        },
+        receiver: chatUser,
+        text: messageInput,
+        timestamp: new Date().toISOString(),
+      },
+    ]);
     setMessageInput("");
     const textarea = document.querySelector(".message-input");
     if (textarea) {
@@ -77,22 +114,18 @@ function PrivateChat() {
           {isExitHovered ? <IoArrowBackCircle /> : <IoArrowBackCircleOutline />}
           <span className="general-text back-text">Back</span>
         </div>
-        <ShortProfile
-          username={chatUser.username}
-          login={chatUser.login}
-          profileImage={chatUser.profileImage}
-        />
+        <h1 className="chat-user-name general-text">{chatUser.username}</h1>
       </div>
-      <div className="message-container">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${
-              message.sender === "me" ? "sent" : "received"
-            }`}
-          >
-            {message.text}
-          </div>
+      <div className="message-container" ref={messageContainerRef}>
+        {messages.map((message) => (
+          <MessageBubble
+            key={message.id}
+            profileImage={message.sender.profileImage}
+            username={message.sender.username}
+            login={message.sender.login}
+            text={message.text}
+            timestamp={message.timestamp}
+          />
         ))}
       </div>
       <div className="message-input-container">
