@@ -86,12 +86,19 @@ function Profile() {
               <h2 className="profile-name general-text">{user.username}</h2>
               <p className="profile-login not-general-text">@{user.login}</p>
             </div>
-            {authLogin === user.login && (
+            {authLogin === user.login ? (
               <button
                 onClick={() => navigate(`/profile/${user.login}/edit`)}
                 className="edit-profile-link"
               >
                 Edit Profile
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate(`/messages/${user.login}`)}
+                className="edit-profile-link"
+              >
+                Send Message
               </button>
             )}
           </div>

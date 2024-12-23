@@ -8,7 +8,7 @@ function InteractionItem(props) {
   const [count, setCount] = useState(props.label);
 
   const handleClick = () => {
-    if (props.itemType === "comment") {
+    if (props.itemType === "comment" || props.itemType === "reply") {
       props.onClick();
     } else {
       setIsActive((prev) => !prev);

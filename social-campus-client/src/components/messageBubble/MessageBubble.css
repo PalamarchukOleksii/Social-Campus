@@ -1,29 +1,68 @@
 .message-bubble-container {
   width: 100%;
   display: flex;
+  gap: 10px;
+}
+
+.message-bubble-container.highlight {
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: background-color 0.5s ease-in-out;
+  border-radius: 10px;
+}
+
+.message-bubble-container.fade-out {
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 1s ease-in-out;
+  border-radius: 10px;
 }
 
 .message-bubble-sender {
-  justify-content: flex-end;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .message-bubble-receiver {
+  flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .message-bubble-content {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  flex-direction: column;
   gap: 10px;
-  align-items: flex-start;
   padding: 10px;
   margin: 5px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  max-width: 50%;
+}
+
+.reply-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.025);
+  background-color: rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.message-info {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
   word-wrap: break-word;
   word-break: break-word;
-  max-width: 50%;
+}
+
+.reply-info .message-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .message-avatar {
@@ -37,6 +76,7 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  width: 100%;
 }
 
 .message-sender-name {
@@ -55,4 +95,14 @@
   margin: 0;
   text-align: right;
   font-weight: lighter;
+}
+
+.message-interactions {
+  display: none;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.message-bubble-container:hover .message-interactions {
+  display: flex;
 }
