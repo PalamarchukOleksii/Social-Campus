@@ -12,6 +12,7 @@ const ROUTES = {
   PUBLICATIONDETAILS: "/publication/:id",
   EDIT_PROFILE: "/profile/:login/edit",
   TAGDETAILS: "/tag/:tag",
+  PRIVATECHAT: "/messages/:login",
 };
 
 export default ROUTES;

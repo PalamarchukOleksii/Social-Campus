@@ -4,6 +4,10 @@ body {
   font-family: "Roboto";
 }
 
+* {
+  scroll-behavior: smooth;
+}
+
 :root {
   --background-color: #f6f8fa;
   --button-color: #b0b3b8;
