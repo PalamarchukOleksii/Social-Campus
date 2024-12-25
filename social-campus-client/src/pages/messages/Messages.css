@@ -1,0 +1,8 @@
+.top-text {
+  margin: 10px 20px;
+}
+
+.chats-previews {
+  display: flex;
+  flex-direction: column;
+}
