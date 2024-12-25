@@ -87,7 +87,12 @@ function CreateComment(props) {
         profileImage={authUser.profileImage}
         redirectOnClick={false}
       />
-      <form className="create-form" onSubmit={props.onSubmit ? () => props.onSubmit(commentText) : handleSubmit}>
+      <form
+        className="create-form"
+        onSubmit={
+          props.onSubmit ? () => props.onSubmit(commentText) : handleSubmit
+        }
+      >
         <textarea
           className="comment-text"
           type="text"
@@ -125,6 +130,7 @@ CreateComment.propTypes = {
   text: PropTypes.string,
   setText: PropTypes.func,
   isForEdit: PropTypes.bool,
+  onSubmit: PropTypes.func,
 };
 
 CreateComment.defaultProps = {
