@@ -49,7 +49,7 @@ function Messages() {
     });
 
     setGroupedChats(grouped);
-  }, [authLogin]);
+  }, []);
 
   return (
     <div className="chat">
