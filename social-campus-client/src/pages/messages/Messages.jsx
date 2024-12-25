@@ -53,7 +53,7 @@ function Messages() {
 
   return (
     <div className="chat">
-      <h1 className="top-text general-text">Your private chats</h1>
+      <h1 className="top-text general-text">Private chats</h1>
       <div className="chats-previews">
         {groupedChats.map((group) => (
           <ChatItem
