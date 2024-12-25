@@ -48,7 +48,7 @@
 }
 
 .message-container {
-  overflow-y: scroll;
+  overflow-y: auto;
   flex: 1;
 }
 
@@ -109,7 +109,7 @@
   height: 38px;
   max-height: 100px;
   resize: none;
-  overflow-y: scroll;
+  overflow-y: auto;
   font-family: "Roboto";
   font-size: 16px;
   background-color: var(--background-color);
