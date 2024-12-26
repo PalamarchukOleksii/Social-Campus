@@ -31,13 +31,13 @@ function Landing() {
             </button>
             <button
               className="profile-button"
-              onClick={() => navigate("/signin")}
+              onClick={() => navigate("/signup")}
             >
               Create a New Profile
             </button>
           </div>
           <h2 className="not-general-text">Already have an account?</h2>
-          <button className="signup-button" onClick={() => navigate("/signup")}>
+          <button className="signup-button" onClick={() => navigate("/signin")}>
             Sign In
           </button>
         </div>
