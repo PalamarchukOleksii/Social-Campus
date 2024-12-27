@@ -25,6 +25,7 @@ import UsersSearch from "./pages/usersSearch/UsersSearch";
 import TagsSearch from "./pages/tagsSearch/TagsSearch";
 import TagDetail from "./pages/tagDetail/TagDetail";
 import PrivateChat from "./pages/privateChat/PrivateChat";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 function App() {
   const location = useLocation();
@@ -76,6 +77,7 @@ function App() {
   return (
     <div className="App">
       <CreateItemContextProvider>
+        <SpeedInsights />
         {showSidebar && (
           <div className="sidebar-container">
             {isCompactSidebar ? <CompactSidebar /> : <Sidebar />}
