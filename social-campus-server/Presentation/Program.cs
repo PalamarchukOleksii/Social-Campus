@@ -14,6 +14,17 @@ builder.Services
 builder.Services.AddOpenApiWithAuth();
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ClientCors", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 LogDetails.LogEnvironmentDetails(app.Logger, builder.Configuration);
@@ -43,5 +54,7 @@ RouteGroupBuilder baseGroup = app
     .MapGroup("api");
 
 app.MapEndpoints(baseGroup);
+
+app.UseCors("ClientCors");
 
 await app.RunAsync();
