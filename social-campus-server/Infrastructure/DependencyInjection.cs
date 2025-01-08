@@ -17,7 +17,11 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            bool isRunningInDocker = configuration["DOTNET_RUNNING_IN_CONTAINER"] == "true";
+            string connectionStringKey = isRunningInDocker ? "DockerConnection" : "LocalConnection";
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString(connectionStringKey)));
 
             services.AddAuthorization();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

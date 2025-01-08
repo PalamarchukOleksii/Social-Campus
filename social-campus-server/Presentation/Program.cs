@@ -1,6 +1,7 @@
 using Application;
 using Infrastructure;
 using Presentation.Extensions;
+using Presentation.Utils;
 using Scalar.AspNetCore;
 using System.Reflection;
 
@@ -15,6 +16,8 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
+LogDetails.LogEnvironmentDetails(app.Logger, builder.Configuration);
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -22,11 +25,14 @@ if (app.Environment.IsDevelopment())
     {
         options
             .WithTitle("Social Campus API")
-            .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
+            .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Axios)
             .WithPreferredScheme("Bearer");
     });
 
-    app.ApplyMigrations();
+    if (builder.Configuration["DOTNET_RUNNING_IN_CONTAINER"] == "true")
+    {
+        app.ApplyMigrations();
+    }
 }
 
 app.UseHttpsRedirection();

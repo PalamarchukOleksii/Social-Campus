@@ -7,6 +7,8 @@ services:
     ports:
     - "8080:8080"
     - "8081:8081"
+    environment:
+    - DOTNET_RUNNING_IN_CONTAINER=true
   
   database:
     image: mcr.microsoft.com/mssql/server:2022-latest
