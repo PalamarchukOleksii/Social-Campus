@@ -3,30 +3,28 @@ import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ShortProfile.css";
 
-function ShortProfile(props) {
+function ShortProfile({
+  profileImage = "/default-profile.png",
+  username,
+  login,
+  redirectOnClick = true,
+}) {
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleProfileClick = () => {
-    if (
-      props.redirectOnClick &&
-      location.pathname !== `/profile/${props.login}`
-    ) {
-      navigate(`/profile/${props.login}`);
+    if (redirectOnClick && location.pathname !== `/profile/${login}`) {
+      navigate(`/profile/${login}`);
       window.scrollTo(0, 0);
     }
   };
 
   return (
     <div className="short-info" onClick={handleProfileClick}>
-      <img
-        src={props.profileImage || "/default-profile.png"}
-        alt="Profile"
-        className="profile-image"
-      />
+      <img src={profileImage} alt="Profile" className="profile-image" />
       <div className="profile-info">
-        <h3 className="general-text">{props.username}</h3>
-        <h4 className="login not-general-text">@{props.login}</h4>
+        <h3 className="general-text">{username}</h3>
+        <h4 className="login not-general-text">@{login}</h4>
       </div>
     </div>
   );
@@ -37,10 +35,6 @@ ShortProfile.propTypes = {
   username: PropTypes.string.isRequired,
   login: PropTypes.string.isRequired,
   redirectOnClick: PropTypes.bool,
-};
-
-ShortProfile.defaultProps = {
-  redirectOnClick: true,
 };
 
 export default ShortProfile;

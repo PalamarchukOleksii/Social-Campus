@@ -3,28 +3,37 @@ import "./NavItem.css";
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 
-function NavItem(props) {
+function NavItem({
+  activeIcon,
+  inactiveIcon,
+  label,
+  path,
+  onClick,
+  setHoveredIcon,
+  hoveredIcon,
+  showLabel = true,
+}) {
   const location = useLocation();
-  const isActive = location.pathname === props.path;
+  const isActive = location.pathname === path;
 
   return (
     <div className="nav-item">
       <Link
-        to={props.path}
-        onMouseEnter={() => props.setHoveredIcon(props.label.toLowerCase())}
-        onMouseLeave={() => props.setHoveredIcon("")}
-        onClick={props.onClick}
+        to={path}
+        onMouseEnter={() => setHoveredIcon(label.toLowerCase())}
+        onMouseLeave={() => setHoveredIcon("")}
+        onClick={onClick}
         className={`link ${isActive ? "active" : ""}`}
       >
         <>
-          {props.hoveredIcon === props.label.toLowerCase() || isActive ? (
-            props.activeIcon ? (
-              <props.activeIcon className="icon" />
+          {hoveredIcon === label.toLowerCase() || isActive ? (
+            activeIcon ? (
+              <activeIcon className="icon" />
             ) : null
-          ) : props.inactiveIcon ? (
-            <props.inactiveIcon className="icon" />
+          ) : inactiveIcon ? (
+            <inactiveIcon className="icon" />
           ) : null}
-          {props.showLabel && props.label && <span>{props.label}</span>}
+          {showLabel && label && <span>{label}</span>}
         </>
       </Link>
     </div>
@@ -40,10 +49,6 @@ NavItem.propTypes = {
   setHoveredIcon: PropTypes.func.isRequired,
   hoveredIcon: PropTypes.string.isRequired,
   showLabel: PropTypes.bool,
-};
-
-NavItem.defaultProps = {
-  showLabel: true,
 };
 
 export default NavItem;

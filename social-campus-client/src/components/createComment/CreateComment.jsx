@@ -133,8 +133,4 @@ CreateComment.propTypes = {
   onSubmit: PropTypes.func,
 };
 
-CreateComment.defaultProps = {
-  addGoBack: false,
-};
-
 export default CreateComment;
