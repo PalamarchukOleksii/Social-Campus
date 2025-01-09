@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./ShortProfile.css";
 
 function ShortProfile({
-  profileImage = "/default-profile.png",
+  profileImage,
   username,
   login,
   redirectOnClick = true,
@@ -21,7 +21,11 @@ function ShortProfile({
 
   return (
     <div className="short-info" onClick={handleProfileClick}>
-      <img src={profileImage} alt="Profile" className="profile-image" />
+      <img
+        src={profileImage || "/default-profile.png"}
+        alt="Profile"
+        className="profile-image"
+      />
       <div className="profile-info">
         <h3 className="general-text">{username}</h3>
         <h4 className="login not-general-text">@{login}</h4>

@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 
 function NavItem({
-  activeIcon,
-  inactiveIcon,
+  activeIcon: ActiveIcon,
+  inactiveIcon: InactiveIcon,
   label,
   path,
   onClick,
@@ -27,11 +27,11 @@ function NavItem({
       >
         <>
           {hoveredIcon === label.toLowerCase() || isActive ? (
-            activeIcon ? (
-              <activeIcon className="icon" />
+            ActiveIcon ? (
+              <ActiveIcon className="icon" />
             ) : null
-          ) : inactiveIcon ? (
-            <inactiveIcon className="icon" />
+          ) : InactiveIcon ? (
+            <InactiveIcon className="icon" />
           ) : null}
           {showLabel && label && <span>{label}</span>}
         </>
