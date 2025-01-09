@@ -15,11 +15,10 @@ namespace Presentation.Endpoints.Users.Login
             {
                 LoginCommand commandRequest = new(request.Email, request.Password);
 
-                Result<TokensDto> response = await sender.Send(commandRequest);
+                Result<UserOnLoginDto> response = await sender.Send(commandRequest);
                 if (response.IsSuccess)
                 {
-                    TokensDto tokens = response.Value;
-
+                    TokensDto tokens = response.Value.Tokens;
                     context.Response.Cookies.Append("RefreshToken", tokens.RefreshToken, new CookieOptions
                     {
                         HttpOnly = true,
@@ -27,8 +26,11 @@ namespace Presentation.Endpoints.Users.Login
                         Expires = DateTimeOffset.UtcNow.AddDays(tokens.RefreshTokenExpirationInDays)
                     });
 
+                    ShortUserDto shortUser = response.Value.ShortUser;
+
                     return Results.Ok(new
                     {
+                        shortUser,
                         tokens.AccessToken,
                         tokens.AccessTokenExpirationInMinutes
                     });
