@@ -10,13 +10,24 @@ namespace Presentation.Endpoints.RefreshTokens.Revoke
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapDelete("refreshtokens/revoke", async (ISender sender, string refreshToken) =>
+            app.MapDelete("refreshtokens/revoke", async (HttpContext context, ISender sender) =>
             {
+                if (!context.Request.Cookies.TryGetValue("RefreshToken", out string? refreshToken) || string.IsNullOrEmpty(refreshToken))
+                {
+                    return Results.BadRequest("Refresh token is missing or invalid");
+                }
+
                 RevokeCommand commandRequest = new(refreshToken);
 
                 Result response = await sender.Send(commandRequest);
+                if (response.IsSuccess)
+                {
+                    context.Response.Cookies.Delete("RefreshToken");
 
-                return response.IsSuccess ? Results.Ok() : HandleFailure(response);
+                    return Results.Ok();
+                }
+
+                return HandleFailure(response);
             })
             .WithTags(Tags.RefreshTokens)
             .RequireAuthorization();
