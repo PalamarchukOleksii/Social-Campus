@@ -47,6 +47,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("ClientCors");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -54,7 +57,5 @@ RouteGroupBuilder baseGroup = app
     .MapGroup("api");
 
 app.MapEndpoints(baseGroup);
-
-app.UseCors("ClientCors");
 
 await app.RunAsync();

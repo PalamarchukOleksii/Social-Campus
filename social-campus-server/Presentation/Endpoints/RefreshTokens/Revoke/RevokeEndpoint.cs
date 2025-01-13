@@ -12,9 +12,13 @@ namespace Presentation.Endpoints.RefreshTokens.Revoke
         {
             app.MapDelete("refreshtokens/revoke", async (HttpContext context, ISender sender) =>
             {
-                if (!context.Request.Cookies.TryGetValue("RefreshToken", out string? refreshToken) || string.IsNullOrEmpty(refreshToken))
+                if (!context.Request.Cookies.ContainsKey("RefreshToken") || !context.Request.Cookies.TryGetValue("RefreshToken", out string? refreshToken))
                 {
-                    return Results.BadRequest("Refresh token is missing or invalid");
+                    return Results.BadRequest("Refresh token is missing in request");
+                }
+                else if (string.IsNullOrEmpty(refreshToken))
+                {
+                    return Results.BadRequest("Refresh token is null or empty");
                 }
 
                 RevokeCommand commandRequest = new(refreshToken);

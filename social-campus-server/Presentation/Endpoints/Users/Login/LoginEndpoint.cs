@@ -24,7 +24,7 @@ namespace Presentation.Endpoints.Users.Login
                     {
                         HttpOnly = true,
                         IsEssential = true,
-                        SameSite = SameSiteMode.None,
+                        SameSite = SameSiteMode.Lax,
                         Expires = DateTimeOffset.UtcNow.AddDays(tokens.RefreshTokenExpirationInDays),
                     });
 

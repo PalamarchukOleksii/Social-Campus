@@ -34,7 +34,7 @@ namespace Presentation.Endpoints.RefreshTokens.Refresh
                     {
                         HttpOnly = true,
                         IsEssential = true,
-                        SameSite = SameSiteMode.None,
+                        SameSite = SameSiteMode.Lax,
                         Expires = DateTimeOffset.UtcNow.AddDays(tokens.RefreshTokenExpirationInDays),
                     });
 
