@@ -9,7 +9,6 @@ import CreatePublication from "../../components/createPublication/CreatePublicat
 import getMaxPublicationId from "../../utils/helpers/GetMaxPublicationId";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
-import useRefreshToken from "../../hooks/useRefreshToken";
 
 const GET_USER_URL = "/api/users";
 
@@ -22,24 +21,38 @@ function Profile() {
   const navigate = useNavigate();
   const { auth } = useAuth();
   const { isCreatePublicationOpen, closeCreatePublication } = useCreateItem();
-  const axiosPrivate = useAxiosPrivate();
-
-  const refresh = useRefreshToken();
+  const axios = useAxiosPrivate();
 
   useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
     const fetchUserData = async () => {
       try {
-        const { data } = await axiosPrivate.get(`${GET_USER_URL}/${login}`);
-        setUser(data);
-        setPublications(data.publications || []);
+        const { data } = await axios.get(`${GET_USER_URL}/${login}`, {
+          signal: controller.signal,
+        });
+        if (isMounted) {
+          setUser(data);
+          setPublications(data.publications || []);
+        }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        if (error.name !== "CanceledError") {
+          console.error("Error fetching user data:", error);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchUserData();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, [login]);
 
   if (loading) {
@@ -121,7 +134,6 @@ function Profile() {
             No publications yet
           </h2>
         )}
-        <button onClick={() => refresh()}>Refresh</button>
       </div>
     </div>
   );

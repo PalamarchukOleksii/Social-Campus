@@ -12,16 +12,11 @@ function useRefreshToken() {
       return;
     }
 
-    const options = {
-      method: "POST",
-      url: REFRESH_URL,
-      headers: { "Content-Type": "application/json" },
-      data: { accessToken: auth.accessToken },
-      withCredentials: true,
-    };
-
     try {
-      const { data } = await axios.request(options);
+      const { data } = await axios.post(REFRESH_URL, {
+        accessToken: auth.accessToken,
+      });
+
       setAuth((prev) => ({
         ...prev,
         accessToken: data.accessToken,
