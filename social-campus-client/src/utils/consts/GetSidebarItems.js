@@ -9,9 +9,7 @@ import {
   IoPerson,
 } from "react-icons/io5";
 
-import login from "./AuthUserLogin";
-
-const SidebarItems = [
+const GetSidebarItems = (login) => [
   {
     path: "/home",
     label: "Home",
@@ -38,4 +36,4 @@ const SidebarItems = [
   },
 ];
 
-export default SidebarItems;
+export default GetSidebarItems;

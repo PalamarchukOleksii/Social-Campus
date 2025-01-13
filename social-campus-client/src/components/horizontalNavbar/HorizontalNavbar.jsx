@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoExit, IoExitOutline } from "react-icons/io5";
 import NavItem from "../navItem/NavItem";
-import SidebarItems from "../../utils/consts/SidebarItems";
 import { useCreateItem } from "../../context/CreateItemContext";
 import { IoAdd } from "react-icons/io5";
 import "./HorizontalNavbar.css";
+import useAuth from "../../hooks/useAuth";
+import GetSidebarItems from "../../utils/consts/GetSidebarItems";
 
 function HorizontalNavbar() {
   const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState("");
 
   const { openCreatePublication } = useCreateItem();
+  const { auth } = useAuth();
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -26,12 +28,14 @@ function HorizontalNavbar() {
     openCreatePublication();
   };
 
+  const sidebarItems = GetSidebarItems(auth.shortUser.login);
+
   return (
     <div className="horizontal-navbar">
       <button className="add-publish-short" onClick={handlePublishClick}>
         <IoAdd />
       </button>
-      {SidebarItems.map(
+      {sidebarItems.map(
         ({
           path,
           label,

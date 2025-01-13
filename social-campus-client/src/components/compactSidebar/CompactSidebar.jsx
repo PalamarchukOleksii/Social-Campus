@@ -3,11 +3,12 @@ import "./CompactSidebar.css";
 import { useNavigate } from "react-router-dom";
 import { IoExit, IoExitOutline } from "react-icons/io5";
 import NavItem from "../navItem/NavItem";
-import SidebarItems from "../../utils/consts/SidebarItems";
 import userData from "../../data/userData.json";
 import login from "../../utils/consts/AuthUserLogin";
 import { useCreateItem } from "../../context/CreateItemContext";
 import { IoAdd } from "react-icons/io5";
+import useAuth from "../../hooks/useAuth";
+import GetSidebarItems from "../../utils/consts/GetSidebarItems";
 
 function CompactSidebar() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ function CompactSidebar() {
   const [loading, setLoading] = useState(true);
 
   const { openCreatePublication } = useCreateItem();
+  const { auth } = useAuth();
 
   useEffect(() => {
     const fetchUserData = () => {
@@ -40,6 +42,8 @@ function CompactSidebar() {
     openCreatePublication();
   };
 
+  const sidebarItems = GetSidebarItems(auth.shortUser.login);
+
   return (
     <div className="compact-sidebar">
       <div className="wrapper">
@@ -48,7 +52,7 @@ function CompactSidebar() {
         </div>
         <div className="navigation">
           <ul>
-            {SidebarItems.map(
+            {sidebarItems.map(
               ({
                 path,
                 label,

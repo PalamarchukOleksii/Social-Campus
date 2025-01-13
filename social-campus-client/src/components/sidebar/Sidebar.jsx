@@ -1,31 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
 import { IoExit, IoExitOutline } from "react-icons/io5";
 import NavItem from "../navItem/NavItem";
-import SidebarItems from "../../utils/consts/SidebarItems";
+import GetSidebarItems from "../../utils/consts/GetSidebarItems";
 import ShortProfile from "../shortProfile/ShortProfile";
-import userData from "../../data/userData.json";
-import login from "../../utils/consts/AuthUserLogin";
 import { useCreateItem } from "../../context/CreateItemContext";
+import useAuth from "../../hooks/useAuth";
 
 function Sidebar() {
   const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState("");
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { auth } = useAuth();
 
   const { openCreatePublication } = useCreateItem();
-
-  useEffect(() => {
-    const fetchUserData = () => {
-      const foundUser = userData.find((user) => user.login === login);
-      setUser(foundUser || null);
-      setLoading(false);
-    };
-
-    fetchUserData();
-  }, []);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -40,6 +28,8 @@ function Sidebar() {
     openCreatePublication();
   };
 
+  const sidebarItems = GetSidebarItems(auth.shortUser.login);
+
   return (
     <div className="sidebar">
       <div className="wrapper">
@@ -49,7 +39,7 @@ function Sidebar() {
         </div>
         <div className="navigation">
           <ul>
-            {SidebarItems.map(
+            {sidebarItems.map(
               ({
                 path,
                 label,
@@ -76,31 +66,29 @@ function Sidebar() {
           </div>
         </div>
       </div>
-      {loading ? (
-        <></>
-      ) : user ? (
-        <div className="logout">
-          <ShortProfile
-            username={user.username}
-            login={user.login}
-            profileImage={user.profileImage}
-          />
-          <div
-            onClick={handleLogout}
-            className="logout-icon"
-            onMouseEnter={() => setHoveredIcon("logout")}
-            onMouseLeave={() => setHoveredIcon("")}
-          >
-            {hoveredIcon === "logout" ? (
-              <IoExit className="exit-icon" />
-            ) : (
-              <IoExitOutline className="exit-icon" />
-            )}
-          </div>
+      <div className="logout">
+        <ShortProfile
+          username={auth.shortUser.firstName + " " + auth.shortUser.lastName}
+          login={auth.shortUser.login}
+          profileImage={
+            auth.shortUser.profileImage
+              ? `data:image/png;base64,${auth.shortUser.profileImage}`
+              : null
+          }
+        />
+        <div
+          onClick={handleLogout}
+          className="logout-icon"
+          onMouseEnter={() => setHoveredIcon("logout")}
+          onMouseLeave={() => setHoveredIcon("")}
+        >
+          {hoveredIcon === "logout" ? (
+            <IoExit className="exit-icon" />
+          ) : (
+            <IoExitOutline className="exit-icon" />
+          )}
         </div>
-      ) : (
-        <h3 className="not-found-text general-text">User not found</h3>
-      )}
+      </div>
     </div>
   );
 }
