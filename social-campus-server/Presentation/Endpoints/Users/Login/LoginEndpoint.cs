@@ -19,11 +19,13 @@ namespace Presentation.Endpoints.Users.Login
                 if (response.IsSuccess)
                 {
                     TokensDto tokens = response.Value.Tokens;
+
                     context.Response.Cookies.Append("RefreshToken", tokens.RefreshToken, new CookieOptions
                     {
                         HttpOnly = true,
-                        SameSite = SameSiteMode.Strict,
-                        Expires = DateTimeOffset.UtcNow.AddDays(tokens.RefreshTokenExpirationInDays)
+                        IsEssential = true,
+                        SameSite = SameSiteMode.None,
+                        Expires = DateTimeOffset.UtcNow.AddDays(tokens.RefreshTokenExpirationInDays),
                     });
 
                     ShortUserDto shortUser = response.Value.ShortUser;

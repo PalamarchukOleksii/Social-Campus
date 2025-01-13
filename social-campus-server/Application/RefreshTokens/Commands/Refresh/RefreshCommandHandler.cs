@@ -10,19 +10,28 @@ using System.Security.Claims;
 namespace Application.RefreshTokens.Commands.Refresh
 {
     public class RefreshCommandHandler(
-    IUserRepository userRepository,
-    IJwtProvider jwtProvider,
-    IRefreshTokenRepository tokenRepository) : ICommandHandler<RefreshCommand, TokensDto>
+        IUserRepository userRepository,
+        IJwtProvider jwtProvider,
+        IRefreshTokenRepository tokenRepository) : ICommandHandler<RefreshCommand, TokensDto>
     {
         public async Task<Result<TokensDto>> Handle(RefreshCommand request, CancellationToken cancellationToken)
         {
-            ClaimsPrincipal principal = await jwtProvider.GetPrincipalFromExpiredTokenAsync(request.AccessToken);
+            ClaimsPrincipal principal;
+            try
+            {
+                principal = await jwtProvider.GetPrincipalFromExpiredTokenAsync(request.AccessToken);
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure<TokensDto>(new Error("AccessToken.InvalidToken", ex.Message));
+            }
+
             string? email = principal.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
             if (email == null)
             {
                 return Result.Failure<TokensDto>(new Error(
                     "AccessToken.InvalidToken",
-                    "Invalid access token"));
+                    "The access token does not contain a valid email"));
             }
 
             User? user = await userRepository.GetByEmailAsync(email);
@@ -34,13 +43,23 @@ namespace Application.RefreshTokens.Commands.Refresh
             }
 
             RefreshToken? refreshToken = await tokenRepository.GetByIdAsync(user.RefreshTokenId);
-            if (refreshToken == null ||
-                refreshToken.Token != request.RefreshToken ||
-                !refreshToken.IsValid())
+            if (refreshToken == null)
+            {
+                return Result.Failure<TokensDto>(new Error(
+                    "RefreshToken.NotFound",
+                    "Refresh token not found for the user"));
+            }
+            else if (refreshToken.Token != request.RefreshToken)
             {
                 return Result.Failure<TokensDto>(new Error(
                     "RefreshToken.InvalidToken",
-                    "Invalid or expired refresh token"));
+                    "The provided refresh token does not match the stored refresh token"));
+            }
+            else if (!refreshToken.IsValid())
+            {
+                return Result.Failure<TokensDto>(new Error(
+                    "RefreshToken.Expired",
+                    "The provided refresh token has expired"));
             }
 
             TokensDto tokens = jwtProvider.GenerateTokens(user);

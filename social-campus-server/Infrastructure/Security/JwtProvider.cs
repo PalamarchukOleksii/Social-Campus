@@ -25,6 +25,7 @@ namespace Infrastructure.Security
                 RefreshTokenExpirationInDays = configuration.GetValue<int>("Jwt:RefreshTokenExpirationInDays")
             };
         }
+
         public async Task<ClaimsPrincipal> GetPrincipalFromExpiredTokenAsync(string token)
         {
             string secretKey = configuration["Jwt:SecretKey"]!;
@@ -45,12 +46,12 @@ namespace Infrastructure.Security
             JsonWebTokenHandler handler = new();
             TokenValidationResult result = await handler.ValidateTokenAsync(token, tokenValidationParameters);
 
-            if (!result.IsValid)
+            if (!result.IsValid || result.ClaimsIdentity == null)
             {
                 throw new SecurityTokenException("Invalid token");
             }
 
-            return result.ClaimsIdentity != null ? new ClaimsPrincipal(result.ClaimsIdentity) : throw new SecurityTokenException("Invalid token");
+            return new ClaimsPrincipal(result.ClaimsIdentity);
         }
 
         private string GenerateAccessToken(User user)
