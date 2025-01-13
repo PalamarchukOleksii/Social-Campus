@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./SignUp.css";
 import { toast } from "react-toastify";
-import axios from "../../utils/consts/AxiosBase";
+import axios from "../../utils/api/AxiosBase";
 
 const REGISTER_URL = "api/users/register";
 const ALLOWED_DOMAINS = ["lll.kpi.ua"];
@@ -19,21 +19,14 @@ function SignUp() {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    const options = {
-      method: "POST",
-      url: REGISTER_URL,
-      headers: { "Content-Type": "application/json" },
-      data: JSON.stringify({
+    try {
+      await axios.post(REGISTER_URL, {
         login: login.trim(),
         firstName: firstName.trim(),
         lastName: secondName.trim(),
         email: email.trim(),
         password: password.trim(),
-      }),
-    };
-
-    try {
-      await axios.request(options);
+      });
 
       toast("Your account has been successfully created! Welcome aboard!");
       navigate("/signin");

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import "./Profile.css";
-import userData from "../../data/userData.json";
 import PublicationsList from "../../components/publicationsList/PublicationsList";
 import ROUTES from "../../utils/consts/Routes";
 import Loading from "../../components/loading/Loading";
 import { useCreateItem } from "../../context/CreateItemContext";
 import CreatePublication from "../../components/createPublication/CreatePublication";
 import getMaxPublicationId from "../../utils/helpers/GetMaxPublicationId";
-import authLogin from "../../utils/consts/AuthUserLogin";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
+import useRefreshToken from "../../hooks/useRefreshToken";
+
+const GET_USER_URL = "/api/users";
 
 function Profile() {
   const { login } = useParams();
@@ -17,30 +20,23 @@ function Profile() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-
+  const { auth } = useAuth();
   const { isCreatePublicationOpen, closeCreatePublication } = useCreateItem();
+  const axiosPrivate = useAxiosPrivate();
+
+  const refresh = useRefreshToken();
 
   useEffect(() => {
-    const fetchUserData = () => {
-      const foundUser = userData.find((user) => user.login === login);
-
-      if (foundUser) {
-        setUser(foundUser);
-        setPublications(
-          foundUser.publications
-            .map((publication) => ({
-              ...publication,
-              username: foundUser.username,
-              login: foundUser.login,
-              profileImage: foundUser.profileImage,
-            }))
-            .sort((a, b) => new Date(b.creationTime) - new Date(a.creationTime))
-        );
-      } else {
-        setUser(null);
+    const fetchUserData = async () => {
+      try {
+        const { data } = await axiosPrivate.get(`${GET_USER_URL}/${login}`);
+        setUser(data);
+        setPublications(data.publications || []);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
     fetchUserData();
@@ -63,8 +59,10 @@ function Profile() {
       {isCreatePublicationOpen && (
         <div className="create-publication-modal-overlay">
           <CreatePublication
-            publications={authLogin === login ? publications : []}
-            setPublications={authLogin === login ? setPublications : null}
+            publications={auth.shortUser.login === login ? publications : []}
+            setPublications={
+              auth.shortUser.login === login ? setPublications : null
+            }
             getMaxPublicationId={getMaxPublicationId}
             close={closeCreatePublication}
           />
@@ -83,10 +81,12 @@ function Profile() {
         <div className="profile-info">
           <div className="short-info-cont">
             <div>
-              <h2 className="profile-name general-text">{user.username}</h2>
+              <h2 className="profile-name general-text">
+                {user.firstName + " " + user.lastName}
+              </h2>
               <p className="profile-login not-general-text">@{user.login}</p>
             </div>
-            {authLogin === user.login ? (
+            {user.login === auth.shortUser.login ? (
               <button
                 onClick={() => navigate(`/profile/${user.login}/edit`)}
                 className="edit-profile-link"
@@ -106,10 +106,10 @@ function Profile() {
         </div>
         <div className="profile-stats">
           <Link to={ROUTES.FOLLOWERS.replace(":login", user.login)}>
-            <span>{user.followers.length} Followers</span>
+            <span>{user.followers?.length || 0} Followers</span>
           </Link>
           <Link to={ROUTES.FOLLOWING.replace(":login", user.login)}>
-            <span>{user.following.length} Following</span>
+            <span>{user.following?.length || 0} Following</span>
           </Link>
         </div>
       </div>
@@ -121,6 +121,7 @@ function Profile() {
             No publications yet
           </h2>
         )}
+        <button onClick={() => refresh()}>Refresh</button>
       </div>
     </div>
   );

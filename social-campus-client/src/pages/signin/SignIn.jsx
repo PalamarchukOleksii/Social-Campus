@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./SignIn.css";
 import { toast } from "react-toastify";
-import axios from "../../utils/consts/AxiosBase";
+import axios from "../../utils/api/AxiosBase";
 import useAuth from "../../hooks/useAuth";
 
 const LOGIN_URL = "/api/users/login";
@@ -18,41 +18,28 @@ function SignIn() {
   const handleSignIn = async (e) => {
     e.preventDefault();
 
-    const options = {
-      method: "POST",
-      url: LOGIN_URL,
-      headers: { "Content-Type": "application/json" },
-      data: JSON.stringify({
+    try {
+      const response = await axios.post(LOGIN_URL, {
         email: email.trim(),
         password: password.trim(),
-      }),
-    };
+      });
 
-    try {
-      const response = await axios.request(options);
+      const { accessToken } = response.data;
 
-      if (
-        response.data.accessToken &&
-        response.data.accessToken.trim() !== ""
-      ) {
+      if (accessToken?.trim()) {
         setAuth(response.data);
-
         toast("Welcome back! You have successfully signed in.");
         navigate("/home");
       } else {
         toast.error("Failed to retrieve access token.");
       }
     } catch (error) {
-      if (error.response) {
-        if (error.response.data && error.response.data.error) {
-          error.response.data.error.forEach((err) => {
-            toast.error(err.message);
-          });
-        } else if (error.response.data && error.response.data.detail) {
-          toast.error(error.response.data.detail);
-        } else {
-          toast.error("There was an error logging into your account.");
-        }
+      const { response } = error;
+
+      if (response?.data?.error) {
+        response.data.error.forEach((err) => toast.error(err.message));
+      } else if (response?.data?.detail) {
+        toast.error(response.data.detail);
       } else {
         console.error(error);
         toast.error("An unexpected error occurred.");
