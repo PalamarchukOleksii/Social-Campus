@@ -20,9 +20,9 @@ namespace Infrastructure.Security
             return new TokensDto
             {
                 AccessToken = accessToken,
-                AccessTokenExpirationInMinutes = configuration.GetValue<int>("Jwt:AccessTokenExpirationInMinutes"),
+                AccessTokenExpirationInSeconds = configuration.GetValue<int>("Jwt:AccessTokenExpirationInSeconds"),
                 RefreshToken = refreshToken,
-                RefreshTokenExpirationInDays = configuration.GetValue<int>("Jwt:RefreshTokenExpirationInDays")
+                RefreshTokenExpirationInSeconds = configuration.GetValue<int>("Jwt:RefreshTokenExpirationInSeconds")
             };
         }
 
@@ -69,7 +69,7 @@ namespace Infrastructure.Security
                     new Claim(JwtRegisteredClaimNames.Name, user.Login),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email)
                 ]),
-                Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:AccessTokenExpirationInMinutes")),
+                Expires = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("Jwt:AccessTokenExpirationInSeconds")),
                 SigningCredentials = credentials,
                 Issuer = configuration["Jwt:Issuer"],
                 Audience = configuration["Jwt:Audience"]

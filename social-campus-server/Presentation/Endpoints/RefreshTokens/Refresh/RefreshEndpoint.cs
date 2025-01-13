@@ -35,13 +35,13 @@ namespace Presentation.Endpoints.RefreshTokens.Refresh
                         HttpOnly = true,
                         IsEssential = true,
                         SameSite = SameSiteMode.Lax,
-                        Expires = DateTimeOffset.UtcNow.AddDays(tokens.RefreshTokenExpirationInDays),
+                        Expires = DateTimeOffset.UtcNow.AddSeconds(tokens.RefreshTokenExpirationInSeconds),
                     });
 
                     return Results.Ok(new
                     {
                         tokens.AccessToken,
-                        tokens.AccessTokenExpirationInMinutes
+                        tokens.AccessTokenExpirationInSeconds
                     });
                 }
 

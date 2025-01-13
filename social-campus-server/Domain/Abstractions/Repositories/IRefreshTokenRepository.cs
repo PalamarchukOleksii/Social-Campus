@@ -7,8 +7,8 @@ namespace Domain.Abstractions.Repositories
     {
         public Task<RefreshToken?> GetByIdAsync(RefreshTokenId id);
         public Task<RefreshToken?> GetByRefreshTokenAsync(string refreshToken);
-        public Task<RefreshToken> AddAsync(string token, int expiryTimeInDays, UserId userId);
-        public void Update(RefreshToken refreshToken, string newToken, int expiryTimeInDays);
+        public Task<RefreshToken> AddAsync(string token, int expiryTimeInSeconds, UserId userId);
+        public void Update(RefreshToken refreshToken, string newToken, int expiryTimeInSeconds);
         public Task DeleteByIdAsync(RefreshTokenId id);
     }
 }

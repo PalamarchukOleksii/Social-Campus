@@ -25,7 +25,7 @@ namespace Presentation.Endpoints.Users.Login
                         HttpOnly = true,
                         IsEssential = true,
                         SameSite = SameSiteMode.Lax,
-                        Expires = DateTimeOffset.UtcNow.AddDays(tokens.RefreshTokenExpirationInDays),
+                        Expires = DateTimeOffset.UtcNow.AddSeconds(tokens.RefreshTokenExpirationInSeconds),
                     });
 
                     ShortUserDto shortUser = response.Value.ShortUser;
@@ -34,7 +34,7 @@ namespace Presentation.Endpoints.Users.Login
                     {
                         shortUser,
                         tokens.AccessToken,
-                        tokens.AccessTokenExpirationInMinutes
+                        tokens.AccessTokenExpirationInSeconds
                     });
                 }
 

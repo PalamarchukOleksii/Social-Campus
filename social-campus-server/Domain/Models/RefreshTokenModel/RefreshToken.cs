@@ -31,10 +31,10 @@ namespace Domain.Models.RefreshTokenModel
             return DateTime.UtcNow < TokenExpiryTime;
         }
 
-        public int DaysUntilExpiration()
+        public int SecondsUntilExpiration()
         {
             var remainingTime = TokenExpiryTime - DateTime.UtcNow;
-            return remainingTime.Days;
+            return remainingTime.Seconds;
         }
     }
 

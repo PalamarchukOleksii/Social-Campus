@@ -8,9 +8,9 @@ namespace Infrastructure.Repositories
 {
     public class RefreshTokenRepository(ApplicationDbContext context) : IRefreshTokenRepository
     {
-        public async Task<RefreshToken> AddAsync(string token, int expiryTimeInDays, UserId userId)
+        public async Task<RefreshToken> AddAsync(string token, int expiryTimeInSeconds, UserId userId)
         {
-            DateTime expirationDateTime = DateTime.UtcNow.AddDays(expiryTimeInDays);
+            DateTime expirationDateTime = DateTime.UtcNow.AddSeconds(expiryTimeInSeconds);
             RefreshToken newRefreshToken = new(token, expirationDateTime, userId);
 
             await context.AddAsync(newRefreshToken);
@@ -39,9 +39,9 @@ namespace Infrastructure.Repositories
             return await context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == refreshToken);
         }
 
-        public void Update(RefreshToken refreshToken, string newToken, int expiryTimeInDays)
+        public void Update(RefreshToken refreshToken, string newToken, int expiryTimeInSeconds)
         {
-            DateTime expirationDateTime = DateTime.UtcNow.AddDays(expiryTimeInDays);
+            DateTime expirationDateTime = DateTime.UtcNow.AddSeconds(expiryTimeInSeconds);
             refreshToken.UpdateTokenOnRefresh(newToken, expirationDateTime);
         }
     }

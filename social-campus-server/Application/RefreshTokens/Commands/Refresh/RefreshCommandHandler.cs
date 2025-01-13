@@ -63,14 +63,14 @@ namespace Application.RefreshTokens.Commands.Refresh
             }
 
             TokensDto tokens = jwtProvider.GenerateTokens(user);
-            tokenRepository.Update(refreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
+            tokenRepository.Update(refreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInSeconds);
 
             return Result.Success(new TokensDto
             {
                 AccessToken = tokens.AccessToken,
-                AccessTokenExpirationInMinutes = tokens.AccessTokenExpirationInMinutes,
+                AccessTokenExpirationInSeconds = tokens.AccessTokenExpirationInSeconds,
                 RefreshToken = tokens.RefreshToken,
-                RefreshTokenExpirationInDays = tokens.RefreshTokenExpirationInDays
+                RefreshTokenExpirationInSeconds = tokens.RefreshTokenExpirationInSeconds
             });
         }
     }

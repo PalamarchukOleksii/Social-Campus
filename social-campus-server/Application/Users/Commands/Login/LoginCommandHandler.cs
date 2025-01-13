@@ -39,11 +39,11 @@ namespace Application.Users.Commands.Login
 
             if (existingRefreshToken != null)
             {
-                tokenRepository.Update(existingRefreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
+                tokenRepository.Update(existingRefreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInSeconds);
             }
             else
             {
-                RefreshToken refreshToken = await tokenRepository.AddAsync(tokens.RefreshToken, tokens.RefreshTokenExpirationInDays, user.Id);
+                RefreshToken refreshToken = await tokenRepository.AddAsync(tokens.RefreshToken, tokens.RefreshTokenExpirationInSeconds, user.Id);
                 user.SetRefreshTokenId(refreshToken.Id);
             }
 

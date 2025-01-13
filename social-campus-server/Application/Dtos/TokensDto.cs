@@ -3,8 +3,8 @@
     public class TokensDto
     {
         public string AccessToken { get; set; } = string.Empty;
-        public int AccessTokenExpirationInMinutes { get; set; }
+        public int AccessTokenExpirationInSeconds { get; set; }
         public string RefreshToken { get; set; } = string.Empty;
-        public int RefreshTokenExpirationInDays { get; set; }
+        public int RefreshTokenExpirationInSeconds { get; set; }
     }
 }

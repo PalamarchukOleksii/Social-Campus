@@ -20,7 +20,7 @@ function useRefreshToken() {
       setAuth((prev) => ({
         ...prev,
         accessToken: data.accessToken,
-        accessTokenExpirationInMinutes: data.accessTokenExpirationInMinutes,
+        accessTokenExpirationInSeconds: data.accessTokenExpirationInSeconds,
       }));
 
       return data.accessToken;
