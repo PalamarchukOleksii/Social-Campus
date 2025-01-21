@@ -46,18 +46,16 @@ function HorizontalNavbar() {
           inactiveIcon: InactiveIcon,
           activeIcon: ActiveIcon,
         }) => (
-          <>
-            <NavItem
-              key={path}
-              path={path}
-              label={label}
-              inactiveIcon={InactiveIcon}
-              activeIcon={ActiveIcon}
-              hoveredIcon={hoveredIcon}
-              setHoveredIcon={setHoveredIcon}
-              showLabel={false}
-            />
-          </>
+          <NavItem
+            key={path}
+            path={path}
+            label={label}
+            inactiveIcon={InactiveIcon}
+            activeIcon={ActiveIcon}
+            hoveredIcon={hoveredIcon}
+            setHoveredIcon={setHoveredIcon}
+            showLabel={false}
+          />
         )
       )}
       <div

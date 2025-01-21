@@ -4,23 +4,15 @@ import useAuth from "./useAuth";
 const REFRESH_URL = "/api/refreshtokens/refresh";
 
 function useRefreshToken() {
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
 
   const refresh = async () => {
-    if (!auth?.accessToken) {
-      console.error("No access token available to refresh.");
-      return;
-    }
-
     try {
-      const { data } = await axios.post(REFRESH_URL, {
-        accessToken: auth.accessToken,
-      });
+      const { data } = await axios.post(REFRESH_URL);
 
       setAuth((prev) => ({
         ...prev,
-        accessToken: data.accessToken,
-        accessTokenExpirationInSeconds: data.accessTokenExpirationInSeconds,
+        ...data,
       }));
 
       return data.accessToken;

@@ -24,35 +24,21 @@ function Profile() {
   const axios = useAxiosPrivate();
 
   useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-
     const fetchUserData = async () => {
       try {
-        const { data } = await axios.get(`${GET_USER_URL}/${login}`, {
-          signal: controller.signal,
-        });
-        if (isMounted) {
-          setUser(data);
-          setPublications(data.publications || []);
-        }
+        const { data } = await axios.get(`${GET_USER_URL}/${login}`);
+        setUser(data);
+        setPublications(data.publications || []);
       } catch (error) {
-        if (error.name !== "CanceledError") {
-          console.error("Error fetching user data:", error);
-        }
+        console.error("Error fetching user data:", error);
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     };
 
     fetchUserData();
 
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
+    return () => setLoading(false);
   }, [login]);
 
   if (loading) {
@@ -81,6 +67,7 @@ function Profile() {
           />
         </div>
       )}
+
       <div className="profile">
         <div className="profile-header">
           <div className="profile-image-container">
@@ -95,7 +82,7 @@ function Profile() {
           <div className="short-info-cont">
             <div>
               <h2 className="profile-name general-text">
-                {user.firstName + " " + user.lastName}
+                {user.firstName} {user.lastName}
               </h2>
               <p className="profile-login not-general-text">@{user.login}</p>
             </div>
@@ -126,6 +113,7 @@ function Profile() {
           </Link>
         </div>
       </div>
+
       <div className="publications">
         {publications.length > 0 ? (
           <PublicationsList publications={publications} />
