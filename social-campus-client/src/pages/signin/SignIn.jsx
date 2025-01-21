@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./SignIn.css";
 import { toast } from "react-toastify";
@@ -13,7 +13,7 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -47,6 +47,14 @@ function SignIn() {
     }
   };
 
+  const togglePersist = () => {
+    setPersist((prev) => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("persist", persist);
+  }, [persist]);
+
   return (
     <div className="signin-container">
       <div className="left-half">
@@ -71,6 +79,15 @@ function SignIn() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <div className="persistCheck">
+                <input
+                  type="checkbox"
+                  id="persist"
+                  onChange={togglePersist}
+                  checked={persist}
+                />
+                <label htmlFor="persist">Trust This Device</label>
+              </div>
               <button type="submit" className="signin-button">
                 Sign In
               </button>

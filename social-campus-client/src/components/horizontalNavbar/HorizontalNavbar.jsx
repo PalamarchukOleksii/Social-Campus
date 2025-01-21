@@ -7,6 +7,8 @@ import { IoAdd } from "react-icons/io5";
 import "./HorizontalNavbar.css";
 import useAuth from "../../hooks/useAuth";
 import GetSidebarItems from "../../utils/consts/GetSidebarItems";
+import useLogout from "../../hooks/useLogout";
+import ROUTES from "../../utils/consts/Routes";
 
 function HorizontalNavbar() {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ function HorizontalNavbar() {
 
   const { openCreatePublication } = useCreateItem();
   const { auth } = useAuth();
+  const logout = useLogout();
 
   useEffect(() => {
     const currentUser = auth?.shortUser || {};
@@ -24,7 +27,8 @@ function HorizontalNavbar() {
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      navigate("/");
+      await logout();
+      navigate(ROUTES.LANDING);
     } catch (error) {
       console.error(error);
     }

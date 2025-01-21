@@ -7,6 +7,8 @@ import GetSidebarItems from "../../utils/consts/GetSidebarItems";
 import ShortProfile from "../shortProfile/ShortProfile";
 import { useCreateItem } from "../../context/CreateItemContext";
 import useAuth from "../../hooks/useAuth";
+import useLogout from "../../hooks/useLogout";
+import ROUTES from "../../utils/consts/Routes";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -16,6 +18,7 @@ function Sidebar() {
   const { auth } = useAuth();
 
   const { openCreatePublication } = useCreateItem();
+  const logout = useLogout();
 
   useEffect(() => {
     const currentUser = auth?.shortUser || {};
@@ -26,7 +29,8 @@ function Sidebar() {
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      navigate("/");
+      await logout();
+      navigate(ROUTES.LANDING);
     } catch (error) {
       console.error(error);
     }

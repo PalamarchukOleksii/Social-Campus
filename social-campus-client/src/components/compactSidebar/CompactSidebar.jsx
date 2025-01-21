@@ -7,6 +7,8 @@ import { useCreateItem } from "../../context/CreateItemContext";
 import { IoAdd } from "react-icons/io5";
 import useAuth from "../../hooks/useAuth";
 import GetSidebarItems from "../../utils/consts/GetSidebarItems";
+import useLogout from "../../hooks/useLogout";
+import ROUTES from "../../utils/consts/Routes";
 
 function CompactSidebar() {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ function CompactSidebar() {
 
   const { openCreatePublication } = useCreateItem();
   const { auth } = useAuth();
+  const logout = useLogout();
 
   useEffect(() => {
     const currentUser = auth?.shortUser || {};
@@ -24,7 +27,8 @@ function CompactSidebar() {
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      navigate("/");
+      await logout();
+      navigate(ROUTES.LANDING);
     } catch (error) {
       console.error(error);
     }
