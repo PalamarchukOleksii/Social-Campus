@@ -12,14 +12,14 @@ namespace Application.Users.Commands.Login
         IJwtProvider jwtProvider,
         IUserRepository userRepository,
         IRefreshTokenRepository tokenRepository,
-        IPasswordHasher passwordHasher) : ICommandHandler<LoginCommand, UserOnLoginDto>
+        IPasswordHasher passwordHasher) : ICommandHandler<LoginCommand, UserOnLoginRefreshDto>
     {
-        public async Task<Result<UserOnLoginDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UserOnLoginRefreshDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             User? user = await userRepository.GetByEmailAsync(request.Email);
             if (user is null)
             {
-                return Result.Failure<UserOnLoginDto>(new Error(
+                return Result.Failure<UserOnLoginRefreshDto>(new Error(
                     "User.NotFound",
                     $"User with email {request.Email} was not found"));
             }
@@ -27,7 +27,7 @@ namespace Application.Users.Commands.Login
             bool isPasswordValid = await passwordHasher.VerifyAsync(request.Password, user.PasswordHash);
             if (!isPasswordValid)
             {
-                return Result.Failure<UserOnLoginDto>(new Error(
+                return Result.Failure<UserOnLoginRefreshDto>(new Error(
                     "User.IncorrectPassword",
                     "Incorrect password"));
             }
@@ -47,7 +47,7 @@ namespace Application.Users.Commands.Login
                 user.SetRefreshTokenId(refreshToken.Id);
             }
 
-            return Result.Success(new UserOnLoginDto
+            return Result.Success(new UserOnLoginRefreshDto
             {
                 Tokens = tokens,
                 ShortUser = new ShortUserDto

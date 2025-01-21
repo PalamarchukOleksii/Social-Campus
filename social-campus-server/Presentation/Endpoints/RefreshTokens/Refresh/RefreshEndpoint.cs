@@ -24,11 +24,10 @@ namespace Presentation.Endpoints.RefreshTokens.Refresh
 
                 RefreshCommand commandRequest = new(request.AccessToken, refreshToken);
 
-                Result<TokensDto> response = await sender.Send(commandRequest);
-
+                Result<UserOnLoginRefreshDto> response = await sender.Send(commandRequest);
                 if (response.IsSuccess)
                 {
-                    TokensDto tokens = response.Value;
+                    TokensDto tokens = response.Value.Tokens;
 
                     context.Response.Cookies.Append("RefreshToken", tokens.RefreshToken, new CookieOptions
                     {
@@ -38,8 +37,11 @@ namespace Presentation.Endpoints.RefreshTokens.Refresh
                         Expires = DateTimeOffset.UtcNow.AddSeconds(tokens.RefreshTokenExpirationInSeconds),
                     });
 
+                    ShortUserDto shortUser = response.Value.ShortUser;
+
                     return Results.Ok(new
                     {
+                        shortUser,
                         tokens.AccessToken,
                         tokens.AccessTokenExpirationInSeconds
                     });

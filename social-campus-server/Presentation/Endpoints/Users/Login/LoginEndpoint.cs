@@ -15,7 +15,7 @@ namespace Presentation.Endpoints.Users.Login
             {
                 LoginCommand commandRequest = new(request.Email, request.Password);
 
-                Result<UserOnLoginDto> response = await sender.Send(commandRequest);
+                Result<UserOnLoginRefreshDto> response = await sender.Send(commandRequest);
                 if (response.IsSuccess)
                 {
                     TokensDto tokens = response.Value.Tokens;
