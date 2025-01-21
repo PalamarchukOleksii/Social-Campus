@@ -1,20 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Landing.css";
-import { toast } from "react-toastify";
 
 function Landing() {
   const navigate = useNavigate();
-
-  const handleGoogle = async (e) => {
-    e.preventDefault();
-    try {
-      navigate("/home");
-      toast("Your account has been successfully created! Welcome aboard!");
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <div className="landing-container">
@@ -23,12 +12,15 @@ function Landing() {
       </div>
       <div className="right-half">
         <div className="welcom">
-          <h1 className="general-text">Welcome to Social Campus</h1>
-          <p className="not-general-text">Connect, Collaborate, and Create</p>
-          <div className="button-container">
-            <button className="google-button" onClick={handleGoogle}>
-              Sign Up with Google
-            </button>
+          <div className="top-container">
+            <div className="text-container">
+              <h1 className="welcome-text general-text">
+                Welcome to Social Campus
+              </h1>
+              <p className="slogan-text not-general-text">
+                Connect, Collaborate, and Create
+              </p>
+            </div>
             <button
               className="profile-button"
               onClick={() => navigate("/signup")}
@@ -36,10 +28,17 @@ function Landing() {
               Create a New Profile
             </button>
           </div>
-          <h2 className="not-general-text">Already have an account?</h2>
-          <button className="signup-button" onClick={() => navigate("/signin")}>
-            Sign In
-          </button>
+          <div className="have-account-container">
+            <h3 className="have-account-text not-general-text">
+              Already have an account?
+            </h3>
+            <button
+              className="signup-button"
+              onClick={() => navigate("/signin")}
+            >
+              Sign In
+            </button>
+          </div>
         </div>
       </div>
     </div>
