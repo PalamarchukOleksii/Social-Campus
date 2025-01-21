@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
 import { IoExit, IoExitOutline } from "react-icons/io5";
@@ -11,9 +11,17 @@ import useAuth from "../../hooks/useAuth";
 function Sidebar() {
   const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState("");
+  const [user, setUser] = useState({});
+  const [sidebarItems, setSidebarItems] = useState([]);
   const { auth } = useAuth();
 
   const { openCreatePublication } = useCreateItem();
+
+  useEffect(() => {
+    const currentUser = auth?.shortUser || {};
+    setUser(currentUser);
+    setSidebarItems(GetSidebarItems(currentUser.login || ""));
+  }, [auth]);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -27,8 +35,6 @@ function Sidebar() {
   const handlePublishClick = () => {
     openCreatePublication();
   };
-
-  const sidebarItems = GetSidebarItems(auth.shortUser.login);
 
   return (
     <div className="sidebar">
@@ -48,6 +54,7 @@ function Sidebar() {
               }) => (
                 <li key={path}>
                   <NavItem
+                    key={path}
                     path={path}
                     label={label}
                     inactiveIcon={InactiveIcon}
@@ -68,11 +75,11 @@ function Sidebar() {
       </div>
       <div className="logout">
         <ShortProfile
-          username={auth.shortUser.firstName + " " + auth.shortUser.lastName}
-          login={auth.shortUser.login}
+          username={user.firstName + " " + user.lastName}
+          login={user.login || ""}
           profileImage={
-            auth.shortUser.profileImage
-              ? `data:image/png;base64,${auth.shortUser.profileImage}`
+            user.profileImage
+              ? `data:image/png;base64,${user.profileImage}`
               : null
           }
         />

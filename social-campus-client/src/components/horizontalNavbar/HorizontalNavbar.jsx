@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoExit, IoExitOutline } from "react-icons/io5";
 import NavItem from "../navItem/NavItem";
@@ -11,9 +11,15 @@ import GetSidebarItems from "../../utils/consts/GetSidebarItems";
 function HorizontalNavbar() {
   const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState("");
+  const [sidebarItems, setSidebarItems] = useState([]);
 
   const { openCreatePublication } = useCreateItem();
   const { auth } = useAuth();
+
+  useEffect(() => {
+    const currentUser = auth?.shortUser || {};
+    setSidebarItems(GetSidebarItems(currentUser.login || ""));
+  }, [auth]);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -27,8 +33,6 @@ function HorizontalNavbar() {
   const handlePublishClick = () => {
     openCreatePublication();
   };
-
-  const sidebarItems = GetSidebarItems(auth.shortUser.login);
 
   return (
     <div className="horizontal-navbar">
@@ -44,6 +48,7 @@ function HorizontalNavbar() {
         }) => (
           <>
             <NavItem
+              key={path}
               path={path}
               label={label}
               inactiveIcon={InactiveIcon}
