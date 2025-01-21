@@ -5,7 +5,6 @@ using Domain.Abstractions.Repositories;
 using Domain.Models.RefreshTokenModel;
 using Domain.Models.UserModel;
 using Domain.Shared;
-using System.Security.Claims;
 
 namespace Application.RefreshTokens.Commands.Refresh
 {
@@ -16,50 +15,26 @@ namespace Application.RefreshTokens.Commands.Refresh
     {
         public async Task<Result<UserOnLoginRefreshDto>> Handle(RefreshCommand request, CancellationToken cancellationToken)
         {
-            ClaimsPrincipal principal;
-            try
-            {
-                principal = await jwtProvider.GetPrincipalFromExpiredTokenAsync(request.AccessToken);
-            }
-            catch (Exception ex)
-            {
-                return Result.Failure<UserOnLoginRefreshDto>(new Error("AccessToken.InvalidToken", ex.Message));
-            }
-
-            string? email = principal.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
-            if (email == null)
-            {
-                return Result.Failure<UserOnLoginRefreshDto>(new Error(
-                    "AccessToken.InvalidToken",
-                    "The access token does not contain a valid email"));
-            }
-
-            User? user = await userRepository.GetByEmailAsync(email);
-            if (user == null || user.RefreshTokenId == null)
-            {
-                return Result.Failure<UserOnLoginRefreshDto>(new Error(
-                    "InvalidCredentials",
-                    "Invalid credentials provided"));
-            }
-
-            RefreshToken? refreshToken = await tokenRepository.GetByIdAsync(user.RefreshTokenId);
+            RefreshToken? refreshToken = await tokenRepository.GetByRefreshTokenAsync(request.RefreshToken);
             if (refreshToken == null)
             {
                 return Result.Failure<UserOnLoginRefreshDto>(new Error(
                     "RefreshToken.NotFound",
                     "Refresh token not found for the user"));
             }
-            else if (refreshToken.Token != request.RefreshToken)
-            {
-                return Result.Failure<UserOnLoginRefreshDto>(new Error(
-                    "RefreshToken.InvalidToken",
-                    "The provided refresh token does not match the stored refresh token"));
-            }
             else if (!refreshToken.IsValid())
             {
                 return Result.Failure<UserOnLoginRefreshDto>(new Error(
                     "RefreshToken.Expired",
                     "The provided refresh token has expired"));
+            }
+
+            User? user = await userRepository.GetByRefreshTokenIdAsync(refreshToken.Id);
+            if (user == null || user.RefreshTokenId == null)
+            {
+                return Result.Failure<UserOnLoginRefreshDto>(new Error(
+                    "RefreshToken.Invalid",
+                    "No user exists with the provided refresh token"));
             }
 
             TokensDto tokens = jwtProvider.GenerateTokens(user);

@@ -11,7 +11,7 @@ namespace Presentation.Endpoints.RefreshTokens.Refresh
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("refreshtokens/refresh", async (HttpContext context, ISender sender, RefreshRequest request) =>
+            app.MapPost("refreshtokens/refresh", async (HttpContext context, ISender sender) =>
             {
                 if (!context.Request.Cookies.ContainsKey("RefreshToken") || !context.Request.Cookies.TryGetValue("RefreshToken", out string? refreshToken))
                 {
@@ -22,7 +22,7 @@ namespace Presentation.Endpoints.RefreshTokens.Refresh
                     return Results.BadRequest("Refresh token is null or empty");
                 }
 
-                RefreshCommand commandRequest = new(request.AccessToken, refreshToken);
+                RefreshCommand commandRequest = new(refreshToken);
 
                 Result<UserOnLoginRefreshDto> response = await sender.Send(commandRequest);
                 if (response.IsSuccess)
