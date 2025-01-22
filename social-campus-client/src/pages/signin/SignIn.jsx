@@ -1,20 +1,59 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./SignIn.css";
 import { toast } from "react-toastify";
+import axios from "../../utils/api/AxiosBase";
+import useAuth from "../../hooks/useAuth";
+
+const LOGIN_URL = "/api/users/login";
 
 function SignIn() {
   const navigate = useNavigate();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { setAuth, persist, setPersist } = useAuth();
+
   const handleSignIn = async (e) => {
     e.preventDefault();
+
     try {
-      navigate("/home");
-      toast("Welcome back! You have successfully signed in.");
+      const response = await axios.post(LOGIN_URL, {
+        email: email.trim(),
+        password: password.trim(),
+      });
+
+      const { accessToken } = response.data;
+
+      if (accessToken?.trim()) {
+        setAuth(response.data);
+        toast("Welcome back! You have successfully signed in.");
+        navigate("/home");
+      } else {
+        toast.error("Failed to retrieve access token.");
+      }
     } catch (error) {
-      console.error(error);
+      const { response } = error;
+
+      if (response?.data?.error) {
+        response.data.error.forEach((err) => toast.error(err.message));
+      } else if (response?.data?.detail) {
+        toast.error(response.data.detail);
+      } else {
+        console.error(error);
+        toast.error("An unexpected error occurred.");
+      }
     }
   };
+
+  const togglePersist = () => {
+    setPersist((prev) => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("persist", persist);
+  }, [persist]);
 
   return (
     <div className="signin-container">
@@ -23,18 +62,46 @@ function SignIn() {
       </div>
       <div className="right-half">
         <div className="signin">
-          <div>
-            <h1 className="general-text">Sign In</h1>
-            <form onSubmit={handleSignIn}>
-              <input type="email" placeholder="Email" required />
-              <input type="password" placeholder="Password" required />
+          <div className="login-container">
+            <h1 className="top-text general-text">Sign In</h1>
+            <form onSubmit={handleSignIn} className="login-form">
+              <input
+                className="text-input"
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <input
+                className="text-input"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <div className="persist-check">
+                <input
+                  type="checkbox"
+                  id="persist"
+                  onChange={togglePersist}
+                  checked={persist}
+                  className="persist-checkbox"
+                />
+                <label htmlFor="persist" className="not-general-text">
+                  Trust This Device
+                </label>
+              </div>
               <button type="submit" className="signin-button">
                 Sign In
               </button>
             </form>
           </div>
           <div>
-            <h2 className="not-general-text">Don&apos;t have an account?</h2>
+            <h2 className="secondary-text not-general-text">
+              Don&apos;t have an account?
+            </h2>
             <button
               className="signup-button"
               onClick={() => navigate("/signup")}

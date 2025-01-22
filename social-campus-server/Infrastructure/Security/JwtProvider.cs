@@ -20,11 +20,12 @@ namespace Infrastructure.Security
             return new TokensDto
             {
                 AccessToken = accessToken,
-                AccessTokenExpirationInMinutes = configuration.GetValue<int>("Jwt:AccessTokenExpirationInMinutes"),
+                AccessTokenExpirationInSeconds = configuration.GetValue<int>("Jwt:AccessTokenExpirationInSeconds"),
                 RefreshToken = refreshToken,
-                RefreshTokenExpirationInDays = configuration.GetValue<int>("Jwt:RefreshTokenExpirationInDays")
+                RefreshTokenExpirationInSeconds = configuration.GetValue<int>("Jwt:RefreshTokenExpirationInSeconds")
             };
         }
+
         public async Task<ClaimsPrincipal> GetPrincipalFromExpiredTokenAsync(string token)
         {
             string secretKey = configuration["Jwt:SecretKey"]!;
@@ -45,12 +46,12 @@ namespace Infrastructure.Security
             JsonWebTokenHandler handler = new();
             TokenValidationResult result = await handler.ValidateTokenAsync(token, tokenValidationParameters);
 
-            if (!result.IsValid)
+            if (!result.IsValid || result.ClaimsIdentity == null)
             {
                 throw new SecurityTokenException("Invalid token");
             }
 
-            return result.ClaimsIdentity != null ? new ClaimsPrincipal(result.ClaimsIdentity) : throw new SecurityTokenException("Invalid token");
+            return new ClaimsPrincipal(result.ClaimsIdentity);
         }
 
         private string GenerateAccessToken(User user)
@@ -68,7 +69,7 @@ namespace Infrastructure.Security
                     new Claim(JwtRegisteredClaimNames.Name, user.Login),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email)
                 ]),
-                Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:AccessTokenExpirationInMinutes")),
+                Expires = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("Jwt:AccessTokenExpirationInSeconds")),
                 SigningCredentials = credentials,
                 Issuer = configuration["Jwt:Issuer"],
                 Audience = configuration["Jwt:Audience"]

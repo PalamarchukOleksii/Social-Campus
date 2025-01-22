@@ -14,17 +14,17 @@ import userData from "../../data/userData.json";
 import CreatePublication from "../../components/createPublication/CreatePublication";
 import { IoCreateOutline, IoCreate } from "react-icons/io5";
 
-function Publication(props) {
+function Publication({ publication, addCreateOpen = true }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [comments, setComments] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [publicationImgUrl, setPublicationImgUrl] = useState(
-    props.publication.imageUrl
+    publication.imageUrl
   );
   const [publicationDescription, setPublicationDescription] = useState(
-    props.publication.description
+    publication.description
   );
   const [isEditHovered, setIsEditHovered] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -36,21 +36,21 @@ function Publication(props) {
     const fetchData = () => {
       const user = userData.find((user) => user.login === login);
       setCurrentUser(user);
-      setComments(props.publication.comments);
+      setComments(publication.comments);
       setLoading(false);
     };
 
     fetchData();
-  }, [props.publication.comments]);
+  }, [publication.comments]);
 
   const handlePublicationClick = () => {
-    if (location.pathname !== `/publication/${props.publication.id}`) {
-      navigate(`/publication/${props.publication.id}`);
+    if (location.pathname !== `/publication/${publication.id}`) {
+      navigate(`/publication/${publication.id}`);
     }
   };
 
   const handleCreateCommentOpenClick = () => {
-    if (props.addCreateOpen) {
+    if (addCreateOpen) {
       openCreateComment();
       setIsCreateOpen((prev) => !prev);
     }
@@ -140,16 +140,13 @@ function Publication(props) {
         <div className="short-info-container">
           <div className="creator-info">
             <ShortProfile
-              username={props.publication.username}
-              login={props.publication.login}
-              profileImage={props.publication.profileImage}
+              username={publication.username}
+              login={publication.login}
+              profileImage={publication.profileImage}
             />
-            <DateTime
-              dateTime={props.publication.creationTime}
-              locale="en-US"
-            />
+            <DateTime dateTime={publication.creationTime} locale="en-US" />
           </div>
-          {currentUser.login === props.publication.login && (
+          {currentUser.login === publication.login && (
             <div
               className="edit-pub-icon general-text"
               onMouseEnter={() => setIsEditHovered(true)}
@@ -173,14 +170,14 @@ function Publication(props) {
         <div className="interaction-stat">
           <InteractionItem
             itemType="like"
-            label={props.publication.likesCount}
+            label={publication.likesCount}
             icon={InteractionItems.likeIcon}
             activeIcon={InteractionItems.activeLikeIcon}
             className="like-element"
           />
           <InteractionItem
             itemType="comment"
-            label={props.publication.comments.length}
+            label={publication.comments.length}
             icon={InteractionItems.commentIcon}
             onClick={handleCreateCommentOpenClick}
             className="comment-element"
@@ -204,10 +201,6 @@ Publication.propTypes = {
     login: PropTypes.string.isRequired,
   }).isRequired,
   addCreateOpen: PropTypes.bool,
-};
-
-Publication.defaultProps = {
-  addCreateOpen: true,
 };
 
 export default Publication;

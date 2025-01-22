@@ -1,18 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./SignUp.css";
 import { toast } from "react-toastify";
+import axios from "../../utils/api/AxiosBase";
+
+const REGISTER_URL = "api/users/register";
+const ALLOWED_DOMAINS = ["lll.kpi.ua"];
 
 function SignUp() {
   const navigate = useNavigate();
 
+  const [login, setLogin] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [secondName, setSecondName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleSignUp = async (e) => {
     e.preventDefault();
+
     try {
-      navigate("/home");
+      await axios.post(REGISTER_URL, {
+        login: login.trim(),
+        firstName: firstName.trim(),
+        lastName: secondName.trim(),
+        email: email.trim(),
+        password: password.trim(),
+      });
+
       toast("Your account has been successfully created! Welcome aboard!");
+      navigate("/signin");
     } catch (error) {
-      console.error(error);
+      if (error.response) {
+        if (error.response.data && error.response.data.error) {
+          error.response.data.error.forEach((err) => {
+            if (err.code === "Email") {
+              toast.error(
+                `${err.message}. Allowed domains: ${ALLOWED_DOMAINS.join(", ")}`
+              );
+            } else {
+              toast.error(err.message);
+            }
+          });
+        } else if (error.response.data && error.response.data.detail) {
+          toast.error(error.response.data.detail);
+        } else {
+          toast.error("There was an error creating your account.");
+        }
+      } else {
+        console.error(error);
+        toast.error("An unexpected error occurred.");
+      }
     }
   };
 
@@ -23,21 +61,58 @@ function SignUp() {
       </div>
       <div className="right-half">
         <div className="signup">
-          <div>
-            <h1 className="general-text">Create a New Account</h1>
+          <div className="register-container">
+            <h1 className="top-text general-text">Create a New Account</h1>
             <form onSubmit={handleSignUp}>
-              <input type="text" placeholder="Login" required />
-              <input type="text" placeholder="First Name" required />
-              <input type="text" placeholder="Second Name" required />
-              <input type="email" placeholder="Email" required />
-              <input type="password" placeholder="Password" required />
+              <input
+                className="text-input"
+                type="text"
+                placeholder="Login"
+                value={login}
+                onChange={(e) => setLogin(e.target.value)}
+                required
+              />
+              <input
+                className="text-input"
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+              />
+              <input
+                className="text-input"
+                type="text"
+                placeholder="Second Name"
+                value={secondName}
+                onChange={(e) => setSecondName(e.target.value)}
+                required
+              />
+              <input
+                className="text-input"
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <input
+                className="text-input"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
               <button type="submit" className="signup-button">
                 Sign Up
               </button>
             </form>
           </div>
           <div>
-            <h2 className="not-general-text">Already have an account?</h2>
+            <h2 className="secondary-text not-general-text">
+              Already have an account?
+            </h2>
             <button
               className="signin-button"
               onClick={() => navigate("/signin")}

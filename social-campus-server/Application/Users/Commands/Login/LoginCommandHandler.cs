@@ -12,14 +12,14 @@ namespace Application.Users.Commands.Login
         IJwtProvider jwtProvider,
         IUserRepository userRepository,
         IRefreshTokenRepository tokenRepository,
-        IPasswordHasher passwordHasher) : ICommandHandler<LoginCommand, TokensDto>
+        IPasswordHasher passwordHasher) : ICommandHandler<LoginCommand, UserOnLoginRefreshDto>
     {
-        public async Task<Result<TokensDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UserOnLoginRefreshDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             User? user = await userRepository.GetByEmailAsync(request.Email);
             if (user is null)
             {
-                return Result.Failure<TokensDto>(new Error(
+                return Result.Failure<UserOnLoginRefreshDto>(new Error(
                     "User.NotFound",
                     $"User with email {request.Email} was not found"));
             }
@@ -27,37 +27,38 @@ namespace Application.Users.Commands.Login
             bool isPasswordValid = await passwordHasher.VerifyAsync(request.Password, user.PasswordHash);
             if (!isPasswordValid)
             {
-                return Result.Failure<TokensDto>(new Error(
+                return Result.Failure<UserOnLoginRefreshDto>(new Error(
                     "User.IncorrectPassword",
                     "Incorrect password"));
             }
 
             TokensDto tokens = jwtProvider.GenerateTokens(user);
-            if (user.RefreshTokenId.Value != Guid.Empty)
+            RefreshToken? existingRefreshToken = user.RefreshTokenId.Value != Guid.Empty
+                ? await tokenRepository.GetByIdAsync(user.RefreshTokenId)
+                : null;
+
+            if (existingRefreshToken != null)
             {
-                RefreshToken? existingRefreshToken = await tokenRepository.GetByIdAsync(user.RefreshTokenId);
-                if (existingRefreshToken != null && existingRefreshToken.IsValid())
-                {
-                    tokens.RefreshTokenExpirationInDays = existingRefreshToken.DaysUntilExpiration();
-                    tokens.RefreshToken = existingRefreshToken.Token;
-                }
-                else if (existingRefreshToken != null)
-                {
-                    tokenRepository.Update(existingRefreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInDays);
-                }
-                else
-                {
-                    RefreshToken refreshToken = await tokenRepository.AddAsync(tokens.RefreshToken, tokens.RefreshTokenExpirationInDays, user.Id);
-                    user.SetRefreshTokenId(refreshToken.Id);
-                }
+                tokenRepository.Update(existingRefreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInSeconds);
             }
             else
             {
-                RefreshToken refreshToken = await tokenRepository.AddAsync(tokens.RefreshToken, tokens.RefreshTokenExpirationInDays, user.Id);
+                RefreshToken refreshToken = await tokenRepository.AddAsync(tokens.RefreshToken, tokens.RefreshTokenExpirationInSeconds, user.Id);
                 user.SetRefreshTokenId(refreshToken.Id);
             }
 
-            return Result.Success(tokens);
+            return Result.Success(new UserOnLoginRefreshDto
+            {
+                Tokens = tokens,
+                ShortUser = new ShortUserDto
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Login = user.Login,
+                    ProfileImageData = user.ProfileImageData
+                }
+            });
         }
     }
 }

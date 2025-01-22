@@ -11,15 +11,44 @@ namespace Presentation.Endpoints.RefreshTokens.Refresh
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("refreshtokens/refresh", async (ISender sender, RefreshRequest request) =>
+            app.MapPost("refreshtokens/refresh", async (HttpContext context, ISender sender) =>
             {
-                RefreshCommand commandRequest = new(request.AccessToken, request.RefreshToken);
+                if (!context.Request.Cookies.ContainsKey("RefreshToken") || !context.Request.Cookies.TryGetValue("RefreshToken", out string? refreshToken))
+                {
+                    return Results.BadRequest("Refresh token is missing in request");
+                }
+                else if (string.IsNullOrEmpty(refreshToken))
+                {
+                    return Results.BadRequest("Refresh token is null or empty");
+                }
 
-                Result<TokensDto> response = await sender.Send(commandRequest);
+                RefreshCommand commandRequest = new(refreshToken);
 
-                return response.IsSuccess ? Results.Ok(response.Value) : HandleFailure(response);
-            })
-            .WithTags(Tags.RefreshTokens);
+                Result<UserOnLoginRefreshDto> response = await sender.Send(commandRequest);
+                if (response.IsSuccess)
+                {
+                    TokensDto tokens = response.Value.Tokens;
+
+                    context.Response.Cookies.Append("RefreshToken", tokens.RefreshToken, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        IsEssential = true,
+                        SameSite = SameSiteMode.Lax,
+                        Expires = DateTimeOffset.UtcNow.AddSeconds(tokens.RefreshTokenExpirationInSeconds),
+                    });
+
+                    ShortUserDto shortUser = response.Value.ShortUser;
+
+                    return Results.Ok(new
+                    {
+                        shortUser,
+                        tokens.AccessToken,
+                        tokens.AccessTokenExpirationInSeconds
+                    });
+                }
+
+                return HandleFailure(response);
+            }).WithTags(Tags.RefreshTokens);
         }
     }
 }

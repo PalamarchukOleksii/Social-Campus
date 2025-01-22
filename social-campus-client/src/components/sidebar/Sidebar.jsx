@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import { useNavigate } from "react-router-dom";
 import { IoExit, IoExitOutline } from "react-icons/io5";
 import NavItem from "../navItem/NavItem";
-import SidebarItems from "../../utils/consts/SidebarItems";
+import GetSidebarItems from "../../utils/consts/GetSidebarItems";
 import ShortProfile from "../shortProfile/ShortProfile";
-import userData from "../../data/userData.json";
-import login from "../../utils/consts/AuthUserLogin";
 import { useCreateItem } from "../../context/CreateItemContext";
+import useAuth from "../../hooks/useAuth";
+import useLogout from "../../hooks/useLogout";
+import ROUTES from "../../utils/consts/Routes";
 
 function Sidebar() {
   const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState("");
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState({});
+  const [sidebarItems, setSidebarItems] = useState([]);
+  const { auth } = useAuth();
 
   const { openCreatePublication } = useCreateItem();
+  const logout = useLogout();
 
   useEffect(() => {
-    const fetchUserData = () => {
-      const foundUser = userData.find((user) => user.login === login);
-      setUser(foundUser || null);
-      setLoading(false);
-    };
-
-    fetchUserData();
-  }, []);
+    const currentUser = auth?.shortUser || {};
+    setUser(currentUser);
+    setSidebarItems(GetSidebarItems(currentUser.login || ""));
+  }, [auth]);
 
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      navigate("/");
+      await logout();
+      navigate(ROUTES.LANDING);
     } catch (error) {
       console.error(error);
     }
@@ -49,7 +49,7 @@ function Sidebar() {
         </div>
         <div className="navigation">
           <ul>
-            {SidebarItems.map(
+            {sidebarItems.map(
               ({
                 path,
                 label,
@@ -58,6 +58,7 @@ function Sidebar() {
               }) => (
                 <li key={path}>
                   <NavItem
+                    key={path}
                     path={path}
                     label={label}
                     inactiveIcon={InactiveIcon}
@@ -76,31 +77,29 @@ function Sidebar() {
           </div>
         </div>
       </div>
-      {loading ? (
-        <></>
-      ) : user ? (
-        <div className="logout">
-          <ShortProfile
-            username={user.username}
-            login={user.login}
-            profileImage={user.profileImage}
-          />
-          <div
-            onClick={handleLogout}
-            className="logout-icon"
-            onMouseEnter={() => setHoveredIcon("logout")}
-            onMouseLeave={() => setHoveredIcon("")}
-          >
-            {hoveredIcon === "logout" ? (
-              <IoExit className="exit-icon" />
-            ) : (
-              <IoExitOutline className="exit-icon" />
-            )}
-          </div>
+      <div className="logout">
+        <ShortProfile
+          username={user.firstName + " " + user.lastName}
+          login={user.login || ""}
+          profileImage={
+            user.profileImage
+              ? `data:image/png;base64,${user.profileImage}`
+              : null
+          }
+        />
+        <div
+          onClick={handleLogout}
+          className="logout-icon"
+          onMouseEnter={() => setHoveredIcon("logout")}
+          onMouseLeave={() => setHoveredIcon("")}
+        >
+          {hoveredIcon === "logout" ? (
+            <IoExit className="exit-icon" />
+          ) : (
+            <IoExitOutline className="exit-icon" />
+          )}
         </div>
-      ) : (
-        <h3 className="not-found-text general-text">User not found</h3>
-      )}
+      </div>
     </div>
   );
 }

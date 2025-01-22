@@ -3,34 +3,32 @@ import "./CompactSidebar.css";
 import { useNavigate } from "react-router-dom";
 import { IoExit, IoExitOutline } from "react-icons/io5";
 import NavItem from "../navItem/NavItem";
-import SidebarItems from "../../utils/consts/SidebarItems";
-import userData from "../../data/userData.json";
-import login from "../../utils/consts/AuthUserLogin";
 import { useCreateItem } from "../../context/CreateItemContext";
 import { IoAdd } from "react-icons/io5";
+import useAuth from "../../hooks/useAuth";
+import GetSidebarItems from "../../utils/consts/GetSidebarItems";
+import useLogout from "../../hooks/useLogout";
+import ROUTES from "../../utils/consts/Routes";
 
 function CompactSidebar() {
   const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState("");
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [sidebarItems, setSidebarItems] = useState([]);
 
   const { openCreatePublication } = useCreateItem();
+  const { auth } = useAuth();
+  const logout = useLogout();
 
   useEffect(() => {
-    const fetchUserData = () => {
-      const foundUser = userData.find((user) => user.login === login);
-      setUser(foundUser || null);
-      setLoading(false);
-    };
-
-    fetchUserData();
-  }, []);
+    const currentUser = auth?.shortUser || {};
+    setSidebarItems(GetSidebarItems(currentUser.login || ""));
+  }, [auth]);
 
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      navigate("/");
+      await logout();
+      navigate(ROUTES.LANDING);
     } catch (error) {
       console.error(error);
     }
@@ -48,7 +46,7 @@ function CompactSidebar() {
         </div>
         <div className="navigation">
           <ul>
-            {SidebarItems.map(
+            {sidebarItems.map(
               ({
                 path,
                 label,
@@ -57,6 +55,7 @@ function CompactSidebar() {
               }) => (
                 <li key={path}>
                   <NavItem
+                    key={path}
                     path={path}
                     label={label}
                     inactiveIcon={InactiveIcon}
@@ -76,26 +75,20 @@ function CompactSidebar() {
           </div>
         </div>
       </div>
-      {loading ? (
-        <></>
-      ) : user ? (
-        <div className="compact-logout">
-          <div
-            onClick={handleLogout}
-            className="logout-icon"
-            onMouseEnter={() => setHoveredIcon("logout")}
-            onMouseLeave={() => setHoveredIcon("")}
-          >
-            {hoveredIcon === "logout" ? (
-              <IoExit className="exit-icon" />
-            ) : (
-              <IoExitOutline className="exit-icon" />
-            )}
-          </div>
+      <div className="compact-logout">
+        <div
+          onClick={handleLogout}
+          className="logout-icon"
+          onMouseEnter={() => setHoveredIcon("logout")}
+          onMouseLeave={() => setHoveredIcon("")}
+        >
+          {hoveredIcon === "logout" ? (
+            <IoExit className="exit-icon" />
+          ) : (
+            <IoExitOutline className="exit-icon" />
+          )}
         </div>
-      ) : (
-        <h3 className="not-found-text general-text">User not found</h3>
-      )}
+      </div>
     </div>
   );
 }

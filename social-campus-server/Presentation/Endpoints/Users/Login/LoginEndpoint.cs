@@ -11,13 +11,34 @@ namespace Presentation.Endpoints.Users.Login
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("users/login", async (ISender sender, LoginRequest request) =>
+            app.MapPost("users/login", async (HttpContext context, ISender sender, LoginRequest request) =>
             {
                 LoginCommand commandRequest = new(request.Email, request.Password);
 
-                Result<TokensDto> response = await sender.Send(commandRequest);
+                Result<UserOnLoginRefreshDto> response = await sender.Send(commandRequest);
+                if (response.IsSuccess)
+                {
+                    TokensDto tokens = response.Value.Tokens;
 
-                return response.IsSuccess ? Results.Ok(response.Value) : HandleFailure(response);
+                    context.Response.Cookies.Append("RefreshToken", tokens.RefreshToken, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        IsEssential = true,
+                        SameSite = SameSiteMode.Lax,
+                        Expires = DateTimeOffset.UtcNow.AddSeconds(tokens.RefreshTokenExpirationInSeconds),
+                    });
+
+                    ShortUserDto shortUser = response.Value.ShortUser;
+
+                    return Results.Ok(new
+                    {
+                        shortUser,
+                        tokens.AccessToken,
+                        tokens.AccessTokenExpirationInSeconds
+                    });
+                }
+
+                return HandleFailure(response);
             }).WithTags(Tags.Users);
         }
     }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -148,6 +148,39 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CommentLikes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommentLikes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CommentLikes_Comments_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "Comments",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_CommentLikes_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CommentLikes_CommentId",
+                table: "CommentLikes",
+                column: "CommentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CommentLikes_UserId",
+                table: "CommentLikes",
+                column: "UserId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_CreatorId",
                 table: "Comments",
@@ -240,7 +273,7 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Comments");
+                name: "CommentLikes");
 
             migrationBuilder.DropTable(
                 name: "Follows");
@@ -250,6 +283,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
+
+            migrationBuilder.DropTable(
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Publications");
