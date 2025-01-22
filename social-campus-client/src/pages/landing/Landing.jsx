@@ -22,7 +22,7 @@ function Landing() {
               </p>
             </div>
             <button
-              className="profile-button"
+              className="register-button"
               onClick={() => navigate("/signup")}
             >
               Create a New Profile
@@ -33,7 +33,7 @@ function Landing() {
               Already have an account?
             </h3>
             <button
-              className="signup-button"
+              className="login-button"
               onClick={() => navigate("/signin")}
             >
               Sign In

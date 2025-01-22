@@ -35,6 +35,7 @@
 }
 
 .welcom {
+  width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,14 +44,13 @@
   gap: 30px;
   border-radius: 8px;
   padding: 30px;
-  margin: 10px;
+  margin: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .welcome-text {
   margin: 0;
   padding: 0;
-  white-space: nowrap;
   font-size: 30px;
 }
 
@@ -93,8 +93,8 @@
   font-size: 20px;
 }
 
-.profile-button,
-.signup-button {
+.register-button,
+.login-button {
   font-size: 17px;
 }
 
@@ -115,5 +115,11 @@
 
   .logo {
     width: 100px;
+  }
+}
+
+@media (max-width: 500px) {
+  .welcom {
+    width: auto;
   }
 }

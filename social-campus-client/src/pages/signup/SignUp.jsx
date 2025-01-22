@@ -61,10 +61,11 @@ function SignUp() {
       </div>
       <div className="right-half">
         <div className="signup">
-          <div>
-            <h1 className="general-text">Create a New Account</h1>
+          <div className="register-container">
+            <h1 className="top-text general-text">Create a New Account</h1>
             <form onSubmit={handleSignUp}>
               <input
+                className="text-input"
                 type="text"
                 placeholder="Login"
                 value={login}
@@ -72,6 +73,7 @@ function SignUp() {
                 required
               />
               <input
+                className="text-input"
                 type="text"
                 placeholder="First Name"
                 value={firstName}
@@ -79,6 +81,7 @@ function SignUp() {
                 required
               />
               <input
+                className="text-input"
                 type="text"
                 placeholder="Second Name"
                 value={secondName}
@@ -86,6 +89,7 @@ function SignUp() {
                 required
               />
               <input
+                className="text-input"
                 type="email"
                 placeholder="Email"
                 value={email}
@@ -93,6 +97,7 @@ function SignUp() {
                 required
               />
               <input
+                className="text-input"
                 type="password"
                 placeholder="Password"
                 value={password}
@@ -105,7 +110,9 @@ function SignUp() {
             </form>
           </div>
           <div>
-            <h2 className="not-general-text">Already have an account?</h2>
+            <h2 className="secondary-text not-general-text">
+              Already have an account?
+            </h2>
             <button
               className="signin-button"
               onClick={() => navigate("/signin")}
