@@ -3,17 +3,11 @@ import userData from "../../data/userData.json";
 import PublicationsList from "../../components/publicationsList/PublicationsList";
 import login from "../../utils/consts/AuthUserLogin";
 import Loading from "../../components/loading/Loading";
-import "./Home.css";
-import CreatePublication from "../../components/createPublication/CreatePublication";
-import { useCreateItem } from "../../context/CreateItemContext";
-import getMaxPublicationId from "../../utils/helpers/GetMaxPublicationId";
 
 function Home() {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
-
-  const { isCreatePublicationOpen, closeCreatePublication } = useCreateItem();
 
   useEffect(() => {
     const fetchData = () => {
@@ -73,17 +67,6 @@ function Home() {
 
   return (
     <div className="home">
-      {isCreatePublicationOpen && (
-        <div className="create-publication-modal-overlay">
-          <CreatePublication
-            user={currentUser}
-            publications={publications}
-            setPublications={setPublications}
-            getMaxPublicationId={getMaxPublicationId}
-            close={closeCreatePublication}
-          />
-        </div>
-      )}
       <PublicationsList publications={publications} />
     </div>
   );

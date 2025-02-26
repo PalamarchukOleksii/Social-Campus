@@ -6,12 +6,10 @@ import InteractionItem from "../interactionItem/InteractionItem";
 import InteractionItems from "../../utils/consts/InteractionItems";
 import "./Publication.css";
 import DateTime from "../dateTime/DateTime";
-import { useCreateItem } from "../../context/CreateItemContext";
 import CreateComment from "../createComment/CreateComment";
 import login from "../../utils/consts/AuthUserLogin";
 import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
 import userData from "../../data/userData.json";
-import CreatePublication from "../../components/createPublication/CreatePublication";
 import { IoCreateOutline, IoCreate } from "react-icons/io5";
 
 function Publication({ publication, addCreateOpen = true }) {
@@ -28,9 +26,6 @@ function Publication({ publication, addCreateOpen = true }) {
   );
   const [isEditHovered, setIsEditHovered] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isEditOpen, setIsEditOpen] = useState(false);
-
-  const { closeCreateComment, openCreateComment } = useCreateItem();
 
   useEffect(() => {
     const fetchData = () => {
@@ -51,24 +46,12 @@ function Publication({ publication, addCreateOpen = true }) {
 
   const handleCreateCommentOpenClick = () => {
     if (addCreateOpen) {
-      openCreateComment();
       setIsCreateOpen((prev) => !prev);
     }
   };
 
   const handleCreateCommentCloseClick = () => {
-    closeCreateComment();
     setIsCreateOpen((prev) => !prev);
-  };
-
-  const handleEditPublicationOpenClick = () => {
-    document.body.classList.add("no-scroll");
-    setIsEditOpen((prev) => !prev);
-  };
-
-  const handleEditPublicationCloseClick = () => {
-    document.body.classList.remove("no-scroll");
-    setIsEditOpen((prev) => !prev);
   };
 
   const handleTagClick = (e, tagName) => {
@@ -124,18 +107,6 @@ function Publication({ publication, addCreateOpen = true }) {
           />
         </div>
       )}
-      {isEditOpen && (
-        <div className="edit-publication-modal-overlay">
-          <CreatePublication
-            publicationImgUrl={publicationImgUrl}
-            setPublicationImgUrl={setPublicationImgUrl}
-            publicationDescription={publicationDescription}
-            setPublicationDescription={setPublicationDescription}
-            close={handleEditPublicationCloseClick}
-            isForEdit={true}
-          />
-        </div>
-      )}
       <div>
         <div className="short-info-container">
           <div className="creator-info">
@@ -151,7 +122,7 @@ function Publication({ publication, addCreateOpen = true }) {
               className="edit-pub-icon general-text"
               onMouseEnter={() => setIsEditHovered(true)}
               onMouseLeave={() => setIsEditHovered(false)}
-              onClick={handleEditPublicationOpenClick}
+              onClick={() => {}}
             >
               {isEditHovered ? <IoCreate /> : <IoCreateOutline />}
             </div>

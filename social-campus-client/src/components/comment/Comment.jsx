@@ -8,32 +8,12 @@ import DateTime from "../dateTime/DateTime";
 import { IoCreateOutline, IoCreate } from "react-icons/io5";
 import login from "../../utils/consts/AuthUserLogin";
 import userData from "../../data/userData.json";
-import { useCreateItem } from "../../context/CreateItemContext";
-import CreateComment from "../createComment/CreateComment";
 
 function Comment(props) {
   const [isEditHovered, setIsEditHovered] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [isEditOpen, setIsEditOpen] = useState(false);
   const [commentText, setCommentText] = useState(props.text);
   const [loading, setLoading] = useState(true);
-  const [isReplyOpen, setIsReplyOpen] = useState(false);
-
-  const { closeCreateComment, openCreateComment } = useCreateItem();
-
-  const handleCreateCommentOpenClick = () => {
-    openCreateComment();
-    setIsEditOpen((prev) => !prev);
-  };
-
-  const handleCreateCommentCloseClick = () => {
-    if (isReplyOpen) {
-      setIsReplyOpen(false);
-    } else {
-      closeCreateComment();
-      setIsEditOpen((prev) => !prev);
-    }
-  };
 
   useEffect(() => {
     const fetchData = () => {
@@ -51,18 +31,6 @@ function Comment(props) {
 
   return (
     <div className="comment-container">
-      {isEditOpen && (
-        <div className="create-comment-modal-overlay">
-          <CreateComment
-            user={currentUser}
-            text={commentText}
-            setText={setCommentText}
-            onCloseClick={handleCreateCommentCloseClick}
-            addGoBack={true}
-            isForEdit={true}
-          />
-        </div>
-      )}
       <div className="comment-info">
         <div className="user-info">
           <div className="commenter-info">
@@ -78,7 +46,7 @@ function Comment(props) {
               className="edit-comment-icon general-text"
               onMouseEnter={() => setIsEditHovered(true)}
               onMouseLeave={() => setIsEditHovered(false)}
-              onClick={handleCreateCommentOpenClick}
+              onClick={() => {}}
             >
               {isEditHovered ? <IoCreate /> : <IoCreateOutline />}
             </div>

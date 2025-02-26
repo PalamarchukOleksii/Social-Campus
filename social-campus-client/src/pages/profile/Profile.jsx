@@ -4,9 +4,6 @@ import "./Profile.css";
 import PublicationsList from "../../components/publicationsList/PublicationsList";
 import ROUTES from "../../utils/consts/Routes";
 import Loading from "../../components/loading/Loading";
-import { useCreateItem } from "../../context/CreateItemContext";
-import CreatePublication from "../../components/createPublication/CreatePublication";
-import getMaxPublicationId from "../../utils/helpers/GetMaxPublicationId";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
 
@@ -20,7 +17,6 @@ function Profile() {
 
   const navigate = useNavigate();
   const { auth } = useAuth();
-  const { isCreatePublicationOpen, closeCreatePublication } = useCreateItem();
   const axios = useAxiosPrivate();
 
   useEffect(() => {
@@ -55,19 +51,6 @@ function Profile() {
 
   return (
     <div className="wrapper">
-      {isCreatePublicationOpen && (
-        <div className="create-publication-modal-overlay">
-          <CreatePublication
-            publications={auth.shortUser.login === login ? publications : []}
-            setPublications={
-              auth.shortUser.login === login ? setPublications : null
-            }
-            getMaxPublicationId={getMaxPublicationId}
-            close={closeCreatePublication}
-          />
-        </div>
-      )}
-
       <div className="profile">
         <div className="profile-header">
           <div className="profile-image-container">
