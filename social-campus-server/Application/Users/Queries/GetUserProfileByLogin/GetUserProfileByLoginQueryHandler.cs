@@ -27,8 +27,10 @@ namespace Application.Users.Queries.GetUserProfileByLogin
             IReadOnlyList<User> following = await followRepository.GetFollowingUsersByUserIdAsync(user.Id);
             IReadOnlyList<User> followers = await followRepository.GetFollowersUsersByUserIdAsync(user.Id);
 
-            IReadOnlyList<ShortPublicationDto> readOnlyPublicationsDto = publications is null ? [] : await Task.WhenAll(publications
-                .Select(async p => new ShortPublicationDto
+            List<ShortPublicationDto> readOnlyPublicationsDto = [];
+            foreach (var p in publications)
+            {
+                var publicationDto = new ShortPublicationDto
                 {
                     Id = p.Id,
                     Description = p.Description,
@@ -43,15 +45,19 @@ namespace Application.Users.Queries.GetUserProfileByLogin
                         Bio = user.Bio,
                         ProfileImageData = user.ProfileImageData,
                         FollowersIds = followers
-                        .Select(f => f.Id)
-                        .ToList() as IReadOnlyList<UserId>
+                            .Select(f => f.Id)
+                            .ToList() as IReadOnlyList<UserId>
                     },
                     UserWhoLikedIds = (await publicationLikeRepositories
                         .GetPublicationLikesListByPublicationIdAsync(p.Id))
                         .Select(like => like.UserId)
                         .ToList() as IReadOnlyList<UserId>,
                     CommentsCount = await commentRepository.GetPublicationCommentsCountByPublicationIdAsync(p.Id)
-                }));
+                };
+
+                readOnlyPublicationsDto.Add(publicationDto);
+            }
+
 
             UserProfileDto userProfile = new()
             {

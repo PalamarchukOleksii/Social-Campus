@@ -1,30 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ShortProfile from "../shortProfile/ShortProfile";
-import userData from "../../data/userData.json";
-import login from "../../utils/consts/AuthUserLogin";
 import "./HorizontalRecommendedProfiles.css";
 
 function HorizontalRecommendedProfiles() {
   const [recommendationList, setRecommendationList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUserData = () => {
-      const user = userData.find((user) => user.login === login);
-
-      if (user) {
-        const notFollowList = user.followers.filter(
-          (follower) => !follower.isFollowing
-        );
-        setRecommendationList(notFollowList);
-      } else {
-        setRecommendationList(null);
-      }
-      setLoading(false);
-    };
-
-    fetchUserData();
-  }, []);
+  useEffect(() => {}, []);
 
   if (loading) {
     return <></>;

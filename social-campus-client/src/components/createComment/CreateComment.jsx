@@ -4,8 +4,6 @@ import { toast } from "react-toastify";
 import ShortProfile from "../shortProfile/ShortProfile";
 import { IoArrowBackCircleOutline, IoArrowBackCircle } from "react-icons/io5";
 import "./CreateComment.css";
-import login from "../../utils/consts/AuthUserLogin";
-import userData from "../../data/userData.json";
 
 function CreateComment(props) {
   const [commentText, setCommentText] = useState(
@@ -15,15 +13,7 @@ function CreateComment(props) {
   const [authUser, setAuthUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUserData = () => {
-      const foundUser = userData.find((user) => user.login === login);
-      setAuthUser(foundUser || null);
-      setLoading(false);
-    };
-
-    fetchUserData();
-  }, []);
+  useEffect(() => {}, []);
 
   const handleInputChange = (e) => {
     setCommentText(e.target.value);

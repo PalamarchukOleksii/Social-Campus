@@ -17,7 +17,6 @@ import Followers from "./pages/followers/Followers";
 import Following from "./pages/following/Following";
 import PublicationDetail from "./pages/publicationDetail/PublicationDetail";
 import RecommendedProfiles from "./components/recommendedProfiles/RecommendedProfiles";
-import { CreateItemContextProvider } from "./context/CreateItemContext";
 import CompactSidebar from "./components/compactSidebar/CompactSidebar";
 import HorizontalNavbar from "./components/horizontalNavbar/HorizontalNavbar";
 import HorizontalRecommendedProfiles from "./components/horizontalRecommendedProfiles/HorizontalRecommendedProfiles";
@@ -77,7 +76,6 @@ function App() {
 
   return (
     <div className="App">
-      <CreateItemContextProvider>
         {showSidebar && (
           <div className="sidebar-container">
             {isCompactSidebar ? <CompactSidebar /> : <Sidebar />}
@@ -132,7 +130,6 @@ function App() {
           </div>
         )}
         <ToastContainer />
-      </CreateItemContextProvider>
     </div>
   );
 }
