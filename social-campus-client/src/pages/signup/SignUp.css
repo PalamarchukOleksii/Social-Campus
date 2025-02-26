@@ -75,6 +75,20 @@
   margin: 5px 0;
 }
 
+.show-password-check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin: 5px 0;
+}
+
+.show-pswd-checkbox {
+  padding: 0;
+  margin: 0;
+  width: auto;
+}
+
 @media (max-width: 980px) {
   .signup-container {
     display: flex;

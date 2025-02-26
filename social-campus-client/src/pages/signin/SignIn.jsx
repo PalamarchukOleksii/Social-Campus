@@ -12,6 +12,7 @@ function SignIn() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const { setAuth, persist, setPersist } = useAuth();
 
@@ -75,12 +76,24 @@ function SignIn() {
               />
               <input
                 className="text-input"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <div className="show-password-check">
+                <input
+                  type="checkbox"
+                  id="show-pswd"
+                  onChange={() => setShowPassword((prev) => !prev)}
+                  checked={showPassword}
+                  className="show-pswd-checkbox"
+                />
+                <label htmlFor="showpswd" className="not-general-text">
+                  Show Password
+                </label>
+              </div>
               <div className="persist-check">
                 <input
                   type="checkbox"

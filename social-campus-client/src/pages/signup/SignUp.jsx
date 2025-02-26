@@ -15,6 +15,7 @@ function SignUp() {
   const [secondName, setSecondName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -98,12 +99,24 @@ function SignUp() {
               />
               <input
                 className="text-input"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <div className="show-password-check">
+                <input
+                  type="checkbox"
+                  id="show-pswd"
+                  onChange={() => setShowPassword((prev) => !prev)}
+                  checked={showPassword}
+                  className="show-pswd-checkbox"
+                />
+                <label htmlFor="showpswd" className="not-general-text">
+                  Show Password
+                </label>
+              </div>
               <button type="submit" className="signup-button">
                 Sign Up
               </button>
