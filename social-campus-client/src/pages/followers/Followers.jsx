@@ -2,23 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import FollowItem from "../../components/followItem/FollowItem";
 import FollowTabs from "../../components/followTads/FollowTabs";
-import userData from "../../data/userData.json";
 import "./Followers.css";
 
 function Followers() {
   const { login } = useParams();
   const [followers, setFollowers] = useState([]);
 
-  useEffect(() => {
-    const fetchUserData = () => {
-      const user = userData.find((user) => user.login === login);
-      if (user) {
-        setFollowers(user.followers);
-      }
-    };
-
-    fetchUserData();
-  }, [login]);
+  useEffect(() => {}, [login]);
 
   const handleFollowClick = (username) => {
     setFollowers((prev) =>

@@ -7,8 +7,6 @@ import {
   IoAdd,
   IoAddOutline,
 } from "react-icons/io5";
-import authLogin from "../../utils/consts/AuthUserLogin";
-import userData from "../../data/userData.json";
 
 function EditProfile() {
   const [firstName, setFirstName] = useState("");
@@ -21,25 +19,7 @@ function EditProfile() {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUserData = () => {
-      const foundUser = userData.find((user) => user.login === authLogin);
-      if (foundUser) {
-        setLogin(foundUser.login);
-
-        const [firstName, lastName] = foundUser.username.split(" ");
-
-        setFirstName(firstName);
-        setLastName(lastName || "");
-
-        setEmail(foundUser.email);
-        setBio(foundUser.bio);
-        setProfileImage(foundUser.profileImage);
-      }
-    };
-
-    fetchUserData();
-  }, []);
+  useEffect(() => {}, []);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

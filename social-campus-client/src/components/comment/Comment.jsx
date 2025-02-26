@@ -6,8 +6,6 @@ import InteractionItems from "../../utils/consts/InteractionItems";
 import InteractionItem from "../interactionItem/InteractionItem";
 import DateTime from "../dateTime/DateTime";
 import { IoCreateOutline, IoCreate } from "react-icons/io5";
-import login from "../../utils/consts/AuthUserLogin";
-import userData from "../../data/userData.json";
 
 function Comment(props) {
   const [isEditHovered, setIsEditHovered] = useState(false);
@@ -15,15 +13,7 @@ function Comment(props) {
   const [commentText, setCommentText] = useState(props.text);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = () => {
-      const user = userData.find((user) => user.login === login);
-      setCurrentUser(user);
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
+  useEffect(() => {}, []);
 
   if (loading) {
     return <></>;

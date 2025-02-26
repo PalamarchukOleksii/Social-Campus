@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Publication from "../../components/publication/Publication";
-import publicationDetailsData from "../../data/userData.json";
 import NavItem from "../../components/navItem/NavItem";
 import PublicationDetailItems from "../../utils/consts/PublicationDetailItems";
 import "./PublicationDetail.css";
@@ -20,49 +19,7 @@ function PublicationDetail() {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const fetchPublication = async () => {
-      try {
-        const currentUser = publicationDetailsData.find(
-          (user) => user.login === login
-        );
-
-        setCurrentUser(currentUser);
-
-        const foundPublication = publicationDetailsData
-          .flatMap((user) => user.publications)
-          .find((pub) => pub.id === parseInt(id));
-
-        if (foundPublication) {
-          const foundUser = publicationDetailsData.find((user) =>
-            user.publications.some((pub) => pub.id === foundPublication.id)
-          );
-
-          const publication = {
-            id: foundPublication.id,
-            description: foundPublication.description,
-            imageUrl: foundPublication.imageUrl,
-            creationTime: foundPublication.creationTime,
-            likesCount: foundPublication.likesCount,
-            comments: foundPublication.comments,
-            username: foundUser.username,
-            login: foundUser.login,
-            profileImage: foundUser.profileImage,
-          };
-
-          setPublication(publication);
-          setComments(foundPublication.comments);
-        }
-      } catch (error) {
-        console.error("Error fetching publication:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchPublication();
-      window.scrollTo(0, 0);
-    }
+    setLoading(false);
   }, [id]);
 
   return (

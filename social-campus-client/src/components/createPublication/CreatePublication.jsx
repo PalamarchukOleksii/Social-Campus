@@ -57,7 +57,7 @@ function CreatePublication(props) {
       const reader = new FileReader();
       reader.readAsDataURL(image);
       reader.onloadend = async () => {
-        imageData = reader.result.split(",")[1];
+        imageData = reader.result;
         try {
           await axios.post(CREATE_PUBLICATION_URL, {
             description: publicationText,
