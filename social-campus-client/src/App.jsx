@@ -26,7 +26,7 @@ import TagDetail from "./pages/tagDetail/TagDetail";
 import PrivateChat from "./pages/privateChat/PrivateChat";
 import RequireAuth from "./components/requireAuth/RequireAuth";
 import PersistLogin from "./components/persistLogin/PersistLogin";
-import ProtectProfileEdit from "./protectEditProfile/ProtectEditProfile";
+import ProtectEditProfile from "./components/protectEditProfile/ProtectEditProfile";
 
 function App() {
   const location = useLocation();
@@ -103,7 +103,7 @@ function App() {
                 <Route path={ROUTES.MESSAGES} element={<Messages />} />
                 <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
                 <Route path={ROUTES.FOLLOWING} element={<Following />} />
-                <Route element={<ProtectProfileEdit />}>
+                <Route element={<ProtectEditProfile />}>
                   <Route path={ROUTES.EDIT_PROFILE} element={<EditProfile />} />
                 </Route>
                 <Route
