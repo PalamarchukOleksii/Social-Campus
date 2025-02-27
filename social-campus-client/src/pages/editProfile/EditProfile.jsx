@@ -86,6 +86,7 @@ function EditProfile() {
           </div>
         </div>
         <input
+          className="login-input"
           type="text"
           name="login"
           placeholder="Login"
@@ -94,6 +95,7 @@ function EditProfile() {
           required
         />
         <input
+          className="first-name-input"
           type="text"
           name="first-name"
           placeholder="First Name"
@@ -102,6 +104,7 @@ function EditProfile() {
           required
         />
         <input
+          className="last-name-input"
           type="text"
           name="last-name"
           placeholder="Last Name"
@@ -110,6 +113,7 @@ function EditProfile() {
           required
         />
         <input
+          className="email-input"
           type="email"
           name="email"
           placeholder="Email"
