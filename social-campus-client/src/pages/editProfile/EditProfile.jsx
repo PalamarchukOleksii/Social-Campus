@@ -4,8 +4,10 @@ import "./EditProfile.css";
 import {
   IoArrowBackCircleOutline,
   IoArrowBackCircle,
-  IoAdd,
-  IoAddOutline,
+  IoAddCircle,
+  IoAddCircleOutline,
+  IoCloseCircle,
+  IoCloseCircleOutline,
 } from "react-icons/io5";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
@@ -28,6 +30,7 @@ function EditProfile() {
   const [email, setEmail] = useState("");
   const [isExitHovered, setIsExitHovered] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [removeImgHovered, setRemoveImgHovered] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -90,6 +93,10 @@ function EditProfile() {
     }
   };
 
+  const removeImage = () => {
+    setProfileImage(null);
+  };
+
   return (
     <div className="edit-profile">
       <form onSubmit={handleSubmit} className="edit-profile-form">
@@ -119,22 +126,37 @@ function EditProfile() {
               alt="Profile"
               className="profile-picture"
             />
-            <div className="upload-overlay">
-              <label
-                htmlFor="image-upload"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
-                {isHovered ? <IoAdd /> : <IoAddOutline />}
-              </label>
-              <input
-                type="file"
-                id="image-upload"
-                className="file-input"
-                accept="image/*"
-                onChange={handleImageChange}
-                style={{ display: "none" }}
-              />
+            <div className="control-img">
+              <div className="upload-overlay">
+                <label
+                  htmlFor="image-upload"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
+                  {isHovered ? <IoAddCircle /> : <IoAddCircleOutline />}
+                </label>
+                <input
+                  type="file"
+                  id="image-upload"
+                  className="file-input"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                />
+              </div>
+              <div className="remove-overlay">
+                <label
+                  onMouseEnter={() => setRemoveImgHovered(true)}
+                  onMouseLeave={() => setRemoveImgHovered(false)}
+                  onClick={removeImage}
+                >
+                  {removeImgHovered ? (
+                    <IoCloseCircle />
+                  ) : (
+                    <IoCloseCircleOutline />
+                  )}
+                </label>
+              </div>
             </div>
           </div>
         </div>
