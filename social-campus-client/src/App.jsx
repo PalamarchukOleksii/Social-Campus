@@ -26,6 +26,7 @@ import TagDetail from "./pages/tagDetail/TagDetail";
 import PrivateChat from "./pages/privateChat/PrivateChat";
 import RequireAuth from "./components/requireAuth/RequireAuth";
 import PersistLogin from "./components/persistLogin/PersistLogin";
+import ProtectProfileEdit from "./protectEditProfile/ProtectEditProfile";
 
 function App() {
   const location = useLocation();
@@ -76,60 +77,62 @@ function App() {
 
   return (
     <div className="App">
-        {showSidebar && (
-          <div className="sidebar-container">
-            {isCompactSidebar ? <CompactSidebar /> : <Sidebar />}
-          </div>
-        )}
-        <div className={`main-container ${fullContainer}`}>
-          <div className={centerPage}>
-            {showHorizontalRecommendations && (
-              <div className="horizontal-recommendations-container">
-                <HorizontalRecommendedProfiles />
-              </div>
-            )}
-            <Routes>
-              <Route exact path={ROUTES.LANDING} element={<Landing />} />
-              <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
-              <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
-
-              <Route element={<PersistLogin />}>
-                <Route element={<RequireAuth />}>
-                  <Route path={ROUTES.HOME} element={<Home />} />
-                  <Route path={ROUTES.USERS_SEARCH} element={<UsersSearch />} />
-                  <Route path={ROUTES.TAGS_SEARCH} element={<TagsSearch />} />
-                  <Route path={ROUTES.PROFILE} element={<Profile />} />
-                  <Route path={ROUTES.MESSAGES} element={<Messages />} />
-                  <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
-                  <Route path={ROUTES.FOLLOWING} element={<Following />} />
-                  <Route path={ROUTES.EDIT_PROFILE} element={<EditProfile />} />
-                  <Route
-                    path={ROUTES.PUBLICATIONDETAILS}
-                    element={<PublicationDetail />}
-                  />
-                  <Route path={ROUTES.TAGDETAILS} element={<TagDetail />} />
-                  <Route path={ROUTES.PRIVATECHAT} element={<PrivateChat />} />
-                </Route>
-              </Route>
-            </Routes>
-          </div>
-          {showFooter && (
-            <div className="footer-container">
-              <Footer />
+      {showSidebar && (
+        <div className="sidebar-container">
+          {isCompactSidebar ? <CompactSidebar /> : <Sidebar />}
+        </div>
+      )}
+      <div className={`main-container ${fullContainer}`}>
+        <div className={centerPage}>
+          {showHorizontalRecommendations && (
+            <div className="horizontal-recommendations-container">
+              <HorizontalRecommendedProfiles />
             </div>
           )}
+          <Routes>
+            <Route exact path={ROUTES.LANDING} element={<Landing />} />
+            <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
+            <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+
+            <Route element={<PersistLogin />}>
+              <Route element={<RequireAuth />}>
+                <Route path={ROUTES.HOME} element={<Home />} />
+                <Route path={ROUTES.USERS_SEARCH} element={<UsersSearch />} />
+                <Route path={ROUTES.TAGS_SEARCH} element={<TagsSearch />} />
+                <Route path={ROUTES.PROFILE} element={<Profile />} />
+                <Route path={ROUTES.MESSAGES} element={<Messages />} />
+                <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
+                <Route path={ROUTES.FOLLOWING} element={<Following />} />
+                <Route element={<ProtectProfileEdit />}>
+                  <Route path={ROUTES.EDIT_PROFILE} element={<EditProfile />} />
+                </Route>
+                <Route
+                  path={ROUTES.PUBLICATIONDETAILS}
+                  element={<PublicationDetail />}
+                />
+                <Route path={ROUTES.TAGDETAILS} element={<TagDetail />} />
+                <Route path={ROUTES.PRIVATECHAT} element={<PrivateChat />} />
+              </Route>
+            </Route>
+          </Routes>
         </div>
-        {showRecommendations && (
-          <div className="recommendation-container">
-            <RecommendedProfiles />
+        {showFooter && (
+          <div className="footer-container">
+            <Footer />
           </div>
         )}
-        {showSidebar && (
-          <div className="bottom-navbar">
-            <HorizontalNavbar />
-          </div>
-        )}
-        <ToastContainer />
+      </div>
+      {showRecommendations && (
+        <div className="recommendation-container">
+          <RecommendedProfiles />
+        </div>
+      )}
+      {showSidebar && (
+        <div className="bottom-navbar">
+          <HorizontalNavbar />
+        </div>
+      )}
+      <ToastContainer />
     </div>
   );
 }
