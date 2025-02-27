@@ -11,8 +11,8 @@ import {
   IoArrowBackCircle,
 } from "react-icons/io5";
 import "./CreatePublication.css";
-import axios from "../../utils/api/AxiosBase";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const CREATE_PUBLICATION_URL = "/api/publications/create";
 
@@ -26,6 +26,8 @@ function CreatePublication(props) {
   const [loading, setLoading] = useState(true);
   const { auth } = useAuth();
   const [user, setUser] = useState({});
+
+  const axios = useAxiosPrivate();
 
   useEffect(() => {
     const currentUser = auth?.shortUser || {};
