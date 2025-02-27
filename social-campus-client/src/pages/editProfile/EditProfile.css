@@ -38,6 +38,20 @@
   font-size: 16px;
 }
 
+.login-input,
+.first-name-input,
+.last-name-input,
+.email-input {
+  padding: 12px;
+  margin: 10px 0px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+  font-family: "Roboto";
+  font-size: 16px;
+}
+
 .navigate-container .close-creation-icon {
   margin: 0;
   opacity: 0.5;
@@ -82,28 +96,40 @@
   outline: 2px solid var(--secondary-text-color);
 }
 
-.upload-overlay {
+.control-img {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 30%;
-  height: 30%;
-  background-color: rgba(58, 58, 58, 0.4);
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
+  gap: 20px;
+  background: transparent;
+  height: 100%;
+  width: 100%;
 }
 
-.upload-overlay:hover {
-  background-color: rgba(58, 58, 58, 0.6);
+.upload-overlay,
+.remove-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  cursor: pointer;
 }
 
-.upload-overlay label {
-  font-size: 30px;
-  height: 30px;
-  width: 30px;
+.upload-overlay label,
+.remove-overlay label {
+  font-size: 50px;
+  height: 50px;
+  width: 50px;
+  color: rgba(245, 245, 245, 0.75);
+  transition: color 0.3s ease;
+}
+
+.upload-overlay:hover label,
+.remove-overlay:hover label {
   color: whitesmoke;
 }

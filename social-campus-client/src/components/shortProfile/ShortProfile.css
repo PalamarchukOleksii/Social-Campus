@@ -1,7 +1,6 @@
 .short-info {
   display: flex;
   flex-direction: row;
-  gap: 20px;
   align-items: center;
   justify-content: flex-start;
   gap: 20px;
@@ -22,6 +21,7 @@
   width: 50px;
   border-radius: 50%;
   object-fit: cover;
+  aspect-ratio: 1 / 1;
   outline: 2px solid var(--secondary-text-color);
 }
 

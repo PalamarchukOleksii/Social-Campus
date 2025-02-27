@@ -58,7 +58,11 @@ function Publication({ publication, addCreateOpen = true }) {
         <div className="short-info-container">
           <div className="creator-info">
             <ShortProfile
-              username={publication.creatorInfo.firstName}
+              username={
+                publication.creatorInfo.firstName +
+                " " +
+                publication.creatorInfo.lastName
+              }
               login={publication.creatorInfo.login}
               profileImage={publication.creatorInfo.profileImageData}
             />
