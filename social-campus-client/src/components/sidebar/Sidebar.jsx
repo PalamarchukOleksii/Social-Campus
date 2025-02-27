@@ -96,11 +96,7 @@ function Sidebar() {
         <ShortProfile
           username={user.firstName + " " + user.lastName}
           login={user.login || ""}
-          profileImage={
-            user.profileImage
-              ? `data:image/png;base64,${user.profileImage}`
-              : null
-          }
+          profileImage={user.profileImageData ? user.profileImageData : null}
         />
         <div
           onClick={handleLogout}
