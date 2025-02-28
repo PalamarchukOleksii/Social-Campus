@@ -15,6 +15,8 @@ import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const CREATE_PUBLICATION_URL = "/api/publications/create";
+const GET_PUBLICATION_URL = "/api/publications/";
+const UPDATE_PUBLICATION_URL = "/api/publications/update";
 
 function CreatePublication(props) {
   const [publicationText, setPublicationText] = useState("");
@@ -34,6 +36,29 @@ function CreatePublication(props) {
     setUser(currentUser);
     setLoading(false);
   }, [auth]);
+
+  useEffect(() => {
+    if (props.isForEdit && props.editPublicationId) {
+      const fetchPublication = async () => {
+        try {
+          const response = await axios.get(
+            `${GET_PUBLICATION_URL}${props.editPublicationId}`
+          );
+          const publication = response.data;
+          setPublicationText(publication.description);
+
+          if (publication.imageData) {
+            setImagePreview(publication.imageData);
+          }
+        } catch (error) {
+          console.error("Fetching publication data error:", error);
+          toast.error("Failed to fetch the publication data.");
+        }
+      };
+
+      fetchPublication();
+    }
+  }, [props.isForEdit, props.editPublicationId, axios]);
 
   const handleInputChange = (e) => {
     setPublicationText(e.target.value);
@@ -193,7 +218,7 @@ function CreatePublication(props) {
             style={{ display: "none" }}
           />
           <button className="publish-button" type="submit">
-            Publish
+            {props.isForEdit ? "Save Changes" : "Publish"}
           </button>
         </div>
       </form>
@@ -203,6 +228,8 @@ function CreatePublication(props) {
 
 CreatePublication.propTypes = {
   onCloseClick: PropTypes.func.isRequired,
+  isForEdit: PropTypes.bool,
+  editPublicationId: PropTypes.string,
 };
 
 export default CreatePublication;
