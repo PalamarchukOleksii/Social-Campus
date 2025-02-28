@@ -209,7 +209,6 @@ function EditProfile() {
               e.target.style.height = `${e.target.scrollHeight}px`;
             }
           }}
-          required
         />
       </form>
     </div>

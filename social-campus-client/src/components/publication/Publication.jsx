@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 import ShortProfile from "../shortProfile/ShortProfile";
 import InteractionItem from "../interactionItem/InteractionItem";
@@ -9,35 +10,39 @@ import DateTime from "../dateTime/DateTime";
 import CreateComment from "../createComment/CreateComment";
 import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
 import { IoCreateOutline, IoCreate } from "react-icons/io5";
+import useAuth from "../../hooks/useAuth";
+import CreatePublication from "../createPublication/CreatePublication";
 
-function Publication({ publication, addCreateOpen = true }) {
+function Publication(props) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [comments, setComments] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [publicationImg, setPublicationImg] = useState(publication.imageData);
-  const [publicationDescription, setPublicationDescription] = useState(
-    publication.description
-  );
-  const [isEditHovered, setIsEditHovered] = useState(false);
+  const { auth } = useAuth();
 
-  useEffect(() => {}, []);
+  const [comments, setComments] = useState([]);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditHovered, setIsEditHovered] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const handlePublicationClick = () => {
-    if (location.pathname !== `/publication/${publication.id.value}`) {
-      navigate(`/publication/${publication.id.value}`);
+    if (location.pathname !== `/publication/${props.publication.id.value}`) {
+      navigate(`/publication/${props.publication.id.value}`);
     }
   };
 
   const handleCreateCommentOpenClick = () => {
-    if (addCreateOpen) {
-      setIsCreateOpen((prev) => !prev);
-    }
+    setIsCreateOpen(true);
   };
 
   const handleCreateCommentCloseClick = () => {
-    setIsCreateOpen((prev) => !prev);
+    setIsCreateOpen(false);
+  };
+
+  const handleEditPublicationOpenClick = () => {
+    setIsEditOpen(true);
+  };
+
+  const handleEditPublicationCloseClick = () => {
+    setIsEditOpen(false);
   };
 
   return (
@@ -45,7 +50,7 @@ function Publication({ publication, addCreateOpen = true }) {
       {isCreateOpen && (
         <div className="create-comment-modal-overlay">
           <CreateComment
-            user={currentUser}
+            user={auth.shortUser}
             comments={comments}
             setComments={setComments}
             getMaxCommentId={getMaxCommentId}
@@ -54,29 +59,40 @@ function Publication({ publication, addCreateOpen = true }) {
           />
         </div>
       )}
+      {isEditOpen &&
+        createPortal(
+          <div className="edit-publication-modal-overlay">
+            <CreatePublication
+              onCloseClick={handleEditPublicationCloseClick}
+              isForEdit={true}
+              editPublicationId={props.publication.id.value}
+            />
+          </div>,
+          document.body
+        )}
       <div>
         <div className="short-info-container">
           <div className="creator-info">
             <ShortProfile
               username={
-                publication.creatorInfo.firstName +
+                props.publication.creatorInfo.firstName +
                 " " +
-                publication.creatorInfo.lastName
+                props.publication.creatorInfo.lastName
               }
-              login={publication.creatorInfo.login}
-              profileImage={publication.creatorInfo.profileImageData}
+              login={props.publication.creatorInfo.login}
+              profileImage={props.publication.creatorInfo.profileImageData}
             />
             <DateTime
-              dateTime={publication.creationDateTime.split(".")[0]}
+              dateTime={props.publication.creationDateTime.split(".")[0]}
               locale="en-US"
             />
           </div>
-          {currentUser?.login === publication.creatorInfo.login && (
+          {auth.shortUser?.login === props.publication.creatorInfo.login && (
             <div
               className="edit-pub-icon general-text"
               onMouseEnter={() => setIsEditHovered(true)}
               onMouseLeave={() => setIsEditHovered(false)}
-              onClick={() => {}}
+              onClick={handleEditPublicationOpenClick}
             >
               {isEditHovered ? <IoCreate /> : <IoCreateOutline />}
             </div>
@@ -84,23 +100,25 @@ function Publication({ publication, addCreateOpen = true }) {
         </div>
         <div className="content-container" onClick={handlePublicationClick}>
           <h2 className="description general-text">
-            {publicationDescription || "Description"}
+            {props.publication.description || "Description"}
           </h2>
           <div className="image-wrapper">
-            {publicationImg && <img src={publicationImg} alt="Publication" />}
+            {props.publication.imageData && (
+              <img src={props.publication.imageData} alt="Publication" />
+            )}
           </div>
         </div>
         <div className="interaction-stat">
           <InteractionItem
             itemType="like"
-            label={publication.userWhoLikedIds.length}
+            label={props.publication.userWhoLikedIds.length}
             icon={InteractionItems.likeIcon}
             activeIcon={InteractionItems.activeLikeIcon}
             className="like-element"
           />
           <InteractionItem
             itemType="comment"
-            label={publication.commentsCount}
+            label={props.publication.commentsCount}
             icon={InteractionItems.commentIcon}
             onClick={handleCreateCommentOpenClick}
             className="comment-element"
@@ -132,7 +150,6 @@ Publication.propTypes = {
     userWhoLikedIds: PropTypes.arrayOf(PropTypes.string),
     commentsCount: PropTypes.number.isRequired,
   }).isRequired,
-  addCreateOpen: PropTypes.bool,
 };
 
 export default Publication;

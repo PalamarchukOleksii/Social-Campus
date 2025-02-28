@@ -15,6 +15,8 @@ import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const CREATE_PUBLICATION_URL = "/api/publications/create";
+const GET_PUBLICATION_URL = "/api/publications/";
+const UPDATE_PUBLICATION_URL = "/api/publications/update";
 
 function CreatePublication(props) {
   const [publicationText, setPublicationText] = useState("");
@@ -35,6 +37,29 @@ function CreatePublication(props) {
     setLoading(false);
   }, [auth]);
 
+  useEffect(() => {
+    if (props.isForEdit && props.editPublicationId) {
+      const fetchPublication = async () => {
+        try {
+          const response = await axios.get(
+            `${GET_PUBLICATION_URL}${props.editPublicationId}`
+          );
+          const publication = response.data;
+          setPublicationText(publication.description);
+
+          if (publication.imageData) {
+            setImagePreview(publication.imageData);
+          }
+        } catch (error) {
+          console.error("Fetching publication data error:", error);
+          toast.error("Failed to fetch the publication data.");
+        }
+      };
+
+      fetchPublication();
+    }
+  }, [props.isForEdit, props.editPublicationId, axios]);
+
   const handleInputChange = (e) => {
     setPublicationText(e.target.value);
   };
@@ -54,64 +79,50 @@ function CreatePublication(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let imageData = "";
-    if (image) {
-      const reader = new FileReader();
-      reader.readAsDataURL(image);
-      reader.onloadend = async () => {
-        imageData = reader.result;
-        try {
-          await axios.post(CREATE_PUBLICATION_URL, {
-            description: publicationText,
-            creatorId: {
-              value: user.id.value,
-            },
-            imageData: imageData,
-          });
-        } catch (error) {
-          const { response } = error;
+    try {
+      let imageData = "";
 
-          if (response?.data?.error) {
-            response.data.error.forEach((err) => toast.error(err.message));
-          } else if (response?.data?.detail) {
-            toast.error(response.data.detail);
-          } else {
-            console.error(error);
-            toast.error("An unexpected error occurred.");
-          }
-        } finally {
-          setPublicationText("");
-          setImage(null);
-          setImagePreview(null);
-          props.onCloseClick();
-        }
-      };
-    } else {
-      try {
-        await axios.post(CREATE_PUBLICATION_URL, {
-          description: publicationText,
-          creatorId: {
-            value: user.id.value,
-          },
-          imageData: "",
+      if (image) {
+        imageData = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(image);
         });
-      } catch (error) {
-        const { response } = error;
-
-        if (response?.data?.error) {
-          response.data.error.forEach((err) => toast.error(err.message));
-        } else if (response?.data?.detail) {
-          toast.error(response.data.detail);
-        } else {
-          console.error(error);
-          toast.error("An unexpected error occurred.");
-        }
-      } finally {
-        setPublicationText("");
-        setImage(null);
-        setImagePreview(null);
-        props.onCloseClick();
       }
+
+      const payload = {
+        description: publicationText,
+        imageData,
+      };
+
+      if (props.isForEdit && props.editPublicationId) {
+        payload.callerId = { value: user.id.value };
+        payload.publicationId = { value: props.editPublicationId };
+
+        await axios.patch(UPDATE_PUBLICATION_URL, payload);
+        toast.success("Publication updated successfully.");
+      } else {
+        payload.creatorId = { value: user.id.value };
+
+        await axios.post(CREATE_PUBLICATION_URL, payload);
+        toast.success("Publication created successfully.");
+      }
+    } catch (error) {
+      const { response } = error;
+      if (response?.data?.error) {
+        response.data.error.forEach((err) => toast.error(err.message));
+      } else if (response?.data?.detail) {
+        toast.error(response.data.detail);
+      } else {
+        console.error(error);
+        toast.error("An unexpected error occurred.");
+      }
+    } finally {
+      setPublicationText("");
+      setImage(null);
+      setImagePreview(null);
+      props.onCloseClick();
     }
   };
 
@@ -193,7 +204,7 @@ function CreatePublication(props) {
             style={{ display: "none" }}
           />
           <button className="publish-button" type="submit">
-            Publish
+            {props.isForEdit ? "Save Changes" : "Publish"}
           </button>
         </div>
       </form>
@@ -203,6 +214,8 @@ function CreatePublication(props) {
 
 CreatePublication.propTypes = {
   onCloseClick: PropTypes.func.isRequired,
+  isForEdit: PropTypes.bool,
+  editPublicationId: PropTypes.string,
 };
 
 export default CreatePublication;
