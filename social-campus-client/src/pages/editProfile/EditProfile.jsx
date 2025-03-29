@@ -1,45 +1,57 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./EditProfile.css";
 import {
   IoArrowBackCircleOutline,
   IoArrowBackCircle,
-  IoAdd,
-  IoAddOutline,
+  IoAddCircle,
+  IoAddCircleOutline,
+  IoCloseCircle,
+  IoCloseCircleOutline,
 } from "react-icons/io5";
-import authLogin from "../../utils/consts/AuthUserLogin";
-import userData from "../../data/userData.json";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
+
+const EDIT_PROFILE_URL = "/api/users/update";
+const GET_USER_URL = "/api/users";
 
 function EditProfile() {
+  const { login } = useParams();
+  const { auth } = useAuth();
+  const axios = useAxiosPrivate();
+
+  const [userId, setUserId] = useState();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [bio, setBio] = useState("");
   const [profileImage, setProfileImage] = useState(null);
-  const [login, setLogin] = useState("");
+  const [userLogin, setUserLogin] = useState("");
   const [email, setEmail] = useState("");
   const [isExitHovered, setIsExitHovered] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [removeImgHovered, setRemoveImgHovered] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserData = () => {
-      const foundUser = userData.find((user) => user.login === authLogin);
-      if (foundUser) {
-        setLogin(foundUser.login);
+    const fetchUserData = async () => {
+      try {
+        const { data } = await axios.get(`${GET_USER_URL}/${login}`);
 
-        const [firstName, lastName] = foundUser.username.split(" ");
-
-        setFirstName(firstName);
-        setLastName(lastName || "");
-
-        setEmail(foundUser.email);
-        setBio(foundUser.bio);
-        setProfileImage(foundUser.profileImage);
+        setUserId(data.id?.value || "");
+        setFirstName(data.firstName || "");
+        setLastName(data.lastName || "");
+        setBio(data.bio || "");
+        setEmail(data.email || "");
+        setUserLogin(data.login || "");
+        setProfileImage(data.profileImageData || null);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [login]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -52,9 +64,37 @@ function EditProfile() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate(-1);
+
+    try {
+      const response = await axios.patch(EDIT_PROFILE_URL, {
+        callerId: {
+          value: auth.shortUser.id.value,
+        },
+        userId: {
+          value: userId,
+        },
+        login: userLogin,
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        bio: bio,
+        profileImageData: profileImage,
+      });
+
+      if (response.status === 200) {
+        toast.success("Profile updated successfully!");
+        navigate(-1);
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile. Please try again.");
+    }
+  };
+
+  const removeImage = () => {
+    setProfileImage(null);
   };
 
   return (
@@ -86,34 +126,51 @@ function EditProfile() {
               alt="Profile"
               className="profile-picture"
             />
-            <div className="upload-overlay">
-              <label
-                htmlFor="image-upload"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
-                {isHovered ? <IoAdd /> : <IoAddOutline />}
-              </label>
-              <input
-                type="file"
-                id="image-upload"
-                className="file-input"
-                accept="image/*"
-                onChange={handleImageChange}
-                style={{ display: "none" }}
-              />
+            <div className="control-img">
+              <div className="upload-overlay">
+                <label
+                  htmlFor="image-upload"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
+                  {isHovered ? <IoAddCircle /> : <IoAddCircleOutline />}
+                </label>
+                <input
+                  type="file"
+                  id="image-upload"
+                  className="file-input"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                />
+              </div>
+              <div className="remove-overlay">
+                <label
+                  onMouseEnter={() => setRemoveImgHovered(true)}
+                  onMouseLeave={() => setRemoveImgHovered(false)}
+                  onClick={removeImage}
+                >
+                  {removeImgHovered ? (
+                    <IoCloseCircle />
+                  ) : (
+                    <IoCloseCircleOutline />
+                  )}
+                </label>
+              </div>
             </div>
           </div>
         </div>
         <input
+          className="login-input"
           type="text"
           name="login"
           placeholder="Login"
-          value={login}
-          onChange={(e) => setLogin(e.target.value)}
+          value={userLogin}
+          onChange={(e) => setUserLogin(e.target.value)}
           required
         />
         <input
+          className="first-name-input"
           type="text"
           name="first-name"
           placeholder="First Name"
@@ -122,6 +179,7 @@ function EditProfile() {
           required
         />
         <input
+          className="last-name-input"
           type="text"
           name="last-name"
           placeholder="Last Name"
@@ -130,6 +188,7 @@ function EditProfile() {
           required
         />
         <input
+          className="email-input"
           type="email"
           name="email"
           placeholder="Email"
@@ -150,7 +209,6 @@ function EditProfile() {
               e.target.style.height = `${e.target.scrollHeight}px`;
             }
           }}
-          required
         />
       </form>
     </div>

@@ -3,19 +3,19 @@ import "./CompactSidebar.css";
 import { useNavigate } from "react-router-dom";
 import { IoExit, IoExitOutline } from "react-icons/io5";
 import NavItem from "../navItem/NavItem";
-import { useCreateItem } from "../../context/CreateItemContext";
 import { IoAdd } from "react-icons/io5";
 import useAuth from "../../hooks/useAuth";
 import GetSidebarItems from "../../utils/consts/GetSidebarItems";
 import useLogout from "../../hooks/useLogout";
 import ROUTES from "../../utils/consts/Routes";
+import CreatePublication from "../createPublication/CreatePublication";
 
 function CompactSidebar() {
   const navigate = useNavigate();
   const [hoveredIcon, setHoveredIcon] = useState("");
   const [sidebarItems, setSidebarItems] = useState([]);
+  const [isCreatePublicationOpen, setIsCreatePublicationOpen] = useState(false);
 
-  const { openCreatePublication } = useCreateItem();
   const { auth } = useAuth();
   const logout = useLogout();
 
@@ -34,12 +34,21 @@ function CompactSidebar() {
     }
   };
 
-  const handlePublishClick = () => {
-    openCreatePublication();
+  const handleOpenCreatePublishClick = () => {
+    setIsCreatePublicationOpen(true);
+  };
+
+  const handleCloseCreatePublishClick = () => {
+    setIsCreatePublicationOpen(false);
   };
 
   return (
     <div className="compact-sidebar">
+      {isCreatePublicationOpen && (
+        <div className="create-publication-modal-overlay">
+          <CreatePublication onCloseClick={handleCloseCreatePublishClick} />
+        </div>
+      )}
       <div className="wrapper">
         <div className="head">
           <img src="/android-chrome-512x512.png" alt="logo" />
@@ -69,7 +78,10 @@ function CompactSidebar() {
             )}
           </ul>
           <div className="button-wrapper">
-            <button className="add-publish-short" onClick={handlePublishClick}>
+            <button
+              className="add-publish-short"
+              onClick={handleOpenCreatePublishClick}
+            >
               <IoAdd />
             </button>
           </div>

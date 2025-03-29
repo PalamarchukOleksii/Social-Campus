@@ -11,32 +11,54 @@ import {
   IoArrowBackCircle,
 } from "react-icons/io5";
 import "./CreatePublication.css";
-import login from "../../utils/consts/AuthUserLogin";
-import userData from "../../data/userData.json";
+import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
+const CREATE_PUBLICATION_URL = "/api/publications/create";
+const GET_PUBLICATION_URL = "/api/publications/";
+const UPDATE_PUBLICATION_URL = "/api/publications/update";
 
 function CreatePublication(props) {
-  const [publicationText, setPublicationText] = useState(
-    props.isForEdit ? props.publicationDescription || "" : ""
-  );
+  const [publicationText, setPublicationText] = useState("");
   const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(
-    props.isForEdit ? props.publicationImgUrl || null : null
-  );
+  const [imagePreview, setImagePreview] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [isExitHovered, setIsExitHovered] = useState(false);
-  const [authUser, setAuthUser] = useState();
   const [loading, setLoading] = useState(true);
+  const { auth } = useAuth();
+  const [user, setUser] = useState({});
+
+  const axios = useAxiosPrivate();
 
   useEffect(() => {
-    const fetchUserData = () => {
-      const foundUser = userData.find((user) => user.login === login);
-      setAuthUser(foundUser || null);
-      setLoading(false);
-    };
+    const currentUser = auth?.shortUser || {};
+    setUser(currentUser);
+    setLoading(false);
+  }, [auth]);
 
-    fetchUserData();
-  }, []);
+  useEffect(() => {
+    if (props.isForEdit && props.editPublicationId) {
+      const fetchPublication = async () => {
+        try {
+          const response = await axios.get(
+            `${GET_PUBLICATION_URL}${props.editPublicationId}`
+          );
+          const publication = response.data;
+          setPublicationText(publication.description);
+
+          if (publication.imageData) {
+            setImagePreview(publication.imageData);
+          }
+        } catch (error) {
+          console.error("Fetching publication data error:", error);
+          toast.error("Failed to fetch the publication data.");
+        }
+      };
+
+      fetchPublication();
+    }
+  }, [props.isForEdit, props.editPublicationId, axios]);
 
   const handleInputChange = (e) => {
     setPublicationText(e.target.value);
@@ -54,39 +76,53 @@ function CreatePublication(props) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (publicationText.trim()) {
-      if (props.isForEdit) {
-        props.setPublicationDescription(publicationText);
-        props.setPublicationImgUrl(
-          image ? URL.createObjectURL(image) : imagePreview
-        );
-      } else {
-        const newPublication = {
-          id: props.getMaxPublicationId() + 1,
-          description: publicationText,
-          imageUrl: image ? URL.createObjectURL(image) : null,
-          creationTime: new Date().toISOString(),
-          likesCount: 0,
-          comments: [],
-          username: authUser.username,
-          login: authUser.login,
-          profileImage: authUser.profileImage,
-        };
 
-        if (props.publications.length !== 0) {
-          props.setPublications([newPublication, ...props.publications]);
-        }
+    try {
+      let imageData = "";
+
+      if (image) {
+        imageData = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(image);
+        });
       }
 
+      const payload = {
+        description: publicationText,
+        imageData,
+      };
+
+      if (props.isForEdit && props.editPublicationId) {
+        payload.callerId = { value: user.id.value };
+        payload.publicationId = { value: props.editPublicationId };
+
+        await axios.patch(UPDATE_PUBLICATION_URL, payload);
+        toast.success("Publication updated successfully.");
+      } else {
+        payload.creatorId = { value: user.id.value };
+
+        await axios.post(CREATE_PUBLICATION_URL, payload);
+        toast.success("Publication created successfully.");
+      }
+    } catch (error) {
+      const { response } = error;
+      if (response?.data?.error) {
+        response.data.error.forEach((err) => toast.error(err.message));
+      } else if (response?.data?.detail) {
+        toast.error(response.data.detail);
+      } else {
+        console.error(error);
+        toast.error("An unexpected error occurred.");
+      }
+    } finally {
       setPublicationText("");
       setImage(null);
       setImagePreview(null);
-      props.close();
-      window.scrollTo(0, 0);
-    } else {
-      toast("Publication text cannot be empty.");
+      props.onCloseClick();
     }
   };
 
@@ -99,7 +135,7 @@ function CreatePublication(props) {
     setPublicationText("");
     setImage(null);
     setImagePreview(null);
-    props.close();
+    props.onCloseClick();
   };
 
   if (loading) {
@@ -118,9 +154,9 @@ function CreatePublication(props) {
         <span className="general-text back-text">Back</span>
       </div>
       <ShortProfile
-        username={authUser.username}
-        login={authUser.login}
-        profileImage={authUser.profileImage}
+        username={user.firstName + " " + user.lastName}
+        login={user.login}
+        profileImage={user.profileImage}
         redirectOnClick={false}
       />
       <form className="create-form" onSubmit={handleSubmit}>
@@ -177,27 +213,9 @@ function CreatePublication(props) {
 }
 
 CreatePublication.propTypes = {
-  publications: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-      description: PropTypes.string,
-      imageUrl: PropTypes.string,
-      creationTime: PropTypes.string,
-      likesCount: PropTypes.number,
-      comments: PropTypes.arrayOf(PropTypes.object).isRequired,
-      username: PropTypes.string,
-      login: PropTypes.string,
-      profileImage: PropTypes.string,
-    })
-  ),
-  setPublications: PropTypes.func,
-  getMaxPublicationId: PropTypes.func,
-  close: PropTypes.func.isRequired,
+  onCloseClick: PropTypes.func.isRequired,
   isForEdit: PropTypes.bool,
-  publicationImgUrl: PropTypes.string,
-  setPublicationImgUrl: PropTypes.func,
-  publicationDescription: PropTypes.string,
-  setPublicationDescription: PropTypes.func,
+  editPublicationId: PropTypes.string,
 };
 
 export default CreatePublication;
