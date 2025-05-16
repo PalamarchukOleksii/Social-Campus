@@ -1,4 +1,5 @@
 ﻿using Domain.Models.RefreshTokenModel;
+using Domain.Models.UserRoleModel;
 using Domain.Models.UserModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -44,6 +45,10 @@ namespace Infrastructure.Configurations
             builder.Property(u => u.ProfileImageData)
                 .IsRequired(false);
 
+            builder.Property(u => u.RoleId)
+                .HasConversion(roleId => roleId.Value, value => new UserRoleId(value))
+                .IsRequired();
+
             builder.HasIndex(u => u.Id)
                 .IsUnique();
 
@@ -56,8 +61,8 @@ namespace Infrastructure.Configurations
                 .IsUnique();
 
             builder.HasOne(u => u.RefreshToken)
-                 .WithOne(rt => rt.User)
-                 .HasForeignKey<RefreshToken>(rt => rt.UserId);
+                .WithOne(rt => rt.User)
+                .HasForeignKey<User>(u => u.RefreshTokenId);
 
             builder.HasMany(u => u.FollowedUsers)
                 .WithOne(f => f.User)
@@ -70,6 +75,11 @@ namespace Infrastructure.Configurations
             builder.HasMany(u => u.Publications)
                 .WithOne(p => p.Creator)
                 .HasForeignKey(p => p.CreatorId);
+
+            builder.HasOne(u => u.Role)
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.RoleId)
+                .IsRequired();
         }
     }
 }

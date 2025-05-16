@@ -1,9 +1,13 @@
-﻿using Domain.Models.CommentLikeModel;
+﻿using Domain.Models.ChatParticipantModel;
+using Domain.Models.CommentLikeModel;
 using Domain.Models.CommentModel;
 using Domain.Models.FollowModel;
+using Domain.Models.MessageLikeModel;
+using Domain.Models.MessageModel;
 using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
 using Domain.Models.RefreshTokenModel;
+using Domain.Models.UserRoleModel;
 
 namespace Domain.Models.UserModel
 {
@@ -34,6 +38,7 @@ namespace Domain.Models.UserModel
         public string LastName { get; private set; } = string.Empty;
         public string Bio { get; private set; } = string.Empty;
         public string ProfileImageData { get; private set; } = string.Empty;
+        public UserRoleId RoleId { get; private set; } = new UserRoleId(Guid.Empty);
         public RefreshTokenId RefreshTokenId { get; private set; } = new RefreshTokenId(Guid.Empty);
         public virtual RefreshToken? RefreshToken { get; }
         public virtual ICollection<Follow>? Followers { get; }
@@ -42,6 +47,10 @@ namespace Domain.Models.UserModel
         public virtual ICollection<PublicationLike>? PublicationLikes { get; }
         public virtual ICollection<Comment>? Comments { get; }
         public virtual ICollection<CommentLike>? CommentLikes { get; }
+        public virtual ICollection<ChatParticipant>? ChatParticipations { get; }
+        public virtual ICollection<Message>? Messages { get; }
+        public virtual ICollection<MessageLike>? MessageLikes { get; }
+        public virtual UserRole? Role { get; }
 
         public void SetRefreshTokenId(RefreshTokenId refreshTokenId) => RefreshTokenId = refreshTokenId;
 
