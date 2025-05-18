@@ -375,6 +375,61 @@ namespace Infrastructure.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
+            modelBuilder.Entity("Domain.Models.ReportModel.Report", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<Guid>("ReporterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ResolutionComment")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("Resolved")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("ResolvedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ResolvedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TargetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TargetType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.HasIndex("ReporterId");
+
+                    b.HasIndex("ResolvedById");
+
+                    b.HasIndex("TargetId");
+
+                    b.HasIndex("TargetType");
+
+                    b.ToTable("Report");
+                });
+
             modelBuilder.Entity("Domain.Models.UserModel.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -436,6 +491,44 @@ namespace Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Domain.Models.UserRestrictionModel.UserRestriction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EndAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ImposedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("StartAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TargetUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImposedByUserId");
+
+                    b.HasIndex("TargetUserId")
+                        .IsUnique();
+
+                    b.HasIndex("Type");
+
+                    b.ToTable("UserRestriction");
                 });
 
             modelBuilder.Entity("Domain.Models.UserRoleModel.UserRole", b =>
@@ -615,6 +708,23 @@ namespace Infrastructure.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("Domain.Models.ReportModel.Report", b =>
+                {
+                    b.HasOne("Domain.Models.UserModel.User", "Reporter")
+                        .WithMany()
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.UserModel.User", "Resolver")
+                        .WithMany()
+                        .HasForeignKey("ResolvedById");
+
+                    b.Navigation("Reporter");
+
+                    b.Navigation("Resolver");
+                });
+
             modelBuilder.Entity("Domain.Models.UserModel.User", b =>
                 {
                     b.HasOne("Domain.Models.RefreshTokenModel.RefreshToken", "RefreshToken")
@@ -632,6 +742,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("RefreshToken");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Domain.Models.UserRestrictionModel.UserRestriction", b =>
+                {
+                    b.HasOne("Domain.Models.UserModel.User", "ImposedByUser")
+                        .WithMany()
+                        .HasForeignKey("ImposedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.UserModel.User", "TargetUser")
+                        .WithMany()
+                        .HasForeignKey("TargetUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ImposedByUser");
+
+                    b.Navigation("TargetUser");
                 });
 
             modelBuilder.Entity("Domain.Models.ChatModel.Chat", b =>

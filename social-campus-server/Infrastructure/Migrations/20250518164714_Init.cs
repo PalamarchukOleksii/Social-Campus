@@ -227,6 +227,65 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Report",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReporterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TargetType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    TargetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Resolved = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    ResolvedById = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ResolutionComment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    ResolvedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Report", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Report_Users_ReporterId",
+                        column: x => x.ReporterId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Report_Users_ResolvedById",
+                        column: x => x.ResolvedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRestriction",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TargetUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImposedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    StartAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRestriction", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRestriction_Users_ImposedByUserId",
+                        column: x => x.ImposedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRestriction_Users_TargetUserId",
+                        column: x => x.TargetUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MessageLike",
                 columns: table => new
                 {
@@ -504,6 +563,48 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Report_Id",
+                table: "Report",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Report_ReporterId",
+                table: "Report",
+                column: "ReporterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Report_ResolvedById",
+                table: "Report",
+                column: "ResolvedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Report_TargetId",
+                table: "Report",
+                column: "TargetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Report_TargetType",
+                table: "Report",
+                column: "TargetType");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRestriction_ImposedByUserId",
+                table: "UserRestriction",
+                column: "ImposedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRestriction_TargetUserId",
+                table: "UserRestriction",
+                column: "TargetUserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRestriction_Type",
+                table: "UserRestriction",
+                column: "Type");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRole_Name",
                 table: "UserRole",
                 column: "Name",
@@ -559,6 +660,12 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "PublicationLikes");
+
+            migrationBuilder.DropTable(
+                name: "Report");
+
+            migrationBuilder.DropTable(
+                name: "UserRestriction");
 
             migrationBuilder.DropTable(
                 name: "ChatParticipantRole");
