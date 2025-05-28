@@ -7,6 +7,7 @@ using Domain.Models.MessageModel;
 using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
 using Domain.Models.RefreshTokenModel;
+using Domain.Models.UserRestrictionModel;
 using Domain.Models.UserRoleModel;
 
 namespace Domain.Models.UserModel
@@ -51,6 +52,7 @@ namespace Domain.Models.UserModel
         public virtual ICollection<Message>? Messages { get; }
         public virtual ICollection<MessageLike>? MessageLikes { get; }
         public virtual UserRole? Role { get; }
+        public virtual UserRestriction? Restriction { get; }
 
         public void SetRefreshTokenId(RefreshTokenId refreshTokenId) => RefreshTokenId = refreshTokenId;
 

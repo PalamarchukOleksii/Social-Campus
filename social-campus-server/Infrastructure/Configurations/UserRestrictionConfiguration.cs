@@ -47,8 +47,8 @@ namespace Infrastructure.Configurations
             builder.HasIndex(ur => ur.Type);
 
             builder.HasOne(ur => ur.TargetUser)
-                .WithMany()
-                .HasForeignKey(ur => ur.TargetUserId)
+                .WithOne(u => u.Restriction)
+                .HasForeignKey<UserRestriction>(ur => ur.TargetUserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(ur => ur.ImposedByUser)
