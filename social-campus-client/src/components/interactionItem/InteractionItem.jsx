@@ -3,32 +3,26 @@ import PropTypes from "prop-types";
 import "./InteractionItem.css";
 
 function InteractionItem(props) {
-  const [isActive, setIsActive] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [count, setCount] = useState(props.label);
 
   const handleClick = () => {
     if (props.itemType === "comment" || props.itemType === "reply") {
       props.onClick();
     } else {
-      setIsActive((prev) => !prev);
-      setCount((prev) => (isActive ? prev - 1 : prev + 1));
+      props.onClick();
     }
   };
 
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => setIsHovered(false);
-
   return (
     <div
-      className="interaction-item"
+      className={`interaction-item ${props.className || ""}`}
       onClick={handleClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {isHovered && props.hoverIcon ? (
         <props.hoverIcon className="hover icon" />
-      ) : isActive ? (
+      ) : props.isActive ? (
         props.activeIcon ? (
           <props.activeIcon className="active icon" />
         ) : (
@@ -37,7 +31,7 @@ function InteractionItem(props) {
       ) : (
         <props.icon className="icon" />
       )}
-      <span className="stat">{count}</span>
+      <span className="stat">{props.label}</span>
     </div>
   );
 }
@@ -49,6 +43,8 @@ InteractionItem.propTypes = {
   activeIcon: PropTypes.elementType,
   hoverIcon: PropTypes.elementType,
   onClick: PropTypes.func,
+  isActive: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 export default InteractionItem;

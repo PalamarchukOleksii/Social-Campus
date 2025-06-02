@@ -11,17 +11,54 @@ import CreateComment from "../createComment/CreateComment";
 import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
 import { IoCreateOutline, IoCreate } from "react-icons/io5";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import CreatePublication from "../createPublication/CreatePublication";
+
+const REMOVE_LIKE_URL = "/api/publicationlikes/remove/";
+const ADD_LIKE_URL = "/api/publicationlikes/add";
 
 function Publication(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const { auth } = useAuth();
+  const axios = useAxiosPrivate();
 
   const [comments, setComments] = useState([]);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditHovered, setIsEditHovered] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(
+    props.publication.userWhoLikedIds
+      .map((idObj) => idObj.value)
+      .includes(auth.shortUser.id.value)
+  );
+  const [likeCount, setLikeCount] = useState(
+    props.publication.userWhoLikedIds.length
+  );
+
+  const handleLikeToggle = async () => {
+    const userId = auth.shortUser?.id?.value;
+    const publicationId = props.publication.id.value;
+
+    if (!userId || !publicationId) return;
+
+    try {
+      if (isLiked) {
+        await axios.delete(`${REMOVE_LIKE_URL}${publicationId}/${userId}`);
+        setIsLiked(false);
+        setLikeCount((prev) => prev - 1);
+      } else {
+        await axios.post(ADD_LIKE_URL, {
+          userId: { value: userId },
+          publicationId: { value: publicationId },
+        });
+        setIsLiked(true);
+        setLikeCount((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error("Error toggling like:", error);
+    }
+  };
 
   const handlePublicationClick = () => {
     if (location.pathname !== `/publication/${props.publication.id.value}`) {
@@ -111,9 +148,11 @@ function Publication(props) {
         <div className="interaction-stat">
           <InteractionItem
             itemType="like"
-            label={props.publication.userWhoLikedIds.length}
+            label={likeCount}
             icon={InteractionItems.likeIcon}
             activeIcon={InteractionItems.activeLikeIcon}
+            isActive={isLiked}
+            onClick={handleLikeToggle}
             className="like-element"
           />
           <InteractionItem
