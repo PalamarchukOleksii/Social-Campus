@@ -17,8 +17,7 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            bool isRunningInDocker = configuration["DOTNET_RUNNING_IN_CONTAINER"] == "true";
-            string connectionStringKey = isRunningInDocker ? "DockerConnection" : "LocalConnection";
+            string connectionStringKey =  "LocalConnection";
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString(connectionStringKey)));
