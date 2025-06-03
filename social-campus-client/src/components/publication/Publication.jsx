@@ -111,13 +111,13 @@ function Publication(props) {
       <div>
         <div className="short-info-container">
           <div className="creator-info">
-            <ShortProfile userId={props.publication.creatorId} />
+            <ShortProfile userId={props.publication.creatorId.value} />
             <DateTime
               dateTime={props.publication.creationDateTime.split(".")[0]}
               locale="en-US"
             />
           </div>
-          {auth.shortUser?.id === props.publication.creatorId && (
+          {auth.shortUser?.id.value === props.publication.creatorId.value && (
             <div
               className="edit-pub-icon general-text"
               onMouseEnter={() => setIsEditHovered(true)}
