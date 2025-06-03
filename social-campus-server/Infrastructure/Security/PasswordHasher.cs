@@ -1,36 +1,35 @@
-﻿using Application.Abstractions.Security;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
+using Application.Abstractions.Security;
 
-namespace Infrastructure.Security
+namespace Infrastructure.Security;
+
+public class PasswordHasher : IPasswordHasher
 {
-    public class PasswordHasher : IPasswordHasher
+    private const int SaltSize = 16;
+    private const int HashSize = 32;
+    private const int Iterations = 210_000;
+
+    private readonly HashAlgorithmName Algorithm = HashAlgorithmName.SHA512;
+
+    public async Task<string> HashAsync(string password)
     {
-        private const int SaltSize = 16;
-        private const int HashSize = 32;
-        private const int Iterations = 210_000;
+        var salt = RandomNumberGenerator.GetBytes(SaltSize);
 
-        private readonly HashAlgorithmName Algorithm = HashAlgorithmName.SHA512;
+        var hash = await Task.Run(() =>
+            Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, Algorithm, HashSize));
 
-        public async Task<string> HashAsync(string password)
-        {
-            byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
+        return $"{Convert.ToHexString(hash)}-{Convert.ToHexString(salt)}";
+    }
 
-            byte[] hash = await Task.Run(() =>
-                Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, Algorithm, HashSize));
+    public async Task<bool> VerifyAsync(string password, string passwordHash)
+    {
+        var parts = passwordHash.Split('-');
+        var hash = Convert.FromHexString(parts[0]);
+        var salt = Convert.FromHexString(parts[1]);
 
-            return $"{Convert.ToHexString(hash)}-{Convert.ToHexString(salt)}";
-        }
+        var inputHash = await Task.Run(() =>
+            Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, Algorithm, HashSize));
 
-        public async Task<bool> VerifyAsync(string password, string passwordHash)
-        {
-            string[] parts = passwordHash.Split('-');
-            byte[] hash = Convert.FromHexString(parts[0]);
-            byte[] salt = Convert.FromHexString(parts[1]);
-
-            byte[] inputHash = await Task.Run(() =>
-                Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, Algorithm, HashSize));
-
-            return CryptographicOperations.FixedTimeEquals(hash, inputHash);
-        }
+        return CryptographicOperations.FixedTimeEquals(hash, inputHash);
     }
 }

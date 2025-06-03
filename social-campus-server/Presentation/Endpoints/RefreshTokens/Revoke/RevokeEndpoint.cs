@@ -1,29 +1,25 @@
 ﻿using Application.RefreshTokens.Commands.Revoke;
-using Domain.Shared;
 using MediatR;
 using Presentation.Abstractions;
 using Presentation.Consts;
 
-namespace Presentation.Endpoints.RefreshTokens.Revoke
+namespace Presentation.Endpoints.RefreshTokens.Revoke;
+
+public class RevokeEndpoint : BaseEndpoint, IEndpoint
 {
-    public class RevokeEndpoint : BaseEndpoint, IEndpoint
+    public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        public void MapEndpoint(IEndpointRouteBuilder app)
-        {
-            app.MapDelete("refreshtokens/revoke", async (HttpContext context, ISender sender) =>
+        app.MapDelete("refreshtokens/revoke", async (HttpContext context, ISender sender) =>
             {
-                if (!context.Request.Cookies.ContainsKey("RefreshToken") || !context.Request.Cookies.TryGetValue("RefreshToken", out string? refreshToken))
-                {
+                if (!context.Request.Cookies.ContainsKey("RefreshToken") ||
+                    !context.Request.Cookies.TryGetValue("RefreshToken", out var refreshToken))
                     return Results.BadRequest("Refresh token is missing in request");
-                }
-                else if (string.IsNullOrEmpty(refreshToken))
-                {
+                if (string.IsNullOrEmpty(refreshToken))
                     return Results.BadRequest("Refresh token is null or empty");
-                }
 
                 RevokeCommand commandRequest = new(refreshToken);
 
-                Result response = await sender.Send(commandRequest);
+                var response = await sender.Send(commandRequest);
                 if (response.IsSuccess)
                 {
                     context.Response.Cookies.Delete("RefreshToken");
@@ -35,6 +31,5 @@ namespace Presentation.Endpoints.RefreshTokens.Revoke
             })
             .WithTags(Tags.RefreshTokens)
             .RequireAuthorization();
-        }
     }
 }

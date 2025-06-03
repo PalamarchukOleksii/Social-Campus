@@ -1,7 +1,6 @@
-﻿namespace Domain.Consts
+﻿namespace Domain.Consts;
+
+public static class EmailDomains
 {
-    public static class EmailDomains
-    {
-        public static readonly string[] AllowedDomains = ["lll.kpi.ua"];
-    }
+    public static readonly string[] AllowedDomains = ["lll.kpi.ua"];
 }

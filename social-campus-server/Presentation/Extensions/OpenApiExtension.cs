@@ -2,40 +2,38 @@
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
 
-namespace Presentation.Extensions
+namespace Presentation.Extensions;
+
+public static class OpenApiExtension
 {
-    public static class OpenApiExtension
+    public static IServiceCollection AddOpenApiWithAuth(this IServiceCollection services)
     {
-        public static IServiceCollection AddOpenApiWithAuth(this IServiceCollection services)
-        {
-            services.AddOpenApi(options =>
-            {
-                options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
-            });
+        services.AddOpenApi(options => { options.AddDocumentTransformer<BearerSecuritySchemeTransformer>(); });
 
-            return services;
-        }
+        return services;
+    }
 
-        internal sealed class BearerSecuritySchemeTransformer(IAuthenticationSchemeProvider authenticationSchemeProvider) : IOpenApiDocumentTransformer
+    internal sealed class BearerSecuritySchemeTransformer(IAuthenticationSchemeProvider authenticationSchemeProvider)
+        : IOpenApiDocumentTransformer
+    {
+        public async Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context,
+            CancellationToken cancellationToken)
         {
-            public async Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
+            var authenticationSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();
+            if (authenticationSchemes.Any(authScheme => authScheme.Name == "Bearer"))
             {
-                var authenticationSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();
-                if (authenticationSchemes.Any(authScheme => authScheme.Name == "Bearer"))
+                var requirements = new Dictionary<string, OpenApiSecurityScheme>
                 {
-                    var requirements = new Dictionary<string, OpenApiSecurityScheme>
+                    ["Bearer"] = new()
                     {
-                        ["Bearer"] = new OpenApiSecurityScheme
-                        {
-                            Type = SecuritySchemeType.Http,
-                            Scheme = "bearer",
-                            In = ParameterLocation.Header,
-                            BearerFormat = "Json Web Token"
-                        }
-                    };
-                    document.Components ??= new OpenApiComponents();
-                    document.Components.SecuritySchemes = requirements;
-                }
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        In = ParameterLocation.Header,
+                        BearerFormat = "Json Web Token"
+                    }
+                };
+                document.Components ??= new OpenApiComponents();
+                document.Components.SecuritySchemes = requirements;
             }
         }
     }

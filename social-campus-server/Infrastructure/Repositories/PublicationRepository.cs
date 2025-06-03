@@ -4,39 +4,38 @@ using Domain.Models.UserModel;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories
+namespace Infrastructure.Repositories;
+
+public class PublicationRepository(ApplicationDbContext context) : IPublicationRepository
 {
-    public class PublicationRepository(ApplicationDbContext context) : IPublicationRepository
+    public async Task AddAsync(string description, UserId creatorId, string imageData)
     {
-        public async Task AddAsync(string description, UserId creatorId, string imageData)
-        {
-            Publication newPublication = new(description, creatorId, imageData);
+        Publication newPublication = new(description, creatorId, imageData);
 
-            await context.Publications.AddAsync(newPublication);
-        }
+        await context.Publications.AddAsync(newPublication);
+    }
 
-        public async Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(UserId creatorId)
-        {
-            return await context.Publications
-                .Where(p => p.CreatorId == creatorId)
-                .ToListAsync() as IReadOnlyList<Publication>;
-        }
+    public async Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(UserId creatorId)
+    {
+        return await context.Publications
+            .Where(p => p.CreatorId == creatorId)
+            .ToListAsync();
+    }
 
-        public async Task<Publication?> GetByIdAsync(PublicationId publicationId)
-        {
-            return await context.Publications.FirstOrDefaultAsync(p => p.Id == publicationId);
-        }
+    public async Task<Publication?> GetByIdAsync(PublicationId publicationId)
+    {
+        return await context.Publications.FirstOrDefaultAsync(p => p.Id == publicationId);
+    }
 
-        public void Update(Publication publication, string description, string imageData)
-        {
-            publication.Update(description, imageData);
+    public void Update(Publication publication, string description, string imageData)
+    {
+        publication.Update(description, imageData);
 
-            context.Update(publication);
-        }
+        context.Update(publication);
+    }
 
-        public async Task<bool> IsExistByIdAsync(PublicationId publicationId)
-        {
-            return await context.Publications.AnyAsync(u => u.Id == publicationId);
-        }
+    public async Task<bool> IsExistByIdAsync(PublicationId publicationId)
+    {
+        return await context.Publications.AnyAsync(u => u.Id == publicationId);
     }
 }

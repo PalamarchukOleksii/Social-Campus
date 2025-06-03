@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 
-namespace Application.Users.Queries.GetUserByLogin
+namespace Application.Users.Queries.GetUserByLogin;
+
+public class GetUserByLoginValidator : AbstractValidator<GetUserByLoginQuery>
 {
-    public class GetUserByLoginValidator : AbstractValidator<GetUserByLoginQuery>
+    public GetUserByLoginValidator()
     {
-        public GetUserByLoginValidator()
-        {
-            RuleFor(u => u.Login)
-                .NotEmpty().WithMessage("Login is required");
-        }
+        RuleFor(u => u.Login)
+            .NotEmpty().WithMessage("Login is required");
     }
 }

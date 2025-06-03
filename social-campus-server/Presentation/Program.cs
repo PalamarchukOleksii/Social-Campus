@@ -1,8 +1,8 @@
+using System.Reflection;
 using Application;
 using Infrastructure;
 using Presentation.Extensions;
 using Scalar.AspNetCore;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +18,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("ClientCors", policy =>
     {
         policy.WithOrigins("http://localhost:3000")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
@@ -45,7 +45,7 @@ app.UseCors("ClientCors");
 app.UseAuthentication();
 app.UseAuthorization();
 
-RouteGroupBuilder baseGroup = app
+var baseGroup = app
     .MapGroup("api");
 
 app.MapEndpoints(baseGroup);

@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 
-namespace Application.Follows.Queries.GetFollowingList
+namespace Application.Follows.Queries.GetFollowingList;
+
+public class GetFollowingListQueryValidator : AbstractValidator<GetFollowingListQuery>
 {
-    public class GetFollowingListQueryValidator : AbstractValidator<GetFollowingListQuery>
+    public GetFollowingListQueryValidator()
     {
-        public GetFollowingListQueryValidator()
-        {
-            RuleFor(f => f.Login)
-                .NotEmpty().WithMessage("Login is required");
-        }
+        RuleFor(f => f.Login)
+            .NotEmpty().WithMessage("Login is required");
     }
 }

@@ -1,4 +1,3 @@
-﻿namespace Domain.Models.FollowModel
-{
-    public record FollowId(Guid Value);
-}
+﻿namespace Domain.Models.FollowModel;
+
+public record FollowId(Guid Value);
