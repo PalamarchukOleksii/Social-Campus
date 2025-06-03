@@ -4,6 +4,7 @@ import "./SignIn.css";
 import { toast } from "react-toastify";
 import axios from "../../utils/api/AxiosBase";
 import useAuth from "../../hooks/useAuth";
+import Loading from "../../components/loading/Loading";
 
 const LOGIN_URL = "/api/users/login";
 
@@ -13,11 +14,13 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { setAuth, persist, setPersist } = useAuth();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await axios.post(LOGIN_URL, {
@@ -45,6 +48,8 @@ function SignIn() {
         console.error(error);
         toast.error("An unexpected error occurred.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,68 +70,78 @@ function SignIn() {
         <div className="signin">
           <div className="login-container">
             <h1 className="top-text general-text">Sign In</h1>
-            <form onSubmit={handleSignIn} className="login-form">
-              <input
-                className="text-input"
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <input
-                className="text-input"
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <div className="show-password-check">
-                <input
-                  type="checkbox"
-                  id="show-pswd"
-                  onChange={() => setShowPassword((prev) => !prev)}
-                  checked={showPassword}
-                  className="show-pswd-checkbox"
-                />
-                <label htmlFor="showpswd" className="not-general-text">
-                  Show Password
-                </label>
+            {loading ? (
+              <div className="loading-wrapper">
+                <Loading />
               </div>
-              <div className="persist-check">
+            ) : (
+              <form onSubmit={handleSignIn} className="login-form">
                 <input
-                  type="checkbox"
-                  id="persist"
-                  onChange={togglePersist}
-                  checked={persist}
-                  className="persist-checkbox"
+                  className="text-input"
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
-                <label htmlFor="persist" className="not-general-text">
-                  Trust This Device
-                </label>
+                <input
+                  className="text-input"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <div className="show-password-check">
+                  <input
+                    type="checkbox"
+                    id="show-pswd"
+                    onChange={() => setShowPassword((prev) => !prev)}
+                    checked={showPassword}
+                    className="show-pswd-checkbox"
+                  />
+                  <label htmlFor="showpswd" className="not-general-text">
+                    Show Password
+                  </label>
+                </div>
+                <div className="persist-check">
+                  <input
+                    type="checkbox"
+                    id="persist"
+                    onChange={togglePersist}
+                    checked={persist}
+                    className="persist-checkbox"
+                  />
+                  <label htmlFor="persist" className="not-general-text">
+                    Trust This Device
+                  </label>
+                </div>
+                <button type="submit" className="signin-button">
+                  Sign In
+                </button>
+              </form>
+            )}
+          </div>
+          {!loading && (
+            <>
+              <div>
+                <h2 className="secondary-text not-general-text">
+                  Don&apos;t have an account?
+                </h2>
+                <button
+                  className="signup-button"
+                  onClick={() => navigate("/signup")}
+                >
+                  Sign Up
+                </button>
               </div>
-              <button type="submit" className="signin-button">
-                Sign In
-              </button>
-            </form>
-          </div>
-          <div>
-            <h2 className="secondary-text not-general-text">
-              Don&apos;t have an account?
-            </h2>
-            <button
-              className="signup-button"
-              onClick={() => navigate("/signup")}
-            >
-              Sign Up
-            </button>
-          </div>
-          <div className="goWelcom">
-            <Link to="/" className="not-general-text">
-              Go Back to Welcome Page
-            </Link>
-          </div>
+              <div className="goWelcom">
+                <Link to="/" className="not-general-text">
+                  Go Back to Welcome Page
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

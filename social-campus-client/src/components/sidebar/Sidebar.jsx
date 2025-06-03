@@ -93,11 +93,7 @@ function Sidebar() {
         </div>
       </div>
       <div className="logout">
-        <ShortProfile
-          username={user.firstName + " " + user.lastName}
-          login={user.login || ""}
-          profileImage={user.profileImageData ? user.profileImageData : null}
-        />
+        <ShortProfile userId={user.id?.value} />
         <div
           onClick={handleLogout}
           className="logout-icon"

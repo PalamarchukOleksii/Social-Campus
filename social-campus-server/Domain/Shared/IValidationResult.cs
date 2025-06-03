@@ -1,9 +1,8 @@
-﻿namespace Domain.Shared
-{
-    public interface IValidationResult
-    {
-        public static readonly Error ValidationError = new("ValidationError", "A validation problem occurred");
+﻿namespace Domain.Shared;
 
-        Error[] Errors { get; }
-    }
+public interface IValidationResult
+{
+    public static readonly Error ValidationError = new("ValidationError", "A validation problem occurred");
+
+    Error[] Errors { get; }
 }

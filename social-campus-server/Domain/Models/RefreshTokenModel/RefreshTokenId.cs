@@ -1,4 +1,3 @@
-﻿namespace Domain.Models.RefreshTokenModel
-{
-    public record RefreshTokenId(Guid Value);
-}
+﻿namespace Domain.Models.RefreshTokenModel;
+
+public record RefreshTokenId(Guid Value);

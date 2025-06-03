@@ -1,8 +1,7 @@
-﻿namespace Application.Abstractions.Security
+﻿namespace Application.Abstractions.Security;
+
+public interface IPasswordHasher
 {
-    public interface IPasswordHasher
-    {
-        Task<string> HashAsync(string password);
-        Task<bool> VerifyAsync(string password, string passwordHash);
-    }
+    Task<string> HashAsync(string password);
+    Task<bool> VerifyAsync(string password, string passwordHash);
 }

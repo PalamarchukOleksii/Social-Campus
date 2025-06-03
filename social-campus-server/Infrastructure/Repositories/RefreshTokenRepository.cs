@@ -4,45 +4,44 @@ using Domain.Models.UserModel;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories
+namespace Infrastructure.Repositories;
+
+public class RefreshTokenRepository(ApplicationDbContext context) : IRefreshTokenRepository
 {
-    public class RefreshTokenRepository(ApplicationDbContext context) : IRefreshTokenRepository
+    public async Task<RefreshToken> AddAsync(string token, int expiryTimeInSeconds, UserId userId)
     {
-        public async Task<RefreshToken> AddAsync(string token, int expiryTimeInSeconds, UserId userId)
+        var expirationDateTime = DateTime.UtcNow.AddSeconds(expiryTimeInSeconds);
+        RefreshToken newRefreshToken = new(token, expirationDateTime, userId);
+
+        await context.AddAsync(newRefreshToken);
+
+        return newRefreshToken;
+    }
+
+    public async Task DeleteByIdAsync(RefreshTokenId id)
+    {
+        var refreshToken = await context.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Id == id);
+        if (refreshToken != null)
         {
-            DateTime expirationDateTime = DateTime.UtcNow.AddSeconds(expiryTimeInSeconds);
-            RefreshToken newRefreshToken = new(token, expirationDateTime, userId);
+            refreshToken.User?.DropRefreshTokenIdOnRevoke();
 
-            await context.AddAsync(newRefreshToken);
-
-            return newRefreshToken;
+            context.RefreshTokens.Remove(refreshToken);
         }
+    }
 
-        public async Task DeleteByIdAsync(RefreshTokenId id)
-        {
-            RefreshToken? refreshToken = await context.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Id == id);
-            if (refreshToken != null)
-            {
-                refreshToken.User?.DropRefreshTokenIdOnRevoke();
+    public async Task<RefreshToken?> GetByIdAsync(RefreshTokenId id)
+    {
+        return await context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Id == id);
+    }
 
-                context.RefreshTokens.Remove(refreshToken);
-            }
-        }
+    public async Task<RefreshToken?> GetByRefreshTokenAsync(string refreshToken)
+    {
+        return await context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == refreshToken);
+    }
 
-        public async Task<RefreshToken?> GetByIdAsync(RefreshTokenId id)
-        {
-            return await context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Id == id);
-        }
-
-        public async Task<RefreshToken?> GetByRefreshTokenAsync(string refreshToken)
-        {
-            return await context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == refreshToken);
-        }
-
-        public void Update(RefreshToken refreshToken, string newToken, int expiryTimeInSeconds)
-        {
-            DateTime expirationDateTime = DateTime.UtcNow.AddSeconds(expiryTimeInSeconds);
-            refreshToken.UpdateTokenOnRefresh(newToken, expirationDateTime);
-        }
+    public void Update(RefreshToken refreshToken, string newToken, int expiryTimeInSeconds)
+    {
+        var expirationDateTime = DateTime.UtcNow.AddSeconds(expiryTimeInSeconds);
+        refreshToken.UpdateTokenOnRefresh(newToken, expirationDateTime);
     }
 }

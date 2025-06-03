@@ -1,4 +1,3 @@
-﻿namespace Domain.Models.CommentModel
-{
-    public record CommentId(Guid Value);
-}
+﻿namespace Domain.Models.CommentModel;
+
+public record CommentId(Guid Value);

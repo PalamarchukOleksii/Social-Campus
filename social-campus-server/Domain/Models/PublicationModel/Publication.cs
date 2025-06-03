@@ -2,34 +2,35 @@
 using Domain.Models.PublicationLikeModel;
 using Domain.Models.UserModel;
 
-namespace Domain.Models.PublicationModel
+namespace Domain.Models.PublicationModel;
+
+public class Publication
 {
-    public class Publication
+    private Publication()
     {
-        private Publication() { }
+    }
 
-        public Publication(string description, UserId creatorId, string imageData)
-        {
-            Id = new PublicationId(Guid.NewGuid());
-            Description = description;
-            ImageData = imageData;
-            CreatorId = creatorId;
-            CreationDateTime = DateTime.UtcNow;
-        }
+    public Publication(string description, UserId creatorId, string imageUrl)
+    {
+        Id = new PublicationId(Guid.NewGuid());
+        Description = description;
+        ImageUrl = imageUrl;
+        CreatorId = creatorId;
+        CreationDateTime = DateTime.UtcNow;
+    }
 
-        public PublicationId Id { get; private set; } = new PublicationId(Guid.Empty);
-        public string Description { get; private set; } = string.Empty;
-        public string ImageData { get; private set; } = string.Empty;
-        public DateTime CreationDateTime { get; private set; }
-        public UserId CreatorId { get; private set; } = new UserId(Guid.Empty);
-        public virtual User? Creator { get; }
-        public virtual ICollection<PublicationLike>? PublicationLikes { get; }
-        public virtual ICollection<Comment>? Comments { get; }
+    public PublicationId Id { get; private set; } = new(Guid.Empty);
+    public string Description { get; private set; } = string.Empty;
+    public string ImageUrl { get; private set; } = string.Empty;
+    public DateTime CreationDateTime { get; private set; }
+    public UserId CreatorId { get; private set; } = new(Guid.Empty);
+    public virtual User? Creator { get; }
+    public virtual ICollection<PublicationLike>? PublicationLikes { get; }
+    public virtual ICollection<Comment>? Comments { get; }
 
-        public void Update(string description, string imageData)
-        {
-            Description = description;
-            ImageData = imageData;
-        }
+    public void Update(string description, string imageUrl)
+    {
+        Description = description;
+        ImageUrl = imageUrl;
     }
 }

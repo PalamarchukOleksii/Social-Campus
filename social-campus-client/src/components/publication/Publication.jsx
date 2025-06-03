@@ -11,17 +11,54 @@ import CreateComment from "../createComment/CreateComment";
 import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
 import { IoCreateOutline, IoCreate } from "react-icons/io5";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import CreatePublication from "../createPublication/CreatePublication";
+
+const REMOVE_LIKE_URL = "/api/publicationlikes/remove/";
+const ADD_LIKE_URL = "/api/publicationlikes/add";
 
 function Publication(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const { auth } = useAuth();
+  const axios = useAxiosPrivate();
 
   const [comments, setComments] = useState([]);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditHovered, setIsEditHovered] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(
+    props.publication.userWhoLikedIds
+      .map((idObj) => idObj.value)
+      .includes(auth.shortUser.id.value)
+  );
+  const [likeCount, setLikeCount] = useState(
+    props.publication.userWhoLikedIds.length
+  );
+
+  const handleLikeToggle = async () => {
+    const userId = auth.shortUser?.id?.value;
+    const publicationId = props.publication.id.value;
+
+    if (!userId || !publicationId) return;
+
+    try {
+      if (isLiked) {
+        await axios.delete(`${REMOVE_LIKE_URL}${publicationId}/${userId}`);
+        setIsLiked(false);
+        setLikeCount((prev) => prev - 1);
+      } else {
+        await axios.post(ADD_LIKE_URL, {
+          userId: { value: userId },
+          publicationId: { value: publicationId },
+        });
+        setIsLiked(true);
+        setLikeCount((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error("Error toggling like:", error);
+    }
+  };
 
   const handlePublicationClick = () => {
     if (location.pathname !== `/publication/${props.publication.id.value}`) {
@@ -50,6 +87,7 @@ function Publication(props) {
       {isCreateOpen && (
         <div className="create-comment-modal-overlay">
           <CreateComment
+            publicationId={props.publication.id.value}
             user={auth.shortUser}
             comments={comments}
             setComments={setComments}
@@ -73,21 +111,13 @@ function Publication(props) {
       <div>
         <div className="short-info-container">
           <div className="creator-info">
-            <ShortProfile
-              username={
-                props.publication.creatorInfo.firstName +
-                " " +
-                props.publication.creatorInfo.lastName
-              }
-              login={props.publication.creatorInfo.login}
-              profileImage={props.publication.creatorInfo.profileImageData}
-            />
+            <ShortProfile userId={props.publication.creatorId.value} />
             <DateTime
               dateTime={props.publication.creationDateTime.split(".")[0]}
               locale="en-US"
             />
           </div>
-          {auth.shortUser?.login === props.publication.creatorInfo.login && (
+          {auth.shortUser?.id.value === props.publication.creatorId.value && (
             <div
               className="edit-pub-icon general-text"
               onMouseEnter={() => setIsEditHovered(true)}
@@ -103,17 +133,19 @@ function Publication(props) {
             {props.publication.description || "Description"}
           </h2>
           <div className="image-wrapper">
-            {props.publication.imageData && (
-              <img src={props.publication.imageData} alt="Publication" />
+            {props.publication.imageUrl && (
+              <img src={props.publication.imageUrl} alt="Publication" />
             )}
           </div>
         </div>
         <div className="interaction-stat">
           <InteractionItem
             itemType="like"
-            label={props.publication.userWhoLikedIds.length}
+            label={likeCount}
             icon={InteractionItems.likeIcon}
             activeIcon={InteractionItems.activeLikeIcon}
+            isActive={isLiked}
+            onClick={handleLikeToggle}
             className="like-element"
           />
           <InteractionItem
@@ -135,19 +167,16 @@ Publication.propTypes = {
       value: PropTypes.string.isRequired,
     }).isRequired,
     description: PropTypes.string.isRequired,
-    imageData: PropTypes.string,
+    imageUrl: PropTypes.string,
     creationDateTime: PropTypes.string.isRequired,
-    creatorInfo: PropTypes.shape({
-      id: PropTypes.shape({
-        value: PropTypes.string.isRequired,
-      }).isRequired,
-      login: PropTypes.string.isRequired,
-      firstName: PropTypes.string,
-      lastName: PropTypes.string,
-      bio: PropTypes.string,
-      profileImageData: PropTypes.string,
+    creatorId: PropTypes.shape({
+      value: PropTypes.string.isRequired,
     }).isRequired,
-    userWhoLikedIds: PropTypes.arrayOf(PropTypes.string),
+    userWhoLikedIds: PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.string.isRequired,
+      })
+    ),
     commentsCount: PropTypes.number.isRequired,
   }).isRequired,
 };

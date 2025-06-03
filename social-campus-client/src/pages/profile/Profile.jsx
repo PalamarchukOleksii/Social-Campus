@@ -7,12 +7,11 @@ import Loading from "../../components/loading/Loading";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
 
-const GET_USER_URL = "/api/users";
+const GET_USER_URL = "/api/users/by-login/";
 
 function Profile() {
   const { login } = useParams();
   const [user, setUser] = useState(null);
-  const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -22,9 +21,8 @@ function Profile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const { data } = await axios.get(`${GET_USER_URL}/${login}`);
+        const { data } = await axios.get(`${GET_USER_URL}${login}`);
         setUser(data);
-        setPublications(data.publications || []);
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -55,7 +53,7 @@ function Profile() {
         <div className="profile-header">
           <div className="profile-image-container">
             <img
-              src={user.profileImageData || "/default-profile.png"}
+              src={user.profileImageUrl || "/default-profile.png"}
               alt="Profile"
               className="profile-image"
             />
@@ -89,22 +87,16 @@ function Profile() {
         </div>
         <div className="profile-stats">
           <Link to={ROUTES.FOLLOWERS.replace(":login", user.login)}>
-            <span>{user.followers?.length || 0} Followers</span>
+            <span>{user.followersCount} Followers</span>
           </Link>
           <Link to={ROUTES.FOLLOWING.replace(":login", user.login)}>
-            <span>{user.following?.length || 0} Following</span>
+            <span>{user.followingCount} Following</span>
           </Link>
         </div>
       </div>
 
       <div className="publications">
-        {publications.length > 0 ? (
-          <PublicationsList publications={publications} />
-        ) : (
-          <h2 className="no-publications-text general-text">
-            No publications yet
-          </h2>
-        )}
+        <PublicationsList userId={user.id} />
       </div>
     </div>
   );

@@ -1,24 +1,24 @@
-﻿using Application.Abstractions.Data;
+﻿using System.Transactions;
+using Application.Abstractions.Data;
 using MediatR;
-using System.Transactions;
 
-namespace Application.Behaviors
+namespace Application.Behaviors;
+
+public class UnitOfWorkPipelineBehavior<TRequest, TResponse>(IUnitOfWork unitOfWork)
+    : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : notnull
 {
-    public class UnitOfWorkPipelineBehavior<TRequest, TResponse>(IUnitOfWork unitOfWork)
-        : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : notnull
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken)
     {
-        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
-        {
-            using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+        using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-            var response = await next();
+        var response = await next();
 
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            transactionScope.Complete();
+        transactionScope.Complete();
 
-            return response;
-        }
+        return response;
     }
 }

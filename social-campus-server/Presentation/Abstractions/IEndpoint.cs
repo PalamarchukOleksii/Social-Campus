@@ -1,7 +1,6 @@
-﻿namespace Presentation.Abstractions
+﻿namespace Presentation.Abstractions;
+
+public interface IEndpoint
 {
-    public interface IEndpoint
-    {
-        public void MapEndpoint(IEndpointRouteBuilder app);
-    }
+    public void MapEndpoint(IEndpointRouteBuilder app);
 }

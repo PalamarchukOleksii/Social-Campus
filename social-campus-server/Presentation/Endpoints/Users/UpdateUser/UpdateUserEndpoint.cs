@@ -1,18 +1,18 @@
 ﻿using Application.Users.Commands.UpdateUser;
-using Domain.Shared;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Presentation.Abstractions;
 using Presentation.Consts;
 
-namespace Presentation.Endpoints.Users.UpdateUser
+namespace Presentation.Endpoints.Users.UpdateUser;
+
+public class UpdateUserEndpoint : BaseEndpoint, IEndpoint
 {
-    public class UpdateUserEndpoint : BaseEndpoint, IEndpoint
+    public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        public void MapEndpoint(IEndpointRouteBuilder app)
-        {
-            app.MapPatch("users/update", async (ISender sender, UpdateUserRequest request) =>
+        app.MapPatch("users/update", async (ISender sender, [FromForm] UpdateUserRequest request) =>
             {
-                UpdateUserCommand commandRequest = new(
+                var commandRequest = new UpdateUserCommand(
                     request.CallerId,
                     request.UserId,
                     request.Login,
@@ -20,14 +20,15 @@ namespace Presentation.Endpoints.Users.UpdateUser
                     request.FirstName,
                     request.LastName,
                     request.Bio,
-                    request.ProfileImageData);
+                    request.ProfileImage);
 
-                Result response = await sender.Send(commandRequest);
+                var response = await sender.Send(commandRequest);
 
                 return response.IsSuccess ? Results.Ok() : HandleFailure(response);
             })
+            .Accepts<UpdateUserRequest>("multipart/form-data")
             .WithTags(Tags.Users)
-            .RequireAuthorization();
-        }
+            .RequireAuthorization()
+            .DisableAntiforgery();
     }
 }

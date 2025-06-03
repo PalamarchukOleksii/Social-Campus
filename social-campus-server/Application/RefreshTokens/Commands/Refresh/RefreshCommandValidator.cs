@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
 
-namespace Application.RefreshTokens.Commands.Refresh
+namespace Application.RefreshTokens.Commands.Refresh;
+
+public class RefreshCommandValidator : AbstractValidator<RefreshCommand>
 {
-    public class RefreshCommandValidator : AbstractValidator<RefreshCommand>
+    public RefreshCommandValidator()
     {
-        public RefreshCommandValidator()
-        {
-            RuleFor(x => x.RefreshToken)
-                .NotEmpty().WithMessage("Refresh token is required")
-                .MinimumLength(128).WithMessage("Refresh token format is invalid");
-        }
+        RuleFor(x => x.RefreshToken)
+            .NotEmpty().WithMessage("Refresh token is required")
+            .MinimumLength(128).WithMessage("Refresh token format is invalid");
     }
 }

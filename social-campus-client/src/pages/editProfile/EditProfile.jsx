@@ -14,7 +14,7 @@ import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
 
 const EDIT_PROFILE_URL = "/api/users/update";
-const GET_USER_URL = "/api/users";
+const GET_USER_BY_LOGIN_URL = "/api/users/by-login/";
 
 function EditProfile() {
   const { login } = useParams();
@@ -25,7 +25,8 @@ function EditProfile() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [bio, setBio] = useState("");
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImageFile, setProfileImageFile] = useState(null);
+  const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [userLogin, setUserLogin] = useState("");
   const [email, setEmail] = useState("");
   const [isExitHovered, setIsExitHovered] = useState(false);
@@ -36,7 +37,7 @@ function EditProfile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const { data } = await axios.get(`${GET_USER_URL}/${login}`);
+        const { data } = await axios.get(`${GET_USER_BY_LOGIN_URL}${login}`);
 
         setUserId(data.id?.value || "");
         setFirstName(data.firstName || "");
@@ -44,7 +45,14 @@ function EditProfile() {
         setBio(data.bio || "");
         setEmail(data.email || "");
         setUserLogin(data.login || "");
-        setProfileImage(data.profileImageData || null);
+
+        if (data.profileImageUrl) {
+          setProfileImagePreview(data.profileImageUrl);
+          setProfileImageFile(null);
+        } else {
+          setProfileImagePreview(null);
+          setProfileImageFile(null);
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -56,11 +64,13 @@ function EditProfile() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      if (!["image/jpeg", "image/png"].includes(file.type)) {
+        toast.error("Only JPG and PNG files are allowed.");
+        return;
+      }
+
+      setProfileImageFile(file);
+      setProfileImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -68,19 +78,26 @@ function EditProfile() {
     e.preventDefault();
 
     try {
-      const response = await axios.patch(EDIT_PROFILE_URL, {
-        callerId: {
-          value: auth.shortUser.id.value,
+      const formData = new FormData();
+
+      formData.append("callerId.value", auth.shortUser.id.value);
+      formData.append("userId.value", userId);
+      formData.append("login", userLogin);
+      formData.append("email", email);
+      formData.append("firstName", firstName);
+      formData.append("lastName", lastName);
+      formData.append("bio", bio);
+
+      if (profileImageFile) {
+        formData.append("profileImage", profileImageFile);
+      } else {
+        formData.append("profileImage", "");
+      }
+
+      const response = await axios.patch(EDIT_PROFILE_URL, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-        userId: {
-          value: userId,
-        },
-        login: userLogin,
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        bio: bio,
-        profileImageData: profileImage,
       });
 
       if (response.status === 200) {
@@ -94,7 +111,8 @@ function EditProfile() {
   };
 
   const removeImage = () => {
-    setProfileImage(null);
+    setProfileImageFile(null);
+    setProfileImagePreview(null);
   };
 
   return (
@@ -122,7 +140,7 @@ function EditProfile() {
         <div className="wrapper">
           <div className="profile-picture-container">
             <img
-              src={profileImage || "/default-profile.png"}
+              src={profileImagePreview || "/default-profile.png"}
               alt="Profile"
               className="profile-picture"
             />
@@ -139,7 +157,7 @@ function EditProfile() {
                   type="file"
                   id="image-upload"
                   className="file-input"
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png"
                   onChange={handleImageChange}
                   style={{ display: "none" }}
                 />

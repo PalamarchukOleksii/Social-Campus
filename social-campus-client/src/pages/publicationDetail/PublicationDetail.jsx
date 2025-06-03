@@ -6,21 +6,41 @@ import PublicationDetailItems from "../../utils/consts/PublicationDetailItems";
 import "./PublicationDetail.css";
 import CreateComment from "../../components/createComment/CreateComment";
 import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
-import login from "../../utils/consts/AuthUserLogin";
 import CommentReplyManager from "../../components/comment/CommentReplyManager";
+import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
+const GET_PUBLICTION_URL = "/api/publications/";
 
 function PublicationDetail() {
   const { id } = useParams();
+  const { auth } = useAuth();
+  const axios = useAxiosPrivate();
+
   const [publication, setPublication] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hoveredIcon, setHoveredIcon] = useState("");
   const navigate = useNavigate();
   const [comments, setComments] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    setLoading(false);
-  }, [id]);
+    const fetchPublication = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${GET_PUBLICTION_URL}${id}`);
+        setPublication(response.data);
+      } catch (error) {
+        console.error("Failed to fetch publication:", error);
+        setPublication(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchPublication();
+    }
+  }, [id, axios]);
 
   return (
     <div className="publication-detail-container">
@@ -43,7 +63,7 @@ function PublicationDetail() {
         <>
           <Publication publication={publication} addCreateOpen={false} />
           <CreateComment
-            user={currentUser}
+            user={auth.shortUser}
             comments={comments}
             setComments={setComments}
             getMaxCommentId={getMaxCommentId}
@@ -56,7 +76,7 @@ function PublicationDetail() {
                   <CommentReplyManager
                     key={comment.id}
                     comment={comment}
-                    currentUser={currentUser}
+                    currentUser={auth.shortUser}
                     comments={comments}
                     setComments={setComments}
                   />

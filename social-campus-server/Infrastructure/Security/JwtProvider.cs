@@ -1,92 +1,88 @@
-﻿using Application.Abstractions.Security;
+﻿using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using Application.Abstractions.Security;
 using Application.Dtos;
 using Domain.Models.UserModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 
-namespace Infrastructure.Security
+namespace Infrastructure.Security;
+
+public class JwtProvider(IConfiguration configuration) : IJwtProvider
 {
-    public class JwtProvider(IConfiguration configuration) : IJwtProvider
+    public TokensDto GenerateTokens(User user)
     {
-        public TokensDto GenerateTokens(User user)
+        var accessToken = GenerateAccessToken(user);
+        var refreshToken = GenerateRefreshToken();
+
+        return new TokensDto
         {
-            var accessToken = GenerateAccessToken(user);
-            var refreshToken = GenerateRefreshToken();
+            AccessToken = accessToken,
+            AccessTokenExpirationInSeconds = configuration.GetValue<int>("Jwt:AccessTokenExpirationInSeconds"),
+            RefreshToken = refreshToken,
+            RefreshTokenExpirationInSeconds = configuration.GetValue<int>("Jwt:RefreshTokenExpirationInSeconds")
+        };
+    }
 
-            return new TokensDto
-            {
-                AccessToken = accessToken,
-                AccessTokenExpirationInSeconds = configuration.GetValue<int>("Jwt:AccessTokenExpirationInSeconds"),
-                RefreshToken = refreshToken,
-                RefreshTokenExpirationInSeconds = configuration.GetValue<int>("Jwt:RefreshTokenExpirationInSeconds")
-            };
-        }
+    public async Task<ClaimsPrincipal> GetPrincipalFromExpiredTokenAsync(string token)
+    {
+        var secretKey = configuration["Jwt:SecretKey"]!;
+        SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(secretKey));
 
-        public async Task<ClaimsPrincipal> GetPrincipalFromExpiredTokenAsync(string token)
+        TokenValidationParameters tokenValidationParameters = new()
         {
-            string secretKey = configuration["Jwt:SecretKey"]!;
-            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(secretKey));
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = configuration["Jwt:Issuer"],
+            ValidAudience = configuration["Jwt:Audience"],
+            IssuerSigningKey = securityKey,
+            ClockSkew = TimeSpan.Zero
+        };
 
-            TokenValidationParameters tokenValidationParameters = new()
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = false,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = configuration["Jwt:Issuer"],
-                ValidAudience = configuration["Jwt:Audience"],
-                IssuerSigningKey = securityKey,
-                ClockSkew = TimeSpan.Zero
-            };
+        JsonWebTokenHandler handler = new();
+        var result = await handler.ValidateTokenAsync(token, tokenValidationParameters);
 
-            JsonWebTokenHandler handler = new();
-            TokenValidationResult result = await handler.ValidateTokenAsync(token, tokenValidationParameters);
+        if (!result.IsValid || result.ClaimsIdentity == null) throw new SecurityTokenException("Invalid token");
 
-            if (!result.IsValid || result.ClaimsIdentity == null)
-            {
-                throw new SecurityTokenException("Invalid token");
-            }
+        return new ClaimsPrincipal(result.ClaimsIdentity);
+    }
 
-            return new ClaimsPrincipal(result.ClaimsIdentity);
-        }
+    private string GenerateAccessToken(User user)
+    {
+        var secretKey = configuration["Jwt:SecretKey"]!;
+        SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(secretKey));
 
-        private string GenerateAccessToken(User user)
+        SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha512);
+
+        SecurityTokenDescriptor tokenDescriptor = new()
         {
-            string secretKey = configuration["Jwt:SecretKey"]!;
-            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(secretKey));
+            Subject = new ClaimsIdentity(
+            [
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Name, user.Login),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+            ]),
+            Expires = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("Jwt:AccessTokenExpirationInSeconds")),
+            SigningCredentials = credentials,
+            Issuer = configuration["Jwt:Issuer"],
+            Audience = configuration["Jwt:Audience"]
+        };
 
-            SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha512);
+        JsonWebTokenHandler handler = new();
+        var token = handler.CreateToken(tokenDescriptor);
 
-            SecurityTokenDescriptor tokenDescriptor = new()
-            {
-                Subject = new ClaimsIdentity(
-                [
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Name, user.Login),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email)
-                ]),
-                Expires = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("Jwt:AccessTokenExpirationInSeconds")),
-                SigningCredentials = credentials,
-                Issuer = configuration["Jwt:Issuer"],
-                Audience = configuration["Jwt:Audience"]
-            };
+        return token;
+    }
 
-            JsonWebTokenHandler handler = new();
-            string token = handler.CreateToken(tokenDescriptor);
-
-            return token;
-        }
-
-        private static string GenerateRefreshToken()
-        {
-            byte[] randomNumber = new byte[128];
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
-        }
+    private static string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[128];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
     }
 }

@@ -35,6 +35,7 @@
 
 .signin {
   width: 400px;
+  min-height: 377px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,6 +46,10 @@
   margin: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   gap: 10px;
+}
+
+.loading-wrapper {
+  padding: 150px 0;
 }
 
 .text-input {

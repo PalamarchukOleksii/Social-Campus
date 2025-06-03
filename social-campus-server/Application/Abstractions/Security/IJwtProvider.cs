@@ -1,12 +1,11 @@
-﻿using Application.Dtos;
+﻿using System.Security.Claims;
+using Application.Dtos;
 using Domain.Models.UserModel;
-using System.Security.Claims;
 
-namespace Application.Abstractions.Security
+namespace Application.Abstractions.Security;
+
+public interface IJwtProvider
 {
-    public interface IJwtProvider
-    {
-        public TokensDto GenerateTokens(User user);
-        public Task<ClaimsPrincipal> GetPrincipalFromExpiredTokenAsync(string token);
-    }
+    public TokensDto GenerateTokens(User user);
+    public Task<ClaimsPrincipal> GetPrincipalFromExpiredTokenAsync(string token);
 }

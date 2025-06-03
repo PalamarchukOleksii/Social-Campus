@@ -1,9 +1,8 @@
+using System.Reflection;
 using Application;
 using Infrastructure;
 using Presentation.Extensions;
-using Presentation.Utils;
 using Scalar.AspNetCore;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +10,7 @@ builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddApplication();
 
-builder.Services.AddOpenApiWithAuth();
+builder.Services.AddOpenApi();
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 builder.Services.AddCors(options =>
@@ -19,15 +18,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy("ClientCors", policy =>
     {
         policy.WithOrigins("http://localhost:3000")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
 var app = builder.Build();
-
-LogDetails.LogEnvironmentDetails(app.Logger, builder.Configuration);
 
 if (app.Environment.IsDevelopment())
 {
@@ -37,13 +34,9 @@ if (app.Environment.IsDevelopment())
         options
             .WithTitle("Social Campus API")
             .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Axios)
-            .WithPreferredScheme("Bearer");
+            .AddPreferredSecuritySchemes("BearerAuth")
+            .AddHttpAuthentication("BearerAuth", auth => { auth.Token = "eyJhbGciOiJ..."; });
     });
-
-    if (builder.Configuration["DOTNET_RUNNING_IN_CONTAINER"] == "true")
-    {
-        app.ApplyMigrations();
-    }
 }
 
 app.UseHttpsRedirection();
@@ -53,7 +46,7 @@ app.UseCors("ClientCors");
 app.UseAuthentication();
 app.UseAuthorization();
 
-RouteGroupBuilder baseGroup = app
+var baseGroup = app
     .MapGroup("api");
 
 app.MapEndpoints(baseGroup);
