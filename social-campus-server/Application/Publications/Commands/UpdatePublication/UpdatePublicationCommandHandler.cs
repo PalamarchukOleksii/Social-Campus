@@ -1,5 +1,7 @@
 ﻿using Application.Abstractions.Messaging;
+using Application.Abstractions.Storage;
 using Application.Dtos;
+using Application.Helpers;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
 
@@ -7,7 +9,8 @@ namespace Application.Publications.Commands.UpdatePublication;
 
 public class UpdatePublicationCommandHandler(
     IPublicationRepository publicationRepository,
-    IUserRepository userRepository) : ICommandHandler<UpdatePublicationCommand>
+    IUserRepository userRepository,
+    IStorageService storageService) : ICommandHandler<UpdatePublicationCommand>
 {
     public async Task<Result> Handle(UpdatePublicationCommand request, CancellationToken cancellationToken)
     {
@@ -27,7 +30,44 @@ public class UpdatePublicationCommandHandler(
                 "User.NoUpdatePermission",
                 $"User with UserId {request.CallerId.Value} do not have permission to update publication with PublicationId {request.PublicationId.Value}"));
 
-        publicationRepository.Update(publication, request.Description, request.ImageData);
+        var imageUrl = publication.ImageUrl;
+        if (request.ImageData is null)
+        {
+            if (!string.IsNullOrEmpty(imageUrl)) await storageService.DeleteAsync(imageUrl, cancellationToken);
+            imageUrl = null;
+        }
+        else
+        {
+            await using var newImageStream = request.ImageData.OpenReadStream();
+            var newHash = await StorageHelpers.ComputeHashAsync(newImageStream);
+            newImageStream.Position = 0;
+
+            var shouldUpload = true;
+            if (!string.IsNullOrEmpty(imageUrl))
+            {
+                using var oldStream = new MemoryStream();
+                await storageService.DownloadAsync(imageUrl, oldStream, cancellationToken);
+                oldStream.Position = 0;
+
+                var oldHash = await StorageHelpers.ComputeHashAsync(oldStream);
+                shouldUpload = oldHash != newHash;
+            }
+
+            if (shouldUpload)
+            {
+                if (!string.IsNullOrEmpty(imageUrl)) await storageService.DeleteAsync(imageUrl, cancellationToken);
+
+                await using var uploadStream = request.ImageData.OpenReadStream();
+                imageUrl = await storageService.UploadAsync(
+                    uploadStream,
+                    publication.CreatorId,
+                    "publication",
+                    request.ImageData.ContentType,
+                    cancellationToken);
+            }
+        }
+
+        publicationRepository.Update(publication, request.Description, imageUrl ?? "");
 
         return Result.Success();
     }

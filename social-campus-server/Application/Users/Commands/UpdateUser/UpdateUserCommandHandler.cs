@@ -41,7 +41,6 @@ public class UpdateUserCommandHandler(
                 $"User with login {request.Login} has already exist"));
 
         var imageUrl = user.ProfileImageUrl;
-
         if (request.ProfileImage is null)
         {
             if (!string.IsNullOrEmpty(imageUrl)) await storageService.DeleteAsync(imageUrl, cancellationToken);

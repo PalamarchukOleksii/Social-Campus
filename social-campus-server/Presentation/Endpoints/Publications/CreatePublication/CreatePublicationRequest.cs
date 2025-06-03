@@ -6,5 +6,5 @@ public class CreatePublicationRequest
 {
     public string Description { get; set; } = string.Empty;
     public UserId CreatorId { get; set; } = new(Guid.Empty);
-    public string ImageData { get; set; } = string.Empty;
+    public IFormFile? ImageData { get; set; }
 }

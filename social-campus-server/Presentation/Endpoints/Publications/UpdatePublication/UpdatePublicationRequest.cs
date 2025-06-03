@@ -8,5 +8,5 @@ public class UpdatePublicationRequest
     public UserId CallerId { get; set; } = new(Guid.Empty);
     public PublicationId PublicationId { get; set; } = new(Guid.Empty);
     public string Description { get; set; } = string.Empty;
-    public string ImageData { get; set; } = string.Empty;
+    public IFormFile? ImageData { get; set; }
 }
