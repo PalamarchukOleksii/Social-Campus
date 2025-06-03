@@ -3,60 +3,82 @@ import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import ShortProfile from "../shortProfile/ShortProfile";
 import { IoArrowBackCircleOutline, IoArrowBackCircle } from "react-icons/io5";
+import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import "./CreateComment.css";
 
+const CREATE_COMMENT_URL = "/api/comments/create";
+const UPDATE_COMMENT_URL = "/api/comments/update";
+
 function CreateComment(props) {
+  const { auth } = useAuth();
+  const axios = useAxiosPrivate();
+
   const [commentText, setCommentText] = useState(
     props.isForEdit ? props.text || "" : ""
   );
   const [isExitHovered, setIsExitHovered] = useState(false);
-  const [authUser, setAuthUser] = useState();
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState({});
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const currentUser = auth?.shortUser || {};
+    setUser(currentUser);
+    setLoading(false);
+  }, [auth]);
 
   const handleInputChange = (e) => {
     setCommentText(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (commentText.trim()) {
-      if (props.isForEdit) {
-        props.setText(commentText);
-      } else {
-        const newComment = {
-          id: props.getMaxCommentId() + 1,
-          text: commentText,
-          creationTime: new Date().toISOString(),
-          username: authUser.username,
-          login: authUser.login,
-          profileImage: authUser.profileImage,
-          likeCount: 0,
-        };
+    if (!commentText.trim()) {
+      toast.error("Comment text cannot be empty.");
+      return;
+    }
 
-        props.setComments([newComment, ...props.comments]);
+    try {
+      const payload = {
+        description: commentText,
+      };
+
+      if (props.isForEdit && props.commentId) {
+        payload.commentId = { value: props.commentId };
+        payload.callerId = { value: user.id.value };
+
+        await axios.patch(UPDATE_COMMENT_URL, payload);
+        toast.success("Comment updated successfully.");
+        if (props.setText) props.setText(commentText);
+      } else {
+        payload.publicationId = { value: props.publicationId };
+        payload.creatorId = { value: user.id.value };
+
+        await axios.post(CREATE_COMMENT_URL, payload);
+        toast.success("Comment posted successfully.");
       }
 
       setCommentText("");
-      if (props.addGoBack) {
-        props.onCloseClick();
+      if (props.onCloseClick) props.onCloseClick();
+    } catch (error) {
+      const { response } = error;
+      if (response?.data?.error) {
+        response.data.error.forEach((err) => toast.error(err.message));
+      } else if (response?.data?.detail) {
+        toast.error(response.data.detail);
+      } else {
+        console.error(error);
+        toast.error("An unexpected error occurred.");
       }
-    } else {
-      toast("Comment text cannot be empty.");
     }
   };
 
   const closeCreateComment = () => {
     setCommentText("");
-    if (props.addGoBack) {
-      props.onCloseClick();
-    }
+    if (props.onCloseClick) props.onCloseClick();
   };
 
-  if (loading) {
-    return <></>;
-  }
+  if (loading) return null;
 
   return (
     <div className={`create-comment ${props.addGoBack ? "go-back" : ""}`}>
@@ -72,17 +94,12 @@ function CreateComment(props) {
         </div>
       )}
       <ShortProfile
-        username={authUser.username}
-        login={authUser.login}
-        profileImage={authUser.profileImage}
+        username={user.firstName + " " + user.lastName}
+        login={user.login}
+        profileImage={user.profileImage}
         redirectOnClick={false}
       />
-      <form
-        className="create-form"
-        onSubmit={
-          props.onSubmit ? () => props.onSubmit(commentText) : handleSubmit
-        }
-      >
+      <form className="create-form" onSubmit={handleSubmit}>
         <textarea
           className="comment-text"
           type="text"
@@ -102,25 +119,13 @@ function CreateComment(props) {
 }
 
 CreateComment.propTypes = {
-  comments: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-      text: PropTypes.string,
-      creationTime: PropTypes.string,
-      username: PropTypes.string,
-      login: PropTypes.string,
-      profileImage: PropTypes.string,
-      likeCount: PropTypes.number,
-    })
-  ),
-  setComments: PropTypes.func,
-  getMaxCommentId: PropTypes.func,
+  publicationId: PropTypes.string,
+  commentId: PropTypes.string,
   onCloseClick: PropTypes.func,
-  addGoBack: PropTypes.bool,
+  isForEdit: PropTypes.bool,
   text: PropTypes.string,
   setText: PropTypes.func,
-  isForEdit: PropTypes.bool,
-  onSubmit: PropTypes.func,
+  addGoBack: PropTypes.bool,
 };
 
 export default CreateComment;

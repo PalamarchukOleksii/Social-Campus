@@ -15,7 +15,7 @@ namespace Application.Comments.Commands.UpdateComment
             Comment? comment = await commentRepository.GetByIdAsync(request.CommentId);
             if (comment == null)
             {
-                return Result.Failure<ShortPublicationDto>(new Error(
+                return Result.Failure(new Error(
                     "Comment.NotFound",
                     $"Comment with Comment {request.CommentId.Value} was not found"));
             }
@@ -29,7 +29,7 @@ namespace Application.Comments.Commands.UpdateComment
 
             if (comment.CreatorId != request.CallerId)
             {
-                return Result.Failure<ShortPublicationDto>(new Error(
+                return Result.Failure(new Error(
                     "User.NoUpdatePermission",
                     $"User with UserId {request.CallerId.Value} do not have permission to update comment with CommentId {request.CommentId.Value}"));
             }

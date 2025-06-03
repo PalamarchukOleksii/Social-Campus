@@ -15,7 +15,7 @@ namespace Presentation.Endpoints.Follows.GetFollowingByLogin
             {
                 GetFollowingListQuery queryRequest = new(login);
 
-                Result<IReadOnlyList<ShortUserDto>> response = await sender.Send(queryRequest);
+                Result<IReadOnlyList<UserDto>> response = await sender.Send(queryRequest);
                 if (response.IsFailure)
                 {
                     return HandleFailure(response);

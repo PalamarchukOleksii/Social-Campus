@@ -87,6 +87,7 @@ function Publication(props) {
       {isCreateOpen && (
         <div className="create-comment-modal-overlay">
           <CreateComment
+            publicationId={props.publication.id.value}
             user={auth.shortUser}
             comments={comments}
             setComments={setComments}

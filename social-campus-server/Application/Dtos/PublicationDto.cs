@@ -9,8 +9,8 @@ namespace Application.Dtos
         public string Description { get; set; } = string.Empty;
         public string ImageData { get; set; } = string.Empty;
         public DateTime CreationDateTime { get; set; }
-        public ShortUserDto CreatorInfo { get; set; } = new ShortUserDto();
+        public UserId CreatorId { get; set; } = new UserId(Guid.Empty);
         public IReadOnlyList<UserId>? UserWhoLikedIds { get; set; }
-        public IReadOnlyList<CommentDto>? Comments { get; set; }
+        public int CommentsCount { get; set; }
     }
 }

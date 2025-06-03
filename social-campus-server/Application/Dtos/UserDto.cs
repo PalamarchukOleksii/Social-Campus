@@ -2,7 +2,7 @@
 
 namespace Application.Dtos
 {
-    public class UserProfileDto
+    public class UserDto
     {
         public UserId Id { get; set; } = new UserId(Guid.Empty);
         public string Email { get; set; } = string.Empty;
@@ -11,9 +11,8 @@ namespace Application.Dtos
         public string LastName { get; set; } = string.Empty;
         public string Bio { get; set; } = string.Empty;
         public string ProfileImageData { get; set; } = string.Empty;
-        public IReadOnlyList<ShortPublicationDto>? Publications { get; set; }
+        public IReadOnlyList<UserId>? FollowersIds { get; set; }
         public int FollowingCount { get; set; }
         public int FollowersCount { get; set; }
-        public IReadOnlyList<UserId>? FollowersIds { get; set; }
     }
 }

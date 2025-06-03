@@ -8,35 +8,39 @@ namespace Application.Follows.Queries.GetFollowingList
 {
     public class GetFollowingListQueryHandler(
         IFollowRepository followRepository,
-        IUserRepository userRepository) : IQueryHandler<GetFollowingListQuery, IReadOnlyList<ShortUserDto>>
+        IUserRepository userRepository) : IQueryHandler<GetFollowingListQuery, IReadOnlyList<UserDto>>
     {
-        public async Task<Result<IReadOnlyList<ShortUserDto>>> Handle(GetFollowingListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IReadOnlyList<UserDto>>> Handle(GetFollowingListQuery request, CancellationToken cancellationToken)
         {
             User? user = await userRepository.GetByLoginAsync(request.Login);
             if (user is null)
             {
-                return Result.Failure<IReadOnlyList<ShortUserDto>>(new Error(
+                return Result.Failure<IReadOnlyList<UserDto>>(new Error(
                     "User.NotFound",
                     $"User with login {request.Login} was not found"));
             }
 
             IReadOnlyList<User> response = await followRepository.GetFollowingUsersByUserIdAsync(user.Id);
 
-            IReadOnlyList<ShortUserDto> followingDto = await Task.WhenAll(response
-                .Select(async user => new ShortUserDto
-                {
-                    Id = user.Id,
-                    Login = user.Login,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Bio = user.Bio,
-                    ProfileImageData = user.ProfileImageData,
-                    FollowersIds = (await followRepository.GetFollowersUsersByUserIdAsync(user.Id))
-                        .Select(f => f.Id)
-                        .ToList() as IReadOnlyList<UserId>
-                }));
+            List<UserDto> followingDto = new();
 
-            return Result.Success(followingDto);
+            foreach (var followedUser in response)
+            {
+                var followers = await followRepository.GetFollowersUsersByUserIdAsync(followedUser.Id);
+
+                followingDto.Add(new UserDto
+                {
+                    Id = followedUser.Id,
+                    Login = followedUser.Login,
+                    FirstName = followedUser.FirstName,
+                    LastName = followedUser.LastName,
+                    Bio = followedUser.Bio,
+                    ProfileImageData = followedUser.ProfileImageData,
+                    FollowersIds = followers.Select(f => f.Id).ToList() as IReadOnlyList<UserId>
+                });
+            }
+
+            return Result.Success(followingDto as IReadOnlyList<UserDto>);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Application.Dtos
         public CommentId Id { get; set; } = new CommentId(Guid.Empty);
         public string Description { get; set; } = string.Empty;
         public DateTime CreationDateTime { get; set; }
-        public ShortUserDto CreatorInfo { get; set; } = new ShortUserDto();
+        public UserId CreatorId { get; set; } = new UserId(Guid.Empty);
         public PublicationId PublicationId { get; set; } = new PublicationId(Guid.Empty);
         public IReadOnlyList<UserId>? UserWhoLikedIds { get; set; }
     }

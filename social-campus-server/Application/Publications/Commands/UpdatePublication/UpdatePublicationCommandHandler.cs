@@ -15,7 +15,7 @@ namespace Application.Publications.Commands.UpdatePublication
             Publication? publication = await publicationRepository.GetByIdAsync(request.PublicationId);
             if (publication is null)
             {
-                return Result.Failure<ShortPublicationDto>(new Error(
+                return Result.Failure<PublicationDto>(new Error(
                     "Publication.NotFound",
                     $"Publication with PublicationId {request.PublicationId.Value} was not found"));
             }
@@ -29,7 +29,7 @@ namespace Application.Publications.Commands.UpdatePublication
 
             if (publication.CreatorId != request.CallerId)
             {
-                return Result.Failure<ShortPublicationDto>(new Error(
+                return Result.Failure<PublicationDto>(new Error(
                     "User.NoUpdatePermission",
                     $"User with UserId {request.CallerId.Value} do not have permission to update publication with PublicationId {request.PublicationId.Value}"));
             }

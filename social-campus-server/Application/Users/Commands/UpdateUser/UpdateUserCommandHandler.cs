@@ -28,9 +28,9 @@ namespace Application.Users.Commands.UpdateUser
 
             if (user.Id != request.CallerId)
             {
-                return Result.Failure<ShortPublicationDto>(new Error(
+                return Result.Failure(new Error(
                     "User.NoUpdatePermission",
-                    $"User with UserId {request.CallerId.Value} do not have permission to updatep profile of user with UserId {request.UserId.Value}"));
+                    $"User with UserId {request.CallerId.Value} do not have permission to update profile of user with UserId {request.UserId.Value}"));
             }
 
             bool isEmailUnique = await userRepository.IsEmailUniqueAsync(request.Email);

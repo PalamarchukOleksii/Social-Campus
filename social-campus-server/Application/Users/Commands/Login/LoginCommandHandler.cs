@@ -12,14 +12,14 @@ namespace Application.Users.Commands.Login
         IJwtProvider jwtProvider,
         IUserRepository userRepository,
         IRefreshTokenRepository tokenRepository,
-        IPasswordHasher passwordHasher) : ICommandHandler<LoginCommand, UserOnLoginRefreshDto>
+        IPasswordHasher passwordHasher) : ICommandHandler<LoginCommand, UserLoginRefreshDto>
     {
-        public async Task<Result<UserOnLoginRefreshDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UserLoginRefreshDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             User? user = await userRepository.GetByEmailAsync(request.Email);
             if (user is null)
             {
-                return Result.Failure<UserOnLoginRefreshDto>(new Error(
+                return Result.Failure<UserLoginRefreshDto>(new Error(
                     "User.NotFound",
                     $"User with email {request.Email} was not found"));
             }
@@ -27,7 +27,7 @@ namespace Application.Users.Commands.Login
             bool isPasswordValid = await passwordHasher.VerifyAsync(request.Password, user.PasswordHash);
             if (!isPasswordValid)
             {
-                return Result.Failure<UserOnLoginRefreshDto>(new Error(
+                return Result.Failure<UserLoginRefreshDto>(new Error(
                     "User.IncorrectPassword",
                     "Incorrect password"));
             }
@@ -47,17 +47,14 @@ namespace Application.Users.Commands.Login
                 user.SetRefreshTokenId(refreshToken.Id);
             }
 
-            return Result.Success(new UserOnLoginRefreshDto
+            return Result.Success(new UserLoginRefreshDto
             {
                 Tokens = tokens,
-                ShortUser = new ShortUserDto
-                {
-                    Id = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Login = user.Login,
-                    ProfileImageData = user.ProfileImageData
-                }
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Login = user.Login,
+                ProfileImageData = user.ProfileImageData
             });
         }
     }

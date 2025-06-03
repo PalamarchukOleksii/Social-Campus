@@ -3,5 +3,5 @@ using Application.Dtos;
 
 namespace Application.RefreshTokens.Commands.Refresh
 {
-    public record RefreshCommand(string RefreshToken) : ICommand<UserOnLoginRefreshDto>;
+    public record RefreshCommand(string RefreshToken) : ICommand<UserLoginRefreshDto>;
 }

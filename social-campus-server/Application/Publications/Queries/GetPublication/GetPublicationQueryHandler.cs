@@ -13,7 +13,6 @@ namespace Application.Publications.Queries.GetPublication
         IPublicationRepository publicationRepository,
         IUserRepository userRepository,
         IPublicationLikeRepositories publicationLikeRepositories,
-        IFollowRepository followRepository,
         ICommentRepository commentRepository) : IQueryHandler<GetPublicationQuery, PublicationDto>
     {
         public async Task<Result<PublicationDto>> Handle(GetPublicationQuery request, CancellationToken cancellationToken)
@@ -36,36 +35,7 @@ namespace Application.Publications.Queries.GetPublication
 
             IReadOnlyList<PublicationLike> publicationLikes = await publicationLikeRepositories
                 .GetPublicationLikesListByPublicationIdAsync(publication.Id);
-            IReadOnlyList<User> followers = await followRepository.GetFollowersUsersByUserIdAsync(user.Id);
             IReadOnlyList<Comment> comments = await commentRepository.GetPublicationCommentsByPublicationIdAsync(publication.Id);
-
-            IReadOnlyList<CommentDto> commentDtos = await Task.WhenAll(comments.Where(c => c.ReplyToCommentId is null)
-                .Select(async comment =>
-                {
-                    IReadOnlyList<User> followers = await followRepository.GetFollowersUsersByUserIdAsync(comment.CreatorId);
-
-                    return new CommentDto
-                    {
-                        Id = comment.Id,
-                        Description = comment.Description,
-                        CreationDateTime = comment.CreationDateTime,
-                        PublicationId = comment.RelatedPublicationId,
-                        CreatorInfo = new ShortUserDto
-                        {
-                            Id = comment.Creator!.Id,
-                            FirstName = comment.Creator.FirstName,
-                            LastName = comment.Creator.LastName,
-                            Login = comment.Creator.Login,
-                            Bio = comment.Creator.Bio,
-                            ProfileImageData = comment.Creator.ProfileImageData,
-                            FollowersIds = followers
-                                .Select(f => f.Id)
-                                .ToList() as IReadOnlyList<UserId>
-                        },
-                        UserWhoLikedIds = comment.CommentLikes?
-                            .Select(like => like.UserId).ToList() as IReadOnlyList<UserId>
-                    };
-                }));
 
             PublicationDto publicationDto = new()
             {
@@ -73,22 +43,11 @@ namespace Application.Publications.Queries.GetPublication
                 Description = publication.Description,
                 ImageData = publication.ImageData,
                 CreationDateTime = publication.CreationDateTime,
-                CreatorInfo = new ShortUserDto
-                {
-                    Id = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Login = user.Login,
-                    Bio = user.Bio,
-                    ProfileImageData = user.ProfileImageData,
-                    FollowersIds = followers
-                        .Select(f => f.Id)
-                        .ToList() as IReadOnlyList<UserId>
-                },
+                CreatorId = user.Id,
                 UserWhoLikedIds = publicationLikes
                     .Select(like => like.UserId)
-                    .ToList() as IReadOnlyList<UserId>,
-                Comments = commentDtos
+                    .ToList(),
+                CommentsCount = comments.Count,
             };
 
             return Result.Success(publicationDto);

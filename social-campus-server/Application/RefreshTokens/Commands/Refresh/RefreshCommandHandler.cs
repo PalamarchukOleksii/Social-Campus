@@ -11,28 +11,28 @@ namespace Application.RefreshTokens.Commands.Refresh
     public class RefreshCommandHandler(
         IUserRepository userRepository,
         IJwtProvider jwtProvider,
-        IRefreshTokenRepository tokenRepository) : ICommandHandler<RefreshCommand, UserOnLoginRefreshDto>
+        IRefreshTokenRepository tokenRepository) : ICommandHandler<RefreshCommand, UserLoginRefreshDto>
     {
-        public async Task<Result<UserOnLoginRefreshDto>> Handle(RefreshCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UserLoginRefreshDto>> Handle(RefreshCommand request, CancellationToken cancellationToken)
         {
             RefreshToken? refreshToken = await tokenRepository.GetByRefreshTokenAsync(request.RefreshToken);
             if (refreshToken == null)
             {
-                return Result.Failure<UserOnLoginRefreshDto>(new Error(
+                return Result.Failure<UserLoginRefreshDto>(new Error(
                     "RefreshToken.NotFound",
                     "Refresh token not found for the user"));
             }
             else if (!refreshToken.IsValid())
             {
-                return Result.Failure<UserOnLoginRefreshDto>(new Error(
+                return Result.Failure<UserLoginRefreshDto>(new Error(
                     "RefreshToken.Expired",
                     "The provided refresh token has expired"));
             }
 
             User? user = await userRepository.GetByRefreshTokenIdAsync(refreshToken.Id);
-            if (user == null || user.RefreshTokenId == null)
+            if (user == null || user.RefreshTokenId.Value == new RefreshTokenId(Guid.Empty).Value)
             {
-                return Result.Failure<UserOnLoginRefreshDto>(new Error(
+                return Result.Failure<UserLoginRefreshDto>(new Error(
                     "RefreshToken.Invalid",
                     "No user exists with the provided refresh token"));
             }
@@ -40,17 +40,14 @@ namespace Application.RefreshTokens.Commands.Refresh
             TokensDto tokens = jwtProvider.GenerateTokens(user);
             tokenRepository.Update(refreshToken, tokens.RefreshToken, tokens.RefreshTokenExpirationInSeconds);
 
-            return Result.Success(new UserOnLoginRefreshDto
+            return Result.Success(new UserLoginRefreshDto
             {
                 Tokens = tokens,
-                ShortUser = new ShortUserDto
-                {
-                    Id = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Login = user.Login,
-                    ProfileImageData = user.ProfileImageData
-                }
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Login = user.Login,
+                ProfileImageData = user.ProfileImageData
             });
         }
     }
