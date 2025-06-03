@@ -80,32 +80,36 @@ function CreatePublication(props) {
     e.preventDefault();
 
     try {
-      let imageData = "";
+      const formData = new FormData();
+
+      formData.append("description", publicationText);
 
       if (image) {
-        imageData = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(image);
-        });
+        formData.append("imageFile", image);
+      } else {
+        formData.append("imageFile", "");
       }
 
-      const payload = {
-        description: publicationText,
-        imageData,
-      };
-
       if (props.isForEdit && props.editPublicationId) {
-        payload.callerId = { value: user.id.value };
-        payload.publicationId = { value: props.editPublicationId };
+        formData.append("callerId.value", user.id.value);
+        formData.append("publicationId.value", props.editPublicationId);
 
-        await axios.patch(UPDATE_PUBLICATION_URL, payload);
+        await axios.patch(UPDATE_PUBLICATION_URL, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
         toast.success("Publication updated successfully.");
       } else {
-        payload.creatorId = { value: user.id.value };
+        formData.append("creatorId.value", user.id.value);
 
-        await axios.post(CREATE_PUBLICATION_URL, payload);
+        await axios.post(CREATE_PUBLICATION_URL, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
         toast.success("Publication created successfully.");
       }
     } catch (error) {

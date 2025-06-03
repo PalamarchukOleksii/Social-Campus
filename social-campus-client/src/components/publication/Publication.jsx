@@ -111,21 +111,13 @@ function Publication(props) {
       <div>
         <div className="short-info-container">
           <div className="creator-info">
-            <ShortProfile
-              username={
-                props.publication.creatorInfo.firstName +
-                " " +
-                props.publication.creatorInfo.lastName
-              }
-              login={props.publication.creatorInfo.login}
-              profileImage={props.publication.creatorInfo.profileImageUrl}
-            />
+            <ShortProfile userId={props.publication.creatorId} />
             <DateTime
               dateTime={props.publication.creationDateTime.split(".")[0]}
               locale="en-US"
             />
           </div>
-          {auth.shortUser?.login === props.publication.creatorInfo.login && (
+          {auth.shortUser?.id === props.publication.creatorId && (
             <div
               className="edit-pub-icon general-text"
               onMouseEnter={() => setIsEditHovered(true)}
@@ -141,8 +133,8 @@ function Publication(props) {
             {props.publication.description || "Description"}
           </h2>
           <div className="image-wrapper">
-            {props.publication.imageData && (
-              <img src={props.publication.imageData} alt="Publication" />
+            {props.publication.imageUrl && (
+              <img src={props.publication.imageUrl} alt="Publication" />
             )}
           </div>
         </div>
@@ -175,19 +167,16 @@ Publication.propTypes = {
       value: PropTypes.string.isRequired,
     }).isRequired,
     description: PropTypes.string.isRequired,
-    imageData: PropTypes.string,
+    imageUrl: PropTypes.string,
     creationDateTime: PropTypes.string.isRequired,
-    creatorInfo: PropTypes.shape({
-      id: PropTypes.shape({
-        value: PropTypes.string.isRequired,
-      }).isRequired,
-      login: PropTypes.string.isRequired,
-      firstName: PropTypes.string,
-      lastName: PropTypes.string,
-      bio: PropTypes.string,
-      profileImageUrl: PropTypes.string,
+    creatorId: PropTypes.shape({
+      value: PropTypes.string.isRequired,
     }).isRequired,
-    userWhoLikedIds: PropTypes.arrayOf(PropTypes.string),
+    userWhoLikedIds: PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.string.isRequired,
+      })
+    ),
     commentsCount: PropTypes.number.isRequired,
   }).isRequired,
 };

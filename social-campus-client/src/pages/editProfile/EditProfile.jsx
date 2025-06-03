@@ -14,7 +14,7 @@ import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
 
 const EDIT_PROFILE_URL = "/api/users/update";
-const GET_USER_URL = "/api/users";
+const GET_USER_BY_LOGIN_URL = "/api/users/by-login/";
 
 function EditProfile() {
   const { login } = useParams();
@@ -37,7 +37,7 @@ function EditProfile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const { data } = await axios.get(`${GET_USER_URL}/${login}`);
+        const { data } = await axios.get(`${GET_USER_BY_LOGIN_URL}${login}`);
 
         setUserId(data.id?.value || "");
         setFirstName(data.firstName || "");
