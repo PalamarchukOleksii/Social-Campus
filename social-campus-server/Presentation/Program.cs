@@ -10,7 +10,7 @@ builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddApplication();
 
-builder.Services.AddOpenApiWithAuth();
+builder.Services.AddOpenApi();
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 builder.Services.AddCors(options =>
@@ -34,7 +34,8 @@ if (app.Environment.IsDevelopment())
         options
             .WithTitle("Social Campus API")
             .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Axios)
-            .WithPreferredScheme("Bearer");
+            .AddPreferredSecuritySchemes("BearerAuth")
+            .AddHttpAuthentication("BearerAuth", auth => { auth.Token = "eyJhbGciOiJ..."; });
     });
 }
 
