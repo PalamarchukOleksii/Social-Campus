@@ -1,11 +1,14 @@
 ﻿using Application.Abstractions.Messaging;
+using Application.Abstractions.Storage;
+using Application.Helpers;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
 
 namespace Application.Users.Commands.UpdateUser;
 
 public class UpdateUserCommandHandler(
-    IUserRepository userRepository) : ICommandHandler<UpdateUserCommand>
+    IUserRepository userRepository,
+    IStorageService storageService) : ICommandHandler<UpdateUserCommand>
 {
     public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
@@ -37,6 +40,40 @@ public class UpdateUserCommandHandler(
                 "User.NotUniqueLogin",
                 $"User with login {request.Login} has already exist"));
 
+        var imageUrl = user.ProfileImageUrl;
+
+        if (request.ProfileImage is null)
+        {
+            await storageService.DeleteAsync(imageUrl, cancellationToken);
+            imageUrl = null;
+        }
+        else
+        {
+            await using var newImageStream = request.ProfileImage.OpenReadStream();
+            var newHash = await StorageHelpers.ComputeHashAsync(newImageStream);
+            newImageStream.Position = 0;
+
+            using var oldStream = new MemoryStream();
+            await storageService.DownloadAsync(imageUrl, oldStream, cancellationToken);
+            oldStream.Position = 0;
+
+            var oldHash = await StorageHelpers.ComputeHashAsync(oldStream);
+
+            var shouldUpload = oldHash != newHash;
+
+            if (shouldUpload)
+            {
+                await using var uploadStream = request.ProfileImage.OpenReadStream();
+                imageUrl = await storageService.UploadAsync(
+                    uploadStream,
+                    user.Id,
+                    "profile",
+                    request.ProfileImage.ContentType,
+                    cancellationToken);
+            }
+        }
+
+
         userRepository.Update(
             user,
             request.Login,
@@ -44,7 +81,7 @@ public class UpdateUserCommandHandler(
             request.FirstName,
             request.LastName,
             request.Bio,
-            request.ProfileImageData);
+            imageUrl ?? "");
 
         return Result.Success();
     }

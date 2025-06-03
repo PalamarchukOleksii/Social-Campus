@@ -89,10 +89,10 @@ function Profile() {
         </div>
         <div className="profile-stats">
           <Link to={ROUTES.FOLLOWERS.replace(":login", user.login)}>
-            <span>{user.followers?.length || 0} Followers</span>
+            <span>{user.followersCount} Followers</span>
           </Link>
           <Link to={ROUTES.FOLLOWING.replace(":login", user.login)}>
-            <span>{user.following?.length || 0} Following</span>
+            <span>{user.followingCount} Following</span>
           </Link>
         </div>
       </div>

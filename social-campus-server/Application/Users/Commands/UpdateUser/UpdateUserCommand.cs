@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Messaging;
 using Domain.Models.UserModel;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Users.Commands.UpdateUser;
 
@@ -11,4 +12,4 @@ public record UpdateUserCommand(
     string FirstName,
     string LastName,
     string Bio,
-    string ProfileImageData) : ICommand;
+    IFormFile? ProfileImage) : ICommand;

@@ -1,5 +1,6 @@
 ﻿using Application.Users.Commands.UpdateUser;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Presentation.Abstractions;
 using Presentation.Consts;
 
@@ -9,9 +10,9 @@ public class UpdateUserEndpoint : BaseEndpoint, IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPatch("users/update", async (ISender sender, UpdateUserRequest request) =>
+        app.MapPatch("users/update", async (ISender sender, [FromForm] UpdateUserRequest request) =>
             {
-                UpdateUserCommand commandRequest = new(
+                var commandRequest = new UpdateUserCommand(
                     request.CallerId,
                     request.UserId,
                     request.Login,
@@ -19,13 +20,15 @@ public class UpdateUserEndpoint : BaseEndpoint, IEndpoint
                     request.FirstName,
                     request.LastName,
                     request.Bio,
-                    request.ProfileImageData);
+                    request.ProfileImage);
 
                 var response = await sender.Send(commandRequest);
 
                 return response.IsSuccess ? Results.Ok() : HandleFailure(response);
             })
+            .Accepts<UpdateUserRequest>("multipart/form-data")
             .WithTags(Tags.Users)
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .DisableAntiforgery();
     }
 }

@@ -15,5 +15,5 @@ public interface IUserRepository
     public Task<bool> IsExistByIdAsync(UserId userId);
 
     public void Update(User user, string login, string email, string firstName, string lastName, string bio,
-        string profileImageData);
+        string profileImageUrl);
 }

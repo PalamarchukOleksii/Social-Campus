@@ -25,7 +25,7 @@ public class ValidationPipelineBehavior<TRequest, TResponse>(IEnumerable<IValida
                     failure.PropertyName,
                     failure.ErrorMessage))
                 .Distinct()
-                .ToArray());
+                .ToArray(), cancellationToken);
 
         if (errors.Length != 0) return CreateValidationResult<TResponse>(errors);
 

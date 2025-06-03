@@ -33,7 +33,7 @@ public class GetPublicationQueryHandler(
         {
             Id = publication.Id,
             Description = publication.Description,
-            ImageData = publication.ImageData,
+            ImageData = publication.ImageUrl,
             CreationDateTime = publication.CreationDateTime,
             CreatorId = user.Id,
             UserWhoLikedIds = publicationLikes

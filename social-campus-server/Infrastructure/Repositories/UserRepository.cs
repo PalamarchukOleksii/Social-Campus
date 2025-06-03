@@ -50,9 +50,9 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     }
 
     public void Update(User user, string login, string email, string firstName, string lastName, string bio,
-        string profileImageData)
+        string profileImageUrl)
     {
-        user.Update(login, email, firstName, lastName, bio, profileImageData);
+        user.Update(login, email, firstName, lastName, bio, profileImageUrl);
 
         context.Update(user);
     }

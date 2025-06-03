@@ -49,7 +49,7 @@ public class LoginCommandHandler(
             FirstName = user.FirstName,
             LastName = user.LastName,
             Login = user.Login,
-            ProfileImageData = user.ProfileImageData
+            ProfileImageData = user.ProfileImageUrl
         });
     }
 }

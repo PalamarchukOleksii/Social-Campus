@@ -1,10 +1,12 @@
 ﻿using System.Text;
 using Application.Abstractions.Data;
 using Application.Abstractions.Security;
+using Application.Abstractions.Storage;
 using Domain.Abstractions.Repositories;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Security;
+using Infrastructure.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -47,6 +49,8 @@ public static class DependencyInjection
 
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<IJwtProvider, JwtProvider>();
+
+        services.AddSingleton<IStorageService, MinioStorageService>();
 
         return services;
     }

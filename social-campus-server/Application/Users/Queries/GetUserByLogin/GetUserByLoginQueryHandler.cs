@@ -28,7 +28,7 @@ public class GetUserProfileByLoginHandler(
             FirstName = user.FirstName,
             LastName = user.LastName,
             Bio = user.Bio,
-            ProfileImageData = user.ProfileImageData,
+            ProfileImageData = user.ProfileImageUrl,
             FollowersCount = followers.Count,
             FollowingCount = following.Count,
             FollowersIds = followers

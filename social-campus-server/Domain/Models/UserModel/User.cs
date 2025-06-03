@@ -35,7 +35,7 @@ public class User
     public string FirstName { get; private set; } = string.Empty;
     public string LastName { get; private set; } = string.Empty;
     public string Bio { get; private set; } = string.Empty;
-    public string ProfileImageData { get; private set; } = string.Empty;
+    public string ProfileImageUrl { get; private set; } = string.Empty;
     public RefreshTokenId RefreshTokenId { get; private set; } = new(Guid.Empty);
     public virtual RefreshToken? RefreshToken { get; }
     public virtual ICollection<Follow>? Followers { get; }
@@ -56,13 +56,13 @@ public class User
     }
 
     public void Update(string login, string email, string firstName, string lastName, string bio,
-        string profileImageData)
+        string profileImageUrl)
     {
         Login = login;
         Email = email;
         FirstName = firstName;
         LastName = lastName;
         Bio = bio;
-        ProfileImageData = profileImageData;
+        ProfileImageUrl = profileImageUrl;
     }
 }
