@@ -118,7 +118,7 @@ function Publication(props) {
                 props.publication.creatorInfo.lastName
               }
               login={props.publication.creatorInfo.login}
-              profileImage={props.publication.creatorInfo.profileImageData}
+              profileImage={props.publication.creatorInfo.profileImageUrl}
             />
             <DateTime
               dateTime={props.publication.creationDateTime.split(".")[0]}
@@ -185,7 +185,7 @@ Publication.propTypes = {
       firstName: PropTypes.string,
       lastName: PropTypes.string,
       bio: PropTypes.string,
-      profileImageData: PropTypes.string,
+      profileImageUrl: PropTypes.string,
     }).isRequired,
     userWhoLikedIds: PropTypes.arrayOf(PropTypes.string),
     commentsCount: PropTypes.number.isRequired,

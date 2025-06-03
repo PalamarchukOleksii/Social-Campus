@@ -39,7 +39,7 @@ public class RefreshEndpoint : BaseEndpoint, IEndpoint
                 Login = response.Value.Login,
                 FirstName = response.Value.FirstName,
                 LastName = response.Value.LastName,
-                ProfileImageData = response.Value.ProfileImageData
+                ProfileImageUrl = response.Value.ProfileImageUrl
             };
 
             return Results.Ok(new

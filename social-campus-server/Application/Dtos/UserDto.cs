@@ -10,7 +10,7 @@ public class UserDto
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Bio { get; set; } = string.Empty;
-    public string ProfileImageData { get; set; } = string.Empty;
+    public string ProfileImageUrl { get; set; } = string.Empty;
     public IReadOnlyList<UserId>? FollowersIds { get; set; }
     public int FollowingCount { get; set; }
     public int FollowersCount { get; set; }

@@ -44,7 +44,7 @@ public class UpdateUserCommandHandler(
 
         if (request.ProfileImage is null)
         {
-            await storageService.DeleteAsync(imageUrl, cancellationToken);
+            if (!string.IsNullOrEmpty(imageUrl)) await storageService.DeleteAsync(imageUrl, cancellationToken);
             imageUrl = null;
         }
         else
@@ -53,16 +53,21 @@ public class UpdateUserCommandHandler(
             var newHash = await StorageHelpers.ComputeHashAsync(newImageStream);
             newImageStream.Position = 0;
 
-            using var oldStream = new MemoryStream();
-            await storageService.DownloadAsync(imageUrl, oldStream, cancellationToken);
-            oldStream.Position = 0;
+            var shouldUpload = true;
+            if (!string.IsNullOrEmpty(imageUrl))
+            {
+                using var oldStream = new MemoryStream();
+                await storageService.DownloadAsync(imageUrl, oldStream, cancellationToken);
+                oldStream.Position = 0;
 
-            var oldHash = await StorageHelpers.ComputeHashAsync(oldStream);
-
-            var shouldUpload = oldHash != newHash;
+                var oldHash = await StorageHelpers.ComputeHashAsync(oldStream);
+                shouldUpload = oldHash != newHash;
+            }
 
             if (shouldUpload)
             {
+                if (!string.IsNullOrEmpty(imageUrl)) await storageService.DeleteAsync(imageUrl, cancellationToken);
+
                 await using var uploadStream = request.ProfileImage.OpenReadStream();
                 imageUrl = await storageService.UploadAsync(
                     uploadStream,
@@ -72,7 +77,6 @@ public class UpdateUserCommandHandler(
                     cancellationToken);
             }
         }
-
 
         userRepository.Update(
             user,

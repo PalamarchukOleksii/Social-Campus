@@ -30,7 +30,7 @@ PublicationsList.propTypes = {
         firstName: PropTypes.string,
         lastName: PropTypes.string,
         bio: PropTypes.string,
-        profileImageData: PropTypes.string,
+        profileImageUrl: PropTypes.string,
       }).isRequired,
       userWhoLikedIds: PropTypes.arrayOf(PropTypes.string),
       commentsCount: PropTypes.number.isRequired,

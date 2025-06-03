@@ -33,7 +33,7 @@ public class GetFollowingListQueryHandler(
                 FirstName = followedUser.FirstName,
                 LastName = followedUser.LastName,
                 Bio = followedUser.Bio,
-                ProfileImageData = followedUser.ProfileImageUrl,
+                ProfileImageUrl = followedUser.ProfileImageUrl,
                 FollowersIds = followers.Select(f => f.Id).ToList()
             });
         }

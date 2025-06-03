@@ -9,5 +9,5 @@ public class UserLoginRefreshDto
     public string Login { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
-    public string ProfileImageData { get; set; } = string.Empty;
+    public string ProfileImageUrl { get; set; } = string.Empty;
 }

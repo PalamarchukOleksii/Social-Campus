@@ -55,7 +55,7 @@ function Profile() {
         <div className="profile-header">
           <div className="profile-image-container">
             <img
-              src={user.profileImageData || "/default-profile.png"}
+              src={user.profileImageUrl || "/default-profile.png"}
               alt="Profile"
               className="profile-image"
             />

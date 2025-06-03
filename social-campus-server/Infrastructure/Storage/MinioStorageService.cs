@@ -9,7 +9,9 @@ namespace Infrastructure.Storage;
 public class MinioStorageService : IStorageService
 {
     private readonly string _bucketName;
+    private readonly string _endpoint;
     private readonly IMinioClient _minioClient;
+    private readonly bool _useSsl;
 
     public MinioStorageService(IConfiguration configuration)
     {
@@ -17,12 +19,17 @@ public class MinioStorageService : IStorageService
         _bucketName = minioOptions.GetValue<string>("BucketName")
                       ?? throw new InvalidOperationException("Minio:BucketName configuration is missing.");
 
+        _endpoint = minioOptions.GetValue<string>("Endpoint")
+                    ?? throw new InvalidOperationException("Minio:Endpoint configuration is missing.");
+
+        _useSsl = minioOptions.GetValue<bool>("UseSSL");
+
         _minioClient = new MinioClient()
-            .WithEndpoint(minioOptions.GetValue<string>("Endpoint"))
+            .WithEndpoint(_endpoint)
             .WithCredentials(
                 minioOptions.GetValue<string>("AccessKey"),
                 minioOptions.GetValue<string>("SecretKey"))
-            .WithSSL(minioOptions.GetValue<bool>("UseSSL"))
+            .WithSSL(_useSsl)
             .Build();
 
         EnsureBucketExistsAsync().GetAwaiter().GetResult();
@@ -32,7 +39,7 @@ public class MinioStorageService : IStorageService
         CancellationToken cancellationToken = default)
     {
         var extension = contentType == "image/jpeg" ? ".jpg" : ".png";
-        var objectName = $"{contentFor}/{userId}/{Guid.NewGuid()}{extension}";
+        var objectName = $"{contentFor}/{userId.Value}/{Guid.NewGuid()}{extension}";
 
         var putArgs = new PutObjectArgs()
             .WithBucket(_bucketName)
@@ -43,26 +50,40 @@ public class MinioStorageService : IStorageService
 
         await _minioClient.PutObjectAsync(putArgs, cancellationToken);
 
-        return objectName;
+        var protocol = _useSsl ? "https" : "http";
+        return $"{protocol}://{_endpoint}/{_bucketName}/{objectName}";
     }
 
     public async Task DeleteAsync(string fileUrl, CancellationToken cancellationToken = default)
     {
+        var objectName = ExtractObjectNameFromUrl(fileUrl);
+
         var removeArgs = new RemoveObjectArgs()
             .WithBucket(_bucketName)
-            .WithObject(fileUrl);
+            .WithObject(objectName);
 
         await _minioClient.RemoveObjectAsync(removeArgs, cancellationToken);
     }
 
     public async Task DownloadAsync(string fileUrl, Stream destination, CancellationToken cancellationToken = default)
     {
+        var objectName = ExtractObjectNameFromUrl(fileUrl);
+
         var args = new GetObjectArgs()
             .WithBucket(_bucketName)
-            .WithObject(fileUrl)
+            .WithObject(objectName)
             .WithCallbackStream(stream => stream.CopyTo(destination));
 
         await _minioClient.GetObjectAsync(args, cancellationToken);
+    }
+
+    private string ExtractObjectNameFromUrl(string fileUrl)
+    {
+        if (!fileUrl.StartsWith("http://") && !fileUrl.StartsWith("https://")) return fileUrl;
+        var uri = new Uri(fileUrl);
+        var path = uri.AbsolutePath.TrimStart('/');
+
+        return path.StartsWith($"{_bucketName}/") ? path[(_bucketName.Length + 1)..] : path;
     }
 
     private async Task EnsureBucketExistsAsync()
