@@ -1,18 +1,18 @@
-using Application.Publications.Queries.GetUserPublications;
+using Application.Users.Queries.GetUserById;
 using Domain.Models.UserModel;
 using MediatR;
 using Presentation.Abstractions;
 using Presentation.Consts;
 
-namespace Presentation.Endpoints.Publications.GetUserPublications;
+namespace Presentation.Endpoints.Users.GetUserById;
 
-public class GetUserPublicationsEndpoint : BaseEndpoint, IEndpoint
+public class GetUserByIdEndpoint : BaseEndpoint, IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/users/{userId:guid:required}/publications", async (ISender sender, Guid userId) =>
+        app.MapGet("users/by-id/{userId:guid:required}", async (ISender sender, Guid userId) =>
             {
-                GetUserPublicationsQuery queryRequest = new(new UserId(userId));
+                GetUserByIdQuery queryRequest = new(new UserId(userId));
 
                 var response = await sender.Send(queryRequest);
 

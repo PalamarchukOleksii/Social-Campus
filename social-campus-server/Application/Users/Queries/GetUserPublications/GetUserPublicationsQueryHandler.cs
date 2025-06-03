@@ -3,7 +3,7 @@ using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
 
-namespace Application.Publications.Queries.GetUserPublications;
+namespace Application.Users.Queries.GetUserPublications;
 
 public class GetUserPublicationsQueryHandler(
     IPublicationRepository publicationRepository,

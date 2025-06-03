@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Publications.Queries.GetUserPublications;
+namespace Application.Users.Queries.GetUserPublications;
 
 public class GetUserPublicationsQueryValidator : AbstractValidator<GetUserPublicationsQuery>
 {
