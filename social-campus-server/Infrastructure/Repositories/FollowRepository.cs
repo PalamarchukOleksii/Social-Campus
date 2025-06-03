@@ -26,8 +26,7 @@ public class FollowRepository(ApplicationDbContext context) : IFollowRepository
     {
         return await context.Follows
             .Where(f => f.FollowedUserId == userId)
-            .Select(f => f.User)
-            .Where(user => user != null)
+            .Select(f => f.User!)
             .ToListAsync();
     }
 
@@ -35,8 +34,7 @@ public class FollowRepository(ApplicationDbContext context) : IFollowRepository
     {
         return await context.Follows
             .Where(f => f.UserId == userId)
-            .Select(f => f.FollowedUser)
-            .Where(user => user != null)
+            .Select(f => f.FollowedUser!)
             .ToListAsync();
     }
 
