@@ -27,6 +27,29 @@ services:
     networks:
       - socialcampus-net
 
+  minio-init:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "
+      until mc alias set localminio http://minio:9000 minioadmin minioadmin; do
+        echo 'Waiting for MinIO alias setup...';
+        sleep 3;
+      done;
+
+      echo 'Creating bucket socialcampus (if not exists)...';
+      mc mb --ignore-existing localminio/socialcampus;
+
+      echo 'Setting bucket policy to public read...';
+      mc anonymous set download localminio/socialcampus;
+
+      echo 'MinIO setup complete!';
+      "
+    networks:
+      - socialcampus-net
+
 networks:
   socialcampus-net:
 
