@@ -1,6 +1,7 @@
 using System.Reflection;
 using Application;
 using Infrastructure;
+using Infrastructure.Data;
 using Presentation.Extensions;
 using Scalar.AspNetCore;
 
@@ -12,17 +13,13 @@ builder.Services
 
 builder.Services.AddOpenApi();
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("ClientCors", policy =>
-    {
-        policy.WithOrigins("http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-});
+builder.Services.AddClientCors(
+    "ClientCors",
+    [
+        "http://localhost:3000",
+        "https://localhost:3000"
+    ]
+    );
 
 var app = builder.Build();
 
@@ -34,9 +31,10 @@ if (app.Environment.IsDevelopment())
         options
             .WithTitle("Social Campus API")
             .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Axios)
-            .AddPreferredSecuritySchemes("BearerAuth")
-            .AddHttpAuthentication("BearerAuth", auth => { auth.Token = "eyJhbGciOiJ..."; });
+            .AddPreferredSecuritySchemes("Bearer");
     });
+
+    await app.EnsureDatabaseCreatedAsync();
 }
 
 app.UseHttpsRedirection();
@@ -46,9 +44,6 @@ app.UseCors("ClientCors");
 app.UseAuthentication();
 app.UseAuthorization();
 
-var baseGroup = app
-    .MapGroup("api");
-
-app.MapEndpoints(baseGroup);
+app.MapEndpoints("api");
 
 await app.RunAsync();
