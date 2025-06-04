@@ -1,11 +1,11 @@
 using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 
-namespace Infrastructure.Fakers.UserFaker;
+namespace Infrastructure.Fakers.PublicationFaker;
 
-public class PublicationFakerFactory
+public static class PublicationFakerFactory
 {
-    public static async Task<List<Publication>> GenerateAsync(int count, List<User> users)
+    public static List<Publication> Generate(int count, List<User> users)
     {
         var faker = new PublicationFaker(users);
         return faker.Generate(count);

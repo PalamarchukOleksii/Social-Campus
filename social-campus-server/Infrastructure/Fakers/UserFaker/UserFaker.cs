@@ -1,15 +1,15 @@
-using Application.Abstractions.Security;
 using Bogus;
+using Domain.Models.UserModel;
 
-namespace Infrastructure.Fakers.User;
+namespace Infrastructure.Fakers.UserFaker;
 
 public class UserFaker : Faker<User>
 {
-    public UserFaker(IPasswordHasher passwordHasher)
+    public UserFaker()
     {
         CustomInstantiator(f => new User(
             f.Internet.UserName(),
-            await passwordHasher.HashAsync(f.Internet.Password()),
+            f.Internet.Password(),
             f.Internet.Email(),
             f.Name.FirstName(),
             f.Name.LastName()));

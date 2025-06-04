@@ -65,4 +65,9 @@ public class User
         Bio = bio;
         ProfileImageUrl = profileImageUrl;
     }
+
+    public void UpdatePasswordHash(string passwordHash)
+    {
+        PasswordHash = passwordHash;
+    }
 }

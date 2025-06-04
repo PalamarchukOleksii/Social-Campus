@@ -19,16 +19,14 @@ namespace Infrastructure.Data;
 
 public static class DatabaseSeeder
 {
-    public static async Task SeedAsync(ApplicationDbContext context, IServiceProvider serviceProvider,
+    public static async Task SeedAsync(DbContext context, IServiceCollection serviceCollection,
         CancellationToken ct)
     {
         if (await context.Set<User>().AsNoTracking().AnyAsync(ct)) return;
 
         Randomizer.Seed = new Random(42);
 
-        var passwordHasher = serviceProvider.GetService<IPasswordHasher>()
-                             ?? throw new InvalidOperationException("IPasswordHasher not registered");
-
+        var passwordHasher = serviceCollection.BuildServiceProvider().GetRequiredService<IPasswordHasher>();
         var users = await UserFakerFactory.GenerateAsync(20, passwordHasher);
         await context.Set<User>().AddRangeAsync(users, ct);
         await context.SaveChangesAsync(ct);
