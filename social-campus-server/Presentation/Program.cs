@@ -1,7 +1,6 @@
 using System.Reflection;
 using Application;
 using Infrastructure;
-using Infrastructure.Data;
 using Presentation.Extensions;
 using Scalar.AspNetCore;
 
@@ -19,7 +18,7 @@ builder.Services.AddClientCors(
         "http://localhost:3000",
         "https://localhost:3000"
     ]
-    );
+);
 
 var app = builder.Build();
 

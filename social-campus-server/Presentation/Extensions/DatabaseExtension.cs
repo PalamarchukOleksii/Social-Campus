@@ -1,4 +1,3 @@
-using System;
 using Infrastructure.Data;
 
 namespace Presentation.Extensions;
@@ -11,5 +10,4 @@ public static class DatabaseExtension
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await context.Database.EnsureCreatedAsync();
     }
-
 }

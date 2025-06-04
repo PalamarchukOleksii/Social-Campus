@@ -29,10 +29,7 @@ public static class EndpointExtension
             ? app
             : app.MapGroup(routePrefix);
 
-        foreach (var endpoint in endpoints)
-        {
-            endpoint.MapEndpoint(routeBuilder);
-        }
+        foreach (var endpoint in endpoints) endpoint.MapEndpoint(routeBuilder);
 
         return app;
     }
