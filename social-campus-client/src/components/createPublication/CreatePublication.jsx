@@ -158,10 +158,7 @@ function CreatePublication(props) {
         <span className="general-text back-text">Back</span>
       </div>
       <ShortProfile
-        username={user.firstName + " " + user.lastName}
-        login={user.login}
-        profileImage={user.profileImage}
-        redirectOnClick={false}
+        userId={user.id.value}
       />
       <form className="create-form" onSubmit={handleSubmit}>
         <textarea
