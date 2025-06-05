@@ -5,7 +5,6 @@ import NavItem from "../../components/navItem/NavItem";
 import PublicationDetailItems from "../../utils/consts/PublicationDetailItems";
 import "./PublicationDetail.css";
 import CreateComment from "../../components/createComment/CreateComment";
-import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
 import CommentReplyManager from "../../components/comment/CommentReplyManager";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
@@ -63,10 +62,7 @@ function PublicationDetail() {
         <>
           <Publication publication={publication} addCreateOpen={false} />
           <CreateComment
-            user={auth.shortUser}
-            comments={comments}
-            setComments={setComments}
-            getMaxCommentId={getMaxCommentId}
+            publicationId={publication.id.value}
           />
           {comments?.length ? (
             <>

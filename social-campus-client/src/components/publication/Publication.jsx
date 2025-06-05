@@ -8,7 +8,6 @@ import InteractionItems from "../../utils/consts/InteractionItems";
 import "./Publication.css";
 import DateTime from "../dateTime/DateTime";
 import CreateComment from "../createComment/CreateComment";
-import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
 import { IoCreateOutline, IoCreate } from "react-icons/io5";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
@@ -23,7 +22,6 @@ function Publication(props) {
   const { auth } = useAuth();
   const axios = useAxiosPrivate();
 
-  const [comments, setComments] = useState([]);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditHovered, setIsEditHovered] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -88,10 +86,6 @@ function Publication(props) {
         <div className="create-comment-modal-overlay">
           <CreateComment
             publicationId={props.publication.id.value}
-            user={auth.shortUser}
-            comments={comments}
-            setComments={setComments}
-            getMaxCommentId={getMaxCommentId}
             onCloseClick={handleCreateCommentCloseClick}
             addGoBack={true}
           />

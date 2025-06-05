@@ -9,14 +9,13 @@ import "./CreateComment.css";
 
 const CREATE_COMMENT_URL = "/api/comments/create";
 const UPDATE_COMMENT_URL = "/api/comments/update";
+const GET_COMMENT_URL = "/api/comments/";
 
 function CreateComment(props) {
   const { auth } = useAuth();
   const axios = useAxiosPrivate();
 
-  const [commentText, setCommentText] = useState(
-    props.isForEdit ? props.text || "" : ""
-  );
+  const [commentText, setCommentText] = useState("");
   const [isExitHovered, setIsExitHovered] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
@@ -27,12 +26,30 @@ function CreateComment(props) {
     setLoading(false);
   }, [auth]);
 
+  useEffect(() => {
+    const fetchComment = async () => {
+      try {
+        const response = await axios.get(`${GET_COMMENT_URL}${props.editCommentId}`);
+        const comment = response.data;
+        setCommentText(comment.description || "");
+      } catch (error) {
+        console.error("Fetching comment error:", error);
+        toast.error("Failed to fetch the comment data.");
+      }
+    };
+
+    if (props.isForEdit && props.editCommentId) {
+      fetchComment();
+    }
+  }, [props.isForEdit, props.editCommentId, axios]);
+
   const handleInputChange = (e) => {
     setCommentText(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!commentText.trim()) {
       toast.error("Comment text cannot be empty.");
       return;
@@ -43,13 +60,12 @@ function CreateComment(props) {
         description: commentText,
       };
 
-      if (props.isForEdit && props.commentId) {
-        payload.commentId = { value: props.commentId };
+      if (props.isForEdit && props.editCommentId) {
+        payload.commentId = { value: props.editCommentId };
         payload.callerId = { value: user.id.value };
 
         await axios.patch(UPDATE_COMMENT_URL, payload);
         toast.success("Comment updated successfully.");
-        if (props.setText) props.setText(commentText);
       } else {
         payload.publicationId = { value: props.publicationId };
         payload.creatorId = { value: user.id.value };
@@ -93,12 +109,7 @@ function CreateComment(props) {
           <span className="general-text back-text">Back</span>
         </div>
       )}
-      <ShortProfile
-        username={user.firstName + " " + user.lastName}
-        login={user.login}
-        profileImage={user.profileImage}
-        redirectOnClick={false}
-      />
+      <ShortProfile userId={user.id.value} />
       <form className="create-form" onSubmit={handleSubmit}>
         <textarea
           className="comment-text"
@@ -120,11 +131,9 @@ function CreateComment(props) {
 
 CreateComment.propTypes = {
   publicationId: PropTypes.string,
-  commentId: PropTypes.string,
+  editCommentId: PropTypes.string,
   onCloseClick: PropTypes.func,
   isForEdit: PropTypes.bool,
-  text: PropTypes.string,
-  setText: PropTypes.func,
   addGoBack: PropTypes.bool,
 };
 
