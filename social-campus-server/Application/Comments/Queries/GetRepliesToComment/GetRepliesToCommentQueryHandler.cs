@@ -19,9 +19,11 @@ public class GetRepliesToCommentQueryHandler(
 
         var comments = await commentRepository.GetRepliedCommentsByCommentIdAsync(request.CommentId);
 
-        List<CommentDto> commentDtos = new();
-
+        List<CommentDto> commentDtos = [];
         foreach (var c in comments)
+        {
+            var commentReplies = await commentRepository.GetRepliedCommentsByCommentIdAsync(c.Id);
+
             commentDtos.Add(new CommentDto
             {
                 Id = c.Id,
@@ -30,9 +32,11 @@ public class GetRepliesToCommentQueryHandler(
                 PublicationId = c.RelatedPublicationId,
                 CreatorId = c.Creator!.Id,
                 UserWhoLikedIds = c.CommentLikes?
-                    .Select(like => like.UserId).ToList()
+                    .Select(like => like.UserId).ToList(),
+                RepliesCount = commentReplies.Count
             });
+        }
 
-        return Result.Success(commentDtos.ToList() as IReadOnlyList<CommentDto>);
+        return Result.Success<IReadOnlyList<CommentDto>>(commentDtos.ToList());
     }
 }

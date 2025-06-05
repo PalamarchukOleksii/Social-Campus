@@ -19,6 +19,8 @@ public class GetCommentQueryHandler(ICommentRepository commentRepository, IComme
         var commentLikes = await commentLikeRepository
             .GetCommentLikesListByCommentIdAsync(comment.Id);
 
+        var commentReplies = await commentRepository.GetRepliedCommentsByCommentIdAsync(comment.Id);
+
         CommentDto commentDto = new()
         {
             Id = comment.Id,
@@ -28,7 +30,8 @@ public class GetCommentQueryHandler(ICommentRepository commentRepository, IComme
             PublicationId = comment.RelatedPublicationId,
             UserWhoLikedIds = commentLikes
                 .Select(like => like.UserId)
-                .ToList()
+                .ToList(),
+            RepliesCount = commentReplies.Count
         };
 
         return Result.Success(commentDto);

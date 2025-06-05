@@ -12,4 +12,5 @@ public class CommentDto
     public UserId CreatorId { get; set; } = new(Guid.Empty);
     public PublicationId PublicationId { get; set; } = new(Guid.Empty);
     public IReadOnlyList<UserId>? UserWhoLikedIds { get; set; }
+    public int RepliesCount { get; set; }
 }

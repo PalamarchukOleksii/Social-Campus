@@ -26,6 +26,7 @@ public class GetPublicationCommentsQueryHandler(
         foreach (var comment in publicationComments)
         {
             var commentLikes = await commentLikeRepository.GetCommentLikesListByCommentIdAsync(comment.Id);
+            var commentReplies = await commentRepository.GetRepliedCommentsByCommentIdAsync(comment.Id);
 
             commentDtos.Add(new CommentDto
             {
@@ -34,7 +35,8 @@ public class GetPublicationCommentsQueryHandler(
                 CreationDateTime = comment.CreationDateTime,
                 CreatorId = comment.CreatorId,
                 PublicationId = comment.RelatedPublicationId,
-                UserWhoLikedIds = commentLikes.Select(like => like.UserId).ToList()
+                UserWhoLikedIds = commentLikes.Select(like => like.UserId).ToList(),
+                RepliesCount = commentReplies.Count
             });
         }
 
