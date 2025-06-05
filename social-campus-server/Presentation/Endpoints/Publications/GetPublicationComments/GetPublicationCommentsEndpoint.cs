@@ -18,7 +18,7 @@ public class GetPublicationCommentsEndpoint : BaseEndpoint, IEndpoint
 
                 return response.IsSuccess ? Results.Ok(response.Value) : HandleFailure(response);
             })
-            .WithTags(Tags.PublicationLikes)
+            .WithTags(Tags.Publications)
             .RequireAuthorization();
     }
 }
