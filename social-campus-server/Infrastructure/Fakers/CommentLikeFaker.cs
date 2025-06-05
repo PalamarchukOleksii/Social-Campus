@@ -3,9 +3,9 @@ using Domain.Models.CommentLikeModel;
 using Domain.Models.CommentModel;
 using Domain.Models.UserModel;
 
-namespace Infrastructure.Fakers.CommentLikeFaker;
+namespace Infrastructure.Fakers;
 
-public static class CommentLikeFakerFactory
+public static class CommentLikeFaker
 {
     public static List<CommentLike> Generate(List<User> users, List<Comment> comments)
     {

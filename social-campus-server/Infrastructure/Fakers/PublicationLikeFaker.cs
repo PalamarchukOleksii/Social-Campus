@@ -3,9 +3,9 @@ using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 
-namespace Infrastructure.Fakers.PublicationLikeFaker;
+namespace Infrastructure.Fakers;
 
-public static class PublicationLikeFakerFactory
+public static class PublicationLikeFaker
 {
     public static List<PublicationLike> Generate(List<User> users, List<Publication> publications)
     {

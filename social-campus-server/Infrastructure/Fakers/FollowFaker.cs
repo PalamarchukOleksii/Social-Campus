@@ -2,9 +2,9 @@ using Bogus;
 using Domain.Models.FollowModel;
 using Domain.Models.UserModel;
 
-namespace Infrastructure.Fakers.FollowFaker;
+namespace Infrastructure.Fakers;
 
-public static class FollowFakerFactory
+public static class FollowFaker
 {
     public static List<Follow> Generate(List<User> users)
     {
