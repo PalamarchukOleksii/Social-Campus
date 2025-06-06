@@ -21,13 +21,15 @@ public static class EndpointExtension
 
     public static IApplicationBuilder MapEndpoints(
         this WebApplication app,
-        RouteGroupBuilder? routeGroupBuilder = null)
+        string routePrefix = "")
     {
         var endpoints = app.Services.GetRequiredService<IEnumerable<IEndpoint>>();
 
-        IEndpointRouteBuilder builder = routeGroupBuilder is null ? app : routeGroupBuilder;
+        IEndpointRouteBuilder routeBuilder = string.IsNullOrWhiteSpace(routePrefix)
+            ? app
+            : app.MapGroup(routePrefix);
 
-        foreach (var endpoint in endpoints) endpoint.MapEndpoint(builder);
+        foreach (var endpoint in endpoints) endpoint.MapEndpoint(routeBuilder);
 
         return app;
     }

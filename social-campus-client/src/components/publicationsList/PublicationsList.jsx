@@ -20,7 +20,14 @@ function PublicationsList({ userId }) {
         const response = await axios.get(
           `${USERS_BASE_URL}/${userId.value}/publications`
         );
-        setPublications(response.data);
+
+        const sortedPublications = response.data.sort((a, b) => {
+          const dateA = new Date(a.creationDateTime);
+          const dateB = new Date(b.creationDateTime);
+          return dateB - dateA;
+        });
+
+        setPublications(sortedPublications);
       } catch (err) {
         toast.error(err.message || "Failed to fetch publications");
       } finally {

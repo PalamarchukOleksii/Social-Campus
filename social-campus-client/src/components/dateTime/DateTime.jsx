@@ -2,6 +2,16 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./DateTime.css";
 
+function parseUTCDate(dateString) {
+  if (typeof dateString === "string") {
+    if (dateString.match(/Z|[+-]\d{2}:\d{2}$/)) {
+      return new Date(dateString);
+    }
+    return new Date(dateString + "Z");
+  }
+  return dateString instanceof Date ? dateString : new Date(dateString);
+}
+
 function DateTime(props) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -13,7 +23,7 @@ function DateTime(props) {
     return () => clearInterval(interval);
   }, []);
 
-  const date = new Date(props.dateTime);
+  const date = parseUTCDate(props.dateTime);
   const now = currentTime;
 
   const timeDifference = now - date;

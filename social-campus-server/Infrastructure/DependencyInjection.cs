@@ -19,10 +19,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionStringKey = "LocalConnection";
+        services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString(connectionStringKey)));
+            options.UseSqlServer(configuration.GetConnectionString("LocalConnection"))
+                .UseAsyncSeeding(async (context, _, ct) => await DatabaseSeeder.SeedAsync(context, services, ct)));
 
         services.AddAuthorization();
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -47,7 +48,6 @@ public static class DependencyInjection
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
 
-        services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<IJwtProvider, JwtProvider>();
 
         services.AddSingleton<IStorageService, MinioStorageService>();

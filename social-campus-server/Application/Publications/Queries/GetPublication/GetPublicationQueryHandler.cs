@@ -7,7 +7,6 @@ namespace Application.Publications.Queries.GetPublication;
 
 public class GetPublicationQueryHandler(
     IPublicationRepository publicationRepository,
-    IUserRepository userRepository,
     IPublicationLikeRepositories publicationLikeRepositories,
     ICommentRepository commentRepository) : IQueryHandler<GetPublicationQuery, PublicationDto>
 {
@@ -19,12 +18,6 @@ public class GetPublicationQueryHandler(
                 "Publication.NotFound",
                 $"Publication with PublicationId {request.PublicationId.Value} was not found"));
 
-        var user = await userRepository.GetByIdAsync(publication.CreatorId);
-        if (user is null)
-            return Result.Failure<PublicationDto>(new Error(
-                "User.NotFound",
-                $"User with UserId {publication.CreatorId.Value} was not found"));
-
         var publicationLikes = await publicationLikeRepositories
             .GetPublicationLikesListByPublicationIdAsync(publication.Id);
         var comments = await commentRepository.GetPublicationCommentsByPublicationIdAsync(publication.Id);
@@ -35,7 +28,7 @@ public class GetPublicationQueryHandler(
             Description = publication.Description,
             ImageData = publication.ImageUrl,
             CreationDateTime = publication.CreationDateTime,
-            CreatorId = user.Id,
+            CreatorId = publication.CreatorId,
             UserWhoLikedIds = publicationLikes
                 .Select(like => like.UserId)
                 .ToList(),

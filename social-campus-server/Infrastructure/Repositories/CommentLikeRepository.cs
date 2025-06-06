@@ -24,6 +24,13 @@ public class CommentLikeRepository(
         if (commentLike != null) context.CommentLikes.Remove(commentLike);
     }
 
+    public async Task<IReadOnlyList<CommentLike>> GetCommentLikesListByCommentIdAsync(CommentId commentId)
+    {
+        return await context.CommentLikes
+            .Where(pl => pl.CommentId == commentId)
+            .ToListAsync();
+    }
+
     public async Task<bool> IsLike(UserId userId, CommentId commentId)
     {
         return await context.CommentLikes.AnyAsync(pl => pl.CommentId == commentId && pl.UserId == userId);

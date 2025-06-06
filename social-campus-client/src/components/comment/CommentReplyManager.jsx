@@ -1,79 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import CreateComment from "../createComment/CreateComment";
 import Comment from "../comment/Comment";
 import PropTypes from "prop-types";
-import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-function CommentReplyManager({ comment, currentUser, comments, setComments }) {
-  const [replies, setReplies] = useState(comment?.replies || []);
+const GET_REPLIES_URL = "/api/comments/replies/";
+
+function CommentReplyManager({ comment }) {
+  const [replies, setReplies] = useState([]);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(comment.text);
 
-  const handleReplySubmit = (newReplyText) => {
-    const newReply = {
-      id: getMaxCommentId() + 1,
-      text: newReplyText,
-      creationTime: new Date().toISOString(),
-      username: currentUser.username,
-      login: currentUser.login,
-      profileImage: currentUser.profileImage,
-      likeCount: 0,
-    };
+  const axios = useAxiosPrivate();
 
-    setReplies((prevReplies) => [...prevReplies, newReply]);
-    setIsReplying(false);
+  const fetchReplies = async () => {
+    try {
+      const response = await axios.get(`${GET_REPLIES_URL}${comment.id.value}`);
+      setReplies(response.data);
+    } catch (error) {
+      console.error("Failed to fetch replies:", error);
+    }
   };
 
-  const handleEditSubmit = (newText) => {
-    comment.text = newText;
-    setEditText(newText);
-    setIsEditing(false);
-  };
+  useEffect(() => {
+    fetchReplies();
+  }, [comment.id.value]);
 
   return (
     <div className="comment-reply-manager">
       <Comment
-        {...comment}
+        comment={comment}
         onReplyClick={() => setIsReplying(true)}
         onEditClick={() => setIsEditing(true)}
-        currentUser={currentUser}
-        replies={replies}
       />
 
-      {isReplying && (
-        <div className="create-comment-modal-overlay">
-          <CreateComment
-            user={currentUser}
-            onSubmit={handleReplySubmit}
-            onCloseClick={() => setIsReplying(false)}
-            addGoBack
-            getMaxCommentId={getMaxCommentId}
-            comments={comments}
-            setComments={setComments}
-          />
-        </div>
-      )}
-
-      {isEditing && (
-        <CreateComment
-          user={currentUser}
-          text={editText}
-          isForEdit={true}
-          onSubmit={handleEditSubmit}
-          onClose={() => setIsEditing(false)}
-        />
-      )}
-
-      {!!replies?.length && (
-        <div className="replies-section">
-          {replies.map((reply) => (
-            <CommentReplyManager
-              key={reply.id}
-              comment={reply}
-              currentUser={currentUser}
+      {isReplying &&
+        createPortal(
+          <div className="create-comment-modal-overlay">
+            <CreateComment
+              publicationId={comment.publicationId.value}
+              replyToCommentId={comment.id.value}
+              onCloseClick={() => setIsReplying(false)}
+              addGoBack={true}
             />
-          ))}
+          </div>,
+          document.body
+        )}
+
+      {isEditing &&
+        createPortal(
+          <div className="edit-publication-modal-overlay">
+            <CreateComment
+              editCommentId={comment.id.value}
+              isForEdit={true}
+              onCloseClick={() => setIsEditing(false)}
+              addGoBack={true}
+            />
+          </div>,
+          document.body
+        )}
+
+      {replies.length > 0 && (
+        <div className="replies-section">
+          {[...replies]
+            .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+            .map((reply) => (
+              <CommentReplyManager
+                key={reply.id.value || reply.id}
+                comment={reply}
+              />
+            ))}
         </div>
       )}
     </div>
@@ -82,18 +79,24 @@ function CommentReplyManager({ comment, currentUser, comments, setComments }) {
 
 CommentReplyManager.propTypes = {
   comment: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    username: PropTypes.string.isRequired,
-    login: PropTypes.string.isRequired,
-    profileImage: PropTypes.string,
-    text: PropTypes.string.isRequired,
-    likeCount: PropTypes.number.isRequired,
-    creationTime: PropTypes.string.isRequired,
-    replies: PropTypes.array,
+    id: PropTypes.shape({
+      value: PropTypes.string.isRequired,
+    }).isRequired,
+    description: PropTypes.string.isRequired,
+    creationDateTime: PropTypes.string.isRequired,
+    creatorId: PropTypes.shape({
+      value: PropTypes.string.isRequired,
+    }).isRequired,
+    publicationId: PropTypes.shape({
+      value: PropTypes.string.isRequired,
+    }).isRequired,
+    userWhoLikedIds: PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.string.isRequired,
+      })
+    ),
+    repliesCount: PropTypes.number.isRequired,
   }).isRequired,
-  currentUser: PropTypes.object.isRequired,
-  comments: PropTypes.array,
-  setComments: PropTypes.func,
 };
 
 export default CommentReplyManager;

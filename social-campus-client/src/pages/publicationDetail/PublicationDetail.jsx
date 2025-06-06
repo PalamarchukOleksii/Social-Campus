@@ -5,12 +5,12 @@ import NavItem from "../../components/navItem/NavItem";
 import PublicationDetailItems from "../../utils/consts/PublicationDetailItems";
 import "./PublicationDetail.css";
 import CreateComment from "../../components/createComment/CreateComment";
-import getMaxCommentId from "../../utils/helpers/GetMaxCommentId";
 import CommentReplyManager from "../../components/comment/CommentReplyManager";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-const GET_PUBLICTION_URL = "/api/publications/";
+const GET_PUBLICATION_URL = "/api/publications/";
+const GET_COMMENTS_URL = "/api/publications/";
 
 function PublicationDetail() {
   const { id } = useParams();
@@ -24,21 +24,27 @@ function PublicationDetail() {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    const fetchPublication = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${GET_PUBLICTION_URL}${id}`);
-        setPublication(response.data);
+        const pubResponse = await axios.get(`${GET_PUBLICATION_URL}${id}`);
+        setPublication(pubResponse.data);
+
+        const commentsResponse = await axios.get(
+          `${GET_COMMENTS_URL}${id}/comments`
+        );
+        setComments(commentsResponse.data);
       } catch (error) {
-        console.error("Failed to fetch publication:", error);
+        console.error("Failed to fetch publication or comments:", error);
         setPublication(null);
+        setComments([]);
       } finally {
         setLoading(false);
       }
     };
 
     if (id) {
-      fetchPublication();
+      fetchData();
     }
   }, [id, axios]);
 
@@ -61,26 +67,35 @@ function PublicationDetail() {
         <h1 className="not-found-text general-text">Publication not found</h1>
       ) : (
         <>
-          <Publication publication={publication} addCreateOpen={false} />
-          <CreateComment
-            user={auth.shortUser}
-            comments={comments}
-            setComments={setComments}
-            getMaxCommentId={getMaxCommentId}
-          />
-          {comments?.length ? (
+          <Publication publication={publication} disableCreateComment={true} />
+          <CreateComment publicationId={publication.id.value} />
+          {comments.length > 0 ? (
             <>
               <h2 className="comment-section-text general-text">Comments</h2>
               <div className="comments-section">
-                {comments.map((comment) => (
-                  <CommentReplyManager
-                    key={comment.id}
-                    comment={comment}
-                    currentUser={auth.shortUser}
-                    comments={comments}
-                    setComments={setComments}
-                  />
-                ))}
+                {[...comments]
+                  .sort((a, b) => {
+                    const likesDiff =
+                      b.userWhoLikedIds.length - a.userWhoLikedIds.length;
+                    if (likesDiff !== 0) return likesDiff;
+
+                    const repliesDiff = b.repliesCount - a.repliesCount;
+                    if (repliesDiff !== 0) return repliesDiff;
+
+                    return (
+                      new Date(b.creationDateTime) -
+                      new Date(a.creationDateTime)
+                    );
+                  })
+                  .map((comment) => (
+                    <CommentReplyManager
+                      key={comment.id.value}
+                      comment={comment}
+                      currentUser={auth.shortUser}
+                      comments={comments}
+                      setComments={setComments}
+                    />
+                  ))}
               </div>
             </>
           ) : (

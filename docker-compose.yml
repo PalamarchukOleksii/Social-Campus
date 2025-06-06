@@ -1,0 +1,58 @@
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: socialcampus-mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Passw0rd.
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - socialcampus-net
+
+  minio:
+    image: minio/minio
+    container_name: socialcampus-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server --console-address ":9001" /data
+    volumes:
+      - minio_data:/data
+    networks:
+      - socialcampus-net
+
+  minio-init:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "
+      until mc alias set localminio http://minio:9000 minioadmin minioadmin; do
+        echo 'Waiting for MinIO alias setup...';
+        sleep 3;
+      done;
+
+      echo 'Creating bucket socialcampus (if not exists)...';
+      mc mb --ignore-existing localminio/socialcampus;
+
+      echo 'Setting bucket policy to public read...';
+      mc anonymous set download localminio/socialcampus;
+
+      echo 'MinIO setup complete!';
+      "
+    networks:
+      - socialcampus-net
+
+networks:
+  socialcampus-net:
+
+volumes:
+  mssql_data:
+  minio_data:
