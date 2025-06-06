@@ -7,10 +7,48 @@ import InteractionItem from "../interactionItem/InteractionItem";
 import DateTime from "../dateTime/DateTime";
 import { IoCreateOutline, IoCreate } from "react-icons/io5";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
+const REMOVE_COMMENT_LIKE_URL = "/api/commentlikes/remove/";
+const ADD_COMMENT_LIKE_URL = "/api/commentlikes/add";
 
 function Comment(props) {
   const { auth } = useAuth();
+  const axios = useAxiosPrivate();
   const [isEditHovered, setIsEditHovered] = useState(false);
+
+  const [isLiked, setIsLiked] = useState(
+    props.comment.userWhoLikedIds
+      ?.map((idObj) => idObj.value)
+      .includes(auth.shortUser.id.value)
+  );
+  const [likeCount, setLikeCount] = useState(
+    props.comment.userWhoLikedIds?.length || 0
+  );
+
+  const handleLikeToggle = async () => {
+    const userId = auth.shortUser?.id?.value;
+    const commentId = props.comment.id.value;
+
+    if (!userId || !commentId) return;
+
+    try {
+      if (isLiked) {
+        await axios.delete(`${REMOVE_COMMENT_LIKE_URL}${commentId}/${userId}`);
+        setIsLiked(false);
+        setLikeCount((prev) => prev - 1);
+      } else {
+        await axios.post(ADD_COMMENT_LIKE_URL, {
+          userId: { value: userId },
+          commentId: { value: commentId },
+        });
+        setIsLiked(true);
+        setLikeCount((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error("Error toggling comment like:", error);
+    }
+  };
 
   return (
     <div className="comment-container">
@@ -38,10 +76,12 @@ function Comment(props) {
       </div>
       <div className="comment-interactions">
         <InteractionItem
-          label={props.comment.userWhoLikedIds?.length || 0}
+          label={likeCount}
           icon={InteractionItems.likeIcon}
           activeIcon={InteractionItems.activeLikeIcon}
           itemType="like"
+          isActive={isLiked}
+          onClick={handleLikeToggle}
         />
         <InteractionItem
           label={props.comment.repliesCount}
