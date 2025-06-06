@@ -63,12 +63,14 @@ function CommentReplyManager({ comment }) {
 
       {replies.length > 0 && (
         <div className="replies-section">
-          {replies.map((reply) => (
-            <CommentReplyManager
-              key={reply.id.value || reply.id}
-              comment={reply}
-            />
-          ))}
+          {[...replies]
+            .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+            .map((reply) => (
+              <CommentReplyManager
+                key={reply.id.value || reply.id}
+                comment={reply}
+              />
+            ))}
         </div>
       )}
     </div>

@@ -73,15 +73,29 @@ function PublicationDetail() {
             <>
               <h2 className="comment-section-text general-text">Comments</h2>
               <div className="comments-section">
-                {comments.map((comment) => (
-                  <CommentReplyManager
-                    key={comment.id.value}
-                    comment={comment}
-                    currentUser={auth.shortUser}
-                    comments={comments}
-                    setComments={setComments}
-                  />
-                ))}
+                {[...comments]
+                  .sort((a, b) => {
+                    const likesDiff =
+                      b.userWhoLikedIds.length - a.userWhoLikedIds.length;
+                    if (likesDiff !== 0) return likesDiff;
+
+                    const repliesDiff = b.repliesCount - a.repliesCount;
+                    if (repliesDiff !== 0) return repliesDiff;
+
+                    return (
+                      new Date(b.creationDateTime) -
+                      new Date(a.creationDateTime)
+                    );
+                  })
+                  .map((comment) => (
+                    <CommentReplyManager
+                      key={comment.id.value}
+                      comment={comment}
+                      currentUser={auth.shortUser}
+                      comments={comments}
+                      setComments={setComments}
+                    />
+                  ))}
               </div>
             </>
           ) : (
