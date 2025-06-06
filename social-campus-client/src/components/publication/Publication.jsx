@@ -82,7 +82,7 @@ function Publication(props) {
 
   return (
     <div className="publication-container">
-      {isCreateOpen && (
+      {isCreateOpen && !props.disableCreateComment && (
         <div className="create-comment-modal-overlay">
           <CreateComment
             publicationId={props.publication.id.value}
@@ -173,6 +173,7 @@ Publication.propTypes = {
     ),
     commentsCount: PropTypes.number.isRequired,
   }).isRequired,
+  disableCreateComment: PropTypes.bool,
 };
 
 export default Publication;
