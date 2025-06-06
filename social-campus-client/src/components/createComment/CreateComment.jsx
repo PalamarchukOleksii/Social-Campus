@@ -10,6 +10,7 @@ import "./CreateComment.css";
 const CREATE_COMMENT_URL = "/api/comments/create";
 const UPDATE_COMMENT_URL = "/api/comments/update";
 const GET_COMMENT_URL = "/api/comments/";
+const REPLY_TO_COMMENT_URL = "/api/comments/reply";
 
 function CreateComment(props) {
   const { auth } = useAuth();
@@ -29,7 +30,9 @@ function CreateComment(props) {
   useEffect(() => {
     const fetchComment = async () => {
       try {
-        const response = await axios.get(`${GET_COMMENT_URL}${props.editCommentId}`);
+        const response = await axios.get(
+          `${GET_COMMENT_URL}${props.editCommentId}`
+        );
         const comment = response.data;
         setCommentText(comment.description || "");
       } catch (error) {
@@ -58,6 +61,7 @@ function CreateComment(props) {
     try {
       const payload = {
         description: commentText,
+        creatorId: { value: user.id.value },
       };
 
       if (props.isForEdit && props.editCommentId) {
@@ -66,9 +70,14 @@ function CreateComment(props) {
 
         await axios.patch(UPDATE_COMMENT_URL, payload);
         toast.success("Comment updated successfully.");
+      } else if (props.replyToCommentId) {
+        payload.replyToCommentId = { value: props.replyToCommentId };
+        payload.publicationId = { value: props.publicationId };
+
+        await axios.post(REPLY_TO_COMMENT_URL, payload);
+        toast.success("Reply posted successfully.");
       } else {
         payload.publicationId = { value: props.publicationId };
-        payload.creatorId = { value: user.id.value };
 
         await axios.post(CREATE_COMMENT_URL, payload);
         toast.success("Comment posted successfully.");
@@ -135,6 +144,7 @@ CreateComment.propTypes = {
   onCloseClick: PropTypes.func,
   isForEdit: PropTypes.bool,
   addGoBack: PropTypes.bool,
+  replyToCommentId: PropTypes.string,
 };
 
 export default CreateComment;

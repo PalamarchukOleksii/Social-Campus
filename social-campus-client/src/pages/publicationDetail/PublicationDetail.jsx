@@ -9,7 +9,8 @@ import CommentReplyManager from "../../components/comment/CommentReplyManager";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-const GET_PUBLICTION_URL = "/api/publications/";
+const GET_PUBLICATION_URL = "/api/publications/";
+const GET_COMMENTS_URL = "/api/publications/";
 
 function PublicationDetail() {
   const { id } = useParams();
@@ -23,21 +24,27 @@ function PublicationDetail() {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    const fetchPublication = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${GET_PUBLICTION_URL}${id}`);
-        setPublication(response.data);
+        const pubResponse = await axios.get(`${GET_PUBLICATION_URL}${id}`);
+        setPublication(pubResponse.data);
+
+        const commentsResponse = await axios.get(
+          `${GET_COMMENTS_URL}${id}/comments`
+        );
+        setComments(commentsResponse.data);
       } catch (error) {
-        console.error("Failed to fetch publication:", error);
+        console.error("Failed to fetch publication or comments:", error);
         setPublication(null);
+        setComments([]);
       } finally {
         setLoading(false);
       }
     };
 
     if (id) {
-      fetchPublication();
+      fetchData();
     }
   }, [id, axios]);
 
@@ -61,16 +68,14 @@ function PublicationDetail() {
       ) : (
         <>
           <Publication publication={publication} addCreateOpen={false} />
-          <CreateComment
-            publicationId={publication.id.value}
-          />
-          {comments?.length ? (
+          <CreateComment publicationId={publication.id.value} />
+          {comments.length > 0 ? (
             <>
               <h2 className="comment-section-text general-text">Comments</h2>
               <div className="comments-section">
                 {comments.map((comment) => (
                   <CommentReplyManager
-                    key={comment.id}
+                    key={comment.id.value}
                     comment={comment}
                     currentUser={auth.shortUser}
                     comments={comments}

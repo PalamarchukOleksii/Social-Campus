@@ -25,6 +25,9 @@ public class GetPublicationCommentsQueryHandler(
         var commentDtos = new List<CommentDto>();
         foreach (var comment in publicationComments)
         {
+            if (comment.ReplyToCommentId is not null)
+                continue;
+
             var commentLikes = await commentLikeRepository.GetCommentLikesListByCommentIdAsync(comment.Id);
             var commentReplies = await commentRepository.GetRepliedCommentsByCommentIdAsync(comment.Id);
 
