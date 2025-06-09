@@ -1,29 +1,55 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import FollowItem from "../../components/followItem/FollowItem";
 import FollowTabs from "../../components/followTads/FollowTabs";
 import "./Followers.css";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
+
+const FOLLOWS_BASE_URL = "/api/follows";
 
 function Followers() {
+  const axios = useAxiosPrivate();
+  const { auth } = useAuth();
   const { login } = useParams();
   const [followers, setFollowers] = useState([]);
 
-  useEffect(() => {}, [login]);
+  const fetchFollowers = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `${FOLLOWS_BASE_URL}/${login}/followers`
+      );
+      setFollowers(response.data);
+    } catch (error) {
+      console.error("Failed to fetch followers:", error);
+    }
+  }, [axios, login]);
 
-  const handleFollowClick = (username) => {
-    setFollowers((prev) =>
-      prev.map((user) =>
-        user.username === username ? { ...user, isFollowing: true } : user
-      )
-    );
+  useEffect(() => {
+    fetchFollowers();
+  }, [fetchFollowers]);
+
+  const handleFollowClick = async (followUserLogin) => {
+    try {
+      await axios.post(`${FOLLOWS_BASE_URL}/follow`, {
+        userLogin: auth.shortUser.login,
+        followUserLogin,
+      });
+      fetchFollowers();
+    } catch (error) {
+      console.error(`Failed to follow ${followUserLogin}:`, error);
+    }
   };
 
-  const handleUnfollowClick = (username) => {
-    setFollowers((prev) =>
-      prev.map((user) =>
-        user.username === username ? { ...user, isFollowing: false } : user
-      )
-    );
+  const handleUnfollowClick = async (followUserLogin) => {
+    try {
+      await axios.delete(
+        `${FOLLOWS_BASE_URL}/unfollow/${auth.shortUser.login}/${followUserLogin}`
+      );
+      fetchFollowers();
+    } catch (error) {
+      console.error(`Failed to unfollow ${followUserLogin}:`, error);
+    }
   };
 
   return (
@@ -31,26 +57,24 @@ function Followers() {
       <FollowTabs />
       {followers.length > 0 ? (
         followers.map((user) =>
-          user.isFollowing ? (
+          user.followersIds.some(
+            (userId) => userId.value === auth.shortUser.id.value
+          ) ? (
             <FollowItem
-              key={user.id}
-              username={user.username}
-              login={user.login}
-              profileImage={user.profileImage}
+              key={user.id.value}
+              userId={user.id.value}
               bio={user.bio}
               buttonText="Following"
-              onClick={() => handleUnfollowClick(user.username)}
+              onClick={() => handleUnfollowClick(user.login)}
               hoveredText="Unfollow"
             />
           ) : (
             <FollowItem
-              key={user.id}
-              username={user.username}
-              login={user.login}
-              profileImage={user.profileImage}
+              key={user.id.value}
+              userId={user.id.value}
               bio={user.bio}
               buttonText="Follow"
-              onClick={() => handleFollowClick(user.username)}
+              onClick={() => handleFollowClick(user.login)}
               hoveredText="Follow"
             />
           )
