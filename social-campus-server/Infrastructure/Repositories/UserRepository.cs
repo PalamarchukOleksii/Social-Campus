@@ -44,6 +44,14 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         return await context.Users.AnyAsync(u => u.Id == userId);
     }
 
+    public async Task<IReadOnlyList<User>> GetRandomUsersAsync(int count)
+    {
+        return await context.Users
+            .OrderBy(u => Guid.NewGuid())
+            .Take(count)
+            .ToListAsync();
+    }
+
     public async Task<bool> IsLoginUniqueAsync(string login)
     {
         return !await context.Users.AnyAsync(u => u.Login == login);
