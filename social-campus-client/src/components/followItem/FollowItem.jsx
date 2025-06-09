@@ -43,11 +43,7 @@ function FollowItem(props) {
   return (
     <div className="item-container">
       <div className="top-part">
-        <ShortProfile
-          username={props.username}
-          login={props.login}
-          profileImage={props.profileImage}
-        />
+        <ShortProfile userId={props.userId} />
         <button
           className={`${buttonType} ${buttonHoverType}`}
           onMouseEnter={handleMouseEnter}
@@ -65,9 +61,7 @@ function FollowItem(props) {
 }
 
 FollowItem.propTypes = {
-  profileImage: PropTypes.string,
-  username: PropTypes.string.isRequired,
-  login: PropTypes.string.isRequired,
+  userId: PropTypes.string,
   bio: PropTypes.string,
   buttonText: PropTypes.string.isRequired,
   hoveredText: PropTypes.string.isRequired,
