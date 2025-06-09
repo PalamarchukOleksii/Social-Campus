@@ -42,16 +42,16 @@ function Publication(props) {
 
     try {
       if (isLiked) {
-        await axios.delete(`${REMOVE_LIKE_URL}${publicationId}/${userId}`);
         setIsLiked(false);
         setLikeCount((prev) => prev - 1);
+        await axios.delete(`${REMOVE_LIKE_URL}${publicationId}/${userId}`);
       } else {
+        setIsLiked(true);
+        setLikeCount((prev) => prev + 1);
         await axios.post(ADD_LIKE_URL, {
           userId: { value: userId },
           publicationId: { value: publicationId },
         });
-        setIsLiked(true);
-        setLikeCount((prev) => prev + 1);
       }
     } catch (error) {
       console.error("Error toggling like:", error);

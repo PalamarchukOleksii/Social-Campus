@@ -3,27 +3,63 @@ import { useParams } from "react-router-dom";
 import FollowItem from "../../components/followItem/FollowItem";
 import FollowTabs from "../../components/followTads/FollowTabs";
 import "./Followers.css";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
+const FOLLOWS_BASE_URL = "/api/follows";
 
 function Followers() {
+  const axios = useAxiosPrivate();
   const { login } = useParams();
   const [followers, setFollowers] = useState([]);
 
-  useEffect(() => {}, [login]);
+  useEffect(() => {
+    const fetchFollowers = async () => {
+      try {
+        const response = await axios.get(
+          `${FOLLOWS_BASE_URL}/${login}/followers`
+        );
+        setFollowers(response.data);
+      } catch (error) {
+        console.error("Failed to fetch followers:", error);
+      }
+    };
 
-  const handleFollowClick = (username) => {
-    setFollowers((prev) =>
-      prev.map((user) =>
-        user.username === username ? { ...user, isFollowing: true } : user
-      )
-    );
+    fetchFollowers();
+  }, [login]);
+
+  const handleFollowClick = async (followUserLogin) => {
+    try {
+      await axios.post(`${FOLLOWS_BASE_URL}/follow`, {
+        userLogin: login,
+        followUserLogin,
+      });
+      setFollowers((prev) =>
+        prev.map((user) =>
+          user.username === followUserLogin
+            ? { ...user, isFollowing: true }
+            : user
+        )
+      );
+    } catch (error) {
+      console.error(`Failed to follow ${followUserLogin}:`, error);
+    }
   };
 
-  const handleUnfollowClick = (username) => {
-    setFollowers((prev) =>
-      prev.map((user) =>
-        user.username === username ? { ...user, isFollowing: false } : user
-      )
-    );
+  const handleUnfollowClick = async (followUserLogin) => {
+    try {
+      await axios.delete(
+        `${FOLLOWS_BASE_URL}/unfollow/${login}/${followUserLogin}`
+      );
+      setFollowers((prev) =>
+        prev.map((user) =>
+          user.username === followUserLogin
+            ? { ...user, isFollowing: false }
+            : user
+        )
+      );
+    } catch (error) {
+      console.error(`Failed to unfollow ${followUserLogin}:`, error);
+    }
   };
 
   return (
