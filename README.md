@@ -38,15 +38,14 @@ The target audience includes students, young people, and university staff aged 1
 - **User Profiles**: Personalize your profile to connect with others.
 - **News Feed**: Tailored news feed based on your interests and interactions.
 - **Content Sharing**: Share photos, videos, and updates with your peers.
-- **Event Creation**: Organize and promote events for student activities.
-- **Community Groups**: Join or create groups based on shared interests.
+- **Likes and Comments**: Engage with content by liking posts and leaving comments.
 
 ## Technologies Used
 
 - Frontend: React.js
 - Backend: C# ASP.NET Core
 - Database: MS SQL with Entity Framework
-- Real-time Functionality: SignalR
+- Object Storage: MinIO (S3-compatible)
 
 ## Installation
 
@@ -62,21 +61,25 @@ The target audience includes students, young people, and university staff aged 1
    cd Social-Campus
    ```
 
-3. Install dependencies for the frontend:
+3. Start required services (MS SQL Server and MinIO) using Docker Compose:
+
+   ```bash
+   docker-compose up -d
+   ```
+
+4. Install dependencies for the frontend:
 
    ```bash
    cd social-campus-client
    npm install
    ```
 
-4. Install dependencies for the backend:
+5. Install dependencies for the backend:
 
    ```bash
    cd ../social-campus-server
    dotnet restore
    ```
-
-5. Set up the database (if applicable) and run migrations.
 
 6. Start the backend server:
 
@@ -86,6 +89,7 @@ The target audience includes students, young people, and university staff aged 1
    ```
 
 7. Start the frontend server:
+
    ```bash
    cd ../social-campus-client
    npm start
