@@ -7,7 +7,7 @@ public class PublicationDto
 {
     public PublicationId Id { get; set; } = new(Guid.Empty);
     public string Description { get; set; } = string.Empty;
-    public string ImageData { get; set; } = string.Empty;
+    public string ImageUrl { get; set; } = string.Empty;
     public DateTime CreationDateTime { get; set; }
     public UserId CreatorId { get; set; } = new(Guid.Empty);
     public IReadOnlyList<UserId>? UserWhoLikedIds { get; set; }

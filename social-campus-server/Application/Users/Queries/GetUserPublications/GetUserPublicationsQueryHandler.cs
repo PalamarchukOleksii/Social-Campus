@@ -36,7 +36,7 @@ public class GetUserPublicationsQueryHandler(
             {
                 Id = publication.Id,
                 Description = publication.Description,
-                ImageData = publication.ImageUrl,
+                ImageUrl = publication.ImageUrl,
                 CreationDateTime = publication.CreationDateTime,
                 CreatorId = user.Id,
                 UserWhoLikedIds = publicationLikes.Select(like => like.UserId).ToList(),
