@@ -47,8 +47,8 @@ function CreatePublication(props) {
           const publication = response.data;
           setPublicationText(publication.description);
 
-          if (publication.imageData) {
-            setImagePreview(publication.imageData);
+          if (publication.imageUrl) {
+            setImagePreview(publication.imageUrl);
           }
         } catch (error) {
           console.error("Fetching publication data error:", error);
@@ -85,9 +85,7 @@ function CreatePublication(props) {
       formData.append("description", publicationText);
 
       if (image) {
-        formData.append("imageFile", image);
-      } else {
-        formData.append("imageFile", "");
+        formData.append("imageData", image);
       }
 
       if (props.isForEdit && props.editPublicationId) {
@@ -157,9 +155,7 @@ function CreatePublication(props) {
         {isExitHovered ? <IoArrowBackCircle /> : <IoArrowBackCircleOutline />}
         <span className="general-text back-text">Back</span>
       </div>
-      <ShortProfile
-        userId={user.id.value}
-      />
+      <ShortProfile userId={user.id.value} />
       <form className="create-form" onSubmit={handleSubmit}>
         <textarea
           className="publication-text"
