@@ -70,7 +70,7 @@ function Profile() {
       setAllFetched(false);
       fetchPublications();
     }
-  }, [user]);
+  }, [user, login]);
 
   if (loadingUser) {
     return (
