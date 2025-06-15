@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import "./Profile.css";
 import PublicationsList from "../../components/publicationsList/PublicationsList";
@@ -9,6 +9,7 @@ import useAuth from "../../hooks/useAuth";
 
 const GET_USER_URL = "/api/users/by-login/";
 const GET_USER_PUBLICATIONS_URL = "/api/users";
+const PAGE_SIZE = 10;
 
 function Profile() {
   const { login } = useParams();
@@ -16,12 +17,11 @@ function Profile() {
   const [publications, setPublications] = useState([]);
   const [loadingUser, setLoadingUser] = useState(true);
   const [loadingPublications, setLoadingPublications] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [allFetched, setAllFetched] = useState(false);
 
   const navigate = useNavigate();
   const { auth } = useAuth();
   const axios = useAxiosPrivate();
-  const observer = useRef();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -39,22 +39,24 @@ function Profile() {
   }, [login]);
 
   const fetchPublications = async () => {
-    if (!user) return;
-    setLoadingPublications(true);
+    if (loadingPublications || allFetched) return;
 
+    setLoadingPublications(true);
     try {
-      const limit = 2;
       const last = publications[publications.length - 1];
       const lastId = last?.id.value;
 
       const url = lastId
-        ? `${GET_USER_PUBLICATIONS_URL}/${user.id.value}/publications/${limit}?lastPublicationId=${lastId}`
-        : `${GET_USER_PUBLICATIONS_URL}/${user.id.value}/publications/${limit}`;
+        ? `${GET_USER_PUBLICATIONS_URL}/${user.id.value}/publications/count/${PAGE_SIZE}?lastPublicationId=${lastId}`
+        : `${GET_USER_PUBLICATIONS_URL}/${user.id.value}/publications/count/${PAGE_SIZE}`;
 
       const { data: newPublications } = await axios.get(url);
 
       setPublications((prev) => [...prev, ...newPublications]);
-      setHasMore(newPublications.length === limit);
+
+      if (newPublications.length < PAGE_SIZE) {
+        setAllFetched(true);
+      }
     } catch (err) {
       console.error("Failed to load publications", err);
     } finally {
@@ -62,25 +64,10 @@ function Profile() {
     }
   };
 
-  const lastPublicationRef = useCallback(
-    (node) => {
-      if (loadingPublications) return;
-      if (observer.current) observer.current.disconnect();
-
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          fetchPublications();
-        }
-      });
-
-      if (node) observer.current.observe(node);
-    },
-    [loadingPublications, hasMore, user]
-  );
-
   useEffect(() => {
     if (user) {
       setPublications([]);
+      setAllFetched(false);
       fetchPublications();
     }
   }, [user]);
@@ -146,11 +133,14 @@ function Profile() {
       </div>
 
       <div className="publications">
-        <PublicationsList
-          publications={publications}
-          lastPublicationRef={lastPublicationRef}
-        />
-        {loadingPublications && <p className="general-text">Loading...</p>}
+        <PublicationsList publications={publications} />
+        {!allFetched && (
+          <div className="load-more-container">
+            <button onClick={fetchPublications} disabled={loadingPublications}>
+              Load More
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

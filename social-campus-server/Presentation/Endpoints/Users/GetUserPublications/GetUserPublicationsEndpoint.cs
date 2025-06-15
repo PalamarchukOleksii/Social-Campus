@@ -11,7 +11,7 @@ public class GetUserPublicationsEndpoint : BaseEndpoint, IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/users/{userId:guid:required}/publications/{count:int}",
+        app.MapGet("/users/{userId:guid:required}/publications/count/{count:int}",
                 async (ISender sender, Guid userId, int count, Guid? lastPublicationId) =>
                 {
                     GetUserPublicationsQuery queryRequest =
