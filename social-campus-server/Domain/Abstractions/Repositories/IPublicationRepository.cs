@@ -8,7 +8,10 @@ public interface IPublicationRepository
 {
     public Task AddAsync(string description, UserId creatorId, string imageData);
     public Task<Publication?> GetByIdAsync(PublicationId publicationId);
-    public Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(UserId creatorId);
+
+    public Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(UserId creatorId,
+        Publication? lastPublication, int limit);
+
     public void Update(Publication publication, string description, string imageData);
     public Task<bool> IsExistByIdAsync(PublicationId publicationId);
 

@@ -17,10 +17,19 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
         await context.Publications.AddAsync(newPublication);
     }
 
-    public async Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(UserId creatorId)
+    public async Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(
+        UserId creatorId,
+        Publication? lastPublication,
+        int limit)
     {
-        return await context.Publications
-            .Where(p => p.CreatorId == creatorId)
+        var query = context.Publications
+            .Where(p => p.CreatorId == creatorId);
+
+        if (lastPublication != null) query = query.Where(p => p.CreationDateTime < lastPublication.CreationDateTime);
+
+        return await query
+            .OrderByDescending(p => p.CreationDateTime)
+            .Take(limit)
             .ToListAsync();
     }
 
@@ -50,10 +59,10 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
         var userIds = followedUsers.Select(u => u.Id).ToHashSet();
         userIds.Add(currentUser.Id);
 
-        double randomPart = _random.NextDouble() * 0.5;
-        int randomCount = (int)(limit * randomPart);
+        var randomPart = _random.NextDouble() * 0.5;
+        var randomCount = (int)(limit * randomPart);
         randomCount = Math.Min(randomCount, limit);
-        int followedCountLimit = limit - randomCount;
+        var followedCountLimit = limit - randomCount;
 
         var followedQuery = context.Publications
             .Where(p => userIds.Contains(p.CreatorId));
@@ -66,14 +75,15 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
             .Take(followedCountLimit)
             .ToListAsync();
 
-        int needCount = limit - followingPublications.Count;
+        var needCount = limit - followingPublications.Count;
         if (needCount > 0)
         {
             var randomPublicationsQuery = context.Publications
                 .Where(p => !userIds.Contains(p.CreatorId));
 
             if (lastPublication != null)
-                randomPublicationsQuery = randomPublicationsQuery.Where(p => p.CreationDateTime < lastPublication.CreationDateTime);
+                randomPublicationsQuery =
+                    randomPublicationsQuery.Where(p => p.CreationDateTime < lastPublication.CreationDateTime);
 
             var randomPublications = await randomPublicationsQuery
                 .Take(needCount * 5)
