@@ -10,28 +10,42 @@ public class OpenApiExtension(IAuthenticationSchemeProvider authenticationScheme
         CancellationToken cancellationToken)
     {
         var authenticationSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();
+
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
+
         if (authenticationSchemes.Any(authScheme => authScheme.Name == "Bearer"))
         {
-            var requirements = new Dictionary<string, OpenApiSecurityScheme>
+            document.Components.SecuritySchemes["Bearer"] = new OpenApiSecurityScheme
             {
-                ["Bearer"] = new()
-                {
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    In = ParameterLocation.Header,
-                    BearerFormat = "Json Web Token"
-                }
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                In = ParameterLocation.Header,
+                BearerFormat = "JWT",
             };
-            document.Components ??= new OpenApiComponents();
-            document.Components.SecuritySchemes = requirements;
+
+            document.SecurityRequirements ??= [];
+            document.SecurityRequirements.Add(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
         }
 
         document.Info = new OpenApiInfo
         {
             Title = "Social Campus API",
             Version = "v1",
-            Description =
-                "Comprehensive API for Social Campus platform, enabling seamless user interaction, content sharing, and community engagement."
+            Description = "Comprehensive API for Social Campus platform, enabling seamless user interaction, content sharing, and community engagement."
         };
     }
 }
