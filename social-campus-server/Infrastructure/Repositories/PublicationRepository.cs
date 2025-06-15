@@ -38,4 +38,23 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
     {
         return await context.Publications.AnyAsync(u => u.Id == publicationId);
     }
+
+    public async Task<IReadOnlyList<Publication>> GetPublicationsForHomePageAsync(
+        IReadOnlyList<User> followedUsers,
+        Publication? lastPublication,
+        int limit,
+        User currentUser)
+    {
+        var userIds = followedUsers.Select(u => u.Id).ToList();
+
+        if (!userIds.Contains(currentUser.Id))
+            userIds.Add(currentUser.Id);
+
+        return await context.Publications
+            .Where(p => userIds.Contains(p.CreatorId) || EF.Functions.Random() < 0.1)
+            .OrderByDescending(p => p.CreationDateTime)
+            .Where(p => lastPublication == null || p.CreationDateTime < lastPublication.CreationDateTime)
+            .Take(limit)
+            .ToListAsync();
+    }
 }

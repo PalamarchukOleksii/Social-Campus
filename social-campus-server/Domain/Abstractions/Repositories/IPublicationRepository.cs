@@ -1,4 +1,5 @@
-﻿using Domain.Models.PublicationModel;
+﻿using Domain.Models.FollowModel;
+using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 
 namespace Domain.Abstractions.Repositories;
@@ -10,4 +11,7 @@ public interface IPublicationRepository
     public Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(UserId creatorId);
     public void Update(Publication publication, string description, string imageData);
     public Task<bool> IsExistByIdAsync(PublicationId publicationId);
+
+    public Task<IReadOnlyList<Publication>> GetPublicationsForHomePageAsync(IReadOnlyList<User> followedUsers,
+        Publication? lastPublication, int limit, User currentUser);
 }
