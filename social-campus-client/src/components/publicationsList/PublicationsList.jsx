@@ -3,27 +3,14 @@ import PropTypes from "prop-types";
 import Publication from "../publication/Publication";
 import "./PublicationsList.css";
 
-function PublicationsList({ publications, lastPublicationRef }) {
+function PublicationsList({ publications }) {
   return (
     <div className="publications">
-      {publications.length > 0 ? (
-        publications.map((publication, index) => {
-          const isLast = index === publications.length - 1;
-
-          return (
-            <div
-              key={publication.id.value}
-              ref={isLast ? lastPublicationRef : null}
-            >
-              <Publication publication={publication} />
-            </div>
-          );
-        })
-      ) : (
-        <h2 className="no-publications-text general-text">
-          No publications yet
-        </h2>
-      )}
+      {publications.map((publication) => (
+        <div key={publication.id.value}>
+          <Publication publication={publication} />
+        </div>
+      ))}
     </div>
   );
 }
@@ -48,10 +35,6 @@ PublicationsList.propTypes = {
       commentsCount: PropTypes.number.isRequired,
     })
   ).isRequired,
-  lastPublicationRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.any }),
-  ]),
 };
 
 export default PublicationsList;
