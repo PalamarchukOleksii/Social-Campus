@@ -1,6 +1,11 @@
 using System.Reflection;
+using System.Text;
 using Application;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Presentation;
 using Presentation.Extensions;
 using Scalar.AspNetCore;
 
@@ -8,17 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddInfrastructure(builder.Configuration)
-    .AddApplication();
-
-builder.Services.AddOpenApi();
-builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
-builder.Services.AddClientCors(
-    "ClientCors",
-    [
-        "http://localhost:3000",
-        "https://localhost:3000"
-    ]
-);
+    .AddApplication()
+    .AddPresentation(builder.Configuration);
 
 var app = builder.Build();
 
