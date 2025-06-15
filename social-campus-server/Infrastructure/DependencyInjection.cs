@@ -44,7 +44,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IFollowRepository, FollowRepository>();
         services.AddScoped<IPublicationRepository, PublicationRepository>();
-        services.AddScoped<IPublicationLikeRepositories, PublicationLikeRepositories>();
+        services.AddScoped<IPublicationLikeRepository, PublicationLikeRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
 

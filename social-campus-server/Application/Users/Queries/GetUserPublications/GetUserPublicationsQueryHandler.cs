@@ -8,7 +8,7 @@ namespace Application.Users.Queries.GetUserPublications;
 public class GetUserPublicationsQueryHandler(
     IPublicationRepository publicationRepository,
     IUserRepository userRepository,
-    IPublicationLikeRepositories publicationLikeRepositories,
+    IPublicationLikeRepository publicationLikeRepository,
     ICommentRepository commentRepository)
     : IQueryHandler<GetUserPublicationsQuery, IReadOnlyList<PublicationDto>>
 {
@@ -26,7 +26,7 @@ public class GetUserPublicationsQueryHandler(
         var publicationDtos = new List<PublicationDto>();
         foreach (var publication in userPublications)
         {
-            var publicationLikes = await publicationLikeRepositories
+            var publicationLikes = await publicationLikeRepository
                 .GetPublicationLikesListByPublicationIdAsync(publication.Id);
 
             var comments = await commentRepository

@@ -7,7 +7,7 @@ namespace Application.Publications.Queries.GetPublication;
 
 public class GetPublicationQueryHandler(
     IPublicationRepository publicationRepository,
-    IPublicationLikeRepositories publicationLikeRepositories,
+    IPublicationLikeRepository publicationLikeRepository,
     ICommentRepository commentRepository) : IQueryHandler<GetPublicationQuery, PublicationDto>
 {
     public async Task<Result<PublicationDto>> Handle(GetPublicationQuery request, CancellationToken cancellationToken)
@@ -18,7 +18,7 @@ public class GetPublicationQueryHandler(
                 "Publication.NotFound",
                 $"Publication with PublicationId {request.PublicationId.Value} was not found"));
 
-        var publicationLikes = await publicationLikeRepositories
+        var publicationLikes = await publicationLikeRepository
             .GetPublicationLikesListByPublicationIdAsync(publication.Id);
         var comments = await commentRepository.GetPublicationCommentsByPublicationIdAsync(publication.Id);
 
