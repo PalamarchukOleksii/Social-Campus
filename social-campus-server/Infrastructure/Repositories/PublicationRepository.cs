@@ -8,6 +8,8 @@ namespace Infrastructure.Repositories;
 
 public class PublicationRepository(ApplicationDbContext context) : IPublicationRepository
 {
+    private static readonly Random _random = new();
+
     public async Task AddAsync(string description, UserId creatorId, string imageData)
     {
         Publication newPublication = new(description, creatorId, imageData);
@@ -45,16 +47,49 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
         int limit,
         User currentUser)
     {
-        var userIds = followedUsers.Select(u => u.Id).ToList();
+        var userIds = followedUsers.Select(u => u.Id).ToHashSet();
+        userIds.Add(currentUser.Id);
 
-        if (!userIds.Contains(currentUser.Id))
-            userIds.Add(currentUser.Id);
+        double randomPart = _random.NextDouble() * 0.5;
+        int randomCount = (int)(limit * randomPart);
+        randomCount = Math.Min(randomCount, limit);
+        int followedCountLimit = limit - randomCount;
 
-        return await context.Publications
-            .Where(p => userIds.Contains(p.CreatorId) || EF.Functions.Random() < 0.1)
+        var followedQuery = context.Publications
+            .Where(p => userIds.Contains(p.CreatorId));
+
+        if (lastPublication != null)
+            followedQuery = followedQuery.Where(p => p.CreationDateTime < lastPublication.CreationDateTime);
+
+        var followingPublications = await followedQuery
             .OrderByDescending(p => p.CreationDateTime)
-            .Where(p => lastPublication == null || p.CreationDateTime < lastPublication.CreationDateTime)
-            .Take(limit)
+            .Take(followedCountLimit)
             .ToListAsync();
+
+        int needCount = limit - followingPublications.Count;
+        if (needCount > 0)
+        {
+            var randomPublicationsQuery = context.Publications
+                .Where(p => !userIds.Contains(p.CreatorId));
+
+            if (lastPublication != null)
+                randomPublicationsQuery = randomPublicationsQuery.Where(p => p.CreationDateTime < lastPublication.CreationDateTime);
+
+            var randomPublications = await randomPublicationsQuery
+                .Take(needCount * 5)
+                .ToListAsync();
+
+            randomPublications = randomPublications
+                .OrderBy(_ => _random.Next())
+                .Take(needCount)
+                .ToList();
+
+            followingPublications.AddRange(randomPublications);
+        }
+
+        return followingPublications
+            .OrderByDescending(p => p.CreationDateTime)
+            .Take(limit)
+            .ToList();
     }
 }
