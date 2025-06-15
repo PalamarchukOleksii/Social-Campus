@@ -8,7 +8,7 @@ namespace Infrastructure.Repositories;
 
 public class PublicationRepository(ApplicationDbContext context) : IPublicationRepository
 {
-    private static readonly Random _random = new();
+    private static readonly Random Random = new();
 
     public async Task AddAsync(string description, UserId creatorId, string imageData)
     {
@@ -20,7 +20,7 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
     public async Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(
         UserId creatorId,
         Publication? lastPublication,
-        int limit)
+        int count)
     {
         var query = context.Publications
             .Where(p => p.CreatorId == creatorId);
@@ -29,7 +29,7 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
 
         return await query
             .OrderByDescending(p => p.CreationDateTime)
-            .Take(limit)
+            .Take(count)
             .ToListAsync();
     }
 
@@ -53,16 +53,16 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
     public async Task<IReadOnlyList<Publication>> GetPublicationsForHomePageAsync(
         IReadOnlyList<User> followedUsers,
         Publication? lastPublication,
-        int limit,
+        int count,
         User currentUser)
     {
         var userIds = followedUsers.Select(u => u.Id).ToHashSet();
         userIds.Add(currentUser.Id);
 
-        var randomPart = _random.NextDouble() * 0.5;
-        var randomCount = (int)(limit * randomPart);
-        randomCount = Math.Min(randomCount, limit);
-        var followedCountLimit = limit - randomCount;
+        var randomPart = Random.NextDouble() * 0.5;
+        var randomCount = (int)(count * randomPart);
+        randomCount = Math.Min(randomCount, count);
+        var followedCountLimit = count - randomCount;
 
         var followedQuery = context.Publications
             .Where(p => userIds.Contains(p.CreatorId));
@@ -75,7 +75,7 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
             .Take(followedCountLimit)
             .ToListAsync();
 
-        var needCount = limit - followingPublications.Count;
+        var needCount = count - followingPublications.Count;
         if (needCount > 0)
         {
             var randomPublicationsQuery = context.Publications
@@ -90,7 +90,7 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
                 .ToListAsync();
 
             randomPublications = randomPublications
-                .OrderBy(_ => _random.Next())
+                .OrderBy(_ => Random.Next())
                 .Take(needCount)
                 .ToList();
 
@@ -99,7 +99,7 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
 
         return followingPublications
             .OrderByDescending(p => p.CreationDateTime)
-            .Take(limit)
+            .Take(count)
             .ToList();
     }
 }

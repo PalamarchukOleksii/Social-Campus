@@ -5,5 +5,5 @@ using Domain.Models.UserModel;
 
 namespace Application.Users.Queries.GetUserPublications;
 
-public record GetUserPublicationsQuery(UserId UserId, PublicationId? LastPublicationId, int Limit)
+public record GetUserPublicationsQuery(UserId UserId, PublicationId? LastPublicationId, int Count)
     : IQuery<IReadOnlyList<PublicationDto>>;

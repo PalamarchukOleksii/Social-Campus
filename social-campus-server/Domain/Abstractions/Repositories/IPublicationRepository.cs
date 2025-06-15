@@ -10,11 +10,11 @@ public interface IPublicationRepository
     public Task<Publication?> GetByIdAsync(PublicationId publicationId);
 
     public Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(UserId creatorId,
-        Publication? lastPublication, int limit);
+        Publication? lastPublication, int count);
 
     public void Update(Publication publication, string description, string imageData);
     public Task<bool> IsExistByIdAsync(PublicationId publicationId);
 
     public Task<IReadOnlyList<Publication>> GetPublicationsForHomePageAsync(IReadOnlyList<User> followedUsers,
-        Publication? lastPublication, int limit, User currentUser);
+        Publication? lastPublication, int count, User currentUser);
 }

@@ -38,7 +38,7 @@ public class GetHomePagePublicationsQueryHandler(
         var homePagePublications = await publicationRepository.GetPublicationsForHomePageAsync(
             followedUsers,
             lastPublication,
-            request.Limit,
+            request.Count,
             user
         );
 

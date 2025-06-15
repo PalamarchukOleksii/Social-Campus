@@ -11,16 +11,16 @@ public class GetHomePagePublicationsByUserIdEndpoint : BaseEndpoint, IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("publications/home/user/{userId:guid}/{limit:int}", async (
+        app.MapGet("publications/home/user/{userId:guid}/{count:int}", async (
                 Guid userId,
-                int limit,
+                int count,
                 Guid? lastPublicationId,
                 ISender sender) =>
             {
                 var query = new GetHomePagePublicationsQuery(
                     new UserId(userId),
                     lastPublicationId is not null ? new PublicationId(lastPublicationId.Value) : null,
-                    limit);
+                    count);
 
                 var response = await sender.Send(query);
 

@@ -35,7 +35,7 @@ public class GetUserPublicationsQueryHandler(
         var userPublications = await publicationRepository.GetUserPublicationsByUserIdAsync(
             user.Id,
             lastPublication,
-            request.Limit);
+            request.Count);
 
         var publicationDtos = new List<PublicationDto>();
         foreach (var publication in userPublications)
