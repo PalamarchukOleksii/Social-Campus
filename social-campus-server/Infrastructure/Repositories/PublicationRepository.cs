@@ -8,7 +8,6 @@ namespace Infrastructure.Repositories;
 
 public class PublicationRepository(ApplicationDbContext context) : IPublicationRepository
 {
-    private static readonly Random Random = new();
 
     public async Task AddAsync(string description, UserId creatorId, string imageData)
     {
@@ -52,54 +51,43 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
 
     public async Task<IReadOnlyList<Publication>> GetPublicationsForHomePageAsync(
         IReadOnlyList<User> followedUsers,
-        Publication? lastPublication,
+        int page,
         int count,
         User currentUser)
     {
         var userIds = followedUsers.Select(u => u.Id).ToHashSet();
         userIds.Add(currentUser.Id);
 
-        var randomPart = Random.NextDouble() * 0.5;
-        var randomCount = (int)(count * randomPart);
-        randomCount = Math.Min(randomCount, count);
-        var followedCountLimit = count - randomCount;
+        var totalFollowedCount = await context.Publications
+            .Where(p => userIds.Contains(p.CreatorId))
+            .CountAsync();
 
-        var followedQuery = context.Publications
-            .Where(p => userIds.Contains(p.CreatorId));
+        var totalFollowedPages = (int)Math.Ceiling((double)totalFollowedCount / count);
 
-        if (lastPublication != null)
-            followedQuery = followedQuery.Where(p => p.CreationDateTime < lastPublication.CreationDateTime);
-
-        var followingPublications = await followedQuery
-            .OrderByDescending(p => p.CreationDateTime)
-            .Take(followedCountLimit)
-            .ToListAsync();
-
-        var needCount = count - followingPublications.Count;
-        if (needCount > 0)
+        if (page <= totalFollowedPages && totalFollowedPages > 0)
         {
-            var randomPublicationsQuery = context.Publications
-                .Where(p => !userIds.Contains(p.CreatorId));
-
-            if (lastPublication != null)
-                randomPublicationsQuery =
-                    randomPublicationsQuery.Where(p => p.CreationDateTime < lastPublication.CreationDateTime);
-
-            var randomPublications = await randomPublicationsQuery
-                .Take(needCount * 5)
+            var followedPublications = await context.Publications
+                .Where(p => userIds.Contains(p.CreatorId))
+                .OrderByDescending(p => p.CreationDateTime)
+                .Skip((page - 1) * count)
+                .Take(count)
                 .ToListAsync();
 
-            randomPublications = randomPublications
-                .OrderBy(_ => Random.Next())
-                .Take(needCount)
-                .ToList();
-
-            followingPublications.AddRange(randomPublications);
+            return followedPublications;
         }
+        else
+        {
+            int randomPage = page - totalFollowedPages;
+            if (randomPage < 1) randomPage = 1;
 
-        return followingPublications
-            .OrderByDescending(p => p.CreationDateTime)
-            .Take(count)
-            .ToList();
+            var randomPublications = await context.Publications
+                .Where(p => !userIds.Contains(p.CreatorId))
+                .OrderByDescending(p => p.CreationDateTime)
+                .Skip((randomPage - 1) * count)
+                .Take(count)
+                .ToListAsync();
+
+            return randomPublications;
+        }
     }
 }

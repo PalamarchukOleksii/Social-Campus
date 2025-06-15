@@ -16,5 +16,5 @@ public interface IPublicationRepository
     public Task<bool> IsExistByIdAsync(PublicationId publicationId);
 
     public Task<IReadOnlyList<Publication>> GetPublicationsForHomePageAsync(IReadOnlyList<User> followedUsers,
-        Publication? lastPublication, int count, User currentUser);
+        int page, int count, User currentUser);
 }

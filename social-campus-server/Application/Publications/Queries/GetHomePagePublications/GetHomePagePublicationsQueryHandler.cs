@@ -23,21 +23,12 @@ public class GetHomePagePublicationsQueryHandler(
                 "User.NotFound",
                 $"User with UserId {request.UserId.Value} was not found"));
 
-        Publication? lastPublication = null;
-        if (request.LastPublicationId is not null)
-        {
-            lastPublication = await publicationRepository.GetByIdAsync(request.LastPublicationId);
-            if (lastPublication is null)
-                return Result.Failure<IReadOnlyList<PublicationDto>>(new Error(
-                    "Publication.NotFound",
-                    $"Publication with PublicationId {request.LastPublicationId.Value} was not found"));
-        }
 
         var followedUsers = await followRepository.GetFollowingUsersByUserIdAsync(user.Id);
 
         var homePagePublications = await publicationRepository.GetPublicationsForHomePageAsync(
             followedUsers,
-            lastPublication,
+            request.Page,
             request.Count,
             user
         );

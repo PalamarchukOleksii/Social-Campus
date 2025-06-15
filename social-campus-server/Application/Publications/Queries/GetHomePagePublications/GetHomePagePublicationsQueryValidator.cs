@@ -10,8 +10,9 @@ public class GetHomePagePublicationsQueryValidator : AbstractValidator<GetHomePa
             .NotEmpty().WithMessage("UserId is required")
             .Must(id => id.Value != Guid.Empty).WithMessage("UserId must be a valid GUID");
 
-        RuleFor(f => f.LastPublicationId)
-            .Must(id => id == null || id.Value != Guid.Empty).WithMessage("PublicationId must be a valid GUID");
+        RuleFor(f => f.Page)
+            .GreaterThan(0)
+            .WithMessage("Count must be greater than 0.");
 
         RuleFor(x => x.Count)
             .GreaterThan(0)
