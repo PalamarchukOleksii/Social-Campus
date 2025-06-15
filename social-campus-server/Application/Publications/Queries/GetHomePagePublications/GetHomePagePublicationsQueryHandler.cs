@@ -57,7 +57,7 @@ public class GetHomePagePublicationsQueryHandler(
                 Description = publication.Description,
                 ImageUrl = publication.ImageUrl,
                 CreationDateTime = publication.CreationDateTime,
-                CreatorId = user.Id,
+                CreatorId = publication.CreatorId,
                 UserWhoLikedIds = publicationLikes.Select(like => like.UserId).ToList(),
                 CommentsCount = comments.Count
             });
