@@ -5,7 +5,7 @@ using Domain.Shared;
 namespace Application.PublicationLikes.Commands.AddPublicationLike;
 
 public class AddPublicationLikeCommandHandler(
-    IPublicationLikeRepositories publicationLikeRepositories,
+    IPublicationLikeRepository publicationLikeRepository,
     IUserRepository userRepository,
     IPublicationRepository publicationRepository) : ICommandHandler<AddPublicationLikeCommand>
 {
@@ -23,13 +23,13 @@ public class AddPublicationLikeCommandHandler(
                 "Publication.NotFound",
                 $"Publication with PublicationId {request.PublicationId.Value} was not found"));
 
-        var isAlreadiAddLike = await publicationLikeRepositories.IsLike(request.UserId, request.PublicationId);
+        var isAlreadiAddLike = await publicationLikeRepository.IsLike(request.UserId, request.PublicationId);
         if (isAlreadiAddLike)
             return Result.Failure(new Error(
                 "PublicationLike.AlreadyAddLike",
                 $"User with UserId {request.UserId.Value} already add like to publication with PublicationId {request.PublicationId.Value}"));
 
-        await publicationLikeRepositories.AddAsync(request.UserId, request.PublicationId);
+        await publicationLikeRepository.AddAsync(request.UserId, request.PublicationId);
 
         return Result.Success();
     }

@@ -3,7 +3,7 @@ using Application.Dtos;
 using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 
-namespace Application.Users.Queries.GetUserPublications;
+namespace Application.Publications.Queries.GetHomePagePublications;
 
-public record GetUserPublicationsQuery(UserId UserId, PublicationId? LastPublicationId, int Count)
+public record GetHomePagePublicationsQuery(UserId UserId, int Page, int Count)
     : IQuery<IReadOnlyList<PublicationDto>>;

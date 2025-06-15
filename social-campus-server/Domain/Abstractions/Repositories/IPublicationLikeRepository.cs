@@ -4,7 +4,7 @@ using Domain.Models.UserModel;
 
 namespace Domain.Abstractions.Repositories;
 
-public interface IPublicationLikeRepositories
+public interface IPublicationLikeRepository
 {
     public Task AddAsync(UserId userId, PublicationId publicationId);
     public Task DeleteAsync(UserId userId, PublicationId publicationId);

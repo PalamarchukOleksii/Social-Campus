@@ -8,11 +8,16 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
 
 const GET_USER_URL = "/api/users/by-login/";
+const GET_USER_PUBLICATIONS_URL = "/api/users";
+const PAGE_SIZE = 10;
 
 function Profile() {
   const { login } = useParams();
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [publications, setPublications] = useState([]);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [loadingPublications, setLoadingPublications] = useState(false);
+  const [allFetched, setAllFetched] = useState(false);
 
   const navigate = useNavigate();
   const { auth } = useAuth();
@@ -26,16 +31,48 @@ function Profile() {
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
-        setLoading(false);
+        setLoadingUser(false);
       }
     };
 
     fetchUserData();
-
-    return () => setLoading(false);
   }, [login]);
 
-  if (loading) {
+  const fetchPublications = async () => {
+    if (loadingPublications || allFetched) return;
+
+    setLoadingPublications(true);
+    try {
+      const last = publications[publications.length - 1];
+      const lastId = last?.id.value;
+
+      const url = lastId
+        ? `${GET_USER_PUBLICATIONS_URL}/${user.id.value}/publications/count/${PAGE_SIZE}?lastPublicationId=${lastId}`
+        : `${GET_USER_PUBLICATIONS_URL}/${user.id.value}/publications/count/${PAGE_SIZE}`;
+
+      const { data: newPublications } = await axios.get(url);
+
+      setPublications((prev) => [...prev, ...newPublications]);
+
+      if (newPublications.length < PAGE_SIZE) {
+        setAllFetched(true);
+      }
+    } catch (err) {
+      console.error("Failed to load publications", err);
+    } finally {
+      setLoadingPublications(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      setPublications([]);
+      setAllFetched(false);
+      fetchPublications();
+    }
+  }, [user, login]);
+
+  if (loadingUser) {
     return (
       <div className="loading-container">
         <Loading />
@@ -96,7 +133,14 @@ function Profile() {
       </div>
 
       <div className="publications">
-        <PublicationsList userId={user.id} />
+        <PublicationsList publications={publications} />
+        {!allFetched && (
+          <div className="load-more-container">
+            <button onClick={fetchPublications} disabled={loadingPublications}>
+              Load More
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

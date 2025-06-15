@@ -25,26 +25,12 @@ public static class DependencyInjection
             options.UseSqlServer(configuration.GetConnectionString("LocalConnection"))
                 .UseAsyncSeeding(async (context, _, ct) => await DatabaseSeeder.SeedAsync(context, services, ct)));
 
-        services.AddAuthorization();
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(o => o.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = configuration["Jwt:Issuer"],
-                ValidAudience = configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!)),
-                ClockSkew = TimeSpan.Zero
-            });
-
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IFollowRepository, FollowRepository>();
         services.AddScoped<IPublicationRepository, PublicationRepository>();
-        services.AddScoped<IPublicationLikeRepositories, PublicationLikeRepositories>();
+        services.AddScoped<IPublicationLikeRepository, PublicationLikeRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
 

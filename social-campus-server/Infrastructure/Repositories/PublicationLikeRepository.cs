@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class PublicationLikeRepositories(
-    ApplicationDbContext context) : IPublicationLikeRepositories
+public class PublicationLikeRepository(
+    ApplicationDbContext context) : IPublicationLikeRepository
 {
     public async Task AddAsync(UserId userId, PublicationId publicationId)
     {

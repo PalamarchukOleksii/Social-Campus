@@ -1,6 +1,7 @@
 using Application.Abstractions.Messaging;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
+using Domain.Models.PublicationModel;
 using Domain.Shared;
 
 namespace Application.Users.Queries.GetUserPublications;
@@ -8,7 +9,7 @@ namespace Application.Users.Queries.GetUserPublications;
 public class GetUserPublicationsQueryHandler(
     IPublicationRepository publicationRepository,
     IUserRepository userRepository,
-    IPublicationLikeRepositories publicationLikeRepositories,
+    IPublicationLikeRepository publicationLikeRepository,
     ICommentRepository commentRepository)
     : IQueryHandler<GetUserPublicationsQuery, IReadOnlyList<PublicationDto>>
 {
@@ -21,12 +22,25 @@ public class GetUserPublicationsQueryHandler(
                 "User.NotFound",
                 $"User with UserId {request.UserId.Value} was not found"));
 
-        var userPublications = await publicationRepository.GetUserPublicationsByUserIdAsync(user.Id);
+        Publication? lastPublication = null;
+        if (request.LastPublicationId is not null)
+        {
+            lastPublication = await publicationRepository.GetByIdAsync(request.LastPublicationId);
+            if (lastPublication is null)
+                return Result.Failure<IReadOnlyList<PublicationDto>>(new Error(
+                    "Publication.NotFound",
+                    $"Publication with PublicationId {request.LastPublicationId.Value} was not found"));
+        }
+
+        var userPublications = await publicationRepository.GetUserPublicationsByUserIdAsync(
+            user.Id,
+            lastPublication,
+            request.Count);
 
         var publicationDtos = new List<PublicationDto>();
         foreach (var publication in userPublications)
         {
-            var publicationLikes = await publicationLikeRepositories
+            var publicationLikes = await publicationLikeRepository
                 .GetPublicationLikesListByPublicationIdAsync(publication.Id);
 
             var comments = await commentRepository

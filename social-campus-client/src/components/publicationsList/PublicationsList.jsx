@@ -1,64 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Publication from "../publication/Publication";
 import "./PublicationsList.css";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { toast } from "react-toastify";
-import Loading from "../loading/Loading";
 
-const USERS_BASE_URL = "/api/users";
-
-function PublicationsList({ userId }) {
-  const axios = useAxiosPrivate();
-  const [publications, setPublications] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPublications = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `${USERS_BASE_URL}/${userId.value}/publications`
-        );
-
-        const sortedPublications = response.data.sort((a, b) => {
-          const dateA = new Date(a.creationDateTime);
-          const dateB = new Date(b.creationDateTime);
-          return dateB - dateA;
-        });
-
-        setPublications(sortedPublications);
-      } catch (err) {
-        toast.error(err.message || "Failed to fetch publications");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPublications();
-  }, [userId, axios]);
-
-  if (loading) return <Loading />;
-
+function PublicationsList({ publications }) {
   return (
     <div className="publications">
-      {publications.length > 0 ? (
-        publications.map((publication) => (
-          <Publication key={publication.id.value} publication={publication} />
-        ))
-      ) : (
-        <h2 className="no-publications-text general-text">
-          No publications yet
-        </h2>
-      )}
+      {publications.map((publication) => (
+        <div key={publication.id.value}>
+          <Publication publication={publication} />
+        </div>
+      ))}
     </div>
   );
 }
 
 PublicationsList.propTypes = {
-  userId: PropTypes.shape({
-    value: PropTypes.string.isRequired,
-  }).isRequired,
+  publications: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.shape({
+        value: PropTypes.string.isRequired,
+      }).isRequired,
+      description: PropTypes.string.isRequired,
+      imageUrl: PropTypes.string.isRequired,
+      creationDateTime: PropTypes.string.isRequired,
+      creatorId: PropTypes.shape({
+        value: PropTypes.string.isRequired,
+      }).isRequired,
+      userWhoLikedIds: PropTypes.arrayOf(
+        PropTypes.shape({
+          value: PropTypes.string.isRequired,
+        })
+      ),
+      commentsCount: PropTypes.number.isRequired,
+    })
+  ).isRequired,
 };
 
 export default PublicationsList;
