@@ -1,66 +1,102 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SearchTabs from "../../components/searchTabs/SearchTabs";
-import userData from "../../data/userData.json";
 import "./UsersSearch.css";
-import FollowItem from "../../components/followItem/FollowItem";
-import AuthUserLogin from "../../utils/consts/AuthUserLogin";
+import ShortProfile from "../../components/shortProfile/ShortProfile";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import Loading from "../../components/loading/Loading";
+
+const SEARCH_USERS_BASE_URL = "/api/users/searchterm";
+const PAGE_SIZE = 10;
 
 function UsersSearch() {
+  const axios = useAxiosPrivate();
+
   const [searchQuery, setSearchQuery] = useState("");
-  const authUser = userData.find((user) => user.login === AuthUserLogin);
+  const [searchResultUsers, setSearchResultUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [allFetched, setAllFetched] = useState(false);
+  const [page, setPage] = useState(1);
 
-  const [followStatus, setFollowStatus] = useState(() => {
-    const initialStatus = {};
-    if (authUser && authUser.following) {
-      authUser.following.forEach((followedUser) => {
-        initialStatus[followedUser.id] = true;
-      });
+  const debounceTimeoutRef = useRef(null);
+
+  const fetchUsers = async (reset = false, pageNum = 1) => {
+    try {
+      setLoading(true);
+
+      const response = await axios.get(
+        `${SEARCH_USERS_BASE_URL}/${searchQuery}/count/${PAGE_SIZE}/page/${pageNum}`
+      );
+      const users = response.data;
+
+      if (reset) {
+        setSearchResultUsers(users);
+      } else {
+        setSearchResultUsers((prev) => [...prev, ...users]);
+      }
+
+      setPage(pageNum + 1);
+
+      if (users.length < PAGE_SIZE) {
+        setAllFetched(true);
+      } else {
+        setAllFetched(false);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
     }
-    return initialStatus;
-  });
-
-  const filteredUsers = userData.filter(
-    (user) =>
-      user.login !== AuthUserLogin &&
-      (user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.login.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
-
-  const handleFollowClick = (userId) => {
-    setFollowStatus((prevStatus) => ({
-      ...prevStatus,
-      [userId]: !prevStatus[userId],
-    }));
   };
+
+  useEffect(() => {
+    if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+
+    if (searchQuery.trim().length === 0) {
+      setSearchResultUsers([]);
+      setAllFetched(false);
+      setPage(1);
+      setLoading(false);
+      return;
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      fetchUsers(true, 1);
+    }, 250);
+
+    return () => {
+      if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+    };
+  }, [searchQuery, axios]);
 
   return (
     <div className="search-page-container">
       <input
         type="text"
         placeholder="Type to search for users..."
-        className="search-input"
+        className="user-search-input"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
       <SearchTabs />
       <div className="users-list">
-        {filteredUsers.length > 0 ? (
-          filteredUsers.map((user) => (
-            <FollowItem
-              key={user.id}
-              username={user.username}
-              login={user.login}
-              profileImage={user.profileImage}
-              bio={user.bio}
-              buttonText={followStatus[user.id] ? "Following" : "Follow"}
-              hoveredText={followStatus[user.id] ? "Unfollow" : "Follow"}
-              onClick={() => handleFollowClick(user.id)}
-            />
+        {loading && searchResultUsers.length === 0 ? (
+          <Loading />
+        ) : searchResultUsers.length > 0 ? (
+          searchResultUsers.map((user) => (
+            <div key={user.id.value} className="search-result-user-container">
+              <ShortProfile key={user.id.value} userId={user.id.value} />
+              {user.bio && <h2 className="bio">{user.bio}</h2>}
+            </div>
           ))
         ) : (
           <h2 className="not-found-users general-text">No users found.</h2>
         )}
       </div>
+      {!allFetched && !loading && searchResultUsers.length > 0 && (
+        <div className="load-more-container">
+          <button onClick={() => fetchUsers(false, page)}>Load More</button>
+        </div>
+      )}
     </div>
   );
 }
