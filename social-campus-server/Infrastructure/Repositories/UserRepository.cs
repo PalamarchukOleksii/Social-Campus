@@ -69,15 +69,18 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     {
         searchTerm = $"%{searchTerm.ToLower().Trim()}%";
 
-        return await context.Users
+        var users = await context.Users
             .Where(u =>
                 EF.Functions.Like(u.Login.ToLower(), searchTerm) ||
                 EF.Functions.Like(u.FirstName.ToLower(), searchTerm) ||
                 EF.Functions.Like(u.LastName.ToLower(), searchTerm))
             .Include(u => u.Followers)
-            .OrderBy(u => u.Followers != null ? u.Followers.Count : 0)
             .Skip((page - 1) * count)
             .Take(count)
             .ToListAsync();
+
+        return users
+            .OrderByDescending(u => u.Followers?.Count ?? 0)
+            .ToList();
     }
 }
