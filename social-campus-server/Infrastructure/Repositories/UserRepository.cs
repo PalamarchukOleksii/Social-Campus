@@ -64,4 +64,20 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
 
         context.Update(user);
     }
+
+    public async Task<IReadOnlyList<User>> SearchAsync(string searchTerm, int page, int count)
+    {
+        searchTerm = $"%{searchTerm.ToLower().Trim()}%";
+
+        return await context.Users
+            .Where(u =>
+                EF.Functions.Like(u.Login.ToLower(), searchTerm) ||
+                EF.Functions.Like(u.FirstName.ToLower(), searchTerm) ||
+                EF.Functions.Like(u.LastName.ToLower(), searchTerm))
+            .Include(u => u.Followers)
+            .OrderBy(u => u.Followers != null ? u.Followers.Count : 0)
+            .Skip((page - 1) * count)
+            .Take(count)
+            .ToListAsync();
+    }
 }

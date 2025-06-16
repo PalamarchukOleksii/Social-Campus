@@ -14,7 +14,7 @@ public interface IUserRepository
     public Task<User?> GetByRefreshTokenIdAsync(RefreshTokenId refreshTokenId);
     public Task<bool> IsExistByIdAsync(UserId userId);
     public Task<IReadOnlyList<User>> GetRandomUsersAsync(int count);
-
     public void Update(User user, string login, string email, string firstName, string lastName, string bio,
         string profileImageUrl);
+    public Task<IReadOnlyList<User>> SearchAsync(string searchTerm, int page, int count);
 }
