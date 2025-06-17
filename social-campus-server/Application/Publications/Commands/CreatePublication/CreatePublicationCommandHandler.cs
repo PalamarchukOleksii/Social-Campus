@@ -1,14 +1,20 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.Abstractions.Storage;
+using Application.Helpers;
 using Domain.Abstractions.Repositories;
+using Domain.Models.PublicationModel;
+using Domain.Models.TagModel;
 using Domain.Shared;
+using static System.Text.RegularExpressions.Regex;
 
 namespace Application.Publications.Commands.CreatePublication;
 
 public class CreatePublicationCommandHandler(
     IPublicationRepository publicationRepository,
     IUserRepository userRepository,
-    IStorageService storageService) : ICommandHandler<CreatePublicationCommand>
+    IStorageService storageService,
+    ITagRepository tagRepository,
+    IPublicationTagRepository publicationTagRepository) : ICommandHandler<CreatePublicationCommand>
 {
     public async Task<Result> Handle(CreatePublicationCommand request, CancellationToken cancellationToken)
     {
@@ -30,7 +36,18 @@ public class CreatePublicationCommandHandler(
                 cancellationToken);
         }
 
-        await publicationRepository.AddAsync(request.Description, request.CreatorId, imageUrl);
+        var createdPublication =
+            await publicationRepository.AddAsync(request.Description, request.CreatorId, imageUrl);
+
+        var labels = TagHelpers.ExtractLabels(createdPublication.Description);
+
+        foreach (var label in labels)
+        {
+            var tag = await tagRepository.GetByLabelAsync(label)
+                      ?? await tagRepository.AddAsync(label, cancellationToken);
+
+            await publicationTagRepository.AddAsync(tag.Id, createdPublication.Id, cancellationToken);
+        }
 
         return Result.Success();
     }
