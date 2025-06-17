@@ -33,6 +33,8 @@ public static class DependencyInjection
         services.AddScoped<IPublicationLikeRepository, PublicationLikeRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
+        services.AddScoped<ITagRepository, TagRepository>();
+        services.AddScoped<IPublicationTagRepository, PublicationTagRepository>();
 
         services.AddSingleton<IJwtProvider, JwtProvider>();
 
