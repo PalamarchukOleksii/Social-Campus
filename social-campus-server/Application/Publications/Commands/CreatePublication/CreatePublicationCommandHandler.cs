@@ -2,10 +2,7 @@
 using Application.Abstractions.Storage;
 using Application.Helpers;
 using Domain.Abstractions.Repositories;
-using Domain.Models.PublicationModel;
-using Domain.Models.TagModel;
 using Domain.Shared;
-using static System.Text.RegularExpressions.Regex;
 
 namespace Application.Publications.Commands.CreatePublication;
 

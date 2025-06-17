@@ -1,8 +1,8 @@
+using Domain.Models.PublicationModel;
 using Domain.Models.PublicationTagModel;
+using Domain.Models.TagModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Domain.Models.TagModel;
-using Domain.Models.PublicationModel;
 
 namespace Infrastructure.Configurations;
 

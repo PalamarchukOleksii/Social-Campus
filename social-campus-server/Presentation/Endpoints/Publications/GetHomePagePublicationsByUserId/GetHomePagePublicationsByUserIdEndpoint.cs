@@ -1,5 +1,4 @@
 using Application.Publications.Queries.GetHomePagePublications;
-using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 using MediatR;
 using Presentation.Abstractions;

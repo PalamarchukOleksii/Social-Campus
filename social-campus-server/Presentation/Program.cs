@@ -1,10 +1,5 @@
-using System.Reflection;
-using System.Text;
 using Application;
 using Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using Presentation;
 using Presentation.Extensions;
 using Scalar.AspNetCore;

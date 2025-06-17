@@ -1,5 +1,5 @@
-using Domain.Models.PublicationTagModel;
 using Domain.Models.PublicationModel;
+using Domain.Models.PublicationTagModel;
 using Domain.Models.TagModel;
 
 namespace Domain.Abstractions.Repositories;

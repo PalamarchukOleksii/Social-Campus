@@ -76,19 +76,17 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
 
             return followedPublications;
         }
-        else
-        {
-            var randomPage = page - totalFollowedPages;
-            if (randomPage < 1) randomPage = 1;
 
-            var randomPublications = await context.Publications
-                .Where(p => !userIds.Contains(p.CreatorId))
-                .OrderByDescending(p => p.CreationDateTime)
-                .Skip((randomPage - 1) * count)
-                .Take(count)
-                .ToListAsync();
+        var randomPage = page - totalFollowedPages;
+        if (randomPage < 1) randomPage = 1;
 
-            return randomPublications;
-        }
+        var randomPublications = await context.Publications
+            .Where(p => !userIds.Contains(p.CreatorId))
+            .OrderByDescending(p => p.CreationDateTime)
+            .Skip((randomPage - 1) * count)
+            .Take(count)
+            .ToListAsync();
+
+        return randomPublications;
     }
 }

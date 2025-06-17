@@ -1,5 +1,4 @@
-﻿using Domain.Models.FollowModel;
-using Domain.Models.PublicationModel;
+﻿using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 
 namespace Domain.Abstractions.Repositories;

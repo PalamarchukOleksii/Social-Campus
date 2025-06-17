@@ -1,4 +1,3 @@
-using System;
 using Application.Users.Queries.SearchUsers;
 using MediatR;
 using Presentation.Abstractions;
