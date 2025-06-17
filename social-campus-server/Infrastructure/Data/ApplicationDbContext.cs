@@ -3,7 +3,9 @@ using Domain.Models.CommentModel;
 using Domain.Models.FollowModel;
 using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
+using Domain.Models.PublicationTagModel;
 using Domain.Models.RefreshTokenModel;
+using Domain.Models.TagModel;
 using Domain.Models.UserModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +20,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public required DbSet<PublicationLike> PublicationLikes { get; set; }
     public required DbSet<Comment> Comments { get; set; }
     public required DbSet<CommentLike> CommentLikes { get; set; }
+    public required DbSet<Tag> Tags { get; set; }
+    public required DbSet<PublicationTag> PublicationTags { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

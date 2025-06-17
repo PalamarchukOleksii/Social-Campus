@@ -37,5 +37,9 @@ public class PublicationConfiguration : IEntityTypeConfiguration<Publication>
             .IsUnique();
 
         builder.HasIndex(p => p.CreatorId);
+
+        builder.HasMany(p => p.PublicationTags)
+            .WithOne(pt => pt.Publication)
+            .HasForeignKey(pt => pt.PublicationId);
     }
 }
