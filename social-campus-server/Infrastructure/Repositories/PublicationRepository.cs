@@ -8,12 +8,13 @@ namespace Infrastructure.Repositories;
 
 public class PublicationRepository(ApplicationDbContext context) : IPublicationRepository
 {
-
-    public async Task AddAsync(string description, UserId creatorId, string imageData)
+    public async Task<Publication> AddAsync(string description, UserId creatorId, string imageData)
     {
         Publication newPublication = new(description, creatorId, imageData);
 
         await context.Publications.AddAsync(newPublication);
+
+        return newPublication;
     }
 
     public async Task<IReadOnlyList<Publication>> GetUserPublicationsByUserIdAsync(
@@ -77,7 +78,7 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
         }
         else
         {
-            int randomPage = page - totalFollowedPages;
+            var randomPage = page - totalFollowedPages;
             if (randomPage < 1) randomPage = 1;
 
             var randomPublications = await context.Publications

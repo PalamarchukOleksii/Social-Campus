@@ -7,9 +7,23 @@ namespace Infrastructure.Repositories;
 
 public class TagRepository(ApplicationDbContext context) : ITagRepository
 {
-    public async Task AddAsync(Tag tag, CancellationToken cancellationToken = default)
+    public async Task<Tag?> GetByIdAsync(TagId tagId)
     {
-        await context.Tags.AddAsync(tag, cancellationToken);
+        return await context.Tags.FirstOrDefaultAsync(x => x.Id.Value == tagId.Value);
+    }
+
+    public async Task<Tag?> GetByLabelAsync(string label)
+    {
+        return await context.Tags.FirstOrDefaultAsync(t => t.Label == label);
+    }
+
+    public async Task<Tag> AddAsync(string label, CancellationToken cancellationToken = default)
+    {
+        var newTag = new Tag(label);
+
+        await context.Tags.AddAsync(newTag, cancellationToken);
+
+        return newTag;
     }
 
     public async Task<bool> ExistsAsync(string label, CancellationToken cancellationToken = default)

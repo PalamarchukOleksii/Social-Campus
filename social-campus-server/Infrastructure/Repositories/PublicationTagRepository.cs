@@ -15,7 +15,6 @@ public class PublicationTagRepository(ApplicationDbContext context) : IPublicati
         return await context.PublicationTags
             .Where(pt => pt.TagId == tagId)
             .Include(pt => pt.Publication)
-            .ThenInclude(p => p.PublicationLikes)
             .Select(pt => pt.Publication!)
             .OrderByDescending(p => p.PublicationLikes!.Count)
             .Skip((page - 1) * count)
@@ -23,9 +22,10 @@ public class PublicationTagRepository(ApplicationDbContext context) : IPublicati
             .ToListAsync(cancellationToken);
     }
 
-    public async Task AddAsync(PublicationTag publicationTag, CancellationToken cancellationToken = default)
+    public async Task AddAsync(TagId tagId, PublicationId publicationId, CancellationToken cancellationToken = default)
     {
-        await context.PublicationTags.AddAsync(publicationTag, cancellationToken);
+        var newPublicationTag = new PublicationTag(tagId, publicationId);
+        await context.PublicationTags.AddAsync(newPublicationTag, cancellationToken);
     }
 
     public void Remove(PublicationTag publicationTag)
@@ -48,5 +48,16 @@ public class PublicationTagRepository(ApplicationDbContext context) : IPublicati
             .Include(pt => pt.Tag)
             .Select(pt => pt.Tag!)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task RemoveAsync(TagId tagId, PublicationId publicationId,
+        CancellationToken cancellationToken = default)
+    {
+        var entity = await context.PublicationTags
+            .FirstOrDefaultAsync(pt =>
+                    pt.TagId == tagId && pt.PublicationId == publicationId,
+                cancellationToken);
+
+        if (entity is not null) context.PublicationTags.Remove(entity);
     }
 }
