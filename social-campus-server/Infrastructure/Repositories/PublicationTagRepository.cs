@@ -60,4 +60,14 @@ public class PublicationTagRepository(ApplicationDbContext context) : IPublicati
 
         if (entity is not null) context.PublicationTags.Remove(entity);
     }
+
+    public async Task<List<Publication>> GetAllPublicationsForTagAsync(TagId tagId,
+        CancellationToken cancellationToken = default)
+    {
+        return await context.PublicationTags
+            .Where(pt => pt.TagId == tagId)
+            .Include(pt => pt.Publication)
+            .Select(pt => pt.Publication!)
+            .ToListAsync(cancellationToken);
+    }
 }

@@ -17,4 +17,7 @@ public interface IPublicationTagRepository
         CancellationToken cancellationToken = default);
 
     public Task RemoveAsync(TagId tagId, PublicationId publicationId, CancellationToken cancellationToken = default);
+
+    public Task<List<Publication>> GetAllPublicationsForTagAsync(TagId tagId,
+        CancellationToken cancellationToken = default);
 }
