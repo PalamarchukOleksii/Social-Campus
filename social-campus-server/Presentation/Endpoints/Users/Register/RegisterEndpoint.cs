@@ -21,6 +21,6 @@ public class RegisterEndpoint : BaseEndpoint, IEndpoint
             var response = await sender.Send(commandRequest);
 
             return response.IsSuccess ? Results.Ok() : HandleFailure(response);
-        }).WithTags(Tags.Users);
+        }).WithTags(EndpointTags.Users);
     }
 }

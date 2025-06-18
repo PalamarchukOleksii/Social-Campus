@@ -10,7 +10,9 @@ namespace Application.Publications.Commands.UpdatePublication;
 public class UpdatePublicationCommandHandler(
     IPublicationRepository publicationRepository,
     IUserRepository userRepository,
-    IStorageService storageService) : ICommandHandler<UpdatePublicationCommand>
+    IStorageService storageService,
+    ITagRepository tagRepository,
+    IPublicationTagRepository publicationTagRepository) : ICommandHandler<UpdatePublicationCommand>
 {
     public async Task<Result> Handle(UpdatePublicationCommand request, CancellationToken cancellationToken)
     {
@@ -68,6 +70,26 @@ public class UpdatePublicationCommandHandler(
         }
 
         publicationRepository.Update(publication, request.Description, imageUrl ?? "");
+
+        var newLabels = TagHelpers.ExtractLabels(request.Description);
+        var currentTags = await publicationTagRepository.GetTagsForPublicationAsync(publication.Id, cancellationToken);
+        var currentLabels = currentTags.Select(t => t.Label.ToLowerInvariant()).ToHashSet();
+
+        var removedLabels = currentLabels.Except(newLabels).ToList();
+        foreach (var label in removedLabels)
+        {
+            var tag = currentTags.First(t => t.Label.Equals(label, StringComparison.OrdinalIgnoreCase));
+            await publicationTagRepository.RemoveAsync(tag.Id, publication.Id, cancellationToken);
+        }
+
+        var addedLabels = newLabels.Except(currentLabels).ToList();
+        foreach (var label in addedLabels)
+        {
+            var tag = await tagRepository.GetByLabelAsync(label)
+                      ?? await tagRepository.AddAsync(label, cancellationToken);
+
+            await publicationTagRepository.AddAsync(tag.Id, publication.Id, cancellationToken);
+        }
 
         return Result.Success();
     }

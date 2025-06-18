@@ -29,7 +29,7 @@ public class RevokeEndpoint : BaseEndpoint, IEndpoint
 
                 return HandleFailure(response);
             })
-            .WithTags(Tags.RefreshTokens)
+            .WithTags(EndpointTags.RefreshTokens)
             .RequireAuthorization();
     }
 }

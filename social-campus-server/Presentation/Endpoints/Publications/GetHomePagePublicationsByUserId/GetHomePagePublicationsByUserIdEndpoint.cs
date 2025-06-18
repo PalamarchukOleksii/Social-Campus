@@ -1,5 +1,4 @@
 using Application.Publications.Queries.GetHomePagePublications;
-using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 using MediatR;
 using Presentation.Abstractions;
@@ -26,7 +25,7 @@ public class GetHomePagePublicationsByUserIdEndpoint : BaseEndpoint, IEndpoint
 
                 return response.IsSuccess ? Results.Ok(response.Value) : HandleFailure(response);
             })
-            .WithTags(Tags.Publications)
+            .WithTags(EndpointTags.Publications)
             .RequireAuthorization();
     }
 }

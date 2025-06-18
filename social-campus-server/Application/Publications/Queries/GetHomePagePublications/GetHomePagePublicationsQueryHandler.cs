@@ -1,7 +1,6 @@
 using Application.Abstractions.Messaging;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
-using Domain.Models.PublicationModel;
 using Domain.Shared;
 
 namespace Application.Publications.Queries.GetHomePagePublications;

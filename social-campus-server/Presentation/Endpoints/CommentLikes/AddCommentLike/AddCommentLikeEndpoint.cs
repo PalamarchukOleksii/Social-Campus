@@ -17,7 +17,7 @@ public class AddCommentLikeEndpoint : BaseEndpoint, IEndpoint
 
                 return response.IsSuccess ? Results.Ok() : HandleFailure(response);
             })
-            .WithTags(Tags.CommentLikes)
+            .WithTags(EndpointTags.CommentLikes)
             .RequireAuthorization();
     }
 }

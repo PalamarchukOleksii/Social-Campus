@@ -1,4 +1,3 @@
-using System;
 using Application.Abstractions.Messaging;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
@@ -11,7 +10,8 @@ public class SearchUsersQueryHandler(
     IFollowRepository followRepository
 ) : IQueryHandler<SearchUsersQuery, IReadOnlyList<UserDto>>
 {
-    public async Task<Result<IReadOnlyList<UserDto>>> Handle(SearchUsersQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IReadOnlyList<UserDto>>> Handle(SearchUsersQuery request,
+        CancellationToken cancellationToken)
     {
         var users = await userRepository.SearchAsync(request.SearchTerm, request.Page, request.Count);
 

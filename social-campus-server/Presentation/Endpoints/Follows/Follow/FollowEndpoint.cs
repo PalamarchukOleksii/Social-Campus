@@ -17,7 +17,7 @@ public class FollowEndpoint : BaseEndpoint, IEndpoint
 
                 return response.IsSuccess ? Results.Ok() : HandleFailure(response);
             })
-            .WithTags(Tags.Follows)
+            .WithTags(EndpointTags.Follows)
             .RequireAuthorization();
     }
 }

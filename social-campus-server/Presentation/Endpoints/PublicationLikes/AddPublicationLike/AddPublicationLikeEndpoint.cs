@@ -17,7 +17,7 @@ public class AddPublicationLikeEndpoint : BaseEndpoint, IEndpoint
 
                 return response.IsSuccess ? Results.Ok() : HandleFailure(response);
             })
-            .WithTags(Tags.PublicationLikes)
+            .WithTags(EndpointTags.PublicationLikes)
             .RequireAuthorization();
     }
 }

@@ -18,7 +18,7 @@ public class CreateCommentEndpoint : BaseEndpoint, IEndpoint
 
                 return response.IsSuccess ? Results.Ok() : HandleFailure(response);
             })
-            .WithTags(Tags.Comments)
+            .WithTags(EndpointTags.Comments)
             .RequireAuthorization();
     }
 }

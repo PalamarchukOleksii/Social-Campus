@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Application.Abstractions.Security;
 using Application.Abstractions.Storage;
 using Domain.Abstractions.Repositories;
@@ -7,11 +6,9 @@ using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Security;
 using Infrastructure.Storage;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure;
 
@@ -33,6 +30,8 @@ public static class DependencyInjection
         services.AddScoped<IPublicationLikeRepository, PublicationLikeRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
+        services.AddScoped<ITagRepository, TagRepository>();
+        services.AddScoped<IPublicationTagRepository, PublicationTagRepository>();
 
         services.AddSingleton<IJwtProvider, JwtProvider>();
 

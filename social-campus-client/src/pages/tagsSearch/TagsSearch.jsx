@@ -1,61 +1,104 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./TagsSearch.css";
 import Tag from "../../components/tag/Tag";
 import SearchTabs from "../../components/searchTabs/SearchTabs";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import Loading from "../../components/loading/Loading";
+
+const SEARCH_TAGS_BASE_URL = "/api/tags/searchterm";
+const PAGE_SIZE = 10;
 
 function TagsSearch() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [tags, setTags] = useState([]);
+  const axios = useAxiosPrivate();
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResultTags, setSearchResultTags] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [allFetched, setAllFetched] = useState(false);
+  const [page, setPage] = useState(1);
+
+  const debounceTimeoutRef = useRef(null);
+
+  const fetchTags = async (reset = false, pageNum = 1) => {
+    try {
+      setLoading(true);
+
+      const response = await axios.get(
+        `${SEARCH_TAGS_BASE_URL}/${searchQuery}/count/${PAGE_SIZE}/page/${pageNum}`
+      );
+      const tags = response.data;
+
+      if (reset) {
+        setSearchResultTags(tags);
+      } else {
+        setSearchResultTags((prev) => [...prev, ...tags]);
+      }
+
+      setPage(pageNum + 1);
+      setAllFetched(tags.length < PAGE_SIZE);
+    } catch (error) {
+      console.error("Error fetching tags:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const extractTags = () => {
-      const tagCountMap = new Map();
+    if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
 
-      // jsonData.forEach((user) => {
-      //   user.publications.forEach((publication) => {
-      //     const regex = /#\w+/g;
-      //     const matches = publication.description.match(regex);
-      //     if (matches) {
-      //       matches.forEach((tag) => {
-      //         tagCountMap.set(tag, (tagCountMap.get(tag) || 0) + 1);
-      //       });
-      //     }
-      //   });
-      // });
+    if (searchQuery.trim().length === 0) {
+      setSearchResultTags([]);
+      setAllFetched(false);
+      setPage(1);
+      setLoading(false);
+      return;
+    }
 
-      const tagsWithCount = Array.from(tagCountMap, ([tag, count]) => ({
-        tag,
-        count,
-      }));
-      setTags(tagsWithCount);
+    debounceTimeoutRef.current = setTimeout(() => {
+      fetchTags(true, 1);
+    }, 250);
+
+    return () => {
+      if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
     };
-
-    extractTags();
-  }, []);
-
-  const filteredTags = tags.filter((tag) =>
-    tag.tag.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  }, [searchQuery, axios]);
 
   return (
     <div className="search-page-container">
       <input
         type="text"
         placeholder="Type to search for tags..."
-        className="search-input"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        className="tag-search-input"
+        value={searchQuery}
+        onChange={(e) => {
+          const filtered = e.target.value.replace(
+            /[^a-zA-Zа-яА-ЯіІїЇєЄґҐ0-9]/g,
+            ""
+          );
+          setSearchQuery(filtered);
+        }}
       />
       <SearchTabs />
       <div className="tags-container">
-        {filteredTags.length === 0 ? (
-          <h2 className="not-found-users general-text">No tags found.</h2>
-        ) : (
-          filteredTags.map((tagObj, index) => (
-            <Tag key={index} tagName={tagObj.tag} postsCount={tagObj.count} />
+        {loading && searchResultTags.length === 0 ? (
+          <Loading />
+        ) : searchResultTags.length > 0 ? (
+          searchResultTags.map((tag, index) => (
+            <Tag
+              key={index}
+              tagName={tag.label}
+              postsCount={tag.publicationsCount}
+            />
           ))
+        ) : (
+          <h2 className="not-found-users general-text">No tags found.</h2>
         )}
       </div>
+      {!allFetched && !loading && searchResultTags.length > 0 && (
+        <div className="load-more-container">
+          <button onClick={() => fetchTags(false, page)}>Load More</button>
+        </div>
+      )}
     </div>
   );
 }

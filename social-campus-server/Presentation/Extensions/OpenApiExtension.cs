@@ -21,7 +21,7 @@ public class OpenApiExtension(IAuthenticationSchemeProvider authenticationScheme
                 Type = SecuritySchemeType.Http,
                 Scheme = "bearer",
                 In = ParameterLocation.Header,
-                BearerFormat = "JWT",
+                BearerFormat = "JWT"
             };
 
             document.SecurityRequirements ??= [];
@@ -45,7 +45,8 @@ public class OpenApiExtension(IAuthenticationSchemeProvider authenticationScheme
         {
             Title = "Social Campus API",
             Version = "v1",
-            Description = "Comprehensive API for Social Campus platform, enabling seamless user interaction, content sharing, and community engagement."
+            Description =
+                "Comprehensive API for Social Campus platform, enabling seamless user interaction, content sharing, and community engagement."
         };
     }
 }
