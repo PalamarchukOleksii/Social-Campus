@@ -75,7 +75,13 @@ function UsersSearch() {
         placeholder="Type to search for users..."
         className="user-search-input"
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onChange={(e) => {
+          const filtered = e.target.value.replace(
+            /[^a-zA-Zа-яА-ЯіІїЇєЄґҐ0-9 ]/g,
+            ""
+          );
+          setSearchQuery(filtered);
+        }}
       />
       <SearchTabs />
       <div className="users-list">
