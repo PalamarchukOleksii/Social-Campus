@@ -49,7 +49,7 @@ function TagDetail() {
     setRelatedPublications([]);
     setPage(1);
     setAllFetched(false);
-    fetchPublications(1);
+    fetchPublications();
   }, [tag, axios]);
 
   return (
