@@ -15,7 +15,7 @@ public class GetPublicationsForTagByLabelEndpoint : BaseEndpoint, IEndpoint
                 int page,
                 ISender sender) =>
             {
-                var query = new GetPublicationsForTagQuery(taglabel, count, page);
+                var query = new GetPublicationsForTagQuery(taglabel, page, count);
 
                 var response = await sender.Send(query);
 

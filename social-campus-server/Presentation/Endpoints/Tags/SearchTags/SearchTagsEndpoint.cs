@@ -9,7 +9,7 @@ public class SearchTagsEndpoint : BaseEndpoint, IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/users/searchterm/{searchterm}/count/{count:int}/page/{page:int}",
+        app.MapGet("/tags/searchterm/{searchterm}/count/{count:int}/page/{page:int}",
                 async (ISender sender, string searchterm, int count, int page) =>
                 {
                     SearchTagsQuery queryRequest = new(searchterm, page, count);
