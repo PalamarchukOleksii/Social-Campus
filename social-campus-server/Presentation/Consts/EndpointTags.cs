@@ -1,6 +1,6 @@
 ﻿namespace Presentation.Consts;
 
-public static class Tags
+public static class EndpointTags
 {
     public const string Users = "users";
     public const string RefreshTokens = "refreshtokens";
@@ -9,4 +9,5 @@ public static class Tags
     public const string Publications = "publications";
     public const string Comments = "comments";
     public const string CommentLikes = "commentlikes";
+    public const string Tags = "tags";
 }

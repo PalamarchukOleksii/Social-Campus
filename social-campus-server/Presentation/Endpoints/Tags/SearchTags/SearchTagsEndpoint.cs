@@ -1,23 +1,24 @@
-using Application.Users.Queries.SearchUsers;
+using Application.Tags.Queries.SearchTags;
 using MediatR;
 using Presentation.Abstractions;
+using Presentation.Consts;
 
-namespace Presentation.Endpoints.Users.SearchUsers;
+namespace Presentation.Endpoints.Tags.SearchTags;
 
-public class SearchUsersEndpoint : BaseEndpoint, IEndpoint
+public class SearchTagsEndpoint : BaseEndpoint, IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("/users/searchterm/{searchterm}/count/{count:int}/page/{page:int}",
                 async (ISender sender, string searchterm, int count, int page) =>
                 {
-                    SearchUsersQuery queryRequest = new(searchterm, page, count);
+                    SearchTagsQuery queryRequest = new(searchterm, page, count);
 
                     var response = await sender.Send(queryRequest);
 
                     return response.IsSuccess ? Results.Ok(response.Value) : HandleFailure(response);
                 })
-            .WithTags(Consts.EndpointTags.Users)
+            .WithTags(EndpointTags.Tags)
             .RequireAuthorization();
     }
 }

@@ -18,7 +18,7 @@ public class GetRepliedCommentsByCommentIdEndpoint : BaseEndpoint, IEndpoint
 
                 return response.IsSuccess ? Results.Ok(response.Value) : HandleFailure(response);
             })
-            .WithTags(Tags.Comments)
+            .WithTags(EndpointTags.Comments)
             .RequireAuthorization();
     }
 }

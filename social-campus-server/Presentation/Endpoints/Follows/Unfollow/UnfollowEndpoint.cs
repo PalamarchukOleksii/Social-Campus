@@ -18,7 +18,7 @@ public class UnfollowEndpoint : BaseEndpoint, IEndpoint
 
                     return response.IsSuccess ? Results.Ok() : HandleFailure(response);
                 })
-            .WithTags(Tags.Follows)
+            .WithTags(EndpointTags.Follows)
             .RequireAuthorization();
     }
 }

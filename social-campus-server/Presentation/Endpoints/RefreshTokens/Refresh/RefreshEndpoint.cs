@@ -48,6 +48,6 @@ public class RefreshEndpoint : BaseEndpoint, IEndpoint
                 tokens.AccessToken,
                 tokens.AccessTokenExpirationInSeconds
             });
-        }).WithTags(Tags.RefreshTokens);
+        }).WithTags(EndpointTags.RefreshTokens);
     }
 }

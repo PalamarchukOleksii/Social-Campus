@@ -20,7 +20,7 @@ public class CreatePublicationEndpoint : BaseEndpoint, IEndpoint
                 return response.IsSuccess ? Results.Ok() : HandleFailure(response);
             })
             .Accepts<CreatePublicationRequest>("multipart/form-data")
-            .WithTags(Tags.Publications)
+            .WithTags(EndpointTags.Publications)
             .RequireAuthorization()
             .DisableAntiforgery();
     }

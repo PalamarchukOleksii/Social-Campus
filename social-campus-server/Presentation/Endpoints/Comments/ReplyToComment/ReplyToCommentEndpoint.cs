@@ -21,7 +21,7 @@ public class ReplyToCommentEndpoint : BaseEndpoint, IEndpoint
 
                 return response.IsSuccess ? Results.Ok() : HandleFailure(response);
             })
-            .WithTags(Tags.Comments)
+            .WithTags(EndpointTags.Comments)
             .RequireAuthorization();
     }
 }

@@ -42,6 +42,6 @@ public class LoginEndpoint : BaseEndpoint, IEndpoint
                 tokens.AccessToken,
                 tokens.AccessTokenExpirationInSeconds
             });
-        }).WithTags(Tags.Users);
+        }).WithTags(EndpointTags.Users);
     }
 }

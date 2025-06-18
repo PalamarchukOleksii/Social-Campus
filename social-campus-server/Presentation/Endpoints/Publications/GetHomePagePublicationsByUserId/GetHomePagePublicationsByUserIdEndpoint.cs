@@ -25,7 +25,7 @@ public class GetHomePagePublicationsByUserIdEndpoint : BaseEndpoint, IEndpoint
 
                 return response.IsSuccess ? Results.Ok(response.Value) : HandleFailure(response);
             })
-            .WithTags(Tags.Publications)
+            .WithTags(EndpointTags.Publications)
             .RequireAuthorization();
     }
 }

@@ -22,7 +22,7 @@ public class GetUserPublicationsEndpoint : BaseEndpoint, IEndpoint
 
                     return response.IsSuccess ? Results.Ok(response.Value) : HandleFailure(response);
                 })
-            .WithTags(Tags.Users)
+            .WithTags(EndpointTags.Users)
             .RequireAuthorization();
     }
 }

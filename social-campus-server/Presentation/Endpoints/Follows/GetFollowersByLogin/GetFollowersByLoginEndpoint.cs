@@ -18,7 +18,7 @@ public class GetFollowersByLoginEndpoint : BaseEndpoint, IEndpoint
 
                 return Results.Ok(response.Value);
             })
-            .WithTags(Tags.Follows)
+            .WithTags(EndpointTags.Follows)
             .RequireAuthorization();
     }
 }

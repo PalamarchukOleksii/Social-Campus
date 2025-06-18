@@ -27,7 +27,7 @@ public class UpdateUserEndpoint : BaseEndpoint, IEndpoint
                 return response.IsSuccess ? Results.Ok() : HandleFailure(response);
             })
             .Accepts<UpdateUserRequest>("multipart/form-data")
-            .WithTags(Tags.Users)
+            .WithTags(EndpointTags.Users)
             .RequireAuthorization()
             .DisableAntiforgery();
     }
