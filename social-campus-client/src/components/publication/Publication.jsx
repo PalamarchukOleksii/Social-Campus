@@ -80,6 +80,41 @@ function Publication(props) {
     setIsEditOpen(false);
   };
 
+  const handleTagClick = (e, tagName) => {
+    e.stopPropagation();
+    const tagWithoutHash = tagName.replace("#", "");
+
+    const currentPath = location.pathname;
+    if (currentPath !== `/tag/${tagWithoutHash}`) {
+      navigate(`/tag/${tagWithoutHash}`);
+      window.scrollTo(0, 0);
+    }
+  };
+
+  const renderDescriptionWithTags = (description) => {
+    const regex = /#\w+/g;
+    const parts = description.split(regex);
+    const tags = description.match(regex);
+
+    return (
+      <span>
+        {parts.map((part, index) => (
+          <React.Fragment key={index}>
+            {part}
+            {tags && tags[index] && (
+              <span
+                className="tag"
+                onClick={(e) => handleTagClick(e, tags[index])}
+              >
+                {tags[index]}
+              </span>
+            )}
+          </React.Fragment>
+        ))}
+      </span>
+    );
+  };
+
   return (
     <div className="publication-container">
       {isCreateOpen && !props.disableCreateComment && (
@@ -124,7 +159,8 @@ function Publication(props) {
         </div>
         <div className="content-container" onClick={handlePublicationClick}>
           <h2 className="description general-text">
-            {props.publication.description || "Description"}
+            {renderDescriptionWithTags(props.publication.description) ||
+              "Description"}
           </h2>
           <div className="image-wrapper">
             {props.publication.imageUrl && (
