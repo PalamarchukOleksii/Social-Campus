@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import CreateComment from "../createComment/CreateComment";
 import Comment from "../comment/Comment";
@@ -6,26 +6,55 @@ import PropTypes from "prop-types";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const GET_REPLIES_URL = "/api/comments/replies/";
+const PAGE_SIZE = 10;
 
 function CommentReplyManager({ comment }) {
   const [replies, setReplies] = useState([]);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
+  const [replyPage, setReplyPage] = useState(1);
+  const [loadingReplies, setLoadingReplies] = useState(false);
+  const [allRepliesFetched, setAllRepliesFetched] = useState(false);
+  const [repliesLoaded, setRepliesLoaded] = useState(false);
+
   const axios = useAxiosPrivate();
 
   const fetchReplies = async () => {
+    if (allRepliesFetched) return;
+
     try {
-      const response = await axios.get(`${GET_REPLIES_URL}${comment.id.value}`);
-      setReplies(response.data);
+      setLoadingReplies(true);
+      const response = await axios.get(
+        `${GET_REPLIES_URL}${comment.id.value}/count/${PAGE_SIZE}/page/${replyPage}`
+      );
+
+      const newReplies = response.data;
+
+      if (newReplies.length < PAGE_SIZE) {
+        setAllRepliesFetched(true);
+      }
+
+      if (newReplies.length === 0) return;
+
+      setReplies((prev) => [...prev, ...newReplies]);
+      setReplyPage((prev) => prev + 1);
+      setRepliesLoaded(true);
     } catch (error) {
       console.error("Failed to fetch replies:", error);
+    } finally {
+      setLoadingReplies(false);
     }
   };
 
-  useEffect(() => {
+  const handleLoadRepliesClick = () => {
+    if (!repliesLoaded) {
+      setReplies([]);
+      setReplyPage(1);
+      setAllRepliesFetched(false);
+    }
     fetchReplies();
-  }, [comment.id.value]);
+  };
 
   return (
     <div className="comment-reply-manager">
@@ -61,16 +90,34 @@ function CommentReplyManager({ comment }) {
           document.body
         )}
 
+      {!repliesLoaded && comment.repliesCount > 0 && (
+        <div className="load-more-container">
+          <a
+            className="load-replies-button"
+            onClick={handleLoadRepliesClick}
+            disabled={loadingReplies}
+          >
+            Load Replies
+          </a>
+        </div>
+      )}
+
       {replies.length > 0 && (
         <div className="replies-section">
-          {[...replies]
-            .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-            .map((reply) => (
-              <CommentReplyManager
-                key={reply.id.value || reply.id}
-                comment={reply}
-              />
-            ))}
+          {replies.map((reply) => (
+            <CommentReplyManager
+              key={reply.id.value || reply.id}
+              comment={reply}
+            />
+          ))}
+        </div>
+      )}
+
+      {repliesLoaded && !allRepliesFetched && (
+        <div className="load-more-container">
+          <button onClick={fetchReplies} disabled={loadingReplies}>
+            Load More
+          </button>
         </div>
       )}
     </div>

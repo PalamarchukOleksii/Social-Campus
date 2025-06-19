@@ -10,9 +10,10 @@ public class GetRepliedCommentsByCommentIdEndpoint : BaseEndpoint, IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("comments/replies/{commentId:guid:required}", async (ISender sender, Guid commentId) =>
+        app.MapGet("comments/replies/{commentId:guid:required}/count/{count:int}/page/{page:int}", async (
+                ISender sender, Guid commentId, int count, int page) =>
             {
-                GetRepliesToCommentQuery queryRequest = new(new CommentId(commentId));
+                GetRepliesToCommentQuery queryRequest = new(new CommentId(commentId), page, count);
 
                 var response = await sender.Send(queryRequest);
 

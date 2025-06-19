@@ -34,9 +34,24 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
             .ToListAsync();
     }
 
-    public async Task<int> GetPublicationCommentsCountByPublicationIdAsync(PublicationId publicationId)
+    public async Task<IReadOnlyList<Comment>> GetPaginatedPublicationCommentsByPublicationIdAsync(
+        PublicationId publicationId, int page, int count)
     {
-        return (await context.Comments.Where(c => c.RelatedPublicationId == publicationId).ToListAsync()).Count;
+        var comments = await context.Comments
+            .Where(c => c.RelatedPublicationId == publicationId)
+            .Include(c => c.Creator)
+            .Include(c => c.CommentLikes)
+            .Include(c => c.RepliedComments)
+            .AsSplitQuery()
+            .ToListAsync();
+
+        return comments
+            .OrderByDescending(c => c.CommentLikes?.Count ?? 0)
+            .ThenByDescending(c => c.RepliedComments?.Count ?? 0)
+            .ThenByDescending(c => c.CreationDateTime)
+            .Skip((page - 1) * count)
+            .Take(count)
+            .ToList();
     }
 
     public async Task<IReadOnlyList<Comment>> GetRepliedCommentsByCommentIdAsync(CommentId commentId)
@@ -46,6 +61,20 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
             .Include(comment => comment.Creator)
             .Include(comment => comment.CommentLikes)
             .AsSplitQuery()
+            .ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<Comment>> GetPaginatedRepliedCommentsByCommentIdAsync(CommentId commentId, int page,
+        int count)
+    {
+        return await context.Comments
+            .Where(comment => comment.ReplyToCommentId == commentId)
+            .Include(comment => comment.Creator)
+            .Include(comment => comment.CommentLikes)
+            .AsSplitQuery()
+            .OrderBy(comment => comment.CreationDateTime)
+            .Skip((page - 1) * count)
+            .Take(count)
             .ToListAsync();
     }
 

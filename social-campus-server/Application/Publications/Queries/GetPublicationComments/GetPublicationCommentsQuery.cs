@@ -4,4 +4,5 @@ using Domain.Models.PublicationModel;
 
 namespace Application.Publications.Queries.GetPublicationComments;
 
-public record GetPublicationCommentsQuery(PublicationId PublicationId) : IQuery<IReadOnlyList<CommentDto>>;
+public record GetPublicationCommentsQuery(PublicationId PublicationId, int Page, int Count)
+    : IQuery<IReadOnlyList<CommentDto>>;

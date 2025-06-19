@@ -4,4 +4,4 @@ using Domain.Models.CommentModel;
 
 namespace Application.Comments.Queries.GetRepliesToComment;
 
-public record GetRepliesToCommentQuery(CommentId CommentId) : IQuery<IReadOnlyList<CommentDto>>;
+public record GetRepliesToCommentQuery(CommentId CommentId, int Page, int Count) : IQuery<IReadOnlyList<CommentDto>>;

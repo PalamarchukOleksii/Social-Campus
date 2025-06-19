@@ -20,7 +20,9 @@ public class GetPublicationCommentsQueryHandler(
                 "Publication.NotFound",
                 $"Publication with PublicationId {request.PublicationId.Value} was not found"));
 
-        var publicationComments = await commentRepository.GetPublicationCommentsByPublicationIdAsync(publication.Id);
+        var publicationComments =
+            await commentRepository.GetPaginatedPublicationCommentsByPublicationIdAsync(publication.Id, request.Page,
+                request.Count);
 
         var commentDtos = new List<CommentDto>();
         foreach (var comment in publicationComments)
