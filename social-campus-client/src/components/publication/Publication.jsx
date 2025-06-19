@@ -25,6 +25,7 @@ function Publication({ publicationId, disableCreateComment }) {
 
   const [publication, setPublication] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditHovered, setIsEditHovered] = useState(false);
@@ -32,28 +33,34 @@ function Publication({ publicationId, disableCreateComment }) {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
-  useEffect(() => {
+  const fetchPublication = async () => {
     if (!publicationId) return;
 
-    setLoading(true);
+    if (!publication) {
+      setLoading(true);
+    }
 
-    axios
-      .get(`/api/publications/${publicationId}`)
-      .then((res) => {
-        const pub = res.data;
-        setPublication(pub);
+    try {
+      const res = await axios.get(`/api/publications/${publicationId}`);
+      const pub = res.data;
+      setPublication(pub);
 
-        const userLikedIds =
-          pub.userWhoLikedIds?.map((idObj) => idObj.value) || [];
-        setIsLiked(userLikedIds.includes(auth.shortUser?.id?.value));
-        setLikeCount(userLikedIds.length);
+      const userLikedIds =
+        pub.userWhoLikedIds?.map((idObj) => idObj.value) || [];
+      setIsLiked(userLikedIds.includes(auth.shortUser?.id?.value));
+      setLikeCount(userLikedIds.length);
 
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch publication:", err);
-        setLoading(false);
-      });
+      setLoading(false);
+      setIsInitialLoad(false);
+    } catch (err) {
+      console.error("Failed to fetch publication:", err);
+      setLoading(false);
+      setIsInitialLoad(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPublication();
   }, [publicationId, auth.shortUser?.id?.value, axios]);
 
   const handleLikeToggle = async () => {
@@ -96,7 +103,10 @@ function Publication({ publicationId, disableCreateComment }) {
   const handleCreateCommentCloseClick = () => setIsCreateOpen(false);
 
   const handleEditPublicationOpenClick = () => setIsEditOpen(true);
-  const handleEditPublicationCloseClick = () => setIsEditOpen(false);
+  const handleEditPublicationCloseClick = () => {
+    setIsEditOpen(false);
+    fetchPublication();
+  };
 
   const handleTagClick = (e, tagName) => {
     e.stopPropagation();
@@ -131,7 +141,7 @@ function Publication({ publicationId, disableCreateComment }) {
     );
   };
 
-  if (loading) {
+  if (loading && isInitialLoad) {
     return <Loading />;
   }
 
