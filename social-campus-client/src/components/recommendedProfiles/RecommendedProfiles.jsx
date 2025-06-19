@@ -3,6 +3,7 @@ import ShortProfile from "../shortProfile/ShortProfile";
 import "./RecommendedProfiles.css";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import Loading from "../loading/Loading";
 
 const BASE_USER_URL = "/api/users";
 
@@ -32,7 +33,7 @@ function RecommendedProfiles() {
   }, [auth]);
 
   if (loading) {
-    return <h3 className="general-text">Loading recommendations...</h3>;
+    return <Loading />;
   }
 
   if (!recommendationList || recommendationList.length === 0) {

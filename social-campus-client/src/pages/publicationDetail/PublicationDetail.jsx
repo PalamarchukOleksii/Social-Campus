@@ -11,42 +11,70 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const GET_PUBLICATION_URL = "/api/publications/";
 const GET_COMMENTS_URL = "/api/publications/";
+const PAGE_SIZE = 10;
 
 function PublicationDetail() {
   const { id } = useParams();
   const { auth } = useAuth();
   const axios = useAxiosPrivate();
+  const navigate = useNavigate();
 
   const [publication, setPublication] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hoveredIcon, setHoveredIcon] = useState("");
-  const navigate = useNavigate();
   const [comments, setComments] = useState([]);
+  const [commentPage, setCommentPage] = useState(1);
+  const [commentsLoading, setCommentsLoading] = useState(false);
+  const [allCommentsFetched, setAllCommentsFetched] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPublication = async () => {
       try {
         setLoading(true);
         const pubResponse = await axios.get(`${GET_PUBLICATION_URL}${id}`);
         setPublication(pubResponse.data);
-
-        const commentsResponse = await axios.get(
-          `${GET_COMMENTS_URL}${id}/comments`
-        );
-        setComments(commentsResponse.data);
       } catch (error) {
-        console.error("Failed to fetch publication or comments:", error);
+        console.error("Failed to fetch publication:", error);
         setPublication(null);
-        setComments([]);
       } finally {
         setLoading(false);
       }
     };
 
     if (id) {
-      fetchData();
+      fetchPublication();
     }
   }, [id, axios]);
+
+  const fetchComments = async () => {
+    if (allCommentsFetched || !id) return;
+
+    try {
+      setCommentsLoading(true);
+      const response = await axios.get(
+        `${GET_COMMENTS_URL}${id}/comments/count/${PAGE_SIZE}/page/${commentPage}`
+      );
+
+      const newComments = response.data;
+
+      if (newComments.length < PAGE_SIZE) {
+        setAllCommentsFetched(true);
+      }
+
+      if (newComments.length === 0) return;
+
+      setComments((prev) => [...prev, ...newComments]);
+      setCommentPage((prev) => prev + 1);
+    } catch (error) {
+      console.error("Failed to fetch comments:", error);
+    } finally {
+      setCommentsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, [id]);
 
   return (
     <div className="publication-detail-container">
@@ -73,30 +101,23 @@ function PublicationDetail() {
             <>
               <h2 className="comment-section-text general-text">Comments</h2>
               <div className="comments-section">
-                {[...comments]
-                  .sort((a, b) => {
-                    const likesDiff =
-                      b.userWhoLikedIds.length - a.userWhoLikedIds.length;
-                    if (likesDiff !== 0) return likesDiff;
-
-                    const repliesDiff = b.repliesCount - a.repliesCount;
-                    if (repliesDiff !== 0) return repliesDiff;
-
-                    return (
-                      new Date(b.creationDateTime) -
-                      new Date(a.creationDateTime)
-                    );
-                  })
-                  .map((comment) => (
-                    <CommentReplyManager
-                      key={comment.id.value}
-                      comment={comment}
-                      currentUser={auth.shortUser}
-                      comments={comments}
-                      setComments={setComments}
-                    />
-                  ))}
+                {comments.map((comment) => (
+                  <CommentReplyManager
+                    key={comment.id.value}
+                    comment={comment}
+                    currentUser={auth.shortUser}
+                    comments={comments}
+                    setComments={setComments}
+                  />
+                ))}
               </div>
+              {!allCommentsFetched && (
+                <div className="load-more-container">
+                  <button onClick={fetchComments} disabled={commentsLoading}>
+                    Load More
+                  </button>
+                </div>
+              )}
             </>
           ) : (
             <h2 className="general-text no-comments">No comments available</h2>
