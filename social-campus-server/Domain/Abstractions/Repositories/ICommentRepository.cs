@@ -10,7 +10,11 @@ public interface ICommentRepository
         CommentId? replyToCommentId = null);
 
     public Task<IReadOnlyList<Comment>> GetPublicationCommentsByPublicationIdAsync(PublicationId publicationId);
-    public Task<int> GetPublicationCommentsCountByPublicationIdAsync(PublicationId publicationId);
+
+    public Task<IReadOnlyList<Comment>> GetPaginatedPublicationCommentsByPublicationIdAsync(PublicationId publicationId,
+        int page,
+        int count);
+
     public Task<IReadOnlyList<Comment>> GetRepliedCommentsByCommentIdAsync(CommentId commentId);
     public void Update(Comment comment, string description);
     public Task<Comment?> GetByIdAsync(CommentId commentId);
