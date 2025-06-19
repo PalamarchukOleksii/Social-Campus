@@ -5,10 +5,12 @@ import Comment from "../comment/Comment";
 import PropTypes from "prop-types";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-const GET_REPLIES_URL = "/api/comments/replies/";
+const COMMENT_BASE_URL = "/api/comments";
+const GET_REPLIES_URL = "/api/comments/replies";
 const PAGE_SIZE = 10;
 
 function CommentReplyManager({ comment }) {
+  const [currentComment, setCurrentComment] = useState(comment);
   const [replies, setReplies] = useState([]);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -20,13 +22,23 @@ function CommentReplyManager({ comment }) {
 
   const axios = useAxiosPrivate();
 
+  const fetchCommentById = async (commentId) => {
+    try {
+      const response = await axios.get(`${COMMENT_BASE_URL}/${commentId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch comment:", error);
+      return null;
+    }
+  };
+
   const fetchReplies = async () => {
     if (allRepliesFetched) return;
 
     try {
       setLoadingReplies(true);
       const response = await axios.get(
-        `${GET_REPLIES_URL}${comment.id.value}/count/${PAGE_SIZE}/page/${replyPage}`
+        `${GET_REPLIES_URL}/${currentComment.id.value}/count/${PAGE_SIZE}/page/${replyPage}`
       );
 
       const newReplies = response.data;
@@ -56,10 +68,18 @@ function CommentReplyManager({ comment }) {
     fetchReplies();
   };
 
+  const handleEditClose = async () => {
+    setIsEditing(false);
+    const updatedComment = await fetchCommentById(currentComment.id.value);
+    if (updatedComment) {
+      setCurrentComment(updatedComment);
+    }
+  };
+
   return (
     <div className="comment-reply-manager">
       <Comment
-        comment={comment}
+        comment={currentComment}
         onReplyClick={() => setIsReplying(true)}
         onEditClick={() => setIsEditing(true)}
       />
@@ -68,8 +88,8 @@ function CommentReplyManager({ comment }) {
         createPortal(
           <div className="create-comment-modal-overlay">
             <CreateComment
-              publicationId={comment.publicationId.value}
-              replyToCommentId={comment.id.value}
+              publicationId={currentComment.publicationId.value}
+              replyToCommentId={currentComment.id.value}
               onCloseClick={() => setIsReplying(false)}
               addGoBack={true}
             />
@@ -81,16 +101,16 @@ function CommentReplyManager({ comment }) {
         createPortal(
           <div className="edit-publication-modal-overlay">
             <CreateComment
-              editCommentId={comment.id.value}
+              editCommentId={currentComment.id.value}
               isForEdit={true}
-              onCloseClick={() => setIsEditing(false)}
+              onCloseClick={handleEditClose}
               addGoBack={true}
             />
           </div>,
           document.body
         )}
 
-      {!repliesLoaded && comment.repliesCount > 0 && (
+      {!repliesLoaded && currentComment.repliesCount > 0 && (
         <div className="load-more-container">
           <a
             className="load-replies-button"
