@@ -12,7 +12,6 @@ import { IoCreateOutline, IoCreate } from "react-icons/io5";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import CreatePublication from "../createPublication/CreatePublication";
-import Loading from "../loading/Loading";
 
 const REMOVE_LIKE_URL = "/api/publicationlikes/remove/";
 const ADD_LIKE_URL = "/api/publicationlikes/add";
@@ -24,8 +23,6 @@ function Publication({ publicationId, disableCreateComment }) {
   const axios = useAxiosPrivate();
 
   const [publication, setPublication] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditHovered, setIsEditHovered] = useState(false);
@@ -36,10 +33,6 @@ function Publication({ publicationId, disableCreateComment }) {
   const fetchPublication = async () => {
     if (!publicationId) return;
 
-    if (!publication) {
-      setLoading(true);
-    }
-
     try {
       const res = await axios.get(`/api/publications/${publicationId}`);
       const pub = res.data;
@@ -49,19 +42,19 @@ function Publication({ publicationId, disableCreateComment }) {
         pub.userWhoLikedIds?.map((idObj) => idObj.value) || [];
       setIsLiked(userLikedIds.includes(auth.shortUser?.id?.value));
       setLikeCount(userLikedIds.length);
-
-      setLoading(false);
-      setIsInitialLoad(false);
     } catch (err) {
       console.error("Failed to fetch publication:", err);
-      setLoading(false);
-      setIsInitialLoad(false);
+      setPublication(null);
     }
   };
 
   useEffect(() => {
     fetchPublication();
   }, [publicationId, auth.shortUser?.id?.value, axios]);
+
+  if (!publication) {
+    return null;
+  }
 
   const handleLikeToggle = async () => {
     if (!publication) return;
@@ -140,14 +133,6 @@ function Publication({ publicationId, disableCreateComment }) {
       </span>
     );
   };
-
-  if (loading && isInitialLoad) {
-    return <Loading />;
-  }
-
-  if (!publication) {
-    return <div className="publication-container">No publication found.</div>;
-  }
 
   return (
     <div className="publication-container">
