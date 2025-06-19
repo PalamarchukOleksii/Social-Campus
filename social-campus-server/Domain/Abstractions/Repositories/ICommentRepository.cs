@@ -16,6 +16,10 @@ public interface ICommentRepository
         int count);
 
     public Task<IReadOnlyList<Comment>> GetRepliedCommentsByCommentIdAsync(CommentId commentId);
+
+    public Task<IReadOnlyList<Comment>> GetPaginatedRepliedCommentsByCommentIdAsync(CommentId commentId, int page,
+        int count);
+
     public void Update(Comment comment, string description);
     public Task<Comment?> GetByIdAsync(CommentId commentId);
     public Task<bool> IsExistByIdAsync(CommentId commentId);

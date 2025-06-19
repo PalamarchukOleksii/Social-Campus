@@ -64,6 +64,20 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
             .ToListAsync();
     }
 
+    public async Task<IReadOnlyList<Comment>> GetPaginatedRepliedCommentsByCommentIdAsync(CommentId commentId, int page,
+        int count)
+    {
+        return await context.Comments
+            .Where(comment => comment.ReplyToCommentId == commentId)
+            .Include(comment => comment.Creator)
+            .Include(comment => comment.CommentLikes)
+            .AsSplitQuery()
+            .OrderBy(comment => comment.CreationDateTime)
+            .Skip((page - 1) * count)
+            .Take(count)
+            .ToListAsync();
+    }
+
     public async Task<bool> IsExistByIdAsync(CommentId commentId)
     {
         return await context.Comments.AnyAsync(u => u.Id == commentId);

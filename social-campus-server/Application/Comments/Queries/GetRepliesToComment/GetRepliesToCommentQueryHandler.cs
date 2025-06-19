@@ -17,7 +17,9 @@ public class GetRepliesToCommentQueryHandler(
                 "Comment.NotFound",
                 $"Comment with id {request.CommentId.Value} was not found"));
 
-        var comments = await commentRepository.GetRepliedCommentsByCommentIdAsync(request.CommentId);
+        var comments =
+            await commentRepository.GetPaginatedRepliedCommentsByCommentIdAsync(request.CommentId, request.Page,
+                request.Count);
 
         List<CommentDto> commentDtos = [];
         foreach (var c in comments)
