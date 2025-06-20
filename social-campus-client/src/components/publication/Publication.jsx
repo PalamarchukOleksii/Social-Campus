@@ -29,6 +29,7 @@ function Publication({ publicationId, disableCreateComment }) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [commentCount, setCommentCount] = useState(0);
 
   const fetchPublication = async () => {
     if (!publicationId) return;
@@ -42,6 +43,7 @@ function Publication({ publicationId, disableCreateComment }) {
         pub.userWhoLikedIds?.map((idObj) => idObj.value) || [];
       setIsLiked(userLikedIds.includes(auth.shortUser?.id?.value));
       setLikeCount(userLikedIds.length);
+      setCommentCount(pub.commentsCount || 0);
     } catch (err) {
       console.error("Failed to fetch publication:", err);
       setPublication(null);
@@ -142,6 +144,7 @@ function Publication({ publicationId, disableCreateComment }) {
             publicationId={publication.id.value}
             onCloseClick={handleCreateCommentCloseClick}
             addGoBack={true}
+            onCommentAdded={() => setCommentCount((prev) => prev + 1)}
           />
         </div>
       )}
@@ -204,7 +207,7 @@ function Publication({ publicationId, disableCreateComment }) {
           />
           <InteractionItem
             itemType="comment"
-            label={publication.commentsCount}
+            label={commentCount}
             icon={InteractionItems.commentIcon}
             onClick={handleCreateCommentOpenClick}
             className="comment-element"
