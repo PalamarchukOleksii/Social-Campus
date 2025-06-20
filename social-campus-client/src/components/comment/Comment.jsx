@@ -34,15 +34,15 @@ function Comment(props) {
 
     try {
       if (isLiked) {
-        await axios.delete(`${REMOVE_COMMENT_LIKE_URL}${commentId}/${userId}`);
         setIsLiked(false);
+        await axios.delete(`${REMOVE_COMMENT_LIKE_URL}${commentId}/${userId}`);
         setLikeCount((prev) => prev - 1);
       } else {
+        setIsLiked(true);
         await axios.post(ADD_COMMENT_LIKE_URL, {
           userId: { value: userId },
           commentId: { value: commentId },
         });
-        setIsLiked(true);
         setLikeCount((prev) => prev + 1);
       }
     } catch (error) {

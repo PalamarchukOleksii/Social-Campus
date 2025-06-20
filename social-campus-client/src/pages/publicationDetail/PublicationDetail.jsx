@@ -95,7 +95,10 @@ function PublicationDetail() {
         <h1 className="not-found-text general-text">Publication not found</h1>
       ) : (
         <>
-          <Publication publication={publication} disableCreateComment={true} />
+          <Publication
+            publicationId={publication.id.value}
+            disableCreateComment={true}
+          />
           <CreateComment publicationId={publication.id.value} />
           {comments.length > 0 ? (
             <>

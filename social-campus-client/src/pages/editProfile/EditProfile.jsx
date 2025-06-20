@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./EditProfile.css";
 import {
@@ -20,6 +20,8 @@ function EditProfile() {
   const { login } = useParams();
   const { auth } = useAuth();
   const axios = useAxiosPrivate();
+
+  const prevLoginRef = useRef(login);
 
   const [userId, setUserId] = useState();
   const [firstName, setFirstName] = useState("");
@@ -48,7 +50,13 @@ function EditProfile() {
 
         if (data.profileImageUrl) {
           setProfileImagePreview(data.profileImageUrl);
-          setProfileImageFile(null);
+
+          const imageResponse = await fetch(data.profileImageUrl);
+          const blob = await imageResponse.blob();
+          const filename =
+            data.profileImageUrl.split("/").pop() || "profile.jpg";
+          const file = new File([blob], filename, { type: blob.type });
+          setProfileImageFile(file);
         } else {
           setProfileImagePreview(null);
           setProfileImageFile(null);
@@ -102,7 +110,11 @@ function EditProfile() {
 
       if (response.status === 200) {
         toast.success("Profile updated successfully!");
-        navigate(-1);
+        navigate(`/profile/${userLogin}`);
+
+        if (prevLoginRef.current !== userLogin) {
+          window.location.reload();
+        }
       }
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -216,7 +228,6 @@ function EditProfile() {
         />
         <textarea
           className="bio-text"
-          type="text"
           name="bio"
           placeholder="Bio"
           value={bio}

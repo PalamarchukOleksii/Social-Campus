@@ -8,7 +8,7 @@ function PublicationsList({ publications }) {
     <div className="publications">
       {publications.map((publication) => (
         <div key={publication.id.value}>
-          <Publication publication={publication} />
+          <Publication publicationId={publication.id.value} />
         </div>
       ))}
     </div>

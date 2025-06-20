@@ -81,6 +81,9 @@ function CreateComment(props) {
 
         await axios.post(CREATE_COMMENT_URL, payload);
         toast.success("Comment posted successfully.");
+        if (!props.isForEdit && props.onCommentAdded) {
+          props.onCommentAdded();
+        }
       }
 
       setCommentText("");
@@ -145,6 +148,7 @@ CreateComment.propTypes = {
   isForEdit: PropTypes.bool,
   addGoBack: PropTypes.bool,
   replyToCommentId: PropTypes.string,
+  onCommentAdded: PropTypes.func,
 };
 
 export default CreateComment;
