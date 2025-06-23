@@ -1,4 +1,5 @@
 using Application.Abstractions.Messaging;
+using Application.Abstractions.Storage;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
 
@@ -6,7 +7,8 @@ namespace Application.Publications.Commands.DeletePublication;
 
 public class DeletePublicationCommandHandler(
     IPublicationRepository publicationRepository,
-    IUserRepository userRepository) : ICommandHandler<DeletePublicationCommand>
+    IUserRepository userRepository,
+    IStorageService storageService) : ICommandHandler<DeletePublicationCommand>
 {
     public async Task<Result> Handle(DeletePublicationCommand request, CancellationToken cancellationToken)
     {
@@ -26,6 +28,7 @@ public class DeletePublicationCommandHandler(
                 "User.NoDeletePermission",
                 $"User with UserId {request.CallerId.Value} do not have permission to delete publication with PublicationId {request.PublicationId.Value}"));
 
+        await storageService.DeleteAsync(publication.ImageUrl, cancellationToken);
         await publicationRepository.DeleteAsync(publication);
 
         return Result.Success();

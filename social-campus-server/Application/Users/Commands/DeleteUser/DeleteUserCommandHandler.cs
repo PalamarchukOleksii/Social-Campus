@@ -1,10 +1,12 @@
 using Application.Abstractions.Messaging;
+using Application.Abstractions.Storage;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
 
 namespace Application.Users.Commands.DeleteUser;
 
-public class DeleteUserCommandHandler(IUserRepository userRepository) : ICommandHandler<DeleteUserCommand>
+public class DeleteUserCommandHandler(IUserRepository userRepository, IStorageService storageService)
+    : ICommandHandler<DeleteUserCommand>
 {
     public async Task<Result> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
@@ -24,6 +26,7 @@ public class DeleteUserCommandHandler(IUserRepository userRepository) : ICommand
                 "User.NoDeletePermission",
                 $"User with UserId {request.CallerId.Value} do not have permission to delete profile of user with UserId {request.UserId.Value}"));
 
+        await storageService.DeleteAsync(user.ProfileImageUrl, cancellationToken);
         await userRepository.DeleteAsync(user);
 
         return Result.Success();
