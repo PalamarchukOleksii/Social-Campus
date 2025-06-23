@@ -11,7 +11,7 @@ public class DeletePublicationEndpoint : BaseEndpoint, IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPatch("publications/delete/{publicationId:guid}/{callerId:guid}",
+        app.MapDelete("publications/delete/{publicationId:guid}/{callerId:guid}",
                 async (ISender sender, Guid publicationId, Guid callerId) =>
                 {
                     var commandRequest =

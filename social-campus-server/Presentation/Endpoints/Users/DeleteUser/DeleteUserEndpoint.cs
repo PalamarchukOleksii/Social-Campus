@@ -10,7 +10,7 @@ public class DeleteUserEndpoint : BaseEndpoint, IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPatch("users/delete/{userId:guid}/{callerId:guid}", async (ISender sender, Guid userId, Guid callerId) =>
+        app.MapDelete("users/delete/{userId:guid}/{callerId:guid}", async (ISender sender, Guid userId, Guid callerId) =>
             {
                 var commandRequest = new DeleteUserCommand(new UserId(userId), new UserId(callerId));
 

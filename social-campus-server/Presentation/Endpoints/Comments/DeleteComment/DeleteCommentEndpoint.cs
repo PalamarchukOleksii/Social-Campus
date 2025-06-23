@@ -11,7 +11,7 @@ public class DeleteCommentEndpoint : BaseEndpoint, IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPatch("comments/delete/{commentId:guid}/{callerId:guid}",
+        app.MapDelete("comments/delete/{commentId:guid}/{callerId:guid}",
                 async (ISender sender, Guid commentId, Guid callerId) =>
                 {
                     var commandRequest =
