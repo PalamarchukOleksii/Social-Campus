@@ -89,4 +89,9 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
 
         return randomPublications;
     }
+
+    public void Delete(Publication publication)
+    {
+        context.Publications.Remove(publication);
+    }
 }
