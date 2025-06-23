@@ -1,6 +1,7 @@
 using Application.Users.Queries.SearchUsers;
 using MediatR;
 using Presentation.Abstractions;
+using Presentation.Consts;
 
 namespace Presentation.Endpoints.Users.SearchUsers;
 
@@ -17,7 +18,7 @@ public class SearchUsersEndpoint : BaseEndpoint, IEndpoint
 
                     return response.IsSuccess ? Results.Ok(response.Value) : HandleFailure(response);
                 })
-            .WithTags(Consts.EndpointTags.Users)
+            .WithTags(EndpointTags.Users)
             .RequireAuthorization();
     }
 }

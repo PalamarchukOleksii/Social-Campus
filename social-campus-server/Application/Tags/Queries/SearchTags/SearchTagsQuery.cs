@@ -1,6 +1,5 @@
 using Application.Abstractions.Messaging;
 using Application.Dtos;
-using Domain.Models.TagModel;
 
 namespace Application.Tags.Queries.SearchTags;
 

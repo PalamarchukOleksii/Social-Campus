@@ -1,5 +1,4 @@
 using Application.Publications.Commands.DeletePublication;
-using Application.Users.Commands.DeleteUser;
 using Domain.Models.PublicationModel;
 using Domain.Models.UserModel;
 using MediatR;
