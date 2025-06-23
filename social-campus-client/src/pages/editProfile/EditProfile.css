@@ -133,3 +133,22 @@
 .remove-overlay:hover label {
   color: whitesmoke;
 }
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.save-button {
+  font-size: 16px;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  font-size: 16px;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
