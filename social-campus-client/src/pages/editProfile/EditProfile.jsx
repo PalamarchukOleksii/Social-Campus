@@ -19,7 +19,7 @@ const GET_USER_BY_LOGIN_URL = "/api/users/by-login/";
 
 function EditProfile() {
   const { login } = useParams();
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const axios = useAxiosPrivate();
   const prevLoginRef = useRef(login);
   const navigate = useNavigate();
@@ -127,8 +127,7 @@ function EditProfile() {
       const callerIdVal = auth.shortUser.id.value;
       await axios.delete(`${DELETE_PROFILE_URL}/${userIdVal}/${callerIdVal}`);
       toast.success("Profile deleted successfully.");
-      navigate("/");
-      window.location.reload();
+      setAuth({});
     } catch (error) {
       console.error("Failed to delete profile:", error);
       toast.error("Failed to delete profile. Please try again.");
