@@ -2,7 +2,6 @@ using Application.Abstractions.Messaging;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
-using MediatR;
 
 namespace Application.Tags.Queries.SearchTags;
 

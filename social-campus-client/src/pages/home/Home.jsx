@@ -48,17 +48,11 @@ function Home() {
 
   return (
     <div className="home">
-      {publications.length === 0 ? (
-        <p className="no-publications-text">No publications found</p>
-      ) : (
-        <>
-          <PublicationsList publications={publications} />
-          {!allFetched && (
-            <div className="load-more-container">
-              <button onClick={fetchPublications}>Load More</button>
-            </div>
-          )}
-        </>
+      <PublicationsList publications={publications} />
+      {!allFetched && (
+        <div className="load-more-container">
+          <button onClick={fetchPublications}>Load More</button>
+        </div>
       )}
     </div>
   );

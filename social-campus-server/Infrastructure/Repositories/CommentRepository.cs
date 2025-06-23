@@ -83,6 +83,21 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
         return await context.Comments.AnyAsync(u => u.Id == commentId);
     }
 
+    public async Task DeleteAsync(Comment comment)
+    {
+        var replies = await context.Comments
+            .Where(c => c.ReplyToCommentId == comment.Id)
+            .ToListAsync();
+
+        foreach (var reply in replies) await DeleteAsync(reply);
+
+        var likes = context.CommentLikes.Where(cl => cl.CommentId == comment.Id);
+        context.CommentLikes.RemoveRange(likes);
+
+        context.Comments.Remove(comment);
+    }
+
+
     public void Update(Comment comment, string description)
     {
         comment.Update(description);

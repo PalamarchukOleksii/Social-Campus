@@ -27,12 +27,12 @@ public class CommentLikeConfiguration : IEntityTypeConfiguration<CommentLike>
         builder.HasOne(cl => cl.User)
             .WithMany(u => u.CommentLikes)
             .HasForeignKey(cl => cl.UserId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(cl => cl.Comment)
             .WithMany(c => c.CommentLikes)
             .HasForeignKey(cl => cl.CommentId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasIndex(f => f.UserId);
         builder.HasIndex(f => f.CommentId);

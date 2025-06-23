@@ -71,3 +71,26 @@
 .create-comment .back-text {
   font-size: 20px;
 }
+
+.delete-button {
+  background-color: #e74c3c;
+  font-size: 16px;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
+
+.controles {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 630px) {
+  .create-comment.go-back{
+    width: calc(100vw - 80px);
+  }
+}

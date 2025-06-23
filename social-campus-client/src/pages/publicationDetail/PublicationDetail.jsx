@@ -6,7 +6,6 @@ import PublicationDetailItems from "../../utils/consts/PublicationDetailItems";
 import "./PublicationDetail.css";
 import CreateComment from "../../components/createComment/CreateComment";
 import CommentReplyManager from "../../components/comment/CommentReplyManager";
-import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const GET_PUBLICATION_URL = "/api/publications/";
@@ -15,7 +14,6 @@ const PAGE_SIZE = 10;
 
 function PublicationDetail() {
   const { id } = useParams();
-  const { auth } = useAuth();
   const axios = useAxiosPrivate();
   const navigate = useNavigate();
 
@@ -76,6 +74,16 @@ function PublicationDetail() {
     fetchComments();
   }, [id]);
 
+  const handleCommentDelete = (deletedCommentId) => {
+    setComments((prev) =>
+      prev.filter((comment) => comment.id.value !== deletedCommentId)
+    );
+  };
+
+  const handlePublicationDelete = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="publication-detail-container">
       <div className="top-section">
@@ -98,6 +106,7 @@ function PublicationDetail() {
           <Publication
             publicationId={publication.id.value}
             disableCreateComment={true}
+            onPublicationDelete={handlePublicationDelete}
           />
           <CreateComment publicationId={publication.id.value} />
           {comments.length > 0 ? (
@@ -108,9 +117,7 @@ function PublicationDetail() {
                   <CommentReplyManager
                     key={comment.id.value}
                     comment={comment}
-                    currentUser={auth.shortUser}
-                    comments={comments}
-                    setComments={setComments}
+                    onCommentDelete={handleCommentDelete}
                   />
                 ))}
               </div>

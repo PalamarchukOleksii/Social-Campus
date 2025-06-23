@@ -9,11 +9,12 @@ const COMMENT_BASE_URL = "/api/comments";
 const GET_REPLIES_URL = "/api/comments/replies";
 const PAGE_SIZE = 10;
 
-function CommentReplyManager({ comment }) {
+function CommentReplyManager({ comment, onCommentDelete }) {
   const [currentComment, setCurrentComment] = useState(comment);
   const [replies, setReplies] = useState([]);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const [replyPage, setReplyPage] = useState(1);
   const [loadingReplies, setLoadingReplies] = useState(false);
@@ -76,6 +77,26 @@ function CommentReplyManager({ comment }) {
     }
   };
 
+  const onDelete = async () => {
+    setIsEditing(false);
+    setIsReplying(false);
+    setIsDeleted(true);
+
+    if (onCommentDelete) {
+      onCommentDelete(currentComment.id.value);
+    }
+  };
+
+  const handleReplyDelete = (deletedReplyId) => {
+    setReplies((prev) =>
+      prev.filter((reply) => (reply.id.value || reply.id) !== deletedReplyId)
+    );
+  };
+
+  if (isDeleted) {
+    return null;
+  }
+
   return (
     <div className="comment-reply-manager">
       <Comment
@@ -104,6 +125,7 @@ function CommentReplyManager({ comment }) {
               editCommentId={currentComment.id.value}
               isForEdit={true}
               onCloseClick={handleEditClose}
+              onDelete={onDelete}
               addGoBack={true}
             />
           </div>,
@@ -128,6 +150,7 @@ function CommentReplyManager({ comment }) {
             <CommentReplyManager
               key={reply.id.value || reply.id}
               comment={reply}
+              onCommentDelete={handleReplyDelete}
             />
           ))}
         </div>
@@ -164,6 +187,7 @@ CommentReplyManager.propTypes = {
     ),
     repliesCount: PropTypes.number.isRequired,
   }).isRequired,
+  onCommentDelete: PropTypes.func,
 };
 
 export default CommentReplyManager;

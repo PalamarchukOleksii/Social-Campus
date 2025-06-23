@@ -16,7 +16,11 @@ import CreatePublication from "../createPublication/CreatePublication";
 const REMOVE_LIKE_URL = "/api/publicationlikes/remove/";
 const ADD_LIKE_URL = "/api/publicationlikes/add";
 
-function Publication({ publicationId, disableCreateComment }) {
+function Publication({
+  publicationId,
+  disableCreateComment,
+  onPublicationDelete,
+}) {
   const navigate = useNavigate();
   const location = useLocation();
   const { auth } = useAuth();
@@ -30,6 +34,7 @@ function Publication({ publicationId, disableCreateComment }) {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const fetchPublication = async () => {
     if (!publicationId) return;
@@ -136,6 +141,17 @@ function Publication({ publicationId, disableCreateComment }) {
     );
   };
 
+  const onDelete = async () => {
+    setIsCreateOpen(false);
+    setIsEditOpen(false);
+    setIsDeleted(true);
+    onPublicationDelete();
+  };
+
+  if (isDeleted) {
+    return null;
+  }
+
   return (
     <div className="publication-container">
       {isCreateOpen && !disableCreateComment && (
@@ -156,6 +172,7 @@ function Publication({ publicationId, disableCreateComment }) {
               onCloseClick={handleEditPublicationCloseClick}
               isForEdit={true}
               editPublicationId={publication.id.value}
+              onDelete={onDelete}
             />
           </div>,
           document.body
@@ -221,6 +238,7 @@ function Publication({ publicationId, disableCreateComment }) {
 Publication.propTypes = {
   publicationId: PropTypes.string.isRequired,
   disableCreateComment: PropTypes.bool,
+  onPublicationDelete: PropTypes.func,
 };
 
 export default Publication;

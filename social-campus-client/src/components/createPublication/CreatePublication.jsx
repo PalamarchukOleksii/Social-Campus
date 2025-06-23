@@ -17,6 +17,7 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 const CREATE_PUBLICATION_URL = "/api/publications/create";
 const GET_PUBLICATION_URL = "/api/publications/";
 const UPDATE_PUBLICATION_URL = "/api/publications/update";
+const DELETE_PUBLICATION_URL = "/api/publications/delete";
 
 function CreatePublication(props) {
   const [publicationText, setPublicationText] = useState("");
@@ -140,6 +141,34 @@ function CreatePublication(props) {
     props.onCloseClick();
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this publication?"))
+      return;
+
+    try {
+      await axios.delete(
+        `${DELETE_PUBLICATION_URL}/${props.editPublicationId}/${user.id.value}`
+      );
+
+      toast.success("Publication deleted successfully.");
+      if (props.onDelete) props.onDelete();
+    } catch (error) {
+      const { response } = error;
+      if (response?.data?.error) {
+        response.data.error.forEach((err) => toast.error(err.message));
+      } else if (response?.data?.detail) {
+        toast.error(response.data.detail);
+      } else {
+        console.error(error);
+        toast.error("Failed to delete the comment.");
+      }
+    } finally {
+      setPublicationText("");
+      setImage(null);
+      setImagePreview(null);
+    }
+  };
+
   if (loading) {
     return <></>;
   }
@@ -200,9 +229,20 @@ function CreatePublication(props) {
             onChange={handleImageChange}
             style={{ display: "none" }}
           />
-          <button className="publish-button" type="submit">
-            {props.isForEdit ? "Save Changes" : "Publish"}
-          </button>
+          <div className="controles-buttons">
+            {props.isForEdit && (
+              <button
+                type="button"
+                className="delete-button"
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
+            )}
+            <button className="publish-button" type="submit">
+              {props.isForEdit ? "Save Changes" : "Publish"}
+            </button>
+          </div>
         </div>
       </form>
     </div>
@@ -213,6 +253,7 @@ CreatePublication.propTypes = {
   onCloseClick: PropTypes.func.isRequired,
   isForEdit: PropTypes.bool,
   editPublicationId: PropTypes.string,
+  onDelete: PropTypes.func,
 };
 
 export default CreatePublication;

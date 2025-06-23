@@ -16,4 +16,6 @@ public interface IPublicationRepository
 
     public Task<IReadOnlyList<Publication>> GetPublicationsForHomePageAsync(IReadOnlyList<User> followedUsers,
         int page, int count, User currentUser);
+
+    public Task DeleteAsync(Publication publication);
 }

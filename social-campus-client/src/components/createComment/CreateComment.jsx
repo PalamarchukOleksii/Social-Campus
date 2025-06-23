@@ -9,6 +9,7 @@ import "./CreateComment.css";
 
 const CREATE_COMMENT_URL = "/api/comments/create";
 const UPDATE_COMMENT_URL = "/api/comments/update";
+const DELETE_COMMENT_URL = "/api/comments/delete";
 const GET_COMMENT_URL = "/api/comments/";
 const REPLY_TO_COMMENT_URL = "/api/comments/reply";
 
@@ -101,6 +102,31 @@ function CreateComment(props) {
     }
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this comment?"))
+      return;
+
+    try {
+      await axios.delete(
+        `${DELETE_COMMENT_URL}/${props.editCommentId}/${user.id.value}`
+      );
+
+      toast.success("Comment deleted successfully.");
+      setCommentText("");
+      if (props.onDelete) props.onDelete();
+    } catch (error) {
+      const { response } = error;
+      if (response?.data?.error) {
+        response.data.error.forEach((err) => toast.error(err.message));
+      } else if (response?.data?.detail) {
+        toast.error(response.data.detail);
+      } else {
+        console.error(error);
+        toast.error("Failed to delete the comment.");
+      }
+    }
+  };
+
   const closeCreateComment = () => {
     setCommentText("");
     if (props.onCloseClick) props.onCloseClick();
@@ -132,6 +158,15 @@ function CreateComment(props) {
           required
         />
         <div className="controles">
+          {props.isForEdit && (
+            <button
+              type="button"
+              className="delete-button"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+          )}
           <button className="publish-button" type="submit">
             {props.isForEdit ? "Save Changes" : "Comment"}
           </button>
@@ -149,6 +184,7 @@ CreateComment.propTypes = {
   addGoBack: PropTypes.bool,
   replyToCommentId: PropTypes.string,
   onCommentAdded: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 export default CreateComment;
