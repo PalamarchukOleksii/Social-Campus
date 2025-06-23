@@ -23,10 +23,6 @@ function CommentReplyManager({ comment, onCommentDelete }) {
 
   const axios = useAxiosPrivate();
 
-  if (isDeleted) {
-    return null;
-  }
-
   const fetchCommentById = async (commentId) => {
     try {
       const response = await axios.get(`${COMMENT_BASE_URL}/${commentId}`);
@@ -96,6 +92,10 @@ function CommentReplyManager({ comment, onCommentDelete }) {
       prev.filter((reply) => (reply.id.value || reply.id) !== deletedReplyId)
     );
   };
+
+  if (isDeleted) {
+    return null;
+  }
 
   return (
     <div className="comment-reply-manager">

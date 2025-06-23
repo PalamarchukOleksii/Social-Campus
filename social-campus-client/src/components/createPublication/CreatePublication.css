@@ -38,6 +38,14 @@
   align-items: center;
 }
 
+.controles-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
 .create-publication .publish-button {
   width: auto;
   font-size: 16px;
@@ -105,4 +113,10 @@
 
 .create-publication .back-text {
   font-size: 20px;
+}
+
+@media (max-width: 630px) {
+  .create-publication{
+    width: calc(100vw - 80px);
+  }
 }

@@ -6,11 +6,17 @@ import "./PublicationsList.css";
 function PublicationsList({ publications }) {
   return (
     <div className="publications">
-      {publications.map((publication) => (
-        <div key={publication.id.value}>
-          <Publication publicationId={publication.id.value} />
-        </div>
-      ))}
+      {publications.length === 0 ? (
+        <h2 className="no-publications-text general-text">
+          No publications found
+        </h2>
+      ) : (
+        publications.map((publication) => (
+          <div key={publication.id.value}>
+            <Publication publicationId={publication.id.value} />
+          </div>
+        ))
+      )}
     </div>
   );
 }

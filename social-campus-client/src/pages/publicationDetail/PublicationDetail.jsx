@@ -80,6 +80,10 @@ function PublicationDetail() {
     );
   };
 
+  const handlePublicationDelete = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="publication-detail-container">
       <div className="top-section">
@@ -102,6 +106,7 @@ function PublicationDetail() {
           <Publication
             publicationId={publication.id.value}
             disableCreateComment={true}
+            onPublicationDelete={handlePublicationDelete}
           />
           <CreateComment publicationId={publication.id.value} />
           {comments.length > 0 ? (
