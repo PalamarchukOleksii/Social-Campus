@@ -36,17 +36,17 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.HasOne(c => c.Creator)
             .WithMany(u => u.Comments)
             .HasForeignKey(c => c.CreatorId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(c => c.RelatedPublication)
             .WithMany(p => p.Comments)
             .HasForeignKey(c => c.RelatedPublicationId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(c => c.ReplyToComment)
             .WithMany(c => c.RepliedComments)
             .HasForeignKey(c => c.ReplyToCommentId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
+            .OnDelete(DeleteBehavior.Cascade)
             .IsRequired(false);
 
         builder.HasIndex(p => p.Id).IsUnique();

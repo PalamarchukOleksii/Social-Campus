@@ -26,12 +26,12 @@ public class FollowConfiguration : IEntityTypeConfiguration<Follow>
         builder.HasOne(f => f.User)
             .WithMany(u => u.FollowedUsers)
             .HasForeignKey(f => f.UserId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(f => f.FollowedUser)
             .WithMany(u => u.Followers)
             .HasForeignKey(f => f.FollowedUserId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(f => f.UserId);
 

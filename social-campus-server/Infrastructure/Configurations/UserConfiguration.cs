@@ -57,18 +57,22 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasOne(u => u.RefreshToken)
             .WithOne(rt => rt.User)
-            .HasForeignKey<RefreshToken>(rt => rt.UserId);
+            .HasForeignKey<RefreshToken>(rt => rt.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(u => u.FollowedUsers)
             .WithOne(f => f.User)
-            .HasForeignKey(f => f.UserId);
+            .HasForeignKey(f => f.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(u => u.Followers)
             .WithOne(f => f.FollowedUser)
-            .HasForeignKey(f => f.FollowedUserId);
+            .HasForeignKey(f => f.FollowedUserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(u => u.Publications)
             .WithOne(p => p.Creator)
-            .HasForeignKey(p => p.CreatorId);
+            .HasForeignKey(p => p.CreatorId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

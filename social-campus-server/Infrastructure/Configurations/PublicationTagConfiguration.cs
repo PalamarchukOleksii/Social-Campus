@@ -26,11 +26,13 @@ public class PublicationTagConfiguration : IEntityTypeConfiguration<PublicationT
 
         builder.HasOne(pt => pt.Tag)
             .WithMany(t => t.PublicationTags)
-            .HasForeignKey(pt => pt.TagId);
+            .HasForeignKey(pt => pt.TagId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(pt => pt.Publication)
             .WithMany(p => p.PublicationTags)
-            .HasForeignKey(pt => pt.PublicationId);
+            .HasForeignKey(pt => pt.PublicationId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(pt => pt.Id).IsUnique();
         builder.HasIndex(pt => pt.TagId);

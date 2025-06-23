@@ -31,7 +31,8 @@ public class PublicationConfiguration : IEntityTypeConfiguration<Publication>
 
         builder.HasOne(p => p.Creator)
             .WithMany(u => u.Publications)
-            .HasForeignKey(p => p.CreatorId);
+            .HasForeignKey(p => p.CreatorId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(p => p.Id)
             .IsUnique();
@@ -40,6 +41,7 @@ public class PublicationConfiguration : IEntityTypeConfiguration<Publication>
 
         builder.HasMany(p => p.PublicationTags)
             .WithOne(pt => pt.Publication)
-            .HasForeignKey(pt => pt.PublicationId);
+            .HasForeignKey(pt => pt.PublicationId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
