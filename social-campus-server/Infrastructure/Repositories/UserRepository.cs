@@ -83,4 +83,9 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             .OrderByDescending(u => u.Followers?.Count ?? 0)
             .ToList();
     }
+
+    public void Delete(User user)
+    {
+        context.Users.Remove(user);
+    }
 }
