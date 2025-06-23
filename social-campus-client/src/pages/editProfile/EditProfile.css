@@ -9,7 +9,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  position: relative;
 }
 
 .navigate-container .save-button {
@@ -53,6 +54,8 @@
 }
 
 .navigate-container .close-creation-icon {
+  position: absolute;
+  left: 0;
   margin: 0;
   opacity: 0.5;
   color: var(--general-text-color);
