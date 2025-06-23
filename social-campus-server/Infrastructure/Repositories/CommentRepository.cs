@@ -83,6 +83,11 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
         return await context.Comments.AnyAsync(u => u.Id == commentId);
     }
 
+    public void Delete(Comment comment)
+    {
+        context.Comments.Remove(comment);
+    }
+
     public void Update(Comment comment, string description)
     {
         comment.Update(description);

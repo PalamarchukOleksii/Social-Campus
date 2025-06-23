@@ -23,4 +23,5 @@ public interface ICommentRepository
     public void Update(Comment comment, string description);
     public Task<Comment?> GetByIdAsync(CommentId commentId);
     public Task<bool> IsExistByIdAsync(CommentId commentId);
+    public void Delete(Comment comment);
 }
