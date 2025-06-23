@@ -27,12 +27,12 @@ public class PublicationLikeConfiguration : IEntityTypeConfiguration<Publication
         builder.HasOne(pl => pl.User)
             .WithMany(u => u.PublicationLikes)
             .HasForeignKey(pl => pl.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(pl => pl.Publication)
             .WithMany(p => p.PublicationLikes)
             .HasForeignKey(pl => pl.PublicationId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasIndex(f => f.UserId);
 

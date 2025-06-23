@@ -25,7 +25,7 @@ public class DeleteCommentCommandHandler(ICommentRepository commentRepository, I
                 "User.NoDeletePermission",
                 $"User with UserId {request.CallerId.Value} do not have permission to delete comment with CommentId {request.CommentId.Value}"));
 
-        commentRepository.Delete(comment);
+        await commentRepository.DeleteAsync(comment);
 
         return Result.Success();
     }

@@ -6,7 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class UserRepository(ApplicationDbContext context) : IUserRepository
+public class UserRepository(
+    ApplicationDbContext context,
+    IPublicationRepository publicationRepository,
+    ICommentRepository commentRepository) : IUserRepository
 {
     public async Task AddAsync(string login, string passwordHash, string email, string firstName, string lastName)
     {
@@ -84,8 +87,27 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             .ToList();
     }
 
-    public void Delete(User user)
+    public async Task DeleteAsync(User user)
     {
+        var commentLikes = context.CommentLikes.Where(cl => cl.UserId == user.Id);
+        context.CommentLikes.RemoveRange(commentLikes);
+
+        var publicationLikes = context.PublicationLikes.Where(pl => pl.UserId == user.Id);
+        context.PublicationLikes.RemoveRange(publicationLikes);
+
+        var comments = await context.Comments.Where(c => c.CreatorId == user.Id).ToListAsync();
+        foreach (var comment in comments) await commentRepository.DeleteAsync(comment);
+
+        var publications = await context.Publications.Where(p => p.CreatorId == user.Id).ToListAsync();
+        foreach (var publication in publications) await publicationRepository.DeleteAsync(publication);
+
+        var follows = context.Follows.Where(f => f.UserId == user.Id || f.FollowedUserId == user.Id);
+        context.Follows.RemoveRange(follows);
+
+        var refreshToken = await context.RefreshTokens.FirstOrDefaultAsync(rt => rt.UserId == user.Id);
+        if (refreshToken != null)
+            context.RefreshTokens.Remove(refreshToken);
+
         context.Users.Remove(user);
     }
 }

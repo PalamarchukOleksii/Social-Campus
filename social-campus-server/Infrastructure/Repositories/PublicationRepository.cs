@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class PublicationRepository(ApplicationDbContext context) : IPublicationRepository
+public class PublicationRepository(ApplicationDbContext context, ICommentRepository commentRepository)
+    : IPublicationRepository
 {
     public async Task<Publication> AddAsync(string description, UserId creatorId, string imageData)
     {
@@ -90,8 +91,17 @@ public class PublicationRepository(ApplicationDbContext context) : IPublicationR
         return randomPublications;
     }
 
-    public void Delete(Publication publication)
+    public async Task DeleteAsync(Publication publication)
     {
+        var likes = context.PublicationLikes.Where(pl => pl.PublicationId == publication.Id);
+        context.PublicationLikes.RemoveRange(likes);
+
+        var tags = context.PublicationTags.Where(pt => pt.PublicationId == publication.Id);
+        context.PublicationTags.RemoveRange(tags);
+
+        var comments = await context.Comments.Where(c => c.RelatedPublicationId == publication.Id).ToListAsync();
+        foreach (var comment in comments) await commentRepository.DeleteAsync(comment);
+
         context.Publications.Remove(publication);
     }
 }

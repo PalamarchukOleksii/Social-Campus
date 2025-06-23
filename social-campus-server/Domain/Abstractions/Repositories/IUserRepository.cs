@@ -19,5 +19,5 @@ public interface IUserRepository
         string profileImageUrl);
 
     public Task<IReadOnlyList<User>> SearchAsync(string searchTerm, int page, int count);
-    public void Delete(User user);
+    public Task DeleteAsync(User user);
 }
