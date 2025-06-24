@@ -34,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<IPublicationTagRepository, PublicationTagRepository>();
+        services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
 
         services.AddSingleton<IJwtProvider, JwtProvider>();
 

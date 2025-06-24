@@ -104,6 +104,9 @@ public class UserRepository(
         var follows = context.Follows.Where(f => f.UserId == user.Id || f.FollowedUserId == user.Id);
         context.Follows.RemoveRange(follows);
 
+        var emailTokens = context.EmailVerificationTokens.Where(t => t.UserId == user.Id);
+        context.EmailVerificationTokens.RemoveRange(emailTokens);
+
         var refreshToken = await context.RefreshTokens.FirstOrDefaultAsync(rt => rt.UserId == user.Id);
         if (refreshToken != null)
             context.RefreshTokens.Remove(refreshToken);
