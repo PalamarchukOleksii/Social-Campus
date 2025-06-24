@@ -15,7 +15,7 @@ public class EmailVerificationTokenRepository(ApplicationDbContext context) : IE
         return await context.EmailVerificationTokens.FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task AddAsync(UserId userEmailToVerifyId)
+    public async Task<EmailVerificationToken> AddAsync(UserId userEmailToVerifyId)
     {
         var existingToken = await context.EmailVerificationTokens
             .FirstOrDefaultAsync(t => t.UserId == userEmailToVerifyId);
@@ -25,6 +25,8 @@ public class EmailVerificationTokenRepository(ApplicationDbContext context) : IE
 
         var token = new EmailVerificationToken(userEmailToVerifyId, ExpirationInSeconds);
         await context.EmailVerificationTokens.AddAsync(token);
+
+        return token;
     }
 
     public void Remove(EmailVerificationToken token)

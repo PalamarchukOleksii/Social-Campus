@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 using Application.Abstractions.Email;
 using Microsoft.Extensions.Options;
@@ -13,25 +14,23 @@ public class EmailService(IOptions<EmailSettings> options) : IEmailService
     private readonly string _smtpUser = options.Value.SmtpUser;
     private readonly string _smtpPass = options.Value.SmtpPass;
 
-    public async Task SendEmailAsync(string messageReceiver, string messageSubject, string messageBody)
+    public async Task SendEmailAsync(string messageReceiver, string messageSubject, string messageBody, bool isHtml)
     {
         using var mail = new MailMessage();
         mail.From = new MailAddress(string.IsNullOrEmpty(_smtpUser) ? "test@local.test" : _smtpUser);
-        mail.To.Add(messageReceiver);
         mail.Subject = messageSubject;
         mail.Body = messageBody;
+        mail.IsBodyHtml = isHtml;
+        mail.BodyEncoding = Encoding.UTF8;
+        mail.SubjectEncoding = Encoding.UTF8;
+
+        mail.To.Add(messageReceiver);
 
         using var smtp = new SmtpClient(_smtpHost, _smtpPort);
+        smtp.EnableSsl = !string.IsNullOrEmpty(_smtpUser) && !string.IsNullOrEmpty(_smtpPass);
 
         if (!string.IsNullOrEmpty(_smtpUser) && !string.IsNullOrEmpty(_smtpPass))
-        {
             smtp.Credentials = new NetworkCredential(_smtpUser, _smtpPass);
-            smtp.EnableSsl = true;
-        }
-        else
-        {
-            smtp.EnableSsl = false;
-        }
 
         await smtp.SendMailAsync(mail);
     }

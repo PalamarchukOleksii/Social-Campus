@@ -11,10 +11,12 @@ public class UserRepository(
     IPublicationRepository publicationRepository,
     ICommentRepository commentRepository) : IUserRepository
 {
-    public async Task AddAsync(string login, string passwordHash, string email, string firstName, string lastName)
+    public async Task<User> AddAsync(string login, string passwordHash, string email, string firstName, string lastName)
     {
         User newUser = new(login, passwordHash, email, firstName, lastName);
         await context.Users.AddAsync(newUser);
+
+        return newUser;
     }
 
     public async Task<User?> GetByEmailAsync(string email)
@@ -112,5 +114,11 @@ public class UserRepository(
             context.RefreshTokens.Remove(refreshToken);
 
         context.Users.Remove(user);
+    }
+
+    public void MakeUserEmailVarified(User user)
+    {
+        user.MakeEmailVerified();
+        context.Users.Update(user);
     }
 }

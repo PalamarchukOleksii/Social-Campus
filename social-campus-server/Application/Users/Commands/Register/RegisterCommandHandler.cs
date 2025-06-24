@@ -2,6 +2,7 @@
 using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
 using Domain.Abstractions.Repositories;
+using Domain.Models.UserModel;
 using Domain.Shared;
 
 namespace Application.Users.Commands.Register;
@@ -9,7 +10,9 @@ namespace Application.Users.Commands.Register;
 public class RegisterCommandHandler(
     IUserRepository userRepository,
     IPasswordHasher passwordHasher,
-    IEmailService emailService) : ICommandHandler<RegisterCommand>
+    IEmailService emailService,
+    IEmailVerificationTokenRepository emailVerificationTokenRepository,
+    IEmailVerificationLinkFactory emailVerificationLinkFactory) : ICommandHandler<RegisterCommand>
 {
     public async Task<Result> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
@@ -27,10 +30,19 @@ public class RegisterCommandHandler(
 
         var passwordHash = await passwordHasher.HashAsync(request.Password);
 
-        await userRepository.AddAsync(request.Login, passwordHash, request.Email, request.FirstName, request.LastName);
+        var registeredUser = await userRepository.AddAsync(request.Login, passwordHash, request.Email,
+            request.FirstName, request.LastName);
 
-        await emailService.SendEmailAsync(request.Email, "Email verification for Social-Campus",
-            "To verify your email address click here");
+        var emailVerificationToken = await emailVerificationTokenRepository.AddAsync(registeredUser.Id);
+
+        var verificationLink = emailVerificationLinkFactory.Create(emailVerificationToken.Id);
+        if (verificationLink is null)
+            return Result.Failure(new Error(
+                "Email.LinkGenerationFailed",
+                "Unable to generate email verification link"));
+
+        var messageBody = $"To verify your email address <a href='{verificationLink}'>click here</a>";
+        await emailService.SendEmailAsync(request.Email, "Email verification for Social-Campus", messageBody, true);
 
         return Result.Success();
     }

@@ -42,6 +42,8 @@ public static class DependencyInjection
 
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
+        services.AddHttpContextAccessor();
 
         return services;
     }
