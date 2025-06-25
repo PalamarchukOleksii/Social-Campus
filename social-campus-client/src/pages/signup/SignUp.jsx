@@ -29,7 +29,9 @@ function SignUp() {
         password: password.trim(),
       });
 
-      toast("Your account has been successfully created! Welcome aboard!");
+      toast(
+        "Your account has been successfully created! Welcome aboard! Please check your email and verify your address to log in."
+      );
       navigate("/signin");
     } catch (error) {
       if (error.response) {
