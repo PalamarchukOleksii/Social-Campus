@@ -12,10 +12,10 @@ public class LoginCommandHandler(
     IJwtProvider jwtProvider,
     IUserRepository userRepository,
     IRefreshTokenRepository tokenRepository,
-    IPasswordHasher passwordHasher,
+    IHasher hasher,
     IEmailService emailService,
     IEmailVerificationTokenRepository emailVerificationTokenRepository,
-    IEmailVerificationLinkFactory emailVerificationLinkFactory) : ICommandHandler<LoginCommand, UserLoginRefreshDto>
+    IEmailLinkFactory emailLinkFactory) : ICommandHandler<LoginCommand, UserLoginRefreshDto>
 {
     public async Task<Result<UserLoginRefreshDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
@@ -25,7 +25,7 @@ public class LoginCommandHandler(
                 "User.NotFound",
                 $"User with email {request.Email} was not found"));
 
-        var isPasswordValid = await passwordHasher.VerifyAsync(request.Password, user.PasswordHash);
+        var isPasswordValid = await hasher.VerifyAsync(request.Password, user.PasswordHash);
         if (!isPasswordValid)
             return Result.Failure<UserLoginRefreshDto>(new Error(
                 "User.IncorrectPassword",
@@ -34,7 +34,7 @@ public class LoginCommandHandler(
         if (!user.IsEmailVerified)
         {
             var emailVerificationToken = await emailVerificationTokenRepository.AddAsync(user.Id);
-            var verificationLink = emailVerificationLinkFactory.Create(emailVerificationToken.Id);
+            var verificationLink = emailLinkFactory.CreateEmailVerificationLink(emailVerificationToken.Id);
             if (verificationLink is null)
                 return Result.Failure<UserLoginRefreshDto>(new Error(
                     "Email.LinkGenerationFailed",

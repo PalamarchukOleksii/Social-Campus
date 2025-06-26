@@ -5,6 +5,7 @@ using Domain.Models.FollowModel;
 using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
 using Domain.Models.RefreshTokenModel;
+using Domain.Models.ResetPasswordTokenModel;
 
 namespace Domain.Models.UserModel;
 
@@ -37,7 +38,7 @@ public class User
     public string LastName { get; private set; } = string.Empty;
     public string Bio { get; private set; } = string.Empty;
     public string ProfileImageUrl { get; private set; } = string.Empty;
-    public bool IsEmailVerified { get; private set; } = false;
+    public bool IsEmailVerified { get; private set; }
     public RefreshTokenId RefreshTokenId { get; private set; } = new(Guid.Empty);
     public virtual RefreshToken? RefreshToken { get; }
     public virtual ICollection<Follow>? Followers { get; }
@@ -47,6 +48,7 @@ public class User
     public virtual ICollection<Comment>? Comments { get; }
     public virtual ICollection<CommentLike>? CommentLikes { get; }
     public virtual ICollection<EmailVerificationToken>? EmailVerificationTokens { get; }
+    public virtual ICollection<ResetPasswordToken>? ResetPasswordTokens { get; }
 
     public void SetRefreshTokenId(RefreshTokenId refreshTokenId)
     {

@@ -92,6 +92,11 @@ function SignIn() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
+                <div className="forgot-password-link">
+                  <Link to="/forgot-password" className="not-general-text">
+                    Forgot Password?
+                  </Link>
+                </div>
                 <div className="show-password-check">
                   <input
                     type="checkbox"
@@ -100,7 +105,7 @@ function SignIn() {
                     checked={showPassword}
                     className="show-pswd-checkbox"
                   />
-                  <label htmlFor="showpswd" className="not-general-text">
+                  <label htmlFor="show-pswd" className="not-general-text">
                     Show Password
                   </label>
                 </div>

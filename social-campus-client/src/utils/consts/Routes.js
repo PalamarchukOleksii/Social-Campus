@@ -13,6 +13,7 @@ const ROUTES = {
   EDIT_PROFILE: "/profile/:login/edit",
   TAGDETAILS: "/tag/:tag",
   PRIVATECHAT: "/messages/:login",
+  FORGOT_PASSWORD: "/forgot-password"
 };
 
 export default ROUTES;

@@ -21,4 +21,5 @@ public interface IUserRepository
     public Task<IReadOnlyList<User>> SearchAsync(string searchTerm, int page, int count);
     public Task DeleteAsync(User user);
     public void MakeUserEmailVarified(User user);
+    public void UpdatePassword(User user, string passwordHash);
 }

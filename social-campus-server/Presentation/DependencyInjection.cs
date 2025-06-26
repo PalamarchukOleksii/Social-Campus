@@ -2,7 +2,9 @@ using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Presentation.Abstractions;
 using Presentation.Extensions;
+using Presentation.Urls;
 
 namespace Presentation;
 
@@ -28,14 +30,11 @@ public static class DependencyInjection
 
         services.AddOpenApi(options => { options.AddDocumentTransformer<OpenApiExtension>(); });
 
+        services.Configure<ApplicationUrlsOptions>(
+            configuration.GetSection(ApplicationUrlsOptions.SectionName));
+
         services.AddEndpoints(Assembly.GetExecutingAssembly());
-        services.AddClientCors(
-            "ClientCors",
-            [
-                "http://localhost:3000",
-                "https://localhost:3000"
-            ]
-        );
+        services.AddClientCorsFromConfiguration(configuration);
 
         return services;
     }

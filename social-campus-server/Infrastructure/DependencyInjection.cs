@@ -18,7 +18,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<IPasswordHasher, PasswordHasher>();
+        services.AddSingleton<IHasher, Hasher>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("LocalConnection"))
@@ -35,6 +35,7 @@ public static class DependencyInjection
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<IPublicationTagRepository, PublicationTagRepository>();
         services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
+        services.AddScoped<IResetPasswordTokenRepository, ResetPasswordTokenRepository>();
 
         services.AddSingleton<IJwtProvider, JwtProvider>();
 
@@ -42,7 +43,7 @@ public static class DependencyInjection
 
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
+        services.AddScoped<IEmailLinkFactory, EmailLinkFactory>();
         services.AddHttpContextAccessor();
 
         return services;

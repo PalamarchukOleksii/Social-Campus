@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Mail;
 using System.Text;
-using System.Threading.Tasks;
 using Application.Abstractions.Email;
 using Microsoft.Extensions.Options;
 
@@ -10,9 +9,9 @@ namespace Infrastructure.Email;
 public class EmailService(IOptions<EmailSettings> options) : IEmailService
 {
     private readonly string _smtpHost = options.Value.SmtpHost;
+    private readonly string _smtpPass = options.Value.SmtpPass;
     private readonly int _smtpPort = options.Value.SmtpPort;
     private readonly string _smtpUser = options.Value.SmtpUser;
-    private readonly string _smtpPass = options.Value.SmtpPass;
 
     public async Task SendEmailAsync(string messageReceiver, string messageSubject, string messageBody, bool isHtml)
     {

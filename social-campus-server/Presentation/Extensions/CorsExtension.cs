@@ -1,10 +1,16 @@
+using Presentation.Urls;
+
 namespace Presentation.Extensions;
 
 public static class CorsExtension
 {
-    public static IServiceCollection AddClientCors(this IServiceCollection services, string policyName,
+    private static IServiceCollection AddClientCors(this IServiceCollection services, string policyName,
         string[] allowedOrigins)
     {
+        foreach (var origin in allowedOrigins)
+            if (!Uri.TryCreate(origin, UriKind.Absolute, out _))
+                throw new InvalidOperationException($"Invalid CORS origin URL: {origin}");
+
         services.AddCors(options =>
         {
             options.AddPolicy(policyName, policy =>
@@ -17,5 +23,19 @@ public static class CorsExtension
         });
 
         return services;
+    }
+
+    public static IServiceCollection AddClientCorsFromConfiguration(this IServiceCollection services,
+        IConfiguration configuration, string policyName = "ClientCors")
+    {
+        var corsOrigins = configuration
+            .GetSection($"{ApplicationUrlsOptions.SectionName}:Cors:AllowedOrigins")
+            .Get<string[]>();
+
+        if (corsOrigins == null || !corsOrigins.Any())
+            throw new InvalidOperationException(
+                "CORS origins must be configured in ApplicationUrls:Cors:AllowedOrigins");
+
+        return services.AddClientCors(policyName, corsOrigins);
     }
 }

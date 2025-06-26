@@ -6,7 +6,7 @@ namespace Infrastructure.Fakers;
 
 public static class UserFaker
 {
-    public static async Task<List<User>> GenerateAsync(int count, IPasswordHasher passwordHasher)
+    public static async Task<List<User>> GenerateAsync(int count, IHasher hasher)
     {
         var faker = new Faker<User>();
 
@@ -24,7 +24,7 @@ public static class UserFaker
 
         foreach (var user in users)
         {
-            var hashedPassword = await passwordHasher.HashAsync(user.PasswordHash);
+            var hashedPassword = await hasher.HashAsync(user.PasswordHash);
             user.UpdatePasswordHash(hashedPassword);
         }
 
