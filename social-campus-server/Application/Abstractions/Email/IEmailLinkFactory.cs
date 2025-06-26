@@ -7,5 +7,5 @@ namespace Application.Abstractions.Email;
 public interface IEmailLinkFactory
 {
     public string? CreateEmailVerificationLink(EmailVerificationTokenId emailVerificationTokenId);
-    public string? CreateResetPasswordLink(ResetPasswordTokenId resetPasswordTokenId, UserId userId);
+    public string? CreateResetPasswordLink(Guid generatedToken, UserId userId);
 }

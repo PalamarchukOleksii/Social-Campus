@@ -22,13 +22,13 @@ public class EmailLinkFactory(IHttpContextAccessor httpContextAccessor, LinkGene
         return verificationLink;
     }
 
-    public string? CreateResetPasswordLink(ResetPasswordTokenId resetPasswordTokenId, UserId userId)
+    public string? CreateResetPasswordLink(Guid generatedToken, UserId userId)
     {
         var resetLink =
             linkGenerator.GetUriByName(
                 httpContextAccessor.HttpContext!,
                 LinkConsts.ResetPassword,
-                new { token = resetPasswordTokenId.Value, userId = userId.Value });
+                new { token = generatedToken, userId = userId.Value });
 
         return resetLink;
     }
