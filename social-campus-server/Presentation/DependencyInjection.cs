@@ -2,7 +2,6 @@ using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Presentation.Abstractions;
 using Presentation.Extensions;
 using Presentation.Urls;
 
@@ -32,6 +31,8 @@ public static class DependencyInjection
 
         services.Configure<ApplicationUrlsOptions>(
             configuration.GetSection(ApplicationUrlsOptions.SectionName));
+        services.AddSingleton(sp =>
+            sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<ApplicationUrlsOptions>>().Value);
 
         services.AddEndpoints(Assembly.GetExecutingAssembly());
         services.AddClientCorsFromConfiguration(configuration);

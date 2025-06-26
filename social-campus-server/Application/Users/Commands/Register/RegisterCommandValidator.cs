@@ -30,5 +30,9 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
         RuleFor(u => u.LastName)
             .NotEmpty().WithMessage("Last name is required")
             .MaximumLength(50).WithMessage("Last name need to be shorter than 50 characters");
+
+        RuleFor(vq => vq.VerifyEmailToken)
+            .NotEmpty().WithMessage("Verify email token is required")
+            .Must(token => token != Guid.Empty).WithMessage("Verify email token must be a valid GUID");
     }
 }

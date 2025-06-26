@@ -4,7 +4,7 @@ namespace Application.Helpers;
 
 public static class EmailTemplateHelpers
 {
-    public static string GetVerifyEmailHtml(string firstName, string verificationLink)
+    public static string GetVerifyEmailHtml(string email, string verificationLink)
     {
         return $$"""
                  <!DOCTYPE html>
@@ -110,19 +110,19 @@ public static class EmailTemplateHelpers
                      </style>
                  </head>
                  <body>
-                     <div class="container">
-                         <h1>Hello {{WebUtility.HtmlEncode(firstName)}},</h1>
-                         <p>Thanks for registering on Social Campus. To finish setting up your account, please verify your email by clicking the button below.</p>
+                 <div class="container">
+                     <h1>Verify your email</h1>
+                     <p>To continue creating your account on Social Campus, please verify your email address by clicking the button below.</p>
 
-                         <div class="btn-container">
-                             <a href="{{WebUtility.HtmlEncode(verificationLink)}}" class="btn">Verify Email</a>
-                         </div>
-
-                         <div class="footer">
-                             <p>If you did not request this, you can safely ignore this email.</p>
-                             <p>&copy; 2025 Social Campus. All rights reserved.</p>
-                         </div>
+                     <div class="btn-container">
+                         <a href="{{WebUtility.HtmlEncode(verificationLink)}}" class="btn">Verify Email</a>
                      </div>
+
+                     <div class="footer">
+                         <p>If you didn't request this, you can safely ignore it.</p>
+                         <p>&copy; {{WebUtility.HtmlEncode(DateTime.Now.Year.ToString())}} Social Campus. All rights reserved.</p>
+                     </div>
+                 </div>
                  </body>
                  </html>
                  """;
@@ -244,7 +244,7 @@ public static class EmailTemplateHelpers
 
                          <div class="footer">
                              <p>If you didn’t request a password reset, you can safely ignore this email.</p>
-                             <p>&copy; 2025 Social Campus. All rights reserved.</p>
+                             <p>&copy; {{WebUtility.HtmlEncode(DateTime.Now.Year.ToString())}} Social Campus. All rights reserved.</p>
                          </div>
                      </div>
                  </body>

@@ -106,9 +106,6 @@ public class UserRepository(
         var follows = context.Follows.Where(f => f.UserId == user.Id || f.FollowedUserId == user.Id);
         context.Follows.RemoveRange(follows);
 
-        var emailTokens = context.EmailVerificationTokens.Where(t => t.UserId == user.Id);
-        context.EmailVerificationTokens.RemoveRange(emailTokens);
-
         var passwordTokens = context.ResetPasswordTokens.Where(t => t.UserId == user.Id);
         context.ResetPasswordTokens.RemoveRange(passwordTokens);
 
@@ -117,12 +114,6 @@ public class UserRepository(
             context.RefreshTokens.Remove(refreshToken);
 
         context.Users.Remove(user);
-    }
-
-    public void MakeUserEmailVarified(User user)
-    {
-        user.MakeEmailVerified();
-        context.Users.Update(user);
     }
 
     public void UpdatePassword(User user, string passwordHash)

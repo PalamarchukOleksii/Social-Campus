@@ -1,6 +1,5 @@
-using Application.ResetPasswordTokens.Commands.Verify;
+using Application.EmailVerificationTokens.Commands.Verify;
 using Domain.Consts;
-using Domain.Models.UserModel;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -8,28 +7,28 @@ using Presentation.Abstractions;
 using Presentation.Consts;
 using Presentation.Urls;
 
-namespace Presentation.Endpoints.ResetPasswordTokens.Verify;
+namespace Presentation.Endpoints.EmailVerificationTokens.Verify;
 
 public class VerifyEndpoint : BaseEndpoint, IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("reset-password-tokens/verify",
-                async (ISender sender, Guid token, Guid userId,
+        app.MapGet("verify-email-tokens/verify",
+                async (ISender sender, Guid token, string email,
                     [FromServices] ApplicationUrlsOptions applicationUrls) =>
                 {
-                    var commandRequest = new VerifyCommand(token, new UserId(userId));
+                    var commandRequest = new VerifyCommand(token, email);
                     var response = await sender.Send(commandRequest);
 
                     var uri = new Uri(new Uri(applicationUrls.Frontend.BaseUrl.TrimEnd('/')),
-                        applicationUrls.Frontend.ForgotPasswordPath.TrimStart('/'));
+                        applicationUrls.Frontend.SignUpPath.TrimStart('/'));
                     if (response.IsSuccess)
                     {
                         var successUrl = QueryHelpers.AddQueryString(uri.ToString(),
                             new Dictionary<string, string>
                             {
                                 ["token"] = token.ToString(),
-                                ["userId"] = userId.ToString()
+                                ["email"] = email
                             }!);
 
                         return Results.Redirect(successUrl);
@@ -43,7 +42,7 @@ public class VerifyEndpoint : BaseEndpoint, IEndpoint
 
                     return Results.Redirect(failureUrl);
                 })
-            .WithTags(EndpointTags.ResetPasswordTokens)
-            .WithName(LinkConsts.ResetPassword);
+            .WithTags(EndpointTags.VerifyEmailTokens)
+            .WithName(LinkConsts.VerifyEmail);
     }
 }

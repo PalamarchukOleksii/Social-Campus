@@ -11,4 +11,5 @@ public static class EndpointTags
     public const string CommentLikes = "commentlikes";
     public const string Tags = "tags";
     public const string ResetPasswordTokens = "resetpasswordtokens";
+    public const string VerifyEmailTokens = "verifyemailtokens";
 }
