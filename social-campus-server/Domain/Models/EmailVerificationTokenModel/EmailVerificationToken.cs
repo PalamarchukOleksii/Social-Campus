@@ -8,17 +8,18 @@ public class EmailVerificationToken
     {
     }
 
-    public EmailVerificationToken(UserId userId, int expirationInSeconds)
+    public EmailVerificationToken(string email, string tokenHash, int expirationInSeconds)
     {
         Id = new EmailVerificationTokenId(Guid.NewGuid());
-        UserId = userId;
+        Email = email;
+        TokenHash = tokenHash;
         CreatedOnUtc = DateTime.UtcNow;
         ExpiresOnUtc = DateTime.UtcNow.AddSeconds(expirationInSeconds);
     }
 
     public EmailVerificationTokenId Id { get; private set; } = new(Guid.Empty);
-    public UserId UserId { get; private set; } = new(Guid.Empty);
+    public string Email { get; private set; } = string.Empty;
+    public string TokenHash { get; private set; } = string.Empty;
     public DateTime CreatedOnUtc { get; private set; }
     public DateTime ExpiresOnUtc { get; private set; }
-    public virtual User? User { get; }
 }

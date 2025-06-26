@@ -5,7 +5,7 @@ namespace Domain.Abstractions.Repositories;
 
 public interface IEmailVerificationTokenRepository
 {
-    public Task<EmailVerificationToken?> GetAsync(EmailVerificationTokenId id);
-    public Task<EmailVerificationToken> AddAsync(UserId userEmailToVerifyId);
+    public Task<EmailVerificationToken?> GetByEmailAsync(string email);
+    public Task<EmailVerificationToken> AddAsync(string email, string tokenHash);
     public void Remove(EmailVerificationToken token);
 }
