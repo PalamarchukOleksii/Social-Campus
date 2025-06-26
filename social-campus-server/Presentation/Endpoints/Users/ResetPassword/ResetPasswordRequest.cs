@@ -1,5 +1,3 @@
-using Domain.Models.UserModel;
-
 namespace Presentation.Endpoints.Users.ResetPassword;
 
 public class ResetPasswordRequest

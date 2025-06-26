@@ -31,16 +31,14 @@ public class VerifyEndpoint : BaseEndpoint, IEndpoint
 
                         return Results.Redirect(successUrl);
                     }
-                    else
-                    {
-                        var failureUrl = QueryHelpers.AddQueryString(applicationUrls.Frontend.BaseUrl,
-                            new Dictionary<string, string>
-                            {
-                                ["errorMsg"] = response.Error.Message
-                            }!);
 
-                        return Results.Redirect(failureUrl);
-                    }
+                    var failureUrl = QueryHelpers.AddQueryString(applicationUrls.Frontend.BaseUrl,
+                        new Dictionary<string, string>
+                        {
+                            ["errorMsg"] = response.Error.Message
+                        }!);
+
+                    return Results.Redirect(failureUrl);
                 })
             .WithTags(EndpointTags.VerifyEmailTokens)
             .WithName(LinkConsts.VerifyEmail);

@@ -1,5 +1,4 @@
 using Domain.Models.EmailVerificationTokenModel;
-using Domain.Models.UserModel;
 
 namespace Domain.Abstractions.Repositories;
 

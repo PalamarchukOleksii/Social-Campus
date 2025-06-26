@@ -1,5 +1,3 @@
-using Domain.Models.UserModel;
-
 namespace Domain.Models.EmailVerificationTokenModel;
 
 public class EmailVerificationToken

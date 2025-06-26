@@ -1,6 +1,5 @@
 using Domain.Abstractions.Repositories;
 using Domain.Models.EmailVerificationTokenModel;
-using Domain.Models.UserModel;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 

@@ -2,7 +2,6 @@ using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Presentation.Abstractions;
 using Presentation.Extensions;
 using Presentation.Urls;
 

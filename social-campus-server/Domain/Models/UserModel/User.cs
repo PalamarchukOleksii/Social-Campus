@@ -1,6 +1,5 @@
 ﻿using Domain.Models.CommentLikeModel;
 using Domain.Models.CommentModel;
-using Domain.Models.EmailVerificationTokenModel;
 using Domain.Models.FollowModel;
 using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;

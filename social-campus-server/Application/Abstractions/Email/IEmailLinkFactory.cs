@@ -1,5 +1,3 @@
-using Domain.Models.EmailVerificationTokenModel;
-using Domain.Models.ResetPasswordTokenModel;
 using Domain.Models.UserModel;
 
 namespace Application.Abstractions.Email;

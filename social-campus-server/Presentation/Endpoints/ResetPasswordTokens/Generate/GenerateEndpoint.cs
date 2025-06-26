@@ -1,5 +1,4 @@
 using Application.ResetPasswordTokens.Commands.Generate;
-using Domain.Consts;
 using MediatR;
 using Presentation.Abstractions;
 using Presentation.Consts;

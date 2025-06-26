@@ -1,5 +1,4 @@
 using Domain.Models.EmailVerificationTokenModel;
-using Domain.Models.UserModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

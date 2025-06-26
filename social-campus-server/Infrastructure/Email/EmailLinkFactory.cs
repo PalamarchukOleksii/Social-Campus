@@ -1,7 +1,5 @@
 using Application.Abstractions.Email;
 using Domain.Consts;
-using Domain.Models.EmailVerificationTokenModel;
-using Domain.Models.ResetPasswordTokenModel;
 using Domain.Models.UserModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
