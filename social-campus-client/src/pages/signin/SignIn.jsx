@@ -71,61 +71,63 @@ function SignIn() {
           <div className="login-container">
             <h1 className="top-text general-text">Sign In</h1>
             {loading ? (
-              <div className="loading-wrapper">
+              <div className="loading-wrapper-signin">
                 <Loading />
               </div>
             ) : (
-              <form onSubmit={handleSignIn} className="login-form">
-                <input
-                  className="text-input"
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <input
-                  className="text-input"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <div className="show-password-check">
+              <>
+                <form onSubmit={handleSignIn} className="login-form">
                   <input
-                    type="checkbox"
-                    id="show-pswd"
-                    onChange={() => setShowPassword((prev) => !prev)}
-                    checked={showPassword}
-                    className="show-pswd-checkbox"
+                    className="text-input"
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
-                  <label htmlFor="show-pswd" className="not-general-text">
-                    Show Password
-                  </label>
-                </div>
-                <div className="persist-check">
                   <input
-                    type="checkbox"
-                    id="persist"
-                    onChange={togglePersist}
-                    checked={persist}
-                    className="persist-checkbox"
+                    className="text-input"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
-                  <label htmlFor="persist" className="not-general-text">
-                    Trust This Device
-                  </label>
+                  <div className="show-password-check">
+                    <input
+                      type="checkbox"
+                      id="show-pswd"
+                      onChange={() => setShowPassword((prev) => !prev)}
+                      checked={showPassword}
+                      className="show-pswd-checkbox"
+                    />
+                    <label htmlFor="show-pswd" className="not-general-text">
+                      Show Password
+                    </label>
+                  </div>
+                  <div className="persist-check">
+                    <input
+                      type="checkbox"
+                      id="persist"
+                      onChange={togglePersist}
+                      checked={persist}
+                      className="persist-checkbox"
+                    />
+                    <label htmlFor="persist" className="not-general-text">
+                      Trust This Device
+                    </label>
+                  </div>
+                  <button type="submit" className="signin-button">
+                    Sign In
+                  </button>
+                </form>
+                <div className="forgot-password-link">
+                  <Link to="/forgot-password" className="not-general-text">
+                    Forgot Password?
+                  </Link>
                 </div>
-                <button type="submit" className="signin-button">
-                  Sign In
-                </button>
-              </form>
+              </>
             )}
-            <div className="forgot-password-link">
-              <Link to="/forgot-password" className="not-general-text">
-                Forgot Password?
-              </Link>
-            </div>
           </div>
           {!loading && (
             <div className="goWelcom">

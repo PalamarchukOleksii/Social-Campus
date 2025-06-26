@@ -1,11 +1,9 @@
 import {
   IoHomeOutline,
   IoSearchOutline,
-  IoMailOutline,
   IoPersonOutline,
   IoHome,
   IoSearch,
-  IoMail,
   IoPerson,
 } from "react-icons/io5";
 
@@ -21,12 +19,6 @@ const GetSidebarItems = (login) => [
     label: "Search",
     inactiveIcon: IoSearchOutline,
     activeIcon: IoSearch,
-  },
-  {
-    path: "/messages",
-    label: "Messages",
-    inactiveIcon: IoMailOutline,
-    activeIcon: IoMail,
   },
   {
     path: `/profile/${login}`,
