@@ -22,19 +22,13 @@ function ForgotPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  let isResetStep = !!token && !!userId;
+  const isResetStep = !!token && !!userId;
 
   useEffect(() => {
     if (!isResetStep && errorMsg) {
       toast.error(errorMsg);
     }
   }, [isResetStep, errorMsg]);
-
-  useEffect(() => {
-    if (token && userId) {
-      isResetStep = true;
-    }
-  }, [token, userId]);
 
   const handleSendResetLink = async () => {
     if (!email) return toast.error("Email is required");
