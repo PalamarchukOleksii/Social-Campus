@@ -38,7 +38,7 @@ public class User
     public string LastName { get; private set; } = string.Empty;
     public string Bio { get; private set; } = string.Empty;
     public string ProfileImageUrl { get; private set; } = string.Empty;
-    public bool IsEmailVerified { get; private set; } = false;
+    public bool IsEmailVerified { get; private set; }
     public RefreshTokenId RefreshTokenId { get; private set; } = new(Guid.Empty);
     public virtual RefreshToken? RefreshToken { get; }
     public virtual ICollection<Follow>? Followers { get; }

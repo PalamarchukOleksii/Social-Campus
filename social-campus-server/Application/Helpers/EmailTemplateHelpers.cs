@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace Application.Helpers;
 
 public static class EmailTemplateHelpers
@@ -109,11 +111,11 @@ public static class EmailTemplateHelpers
                  </head>
                  <body>
                      <div class="container">
-                         <h1>Hello {{System.Net.WebUtility.HtmlEncode(firstName)}},</h1>
+                         <h1>Hello {{WebUtility.HtmlEncode(firstName)}},</h1>
                          <p>Thanks for registering on Social Campus. To finish setting up your account, please verify your email by clicking the button below.</p>
 
                          <div class="btn-container">
-                             <a href="{{System.Net.WebUtility.HtmlEncode(verificationLink)}}" class="btn">Verify Email</a>
+                             <a href="{{WebUtility.HtmlEncode(verificationLink)}}" class="btn">Verify Email</a>
                          </div>
 
                          <div class="footer">
@@ -233,11 +235,11 @@ public static class EmailTemplateHelpers
                  </head>
                  <body>
                      <div class="container">
-                         <h1>Hello {{System.Net.WebUtility.HtmlEncode(firstName)}},</h1>
+                         <h1>Hello {{WebUtility.HtmlEncode(firstName)}},</h1>
                          <p>We received a request to reset your password for your Social Campus account. If this was you, click the button below to set a new password.</p>
 
                          <div class="btn-container">
-                             <a href="{{System.Net.WebUtility.HtmlEncode(resetLink)}}" class="btn">Reset Password</a>
+                             <a href="{{WebUtility.HtmlEncode(resetLink)}}" class="btn">Reset Password</a>
                          </div>
 
                          <div class="footer">

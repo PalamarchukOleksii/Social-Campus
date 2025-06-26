@@ -3,7 +3,6 @@ using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
 using Application.Helpers;
 using Domain.Abstractions.Repositories;
-using Domain.Models.UserModel;
 using Domain.Shared;
 
 namespace Application.Users.Commands.Register;
