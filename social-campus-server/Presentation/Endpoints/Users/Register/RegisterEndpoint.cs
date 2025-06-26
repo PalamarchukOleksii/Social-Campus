@@ -16,7 +16,8 @@ public class RegisterEndpoint : BaseEndpoint, IEndpoint
                 request.FirstName,
                 request.LastName,
                 request.Email,
-                request.Password);
+                request.Password,
+                request.VerifyEmailToken);
 
             var response = await sender.Send(commandRequest);
 
