@@ -6,6 +6,7 @@ using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
 using Domain.Models.PublicationTagModel;
 using Domain.Models.RefreshTokenModel;
+using Domain.Models.ResetPasswordTokenModel;
 using Domain.Models.TagModel;
 using Domain.Models.UserModel;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public required DbSet<Tag> Tags { get; set; }
     public required DbSet<PublicationTag> PublicationTags { get; set; }
     public required DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; }
+    public required DbSet<ResetPasswordToken> ResetPasswordTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

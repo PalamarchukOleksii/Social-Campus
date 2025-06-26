@@ -109,6 +109,9 @@ public class UserRepository(
         var emailTokens = context.EmailVerificationTokens.Where(t => t.UserId == user.Id);
         context.EmailVerificationTokens.RemoveRange(emailTokens);
 
+        var passwordTokens = context.ResetPasswordTokens.Where(t => t.UserId == user.Id);
+        context.ResetPasswordTokens.RemoveRange(passwordTokens);
+
         var refreshToken = await context.RefreshTokens.FirstOrDefaultAsync(rt => rt.UserId == user.Id);
         if (refreshToken != null)
             context.RefreshTokens.Remove(refreshToken);

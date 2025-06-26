@@ -5,6 +5,7 @@ using Domain.Models.FollowModel;
 using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
 using Domain.Models.RefreshTokenModel;
+using Domain.Models.ResetPasswordTokenModel;
 
 namespace Domain.Models.UserModel;
 
@@ -47,6 +48,7 @@ public class User
     public virtual ICollection<Comment>? Comments { get; }
     public virtual ICollection<CommentLike>? CommentLikes { get; }
     public virtual ICollection<EmailVerificationToken>? EmailVerificationTokens { get; }
+    public virtual ICollection<ResetPasswordToken>? ResetPasswordTokens { get; }
 
     public void SetRefreshTokenId(RefreshTokenId refreshTokenId)
     {
