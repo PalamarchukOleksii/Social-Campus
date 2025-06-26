@@ -92,11 +92,6 @@ function SignIn() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <div className="forgot-password-link">
-                  <Link to="/forgot-password" className="not-general-text">
-                    Forgot Password?
-                  </Link>
-                </div>
                 <div className="show-password-check">
                   <input
                     type="checkbox"
@@ -126,26 +121,18 @@ function SignIn() {
                 </button>
               </form>
             )}
+            <div className="forgot-password-link">
+              <Link to="/forgot-password" className="not-general-text">
+                Forgot Password?
+              </Link>
+            </div>
           </div>
           {!loading && (
-            <>
-              <div>
-                <h2 className="secondary-text not-general-text">
-                  Don&apos;t have an account?
-                </h2>
-                <button
-                  className="signup-button"
-                  onClick={() => navigate("/signup")}
-                >
-                  Sign Up
-                </button>
-              </div>
-              <div className="goWelcom">
-                <Link to="/" className="not-general-text">
-                  Go Back to Welcome Page
-                </Link>
-              </div>
-            </>
+            <div className="goWelcom">
+              <Link to="/" className="not-general-text">
+                Go Back to Welcome Page
+              </Link>
+            </div>
           )}
         </div>
       </div>

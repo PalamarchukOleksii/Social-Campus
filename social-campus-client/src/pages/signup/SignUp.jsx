@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "./SignUp.css";
 import { toast } from "react-toastify";
 import axios from "../../utils/api/AxiosBase";
@@ -185,6 +185,13 @@ function SignUp() {
                   </>
                 )}
               </>
+            )}
+            {!loading && (
+              <div className="goWelcom">
+                <Link to="/" className="not-general-text">
+                  Go Back to Welcome Page
+                </Link>
+              </div>
             )}
           </div>
         </div>
