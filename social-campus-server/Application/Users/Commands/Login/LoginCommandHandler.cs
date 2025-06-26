@@ -31,23 +31,6 @@ public class LoginCommandHandler(
                 "User.IncorrectPassword",
                 "Incorrect password"));
 
-        if (!user.IsEmailVerified)
-        {
-            var emailVerificationToken = await emailVerificationTokenRepository.AddAsync(user.Id);
-            var verificationLink = emailLinkFactory.CreateEmailVerificationLink(emailVerificationToken.Id);
-            if (verificationLink is null)
-                return Result.Failure<UserLoginRefreshDto>(new Error(
-                    "Email.LinkGenerationFailed",
-                    "Unable to generate email verification link"));
-
-            var messageBody = EmailTemplateHelpers.GetVerifyEmailHtml(user.FirstName, verificationLink);
-            await emailService.SendEmailAsync(user.Email, "Resend Email Verification", messageBody, true);
-
-            return Result.Failure<UserLoginRefreshDto>(new Error(
-                "User.EmailNotVerified",
-                "Your email is not verified. A new verification link has been sent."));
-        }
-
         var tokens = jwtProvider.GenerateTokens(user);
         var existingRefreshToken = user.RefreshTokenId.Value != Guid.Empty
             ? await tokenRepository.GetByIdAsync(user.RefreshTokenId)

@@ -1,20 +1,16 @@
-﻿using Application.Abstractions.Email;
 using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
-using Application.Helpers;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
 
-namespace Application.Users.Commands.Register;
+namespace Application.EmailVerificationTokens.Commands.Verify;
 
-public class RegisterCommandHandler(
-    IUserRepository userRepository,
-    IHasher hasher,
-    IEmailService emailService,
+public class VerifyCommandHadler(
     IEmailVerificationTokenRepository emailVerificationTokenRepository,
-    IEmailLinkFactory emailLinkFactory) : ICommandHandler<RegisterCommand>
+    IUserRepository userRepository,
+    IHasher hasher) : ICommandHandler<VerifyCommand>
 {
-    public async Task<Result> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(VerifyCommand request, CancellationToken cancellationToken)
     {
         var isEmailUnique = await userRepository.IsEmailUniqueAsync(request.Email);
         if (!isEmailUnique)
@@ -33,24 +29,11 @@ public class RegisterCommandHandler(
                 "VerifyToken.Invalid",
                 "Verify email token is expired"));
 
-        var isTokenHashValid =
-            await hasher.VerifyAsync(request.VerifyEmailToken.ToString(), verifyEmailToken.TokenHash);
+        var isTokenHashValid = await hasher.VerifyAsync(request.Token.ToString(), verifyEmailToken.TokenHash);
         if (!isTokenHashValid)
             return Result.Failure(new Error(
                 "VerifyToken.Invalid",
                 "The provided verify token is invalid"));
-
-        emailVerificationTokenRepository.Remove(verifyEmailToken);
-
-        var isLoginUnique = await userRepository.IsLoginUniqueAsync(request.Login);
-        if (!isLoginUnique)
-            return Result.Failure(new Error(
-                "User.NotUniqueLogin",
-                $"User with login {request.Login} has already exist"));
-
-        var passwordHash = await hasher.HashAsync(request.Password);
-
-        await userRepository.AddAsync(request.Login, passwordHash, request.Email, request.FirstName, request.LastName);
 
         return Result.Success();
     }
