@@ -10,9 +10,12 @@ public class ResetPasswordTokenRepository(ApplicationDbContext context) : IReset
 {
     private const int ExpirationInSeconds = 600;
 
-    public async Task<ResetPasswordToken?> GetAsync(ResetPasswordTokenId id)
+    public async Task<ResetPasswordToken?> GetByUserIdAsync(UserId userId)
     {
-        return await context.ResetPasswordTokens.FirstOrDefaultAsync(e => e.Id == id);
+        return await context.ResetPasswordTokens
+            .Where(e => e.UserId == userId)
+            .OrderByDescending(e => e.CreatedOnUtc)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<ResetPasswordToken> AddAsync(UserId userPasswordToResetId, string tokenHash)
