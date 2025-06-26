@@ -26,5 +26,6 @@
         <_ContentIncludedByDefault Remove="Pages\Shared\_Layout.cshtml"/>
         <_ContentIncludedByDefault Remove="Pages\VerifyEmailFailed.cshtml"/>
         <_ContentIncludedByDefault Remove="Pages\VerifyEmailSuccess.cshtml"/>
+        <_ContentIncludedByDefault Remove="wwwroot\css\styles.css"/>
     </ItemGroup>
 </Project>

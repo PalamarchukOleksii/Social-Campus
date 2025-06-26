@@ -32,7 +32,7 @@ public static class CorsExtension
             .GetSection($"{ApplicationUrlsOptions.SectionName}:Cors:AllowedOrigins")
             .Get<string[]>();
 
-        if (corsOrigins == null || !corsOrigins.Any())
+        if (corsOrigins == null || corsOrigins.Length == 0)
             throw new InvalidOperationException(
                 "CORS origins must be configured in ApplicationUrls:Cors:AllowedOrigins");
 

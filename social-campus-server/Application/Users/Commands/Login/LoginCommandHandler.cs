@@ -1,5 +1,4 @@
-﻿using Application.Abstractions.Email;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;

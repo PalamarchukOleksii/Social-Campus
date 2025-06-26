@@ -31,7 +31,6 @@ function EditProfile() {
   const [profileImageFile, setProfileImageFile] = useState(null);
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [userLogin, setUserLogin] = useState("");
-  const [email, setEmail] = useState("");
   const [isExitHovered, setIsExitHovered] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [removeImgHovered, setRemoveImgHovered] = useState(false);
@@ -44,7 +43,6 @@ function EditProfile() {
         setFirstName(data.firstName || "");
         setLastName(data.lastName || "");
         setBio(data.bio || "");
-        setEmail(data.email || "");
         setUserLogin(data.login || "");
 
         if (data.profileImageUrl) {
@@ -88,7 +86,6 @@ function EditProfile() {
       formData.append("callerId.value", auth.shortUser.id.value);
       formData.append("userId.value", userId);
       formData.append("login", userLogin);
-      formData.append("email", email);
       formData.append("firstName", firstName);
       formData.append("lastName", lastName);
       formData.append("bio", bio);
@@ -219,15 +216,6 @@ function EditProfile() {
           placeholder="Last Name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          required
-        />
-        <input
-          className="email-input"
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <textarea

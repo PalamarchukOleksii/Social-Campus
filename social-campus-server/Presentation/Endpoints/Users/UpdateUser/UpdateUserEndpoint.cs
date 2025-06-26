@@ -16,7 +16,6 @@ public class UpdateUserEndpoint : BaseEndpoint, IEndpoint
                     request.CallerId,
                     request.UserId,
                     request.Login,
-                    request.Email,
                     request.FirstName,
                     request.LastName,
                     request.Bio,

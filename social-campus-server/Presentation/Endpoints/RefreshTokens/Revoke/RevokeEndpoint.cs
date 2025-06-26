@@ -20,14 +20,10 @@ public class RevokeEndpoint : BaseEndpoint, IEndpoint
                 RevokeCommand commandRequest = new(refreshToken);
 
                 var response = await sender.Send(commandRequest);
-                if (response.IsSuccess)
-                {
-                    context.Response.Cookies.Delete("RefreshToken");
+                if (!response.IsSuccess) return HandleFailure(response);
+                context.Response.Cookies.Delete("RefreshToken");
 
-                    return Results.Ok();
-                }
-
-                return HandleFailure(response);
+                return Results.Ok();
             })
             .WithTags(EndpointTags.RefreshTokens)
             .RequireAuthorization();

@@ -8,7 +8,6 @@ public record UpdateUserCommand(
     UserId CallerId,
     UserId UserId,
     string Login,
-    string Email,
     string FirstName,
     string LastName,
     string Bio,
