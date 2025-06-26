@@ -46,6 +46,7 @@ The target audience includes students, young people, and university staff aged 1
 - Backend: C# ASP.NET Core
 - Database: MS SQL with Entity Framework
 - Object Storage: MinIO (S3-compatible)
+- Email Testing: MailHog (for local email testing and development)
 
 ## Installation
 
@@ -61,11 +62,13 @@ The target audience includes students, young people, and university staff aged 1
    cd Social-Campus
    ```
 
-3. Start required services (MS SQL Server and MinIO) using Docker Compose:
+3. Start required services (MS SQL Server, MinIO, and MailHog) using Docker Compose:
 
    ```bash
    docker-compose up -d
    ```
+
+   > **Note:** MailHog is included for capturing and testing emails locally without sending them.
 
 4. Install dependencies for the frontend:
 
@@ -99,6 +102,16 @@ The target audience includes students, young people, and university staff aged 1
 
 After starting both the frontend and backend servers, navigate to `http://localhost:3000` in your web browser to access the Social Campus platform.
 
+### Accessing MailHog
+
+To view the emails sent locally during development (e.g., verification emails), open MailHog’s web UI at:
+
+```
+http://localhost:8025
+```
+
+This interface allows you to inspect, read, and test emails without sending them outside your local environment.
+
 ## Contributing
 
 Contributions are welcome! If you would like to contribute to the project, please fork the repository and create a pull request. Ensure that you follow the project's coding standards and guidelines.
@@ -109,4 +122,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-For inquiries or feedback, please reach out to [oleksiypalamarchuck@gmail.com](mailto:oleksiypalamarchuck@gmail.com?subject=Your%20Subject&body=Body%20text).
+For inquiries or feedback, please reach out to [oleksiypalamarchuck@gmail.com](mailto:oleksiypalamarchuck@gmail.com?subject=Social%20Campus%20Inquiry&body=Hello%20Oleksii,)
