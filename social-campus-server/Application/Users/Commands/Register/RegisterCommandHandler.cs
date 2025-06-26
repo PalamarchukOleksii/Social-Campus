@@ -10,10 +10,10 @@ namespace Application.Users.Commands.Register;
 
 public class RegisterCommandHandler(
     IUserRepository userRepository,
-    IPasswordHasher passwordHasher,
+    IHasher hasher,
     IEmailService emailService,
     IEmailVerificationTokenRepository emailVerificationTokenRepository,
-    IEmailVerificationLinkFactory emailVerificationLinkFactory) : ICommandHandler<RegisterCommand>
+    IEmailLinkFactory emailLinkFactory) : ICommandHandler<RegisterCommand>
 {
     public async Task<Result> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
@@ -29,14 +29,14 @@ public class RegisterCommandHandler(
                 "User.NotUniqueLogin",
                 $"User with login {request.Login} has already exist"));
 
-        var passwordHash = await passwordHasher.HashAsync(request.Password);
+        var passwordHash = await hasher.HashAsync(request.Password);
 
         var registeredUser = await userRepository.AddAsync(request.Login, passwordHash, request.Email,
             request.FirstName, request.LastName);
 
         var emailVerificationToken = await emailVerificationTokenRepository.AddAsync(registeredUser.Id);
 
-        var verificationLink = emailVerificationLinkFactory.Create(emailVerificationToken.Id);
+        var verificationLink = emailLinkFactory.CreateEmailVerificationLink(emailVerificationToken.Id);
         if (verificationLink is null)
             return Result.Failure(new Error(
                 "Email.LinkGenerationFailed",

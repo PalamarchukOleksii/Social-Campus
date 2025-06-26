@@ -9,7 +9,6 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
         RuleFor(u => u.Email)
             .NotEmpty().WithMessage("Email is required")
             .EmailAddress().WithMessage("A valid email address is required")
-            .WithMessage("Email domain must be one of the allowed domains")
             .MaximumLength(100).WithMessage("Email need to be shorter than 100 characters");
 
         RuleFor(u => u.Password)
