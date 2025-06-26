@@ -4,7 +4,6 @@ import "./App.css";
 import Home from "./pages/home/Home";
 import SignUp from "./pages/signup/SignUp";
 import Profile from "./pages/profile/Profile";
-import Messages from "./pages/messages/Messages";
 import SignIn from "./pages/signin/SignIn";
 import Sidebar from "./components/sidebar/Sidebar";
 import Landing from "./pages/landing/Landing";
@@ -23,7 +22,6 @@ import HorizontalRecommendedProfiles from "./components/horizontalRecommendedPro
 import UsersSearch from "./pages/usersSearch/UsersSearch";
 import TagsSearch from "./pages/tagsSearch/TagsSearch";
 import TagDetail from "./pages/tagDetail/TagDetail";
-import PrivateChat from "./pages/privateChat/PrivateChat";
 import RequireAuth from "./components/requireAuth/RequireAuth";
 import PersistLogin from "./components/persistLogin/PersistLogin";
 import ProtectEditProfile from "./components/protectEditProfile/ProtectEditProfile";
@@ -108,7 +106,6 @@ function App() {
                 <Route path={ROUTES.USERS_SEARCH} element={<UsersSearch />} />
                 <Route path={ROUTES.TAGS_SEARCH} element={<TagsSearch />} />
                 <Route path={ROUTES.PROFILE} element={<Profile />} />
-                <Route path={ROUTES.MESSAGES} element={<Messages />} />
                 <Route path={ROUTES.FOLLOWERS} element={<Followers />} />
                 <Route path={ROUTES.FOLLOWING} element={<Following />} />
                 <Route element={<ProtectEditProfile />}>
@@ -119,7 +116,6 @@ function App() {
                   element={<PublicationDetail />}
                 />
                 <Route path={ROUTES.TAGDETAILS} element={<TagDetail />} />
-                <Route path={ROUTES.PRIVATECHAT} element={<PrivateChat />} />
               </Route>
             </Route>
           </Routes>

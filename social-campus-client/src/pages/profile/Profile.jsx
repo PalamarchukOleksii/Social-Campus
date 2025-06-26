@@ -9,6 +9,7 @@ import useAuth from "../../hooks/useAuth";
 
 const GET_USER_URL = "/api/users/by-login/";
 const GET_USER_PUBLICATIONS_URL = "/api/users";
+const FOLLOWS_BASE_URL = "/api/follows";
 const PAGE_SIZE = 10;
 
 function Profile() {
@@ -18,6 +19,7 @@ function Profile() {
   const [loadingUser, setLoadingUser] = useState(true);
   const [loadingPublications, setLoadingPublications] = useState(false);
   const [allFetched, setAllFetched] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const navigate = useNavigate();
   const { auth } = useAuth();
@@ -28,6 +30,12 @@ function Profile() {
       try {
         const { data } = await axios.get(`${GET_USER_URL}${login}`);
         setUser(data);
+        const followers = data.followersIds || [];
+        setIsFollowing(
+          followers.some(
+            (follower) => follower.value === auth.shortUser.id.value
+          )
+        );
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -72,6 +80,29 @@ function Profile() {
     }
   }, [user, login]);
 
+  const handleFollow = async () => {
+    try {
+      await axios.post(`${FOLLOWS_BASE_URL}/follow`, {
+        userLogin: auth.shortUser.login,
+        followUserLogin: user.login,
+      });
+      setIsFollowing(true);
+    } catch (error) {
+      console.error("Failed to follow user:", error);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    try {
+      await axios.delete(
+        `${FOLLOWS_BASE_URL}/unfollow/${auth.shortUser.login}/${user.login}`
+      );
+      setIsFollowing(false);
+    } catch (error) {
+      console.error("Failed to unfollow user:", error);
+    }
+  };
+
   if (loadingUser) {
     return (
       <div className="loading-container">
@@ -111,12 +142,19 @@ function Profile() {
               >
                 Edit Profile
               </button>
+            ) : isFollowing ? (
+              <button
+                onClick={handleUnfollow}
+                className="edit-profile-link unfollow"
+              >
+                Following
+              </button>
             ) : (
               <button
-                onClick={() => navigate(`/messages/${user.login}`)}
-                className="edit-profile-link"
+                onClick={handleFollow}
+                className="edit-profile-link follow"
               >
-                Send Message
+                Follow
               </button>
             )}
           </div>
