@@ -10,6 +10,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddRazorPages();
         services.AddAuthorization();
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(o => o.TokenValidationParameters = new TokenValidationParameters

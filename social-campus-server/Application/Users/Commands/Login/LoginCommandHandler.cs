@@ -1,6 +1,8 @@
-﻿using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Email;
+using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
 using Application.Dtos;
+using Application.Helpers;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
 
@@ -10,7 +12,10 @@ public class LoginCommandHandler(
     IJwtProvider jwtProvider,
     IUserRepository userRepository,
     IRefreshTokenRepository tokenRepository,
-    IPasswordHasher passwordHasher) : ICommandHandler<LoginCommand, UserLoginRefreshDto>
+    IPasswordHasher passwordHasher,
+    IEmailService emailService,
+    IEmailVerificationTokenRepository emailVerificationTokenRepository,
+    IEmailVerificationLinkFactory emailVerificationLinkFactory) : ICommandHandler<LoginCommand, UserLoginRefreshDto>
 {
     public async Task<Result<UserLoginRefreshDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
@@ -25,6 +30,23 @@ public class LoginCommandHandler(
             return Result.Failure<UserLoginRefreshDto>(new Error(
                 "User.IncorrectPassword",
                 "Incorrect password"));
+
+        if (!user.IsEmailVerified)
+        {
+            var emailVerificationToken = await emailVerificationTokenRepository.AddAsync(user.Id);
+            var verificationLink = emailVerificationLinkFactory.Create(emailVerificationToken.Id);
+            if (verificationLink is null)
+                return Result.Failure<UserLoginRefreshDto>(new Error(
+                    "Email.LinkGenerationFailed",
+                    "Unable to generate email verification link"));
+
+            var messageBody = EmailTemplateHelpers.GetVerifyEmailHtml(user.FirstName, verificationLink);
+            await emailService.SendEmailAsync(user.Email, "Resend Email Verification", messageBody, true);
+
+            return Result.Failure<UserLoginRefreshDto>(new Error(
+                "User.EmailNotVerified",
+                "Your email is not verified. A new verification link has been sent."));
+        }
 
         var tokens = jwtProvider.GenerateTokens(user);
         var existingRefreshToken = user.RefreshTokenId.Value != Guid.Empty

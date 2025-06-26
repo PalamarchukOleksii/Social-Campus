@@ -1,8 +1,10 @@
 ﻿using Application.Abstractions.Data;
+using Application.Abstractions.Email;
 using Application.Abstractions.Security;
 using Application.Abstractions.Storage;
 using Domain.Abstractions.Repositories;
 using Infrastructure.Data;
+using Infrastructure.Email;
 using Infrastructure.Repositories;
 using Infrastructure.Security;
 using Infrastructure.Storage;
@@ -32,10 +34,16 @@ public static class DependencyInjection
         services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<IPublicationTagRepository, PublicationTagRepository>();
+        services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
 
         services.AddSingleton<IJwtProvider, JwtProvider>();
 
         services.AddSingleton<IStorageService, MinioStorageService>();
+
+        services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
+        services.AddHttpContextAccessor();
 
         return services;
     }

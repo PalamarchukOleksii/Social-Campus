@@ -12,6 +12,15 @@ services:
     networks:
       - socialcampus-net
 
+  mailhog:
+    image: mailhog/mailhog
+    container_name: socialcampus-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - socialcampus-net
+
   minio:
     image: minio/minio
     container_name: socialcampus-minio
@@ -31,7 +40,7 @@ services:
     image: minio/mc
     depends_on:
       - minio
-    entrypoint: ["/bin/sh", "-c"]
+    entrypoint: [ "/bin/sh", "-c" ]
     command: |
       "
       until mc alias set localminio http://minio:9000 minioadmin minioadmin; do
@@ -52,6 +61,7 @@ services:
 
 networks:
   socialcampus-net:
+
 
 volumes:
   mssql_data:

@@ -1,5 +1,6 @@
 ﻿using Domain.Models.CommentLikeModel;
 using Domain.Models.CommentModel;
+using Domain.Models.EmailVerificationTokenModel;
 using Domain.Models.FollowModel;
 using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
@@ -36,6 +37,7 @@ public class User
     public string LastName { get; private set; } = string.Empty;
     public string Bio { get; private set; } = string.Empty;
     public string ProfileImageUrl { get; private set; } = string.Empty;
+    public bool IsEmailVerified { get; private set; } = false;
     public RefreshTokenId RefreshTokenId { get; private set; } = new(Guid.Empty);
     public virtual RefreshToken? RefreshToken { get; }
     public virtual ICollection<Follow>? Followers { get; }
@@ -44,6 +46,7 @@ public class User
     public virtual ICollection<PublicationLike>? PublicationLikes { get; }
     public virtual ICollection<Comment>? Comments { get; }
     public virtual ICollection<CommentLike>? CommentLikes { get; }
+    public virtual ICollection<EmailVerificationToken>? EmailVerificationTokens { get; }
 
     public void SetRefreshTokenId(RefreshTokenId refreshTokenId)
     {
@@ -69,5 +72,10 @@ public class User
     public void UpdatePasswordHash(string passwordHash)
     {
         PasswordHash = passwordHash;
+    }
+
+    public void MakeEmailVerified()
+    {
+        IsEmailVerified = true;
     }
 }

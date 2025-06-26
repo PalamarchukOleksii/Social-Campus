@@ -1,5 +1,6 @@
 ﻿using Domain.Models.CommentLikeModel;
 using Domain.Models.CommentModel;
+using Domain.Models.EmailVerificationTokenModel;
 using Domain.Models.FollowModel;
 using Domain.Models.PublicationLikeModel;
 using Domain.Models.PublicationModel;
@@ -22,6 +23,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public required DbSet<CommentLike> CommentLikes { get; set; }
     public required DbSet<Tag> Tags { get; set; }
     public required DbSet<PublicationTag> PublicationTags { get; set; }
+    public required DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
