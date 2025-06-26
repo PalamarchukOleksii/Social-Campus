@@ -31,6 +31,8 @@ public static class DependencyInjection
 
         services.Configure<ApplicationUrlsOptions>(
             configuration.GetSection(ApplicationUrlsOptions.SectionName));
+        services.AddSingleton(sp =>
+            sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<ApplicationUrlsOptions>>().Value);
 
         services.AddEndpoints(Assembly.GetExecutingAssembly());
         services.AddClientCorsFromConfiguration(configuration);

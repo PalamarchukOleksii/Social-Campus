@@ -32,7 +32,7 @@ public class GenerateCommandHandler(
                 "Email.LinkGenerationFailed",
                 "Unable to generate email verification link"));
 
-        var messageBody = EmailTemplateHelpers.GetResetPasswordHtml(request.Email, verificationLink);
+        var messageBody = EmailTemplateHelpers.GetVerifyEmailHtml(request.Email, verificationLink);
         await emailService.SendEmailAsync(request.Email, "Password Reset Request", messageBody, true);
 
         return Result.Success();

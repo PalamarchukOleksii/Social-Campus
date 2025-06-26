@@ -11,10 +11,7 @@ public class LoginCommandHandler(
     IJwtProvider jwtProvider,
     IUserRepository userRepository,
     IRefreshTokenRepository tokenRepository,
-    IHasher hasher,
-    IEmailService emailService,
-    IEmailVerificationTokenRepository emailVerificationTokenRepository,
-    IEmailLinkFactory emailLinkFactory) : ICommandHandler<LoginCommand, UserLoginRefreshDto>
+    IHasher hasher) : ICommandHandler<LoginCommand, UserLoginRefreshDto>
 {
     public async Task<Result<UserLoginRefreshDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {

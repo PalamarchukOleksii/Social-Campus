@@ -9,9 +9,7 @@ namespace Application.Users.Commands.Register;
 public class RegisterCommandHandler(
     IUserRepository userRepository,
     IHasher hasher,
-    IEmailService emailService,
-    IEmailVerificationTokenRepository emailVerificationTokenRepository,
-    IEmailLinkFactory emailLinkFactory) : ICommandHandler<RegisterCommand>
+    IEmailVerificationTokenRepository emailVerificationTokenRepository) : ICommandHandler<RegisterCommand>
 {
     public async Task<Result> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {

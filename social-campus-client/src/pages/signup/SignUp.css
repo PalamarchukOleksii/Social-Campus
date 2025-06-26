@@ -5,36 +5,33 @@
   align-items: center;
 }
 
-.left-half,
-.right-half {
+.signup-left-panel,
+.signup-right-panel {
   flex: 1;
   display: flex;
   align-items: center;
 }
 
-.left-half {
-  justify-content: flex-end;
+.signup-left-panel {
   justify-content: center;
-  align-items: center;
   padding-right: 50px;
 }
 
-.right-half {
-  justify-content: flex-start;
+.signup-right-panel {
   justify-content: center;
-  align-items: center;
   padding-left: 50px;
 }
 
-.logo {
+.signup-logo {
   width: 350px;
   height: auto;
   padding: 0;
   margin: 0;
 }
 
-.signup {
+.signup-form-card {
   width: 400px;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,7 +44,18 @@
   gap: 10px;
 }
 
-.text-input {
+.signup-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.signup-loading-wrapper {
+  padding: 62px 0;
+}
+
+.signup-input {
   width: 100%;
   padding: 12px;
   margin: 10px 0;
@@ -57,33 +65,28 @@
   font-size: 16px;
 }
 
-.top-text {
+.signup-title {
   font-size: 24px;
   margin: 0;
   padding: 0;
 }
 
-.secondary-text {
-  font-size: 18px;
-  margin: 0;
-  padding: 0;
-}
-
-.signup-button,
-.signin-button {
+.signup-button {
   font-size: 16px;
   margin: 5px 0;
 }
 
-.show-password-check {
+.signup-show-password-label {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
   margin: 5px 0;
+  font-size: 15px;
+  cursor: pointer;
 }
 
-.show-pswd-checkbox {
+.signup-checkbox {
   padding: 0;
   margin: 0;
   width: auto;
@@ -96,21 +99,21 @@
     gap: 20px;
   }
 
-  .left-half,
-  .right-half {
+  .signup-left-panel,
+  .signup-right-panel {
     align-items: center;
     justify-content: center;
     padding: 0;
     margin: 0;
   }
 
-  .logo {
+  .signup-logo {
     width: 100px;
   }
 }
 
 @media (max-width: 500px) {
-  .signup {
+  .signup-form-card {
     width: auto;
   }
 }

@@ -20,9 +20,11 @@ public class VerifyEndpoint : BaseEndpoint, IEndpoint
                     var commandRequest = new VerifyCommand(token, email);
                     var response = await sender.Send(commandRequest);
 
+                    var uri = new Uri(new Uri(applicationUrls.Frontend.BaseUrl.TrimEnd('/')),
+                        applicationUrls.Frontend.SignUpPath.TrimStart('/'));
                     if (response.IsSuccess)
                     {
-                        var successUrl = QueryHelpers.AddQueryString(applicationUrls.Frontend.BaseUrl,
+                        var successUrl = QueryHelpers.AddQueryString(uri.ToString(),
                             new Dictionary<string, string>
                             {
                                 ["token"] = token.ToString(),
@@ -32,7 +34,7 @@ public class VerifyEndpoint : BaseEndpoint, IEndpoint
                         return Results.Redirect(successUrl);
                     }
 
-                    var failureUrl = QueryHelpers.AddQueryString(applicationUrls.Frontend.BaseUrl,
+                    var failureUrl = QueryHelpers.AddQueryString(uri.ToString(),
                         new Dictionary<string, string>
                         {
                             ["errorMsg"] = response.Error.Message

@@ -119,7 +119,6 @@ public static class EmailTemplateHelpers
                      </div>
 
                      <div class="footer">
-                         <p>This email was sent to {{WebUtility.HtmlEncode(email)}}.</p>
                          <p>If you didn't request this, you can safely ignore it.</p>
                          <p>&copy; {{WebUtility.HtmlEncode(DateTime.Now.Year.ToString())}} Social Campus. All rights reserved.</p>
                      </div>
