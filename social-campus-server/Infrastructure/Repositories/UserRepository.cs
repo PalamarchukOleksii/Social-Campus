@@ -124,4 +124,11 @@ public class UserRepository(
         user.MakeEmailVerified();
         context.Users.Update(user);
     }
+
+    public void UpdatePassword(User user, string passwordHash)
+    {
+        user.UpdatePasswordHash(passwordHash);
+
+        context.Update(user);
+    }
 }
