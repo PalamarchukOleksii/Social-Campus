@@ -27,9 +27,6 @@ if (app.Environment.IsDevelopment())
     await app.EnsureDatabaseCreatedAsync();
 }
 
-app.UseStaticFiles();
-app.MapRazorPages();
-
 app.UseHttpsRedirection();
 
 app.UseCors("ClientCors");
