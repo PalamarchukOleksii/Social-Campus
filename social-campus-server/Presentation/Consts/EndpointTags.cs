@@ -10,4 +10,5 @@ public static class EndpointTags
     public const string Comments = "comments";
     public const string CommentLikes = "commentlikes";
     public const string Tags = "tags";
+    public const string ResetPasswordTokens = "resetpasswordtokens";
 }

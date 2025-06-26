@@ -23,6 +23,6 @@ public class VerifyEmailEndpoint : BaseEndpoint, IEndpoint
                 return Results.Redirect($"/VerifyEmailFailed?error={errorMsg}");
             })
             .WithTags(EndpointTags.Users)
-            .WithName(VerifyConsts.VerifyEmail);
+            .WithName(LinkConsts.VerifyEmail);
     }
 }
