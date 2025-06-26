@@ -14,9 +14,7 @@ public class GetFollowingByLoginEndpoint : BaseEndpoint, IEndpoint
                 GetFollowingListQuery queryRequest = new(login);
 
                 var response = await sender.Send(queryRequest);
-                if (response.IsFailure) return HandleFailure(response);
-
-                return Results.Ok(response.Value);
+                return response.IsFailure ? HandleFailure(response) : Results.Ok(response.Value);
             })
             .WithTags(EndpointTags.Follows)
             .RequireAuthorization();
