@@ -15,7 +15,7 @@ public class ResetPasswordTokenRepository(ApplicationDbContext context) : IReset
         return await context.ResetPasswordTokens.FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task<ResetPasswordToken> AddAsync(UserId userPasswordToResetId)
+    public async Task<ResetPasswordToken> AddAsync(UserId userPasswordToResetId, string tokenHash)
     {
         var existingToken = await context.ResetPasswordTokens
             .FirstOrDefaultAsync(t => t.UserId == userPasswordToResetId);
@@ -23,7 +23,7 @@ public class ResetPasswordTokenRepository(ApplicationDbContext context) : IReset
         if (existingToken != null)
             context.ResetPasswordTokens.Remove(existingToken);
 
-        var token = new ResetPasswordToken(userPasswordToResetId, ExpirationInSeconds);
+        var token = new ResetPasswordToken(userPasswordToResetId, ExpirationInSeconds, tokenHash);
         await context.ResetPasswordTokens.AddAsync(token);
 
         return token;

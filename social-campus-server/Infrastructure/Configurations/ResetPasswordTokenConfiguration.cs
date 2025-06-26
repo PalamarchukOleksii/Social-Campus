@@ -19,6 +19,10 @@ public class ResetPasswordTokenConfiguration : IEntityTypeConfiguration<ResetPas
             .HasConversion(userId => userId.Value, value => new UserId(value))
             .IsRequired();
 
+        builder.Property(u => u.TokenHash)
+            .IsRequired()
+            .HasMaxLength(128);
+
         builder.Property(vt => vt.CreatedOnUtc)
             .IsRequired();
 
