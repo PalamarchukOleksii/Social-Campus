@@ -17,7 +17,10 @@ public class VerifyEmailEndpoint : BaseEndpoint, IEndpoint
 
                 var response = await sender.Send(commandRequest);
 
-                return response.IsSuccess ? Results.Ok() : HandleFailure(response);
+                if (response.IsSuccess) return Results.Redirect("/VerifyEmailSuccess");
+
+                var errorMsg = Uri.EscapeDataString(response.Error.Message);
+                return Results.Redirect($"/VerifyEmailFailed?error={errorMsg}");
             })
             .WithTags(EndpointTags.Users)
             .WithName(VerifyConsts.VerifyEmail);
