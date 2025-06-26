@@ -21,7 +21,7 @@ public static class DatabaseSeeder
 
         Randomizer.Seed = new Random(42);
 
-        var passwordHasher = serviceCollection.BuildServiceProvider().GetRequiredService<IPasswordHasher>();
+        var passwordHasher = serviceCollection.BuildServiceProvider().GetRequiredService<IHasher>();
         var users = await UserFaker.GenerateAsync(20, passwordHasher);
         await context.Set<User>().AddRangeAsync(users, ct);
         await context.SaveChangesAsync(ct);
