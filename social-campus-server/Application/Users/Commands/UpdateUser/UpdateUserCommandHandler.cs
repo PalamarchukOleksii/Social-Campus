@@ -28,12 +28,6 @@ public class UpdateUserCommandHandler(
                 "User.NoUpdatePermission",
                 $"User with UserId {request.CallerId.Value} do not have permission to update profile of user with UserId {request.UserId.Value}"));
 
-        var isEmailUnique = await userRepository.IsEmailUniqueAsync(request.Email);
-        if (!isEmailUnique && request.Email != user.Email)
-            return Result.Failure(new Error(
-                "User.NotUniqueEmail",
-                $"User with email {request.Email} has already exist"));
-
         var isLoginUnique = await userRepository.IsLoginUniqueAsync(request.Login);
         if (!isLoginUnique && request.Login != user.Login)
             return Result.Failure(new Error(
@@ -80,7 +74,6 @@ public class UpdateUserCommandHandler(
         userRepository.Update(
             user,
             request.Login,
-            request.Email,
             request.FirstName,
             request.LastName,
             request.Bio,

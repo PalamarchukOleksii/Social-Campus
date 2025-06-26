@@ -62,10 +62,9 @@ public class UserRepository(
         return !await context.Users.AnyAsync(u => u.Login == login);
     }
 
-    public void Update(User user, string login, string email, string firstName, string lastName, string bio,
-        string profileImageUrl)
+    public void Update(User user, string login, string firstName, string lastName, string bio, string profileImageUrl)
     {
-        user.Update(login, email, firstName, lastName, bio, profileImageUrl);
+        user.Update(login, firstName, lastName, bio, profileImageUrl);
 
         context.Update(user);
     }

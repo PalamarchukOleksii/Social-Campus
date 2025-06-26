@@ -57,11 +57,9 @@ public class User
         RefreshTokenId = new RefreshTokenId(Guid.Empty);
     }
 
-    public void Update(string login, string email, string firstName, string lastName, string bio,
-        string profileImageUrl)
+    public void Update(string login, string firstName, string lastName, string bio, string profileImageUrl)
     {
         Login = login;
-        Email = email;
         FirstName = firstName;
         LastName = lastName;
         Bio = bio;

@@ -14,12 +14,6 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
             .NotEmpty().WithMessage("UserId is required")
             .Must(id => id.Value != Guid.Empty).WithMessage("UserId must be a valid GUID");
 
-        RuleFor(u => u.Email)
-            .NotEmpty().WithMessage("Email is required")
-            .EmailAddress().WithMessage("A valid email address is required")
-            .WithMessage("Email domain must be one of the allowed domains")
-            .MaximumLength(100).WithMessage("Email need to be shorter than 100 characters");
-
         RuleFor(u => u.Login)
             .NotEmpty().WithMessage("Login is required")
             .MaximumLength(50).WithMessage("Login need to be shorter than 50 characters");
