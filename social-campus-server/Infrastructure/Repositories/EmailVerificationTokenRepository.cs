@@ -8,22 +8,22 @@ namespace Infrastructure.Repositories;
 
 public class EmailVerificationTokenRepository(ApplicationDbContext context) : IEmailVerificationTokenRepository
 {
-    private const int ExpirationInSeconds = 86400;
+    private const int ExpirationInSeconds = 600;
 
-    public async Task<EmailVerificationToken?> GetAsync(EmailVerificationTokenId id)
+    public async Task<EmailVerificationToken?> GetByEmailAsync(string email)
     {
-        return await context.EmailVerificationTokens.FirstOrDefaultAsync(e => e.Id == id);
+        return await context.EmailVerificationTokens.FirstOrDefaultAsync(e => e.Email == email);
     }
 
-    public async Task<EmailVerificationToken> AddAsync(UserId userEmailToVerifyId)
+    public async Task<EmailVerificationToken> AddAsync(string email, string tokenHash)
     {
         var existingToken = await context.EmailVerificationTokens
-            .FirstOrDefaultAsync(t => t.UserId == userEmailToVerifyId);
+            .FirstOrDefaultAsync(t => t.Email == email);
 
         if (existingToken != null)
             context.EmailVerificationTokens.Remove(existingToken);
 
-        var token = new EmailVerificationToken(userEmailToVerifyId, ExpirationInSeconds);
+        var token = new EmailVerificationToken(email, tokenHash, ExpirationInSeconds);
         await context.EmailVerificationTokens.AddAsync(token);
 
         return token;

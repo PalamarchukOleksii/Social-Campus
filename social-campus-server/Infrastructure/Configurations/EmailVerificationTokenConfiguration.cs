@@ -15,9 +15,13 @@ public class EmailVerificationTokenConfiguration : IEntityTypeConfiguration<Emai
             .HasConversion(userId => userId.Value, value => new EmailVerificationTokenId(value))
             .IsRequired();
 
-        builder.Property(vt => vt.UserId)
-            .HasConversion(userId => userId.Value, value => new UserId(value))
-            .IsRequired();
+        builder.Property(u => u.Email)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Property(u => u.TokenHash)
+            .IsRequired()
+            .HasMaxLength(128);
 
         builder.Property(vt => vt.CreatedOnUtc)
             .IsRequired();
@@ -26,10 +30,6 @@ public class EmailVerificationTokenConfiguration : IEntityTypeConfiguration<Emai
             .IsRequired();
 
         builder.HasIndex(vt => vt.Id).IsUnique();
-        builder.HasIndex(vt => vt.UserId);
-
-        builder.HasOne(vt => vt.User)
-            .WithMany(u => u.EmailVerificationTokens)
-            .HasForeignKey(vt => vt.UserId);
+        builder.HasIndex(vt => vt.Email);
     }
 }
