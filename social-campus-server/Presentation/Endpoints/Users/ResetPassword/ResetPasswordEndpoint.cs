@@ -13,7 +13,7 @@ public class ResetPasswordEndpoint : BaseEndpoint, IEndpoint
         app.MapPost("users/reset-password", async (ISender sender, ResetPasswordRequest request) =>
             {
                 var commandRequest = new ResetPasswordCommand(request.ResetPasswordToken,
-                    new UserId(request.ResetPasswordToken), request.NewPassword);
+                    new UserId(request.UserId), request.NewPassword);
 
                 var response = await sender.Send(commandRequest);
 

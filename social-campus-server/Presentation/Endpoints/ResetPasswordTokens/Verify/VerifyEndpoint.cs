@@ -14,10 +14,21 @@ public class VerifyEndpoint : BaseEndpoint, IEndpoint
         app.MapGet("reset-password-tokens/verify", async (ISender sender, Guid token, Guid userId) =>
             {
                 var commandRequest = new VerifyCommand(token, new UserId(userId));
-
                 var response = await sender.Send(commandRequest);
 
-                return response.IsSuccess ? Results.Ok() : HandleFailure(response);
+                string baseUrl = "http://localhost:3000/forgot-password";
+
+                if (response.IsSuccess)
+                {
+                    var successUrl = $"{baseUrl}?token={token}&userId={userId}";
+                    return Results.Redirect(successUrl);
+                }
+                else
+                {
+                    var error = Uri.EscapeDataString(response.Error.Message);
+                    var failureUrl = $"{baseUrl}?errorMsg={error}";
+                    return Results.Redirect(failureUrl);
+                }
             })
             .WithTags(EndpointTags.ResetPasswordTokens)
             .WithName(LinkConsts.ResetPassword);

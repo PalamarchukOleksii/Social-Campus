@@ -27,11 +27,18 @@ import PrivateChat from "./pages/privateChat/PrivateChat";
 import RequireAuth from "./components/requireAuth/RequireAuth";
 import PersistLogin from "./components/persistLogin/PersistLogin";
 import ProtectEditProfile from "./components/protectEditProfile/ProtectEditProfile";
+import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
 
 function App() {
   const location = useLocation();
 
-  const authorizePages = [ROUTES.LANDING, ROUTES.SIGN_IN, ROUTES.SIGN_UP];
+  const authorizePages = [
+    ROUTES.LANDING,
+    ROUTES.SIGN_IN,
+    ROUTES.SIGN_UP,
+    ROUTES.FORGOT_PASSWORD,
+  ];
+
   const authorizedHorizontalRecommendations = [
     ROUTES.HOME,
     ROUTES.SEARCH,
@@ -93,6 +100,7 @@ function App() {
             <Route exact path={ROUTES.LANDING} element={<Landing />} />
             <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
             <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+            <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
 
             <Route element={<PersistLogin />}>
               <Route element={<RequireAuth />}>
