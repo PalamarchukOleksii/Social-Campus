@@ -2,6 +2,7 @@
 using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
 using Application.Dtos;
+using Application.Helpers;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
 
@@ -39,7 +40,7 @@ public class LoginCommandHandler(
                     "Email.LinkGenerationFailed",
                     "Unable to generate email verification link"));
 
-            var messageBody = $"To verify your email address <a href='{verificationLink}'>click here</a>";
+            var messageBody = EmailTemplateHelpers.GetVerifyEmailHtml(user.FirstName, verificationLink);
             await emailService.SendEmailAsync(user.Email, "Resend Email Verification", messageBody, true);
 
             return Result.Failure<UserLoginRefreshDto>(new Error(

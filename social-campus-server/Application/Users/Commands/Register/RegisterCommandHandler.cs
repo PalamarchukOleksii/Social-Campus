@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions.Email;
 using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
+using Application.Helpers;
 using Domain.Abstractions.Repositories;
 using Domain.Models.UserModel;
 using Domain.Shared;
@@ -41,7 +42,7 @@ public class RegisterCommandHandler(
                 "Email.LinkGenerationFailed",
                 "Unable to generate email verification link"));
 
-        var messageBody = $"To verify your email address <a href='{verificationLink}'>click here</a>";
+        var messageBody = EmailTemplateHelpers.GetVerifyEmailHtml(registeredUser.FirstName, verificationLink);
         await emailService.SendEmailAsync(request.Email, "Email verification for Social-Campus", messageBody, true);
 
         return Result.Success();
