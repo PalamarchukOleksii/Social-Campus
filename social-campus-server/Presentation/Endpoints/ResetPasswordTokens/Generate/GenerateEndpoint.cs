@@ -18,7 +18,6 @@ public class GenerateEndpoint : BaseEndpoint, IEndpoint
 
                 return response.IsSuccess ? Results.Ok() : HandleFailure(response);
             })
-            .WithTags(EndpointTags.ResetPasswordTokens)
-            .WithName(LinkConsts.ResetPassword);
+            .WithTags(EndpointTags.ResetPasswordTokens);
     }
 }

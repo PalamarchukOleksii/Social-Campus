@@ -22,10 +22,11 @@ public class GenerateCommandHandler(
                 "User.NotFound",
                 $"User with email {request.Email} was not found"));
 
-        var tokenHash = await hasher.HashAsync(Guid.NewGuid().ToString());
-        var resetPasswordToken = await resetPasswordTokenRepository.AddAsync(user.Id, tokenHash);
+        var token = Guid.NewGuid();
+        var tokenHash = await hasher.HashAsync(token.ToString());
+        await resetPasswordTokenRepository.AddAsync(user.Id, tokenHash);
 
-        var verificationLink = emailLinkFactory.CreateResetPasswordLink(resetPasswordToken.Id, user.Id);
+        var verificationLink = emailLinkFactory.CreateResetPasswordLink(token, user.Id);
         if (verificationLink is null)
             return Result.Failure(new Error(
                 "Email.LinkGenerationFailed",
