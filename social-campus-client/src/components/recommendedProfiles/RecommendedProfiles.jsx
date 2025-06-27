@@ -36,19 +36,19 @@ function RecommendedProfiles() {
     return <Loading />;
   }
 
-  if (!recommendationList || recommendationList.length === 0) {
-    return (
-      <h3 className="not-found-text general-text">Recommendations not found</h3>
-    );
-  }
-
   return (
     <div className="recommendation">
       <h2 className="text general-text">Recommendations</h2>
       <div className="list-container">
-        {recommendationList.map((profile) => (
-          <ShortProfile key={profile.id.value} userId={profile.id.value} />
-        ))}
+        {!recommendationList || recommendationList.length === 0 ? (
+          <h3 className="not-found-text general-text">
+            No recommendations found
+          </h3>
+        ) : (
+          recommendationList.map((profile) => (
+            <ShortProfile key={profile.id.value} userId={profile.id.value} />
+          ))
+        )}
       </div>
     </div>
   );
