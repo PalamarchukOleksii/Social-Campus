@@ -21,7 +21,7 @@ public class ResetPasswordTokenConfiguration : IEntityTypeConfiguration<ResetPas
 
         builder.Property(u => u.TokenHash)
             .IsRequired()
-            .HasMaxLength(128);
+            .HasMaxLength(160);
 
         builder.Property(vt => vt.CreatedOnUtc)
             .IsRequired();
