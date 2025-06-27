@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Presentation.Extensions;
-using Presentation.Urls;
+using Presentation.Options;
 
 namespace Presentation;
 

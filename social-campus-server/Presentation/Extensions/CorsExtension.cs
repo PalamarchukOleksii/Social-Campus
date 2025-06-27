@@ -1,4 +1,4 @@
-using Presentation.Urls;
+using Presentation.Options;
 
 namespace Presentation.Extensions;
 
@@ -28,14 +28,11 @@ public static class CorsExtension
     public static IServiceCollection AddClientCorsFromConfiguration(this IServiceCollection services,
         IConfiguration configuration, string policyName = "ClientCors")
     {
-        var corsOrigins = configuration
-            .GetSection($"{ApplicationUrlsOptions.SectionName}:Cors:AllowedOrigins")
-            .Get<string[]>();
+        var clientBaseUrl = configuration["ApplicationUrls:ClientBaseUrl"];
 
-        if (corsOrigins == null || corsOrigins.Length == 0)
-            throw new InvalidOperationException(
-                "CORS origins must be configured in ApplicationUrls:Cors:AllowedOrigins");
+        if (string.IsNullOrWhiteSpace(clientBaseUrl))
+            throw new InvalidOperationException("ClientBaseUrl must be configured in ApplicationUrls:ClientBaseUrl");
 
-        return services.AddClientCors(policyName, corsOrigins);
+        return services.AddClientCors(policyName, [clientBaseUrl]);
     }
 }
