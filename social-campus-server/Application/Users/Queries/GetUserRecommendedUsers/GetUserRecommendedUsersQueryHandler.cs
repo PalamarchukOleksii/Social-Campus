@@ -22,23 +22,38 @@ public class GetUserRecommendedUsersQueryHandler(IUserRepository userRepository,
 
         var followingIds = following.Select(x => x.Id).ToHashSet();
 
-        var followersNotFollowedBack = followers.Where(f => !followingIds.Contains(f.Id)).ToList();
-
         const int recommendationsCount = 5;
         var random = new Random();
 
-        followersNotFollowedBack = followersNotFollowedBack.Count switch
+        var followersNotFollowedBack = followers
+            .Where(f => !followingIds.Contains(f.Id) && f.Id != user.Id)
+            .ToList();
+
+        var recommendedUsers = followersNotFollowedBack
+            .OrderBy(_ => random.Next())
+            .Take(recommendationsCount)
+            .ToList();
+
+        if (recommendedUsers.Count < recommendationsCount)
         {
-            0 => (await userRepository.GetRandomUsersAsync(recommendationsCount)).ToList(),
-            > recommendationsCount => followersNotFollowedBack.OrderBy(_ => random.Next())
-                .Take(recommendationsCount)
-                .ToList(),
-            _ => followersNotFollowedBack
-        };
+            var needed = recommendationsCount - recommendedUsers.Count;
+
+            var excludedIds = new HashSet<Guid>(recommendedUsers.Select(u => u.Id.Value)) { user.Id.Value };
+
+            var randomUsers =
+                await userRepository.GetRandomUsersAsync(recommendationsCount * 2);
+            var additionalUsers = randomUsers
+                .Where(u => !excludedIds.Contains(u.Id.Value))
+                .DistinctBy(u => u.Id)
+                .Take(needed)
+                .ToList();
+
+            recommendedUsers.AddRange(additionalUsers);
+        }
 
         var recommendationsDto = new List<UserDto>();
 
-        foreach (var recommendedUser in followersNotFollowedBack)
+        foreach (var recommendedUser in recommendedUsers)
         {
             var userFollowers = await followRepository.GetFollowersUsersByUserIdAsync(recommendedUser.Id);
 
