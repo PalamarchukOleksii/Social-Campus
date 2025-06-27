@@ -5,13 +5,20 @@ using Application.Abstractions.Security;
 using Application.Dtos;
 using Domain.Models.UserModel;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Security;
 
-public class JwtProvider(IConfiguration configuration) : IJwtProvider
+public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 {
+    private readonly string _secretKey = options.Value.SecretKey;
+    private readonly string _issuer = options.Value.Issuer;
+    private readonly string _audience = options.Value.Audience;
+    private readonly int _accessTokenExpirationInSeconds = options.Value.AccessTokenExpirationInSeconds;
+    private readonly int _refreshTokenExpirationInSeconds = options.Value.RefreshTokenExpirationInSeconds;
+
     public TokensDto GenerateTokens(User user)
     {
         var accessToken = GenerateAccessToken(user);
@@ -20,16 +27,15 @@ public class JwtProvider(IConfiguration configuration) : IJwtProvider
         return new TokensDto
         {
             AccessToken = accessToken,
-            AccessTokenExpirationInSeconds = configuration.GetValue<int>("Jwt:AccessTokenExpirationInSeconds"),
+            AccessTokenExpirationInSeconds = _accessTokenExpirationInSeconds,
             RefreshToken = refreshToken,
-            RefreshTokenExpirationInSeconds = configuration.GetValue<int>("Jwt:RefreshTokenExpirationInSeconds")
+            RefreshTokenExpirationInSeconds = _refreshTokenExpirationInSeconds
         };
     }
 
     public async Task<ClaimsPrincipal> GetPrincipalFromExpiredTokenAsync(string token)
     {
-        var secretKey = configuration["Jwt:SecretKey"]!;
-        SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(secretKey));
+        SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_secretKey));
 
         TokenValidationParameters tokenValidationParameters = new()
         {
@@ -37,8 +43,8 @@ public class JwtProvider(IConfiguration configuration) : IJwtProvider
             ValidateAudience = true,
             ValidateLifetime = false,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = configuration["Jwt:Issuer"],
-            ValidAudience = configuration["Jwt:Audience"],
+            ValidIssuer = _issuer,
+            ValidAudience = _audience,
             IssuerSigningKey = securityKey,
             ClockSkew = TimeSpan.Zero
         };
@@ -53,8 +59,7 @@ public class JwtProvider(IConfiguration configuration) : IJwtProvider
 
     private string GenerateAccessToken(User user)
     {
-        var secretKey = configuration["Jwt:SecretKey"]!;
-        SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(secretKey));
+        SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_secretKey));
 
         SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha512);
 
@@ -66,10 +71,10 @@ public class JwtProvider(IConfiguration configuration) : IJwtProvider
                 new Claim(JwtRegisteredClaimNames.Name, user.Login),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email)
             ]),
-            Expires = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("Jwt:AccessTokenExpirationInSeconds")),
+            Expires = DateTime.UtcNow.AddSeconds(_accessTokenExpirationInSeconds),
             SigningCredentials = credentials,
-            Issuer = configuration["Jwt:Issuer"],
-            Audience = configuration["Jwt:Audience"]
+            Issuer = _issuer,
+            Audience = _audience
         };
 
         JsonWebTokenHandler handler = new();

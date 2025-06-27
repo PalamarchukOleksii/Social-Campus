@@ -37,11 +37,12 @@ public static class DependencyInjection
         services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
         services.AddScoped<IResetPasswordTokenRepository, ResetPasswordTokenRepository>();
 
+        services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
         services.AddSingleton<IJwtProvider, JwtProvider>();
 
         services.AddSingleton<IStorageService, MinioStorageService>();
 
-        services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+        services.Configure<EmailOptions>(configuration.GetSection("EmailOptions"));
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IEmailLinkFactory, EmailLinkFactory>();
         services.AddHttpContextAccessor();

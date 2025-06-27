@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Email;
 
-public class EmailService(IOptions<EmailSettings> options) : IEmailService
+public class EmailService(IOptions<EmailOptions> options) : IEmailService
 {
     private readonly string _smtpHost = options.Value.SmtpHost;
     private readonly string _smtpPass = options.Value.SmtpPass;
