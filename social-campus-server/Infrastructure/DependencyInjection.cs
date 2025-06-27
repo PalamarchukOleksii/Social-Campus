@@ -23,8 +23,8 @@ public static class DependencyInjection
         services.AddSingleton<IHasher, Hasher>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("LocalConnection"))
-                .UseAsyncSeeding(async (context, _, ct) => await DatabaseSeeder.SeedAsync(context, services, ct)));
+            options.UseSqlServer(configuration.GetConnectionString("LocalConnection")));
+        //.UseAsyncSeeding(async (context, _, ct) => await DatabaseSeeder.SeedAsync(context, services, ct)));
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
@@ -49,7 +49,7 @@ public static class DependencyInjection
         services.Configure<StorageOptions>(configuration.GetSection("Storage"));
         services.AddSingleton<IStorageService, StorageService>();
 
-        services.Configure<EmailOptions>(configuration.GetSection("EmailOptions"));
+        services.Configure<EmailOptions>(configuration.GetSection("Email"));
         services.AddScoped<IEmailService, EmailService>();
 
         services.AddScoped<IEmailLinkFactory, EmailLinkFactory>();
