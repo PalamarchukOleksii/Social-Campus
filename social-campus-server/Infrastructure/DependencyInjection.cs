@@ -19,6 +19,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<HasherOptions>(configuration.GetSection("Hasher"));
         services.AddSingleton<IHasher, Hasher>();
 
         services.AddDbContext<ApplicationDbContext>(options =>

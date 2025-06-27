@@ -1,22 +1,24 @@
 ﻿using System.Security.Cryptography;
 using Application.Abstractions.Security;
+using Infrastructure.Options;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Security;
 
-public class Hasher : IHasher
+public class Hasher(IOptions<HasherOptions> options) : IHasher
 {
-    private const int SaltSize = 16;
-    private const int HashSize = 32;
-    private const int Iterations = 210_000;
+    private readonly int _saltSize = options.Value.SaltSize;
+    private readonly int _hashSize = options.Value.HashSize;
+    private readonly int _iterations = options.Value.Iterations;
 
     private readonly HashAlgorithmName _algorithm = HashAlgorithmName.SHA512;
 
     public async Task<string> HashAsync(string value)
     {
-        var salt = RandomNumberGenerator.GetBytes(SaltSize);
+        var salt = RandomNumberGenerator.GetBytes(_saltSize);
 
         var hash = await Task.Run(() =>
-            Rfc2898DeriveBytes.Pbkdf2(value, salt, Iterations, _algorithm, HashSize));
+            Rfc2898DeriveBytes.Pbkdf2(value, salt, _iterations, _algorithm, _hashSize));
 
         return $"{Convert.ToHexString(hash)}-{Convert.ToHexString(salt)}";
     }
@@ -28,7 +30,7 @@ public class Hasher : IHasher
         var salt = Convert.FromHexString(parts[1]);
 
         var inputHash = await Task.Run(() =>
-            Rfc2898DeriveBytes.Pbkdf2(value, salt, Iterations, _algorithm, HashSize));
+            Rfc2898DeriveBytes.Pbkdf2(value, salt, _iterations, _algorithm, _hashSize));
 
         return CryptographicOperations.FixedTimeEquals(hash, inputHash);
     }
