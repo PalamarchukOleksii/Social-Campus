@@ -1,37 +1,33 @@
 using Application.Abstractions.Storage;
 using Domain.Models.UserModel;
+using Infrastructure.Options;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Minio;
 using Minio.DataModel.Args;
 
 namespace Infrastructure.Storage;
 
-public class MinioStorageService : IStorageService
+public class StorageService : IStorageService
 {
     private readonly string _bucketName;
     private readonly string _endpoint;
     private readonly IMinioClient _minioClient;
     private readonly bool _useSsl;
 
-    public MinioStorageService(IConfiguration configuration)
+    public StorageService(IOptions<StorageOptions> options)
     {
-        var minioOptions = configuration.GetSection("Minio");
-        _bucketName = minioOptions.GetValue<string>("BucketName")
-                      ?? throw new InvalidOperationException("Minio:BucketName configuration is missing.");
-
-        _endpoint = minioOptions.GetValue<string>("Endpoint")
-                    ?? throw new InvalidOperationException("Minio:Endpoint configuration is missing.");
-
-        _useSsl = minioOptions.GetValue<bool>("UseSSL");
+        _bucketName = options.Value.BucketName;
+        _endpoint = options.Value.Endpoint;
+        _useSsl = options.Value.UseSsl;
 
         _minioClient = new MinioClient()
             .WithEndpoint(_endpoint)
             .WithCredentials(
-                minioOptions.GetValue<string>("AccessKey"),
-                minioOptions.GetValue<string>("SecretKey"))
+                options.Value.AccessKey,
+                options.Value.SecretKey)
             .WithSSL(_useSsl)
             .Build();
-
         EnsureBucketExistsAsync().GetAwaiter().GetResult();
     }
 

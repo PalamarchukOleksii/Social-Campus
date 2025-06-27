@@ -5,6 +5,7 @@ using Application.Abstractions.Storage;
 using Domain.Abstractions.Repositories;
 using Infrastructure.Data;
 using Infrastructure.Email;
+using Infrastructure.Options;
 using Infrastructure.Repositories;
 using Infrastructure.Security;
 using Infrastructure.Storage;
@@ -40,10 +41,12 @@ public static class DependencyInjection
         services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
         services.AddSingleton<IJwtProvider, JwtProvider>();
 
-        services.AddSingleton<IStorageService, MinioStorageService>();
+        services.Configure<StorageOptions>(configuration.GetSection("Storage"));
+        services.AddSingleton<IStorageService, StorageService>();
 
         services.Configure<EmailOptions>(configuration.GetSection("EmailOptions"));
         services.AddScoped<IEmailService, EmailService>();
+
         services.AddScoped<IEmailLinkFactory, EmailLinkFactory>();
         services.AddHttpContextAccessor();
 

@@ -4,6 +4,7 @@ using System.Text;
 using Application.Abstractions.Security;
 using Application.Dtos;
 using Domain.Models.UserModel;
+using Infrastructure.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
