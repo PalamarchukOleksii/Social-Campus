@@ -2,13 +2,16 @@ using Domain.Abstractions.Repositories;
 using Domain.Models.ResetPasswordTokenModel;
 using Domain.Models.UserModel;
 using Infrastructure.Data;
+using Infrastructure.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Repositories;
 
-public class ResetPasswordTokenRepository(ApplicationDbContext context) : IResetPasswordTokenRepository
+public class ResetPasswordTokenRepository(ApplicationDbContext context, IOptions<ResetPasswordTokenOptions> options)
+    : IResetPasswordTokenRepository
 {
-    private const int ExpirationInSeconds = 600;
+    private readonly int _expirationInSeconds = options.Value.ExpirationInSeconds;
 
     public async Task<ResetPasswordToken?> GetByUserIdAsync(UserId userId)
     {
@@ -26,7 +29,7 @@ public class ResetPasswordTokenRepository(ApplicationDbContext context) : IReset
         if (existingToken != null)
             context.ResetPasswordTokens.Remove(existingToken);
 
-        var token = new ResetPasswordToken(userPasswordToResetId, ExpirationInSeconds, tokenHash);
+        var token = new ResetPasswordToken(userPasswordToResetId, _expirationInSeconds, tokenHash);
         await context.ResetPasswordTokens.AddAsync(token);
 
         return token;

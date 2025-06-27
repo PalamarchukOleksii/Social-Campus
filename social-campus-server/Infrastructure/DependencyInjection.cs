@@ -35,7 +35,11 @@ public static class DependencyInjection
         services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<IPublicationTagRepository, PublicationTagRepository>();
+
+        services.Configure<EmailVerificationTokenOptions>(configuration.GetSection("EmailVerificationToken"));
         services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
+
+        services.Configure<ResetPasswordTokenOptions>(configuration.GetSection("ResetPasswordToken"));
         services.AddScoped<IResetPasswordTokenRepository, ResetPasswordTokenRepository>();
 
         services.Configure<JwtOptions>(configuration.GetSection("Jwt"));

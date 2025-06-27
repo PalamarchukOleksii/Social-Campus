@@ -1,13 +1,17 @@
 using Domain.Abstractions.Repositories;
 using Domain.Models.EmailVerificationTokenModel;
 using Infrastructure.Data;
+using Infrastructure.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Repositories;
 
-public class EmailVerificationTokenRepository(ApplicationDbContext context) : IEmailVerificationTokenRepository
+public class EmailVerificationTokenRepository(
+    ApplicationDbContext context,
+    IOptions<EmailVerificationTokenOptions> options) : IEmailVerificationTokenRepository
 {
-    private const int ExpirationInSeconds = 600;
+    private readonly int _expirationInSeconds = options.Value.ExpirationInSeconds;
 
     public async Task<EmailVerificationToken?> GetByEmailAsync(string email)
     {
@@ -22,7 +26,7 @@ public class EmailVerificationTokenRepository(ApplicationDbContext context) : IE
         if (existingToken != null)
             context.EmailVerificationTokens.Remove(existingToken);
 
-        var token = new EmailVerificationToken(email, tokenHash, ExpirationInSeconds);
+        var token = new EmailVerificationToken(email, tokenHash, _expirationInSeconds);
         await context.EmailVerificationTokens.AddAsync(token);
 
         return token;
