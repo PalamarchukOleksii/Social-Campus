@@ -25,7 +25,7 @@ public static class UserFaker
         foreach (var user in users)
         {
             var hashedPassword = await hasher.HashAsync(user.PasswordHash);
-            user.UpdatePasswordHash(hashedPassword);
+            if (hashedPassword != null) user.UpdatePasswordHash(hashedPassword);
         }
 
         return users;

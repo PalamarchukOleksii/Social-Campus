@@ -39,6 +39,11 @@ public class ResetPasswordCommandHandler(
         resetPasswordTokenRepository.Remove(resetPasswordToken);
 
         var passwordHash = await hasher.HashAsync(request.NewPassword);
+        if (passwordHash is null)
+            return Result.Failure(new Error(
+                "Hasher.Failed",
+                "Unable to generate secure password hash"));
+
         userRepository.UpdatePassword(user, passwordHash);
 
         return Result.Success();

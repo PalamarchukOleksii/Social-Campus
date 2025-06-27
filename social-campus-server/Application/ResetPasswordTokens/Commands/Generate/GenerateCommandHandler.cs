@@ -24,6 +24,11 @@ public class GenerateCommandHandler(
 
         var token = Guid.NewGuid();
         var tokenHash = await hasher.HashAsync(token.ToString());
+        if (tokenHash is null)
+            return Result.Failure(new Error(
+                "Hasher.Failed",
+                "Unable to generate secure token hash"));
+
         await resetPasswordTokenRepository.AddAsync(user.Id, tokenHash);
 
         var verificationLink = emailLinkFactory.CreateResetPasswordLink(token, user.Id);

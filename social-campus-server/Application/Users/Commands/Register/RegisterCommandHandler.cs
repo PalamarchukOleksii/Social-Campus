@@ -45,6 +45,10 @@ public class RegisterCommandHandler(
                 $"User with login {request.Login} has already exist"));
 
         var passwordHash = await hasher.HashAsync(request.Password);
+        if (passwordHash is null)
+            return Result.Failure(new Error(
+                "Hasher.Failed",
+                "Unable to generate secure password hash"));
 
         await userRepository.AddAsync(request.Login, passwordHash, request.Email, request.FirstName, request.LastName);
 
