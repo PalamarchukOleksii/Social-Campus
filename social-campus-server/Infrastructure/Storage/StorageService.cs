@@ -35,11 +35,14 @@ public class StorageService : IStorageService
             Key = objectKey,
             InputStream = fileStream,
             ContentType = contentType,
-            AutoCloseStream = false
+            AutoCloseStream = true
         };
 
         await _s3Client.PutObjectAsync(request, cancellationToken);
-        return $"{_endpoint}/{_bucketName}/{objectKey}";
+        var adjustedEndpoint = _endpoint.Contains("/s3")
+            ? _endpoint.Replace("/s3", "/object/public")
+            : _endpoint;
+        return $"{adjustedEndpoint}/{_bucketName}/{objectKey}";
     }
 
     public async Task DeleteAsync(string fileUrl, CancellationToken cancellationToken = default)

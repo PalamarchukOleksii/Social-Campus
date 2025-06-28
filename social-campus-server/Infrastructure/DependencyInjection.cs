@@ -1,4 +1,5 @@
 ﻿using Amazon;
+using Amazon.Runtime;
 using Amazon.S3;
 using Application.Abstractions.Data;
 using Application.Abstractions.Email;
@@ -11,6 +12,7 @@ using Infrastructure.Options;
 using Infrastructure.Repositories;
 using Infrastructure.Security;
 using Infrastructure.Storage;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,10 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
                 .UseAsyncSeeding(async (context, _, ct) => await DatabaseSeeder.SeedAsync(context, services, ct)));
+
+        services.AddDataProtection()
+            .PersistKeysToDbContext<ApplicationDbContext>()
+            .SetApplicationName("SocialCampus");
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
@@ -60,13 +66,9 @@ public static class DependencyInjection
                 ServiceURL = options.Endpoint
             };
 
-            if (!string.IsNullOrWhiteSpace(options.Region))
-                config.RegionEndpoint = RegionEndpoint.GetBySystemName(options.Region);
+            var credentials = new BasicAWSCredentials(options.AccessKey, options.SecretKey);
 
-            return new AmazonS3Client(
-                options.AccessKey,
-                options.SecretKey,
-                config);
+            return new AmazonS3Client(credentials, config);
         });
         services.AddSingleton<IStorageService, StorageService>();
 

@@ -9,11 +9,13 @@ using Domain.Models.RefreshTokenModel;
 using Domain.Models.ResetPasswordTokenModel;
 using Domain.Models.TagModel;
 using Domain.Models.UserModel;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : DbContext(options), IDataProtectionKeyContext
 {
     public required DbSet<User> Users { get; set; }
     public required DbSet<RefreshToken> RefreshTokens { get; set; }
@@ -26,6 +28,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public required DbSet<PublicationTag> PublicationTags { get; set; }
     public required DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; }
     public required DbSet<ResetPasswordToken> ResetPasswordTokens { get; set; }
+    public required DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

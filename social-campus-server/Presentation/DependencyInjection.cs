@@ -35,7 +35,7 @@ public static class DependencyInjection
             sp.GetRequiredService<IOptions<ApplicationUrlsOptions>>().Value);
 
         services.AddEndpoints(Assembly.GetExecutingAssembly());
-        services.AddClientCorsFromConfiguration(configuration);
+        services.AddClientCors("ClientCors", configuration.GetValue<string>("ApplicationUrls:ClientBaseUrl")!);
 
         return services;
     }
