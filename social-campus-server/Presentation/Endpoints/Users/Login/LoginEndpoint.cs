@@ -23,7 +23,8 @@ public class LoginEndpoint : BaseEndpoint, IEndpoint
             {
                 HttpOnly = true,
                 IsEssential = true,
-                SameSite = SameSiteMode.Lax,
+                SameSite = SameSiteMode.None,
+                Secure = true,
                 Expires = DateTimeOffset.UtcNow.AddSeconds(tokens.RefreshTokenExpirationInSeconds)
             });
 

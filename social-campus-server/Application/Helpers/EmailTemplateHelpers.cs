@@ -20,10 +20,10 @@ public static class EmailTemplateHelpers
                     <p>To continue creating your account on Social Campus, please verify your email address by clicking the button below.</p>
 
                     <div>
-                        <a href="{WebUtility.HtmlEncode(verificationLink)}" style="padding:12px 24px; background-color:#b0b3b8; color:white; text-decoration:none; border-radius: 360px; display:inline-block;">Verify Email</a>
+                        <a href="{WebUtility.HtmlEncode(verificationLink)}">Verify Email</a>
                     </div>
 
-                    <div style="margin-top:40px; font-size:12px; color:#a0a3ab; text-align:center;">
+                    <div>
                         <p>If you didn't request this, you can safely ignore it.</p>
                         <p>&copy; {WebUtility.HtmlEncode(DateTime.Now.Year.ToString())} Social Campus. All rights reserved.</p>
                     </div>
@@ -49,10 +49,10 @@ public static class EmailTemplateHelpers
                         <p>We received a request to reset your password for your Social Campus account. If this was you, click the button below to set a new password.</p>
 
                         <div>
-                            <a href="{WebUtility.HtmlEncode(resetLink)}" style="padding:12px 24px; background-color:#b0b3b8; color:white; text-decoration:none; border-radius: 360px; display:inline-block;">Reset Password</a>
+                            <a href="{WebUtility.HtmlEncode(resetLink)}">Reset Password</a>
                         </div>
 
-                        <div style="margin-top:40px; font-size:12px; color:#a0a3ab; text-align:center;">
+                        <div>
                             <p>If you didn’t request a password reset, you can safely ignore this email.</p>
                             <p>&copy; {WebUtility.HtmlEncode(DateTime.Now.Year.ToString())} Social Campus. All rights reserved.</p>
                         </div>
