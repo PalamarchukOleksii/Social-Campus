@@ -1,4 +1,5 @@
-﻿using Application.Users.Commands.UpdateUser;
+﻿using Application.Dtos;
+using Application.Users.Commands.UpdateUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Abstractions;
@@ -12,6 +13,15 @@ public class UpdateUserEndpoint : BaseEndpoint, IEndpoint
     {
         app.MapPatch("users/update", async (ISender sender, [FromForm] UpdateUserRequest request) =>
             {
+                FileUploadDto? fileDto = null;
+                if (request.ProfileImage is not null)
+                    fileDto = new FileUploadDto
+                    {
+                        Content = request.ProfileImage.OpenReadStream(),
+                        FileName = request.ProfileImage.FileName,
+                        ContentType = request.ProfileImage.ContentType
+                    };
+
                 var commandRequest = new UpdateUserCommand(
                     request.CallerId,
                     request.UserId,
@@ -19,7 +29,7 @@ public class UpdateUserEndpoint : BaseEndpoint, IEndpoint
                     request.FirstName,
                     request.LastName,
                     request.Bio,
-                    request.ProfileImage);
+                    fileDto);
 
                 var response = await sender.Send(commandRequest);
 

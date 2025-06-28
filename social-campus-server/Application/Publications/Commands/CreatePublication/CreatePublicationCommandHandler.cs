@@ -24,7 +24,7 @@ public class CreatePublicationCommandHandler(
         var imageUrl = "";
         if (request.ImageData != null)
         {
-            await using var uploadStream = request.ImageData.OpenReadStream();
+            var uploadStream = request.ImageData.Content;
             imageUrl = await storageService.UploadAsync(
                 uploadStream,
                 request.CreatorId,

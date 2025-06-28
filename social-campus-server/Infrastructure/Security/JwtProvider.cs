@@ -5,7 +5,6 @@ using Application.Abstractions.Security;
 using Application.Dtos;
 using Domain.Models.UserModel;
 using Infrastructure.Options;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -14,11 +13,11 @@ namespace Infrastructure.Security;
 
 public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 {
-    private readonly string _secretKey = options.Value.SecretKey;
-    private readonly string _issuer = options.Value.Issuer;
-    private readonly string _audience = options.Value.Audience;
     private readonly int _accessTokenExpirationInSeconds = options.Value.AccessTokenExpirationInSeconds;
+    private readonly string _audience = options.Value.Audience;
+    private readonly string _issuer = options.Value.Issuer;
     private readonly int _refreshTokenExpirationInSeconds = options.Value.RefreshTokenExpirationInSeconds;
+    private readonly string _secretKey = options.Value.SecretKey;
 
     public TokensDto GenerateTokens(User user)
     {

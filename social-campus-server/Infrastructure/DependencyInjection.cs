@@ -1,4 +1,5 @@
-﻿using Amazon.S3;
+﻿using Amazon;
+using Amazon.S3;
 using Application.Abstractions.Data;
 using Application.Abstractions.Email;
 using Application.Abstractions.Security;
@@ -60,7 +61,7 @@ public static class DependencyInjection
             };
 
             if (!string.IsNullOrWhiteSpace(options.Region))
-                config.RegionEndpoint = Amazon.RegionEndpoint.GetBySystemName(options.Region);
+                config.RegionEndpoint = RegionEndpoint.GetBySystemName(options.Region);
 
             return new AmazonS3Client(
                 options.AccessKey,

@@ -40,7 +40,7 @@ public class UpdatePublicationCommandHandler(
         }
         else
         {
-            await using var newImageStream = request.ImageData.OpenReadStream();
+            var newImageStream = request.ImageData.Content;
             var newHash = await StorageHelpers.ComputeHashAsync(newImageStream);
             newImageStream.Position = 0;
 
@@ -59,7 +59,7 @@ public class UpdatePublicationCommandHandler(
             {
                 if (!string.IsNullOrEmpty(imageUrl)) await storageService.DeleteAsync(imageUrl, cancellationToken);
 
-                await using var uploadStream = request.ImageData.OpenReadStream();
+                var uploadStream = request.ImageData.Content;
                 imageUrl = await storageService.UploadAsync(
                     uploadStream,
                     publication.CreatorId,

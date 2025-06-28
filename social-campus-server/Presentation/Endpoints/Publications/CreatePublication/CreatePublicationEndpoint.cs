@@ -1,4 +1,5 @@
-﻿using Application.Publications.Commands.CreatePublication;
+﻿using Application.Dtos;
+using Application.Publications.Commands.CreatePublication;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Abstractions;
@@ -12,8 +13,17 @@ public class CreatePublicationEndpoint : BaseEndpoint, IEndpoint
     {
         app.MapPost("publications/create", async (ISender sender, [FromForm] CreatePublicationRequest request) =>
             {
+                FileUploadDto? fileDto = null;
+                if (request.ImageData is not null)
+                    fileDto = new FileUploadDto
+                    {
+                        Content = request.ImageData.OpenReadStream(),
+                        FileName = request.ImageData.FileName,
+                        ContentType = request.ImageData.ContentType
+                    };
+
                 CreatePublicationCommand commandRequest =
-                    new(request.Description, request.CreatorId, request.ImageData);
+                    new(request.Description, request.CreatorId, fileDto);
 
                 var response = await sender.Send(commandRequest);
 

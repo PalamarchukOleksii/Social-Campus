@@ -9,11 +9,11 @@ namespace Infrastructure.Email;
 
 public class EmailService(IOptions<EmailOptions> options) : IEmailService
 {
+    private readonly bool _enableSsl = options.Value.EnableSsl;
     private readonly string _smtpHost = options.Value.SmtpHost;
     private readonly string _smtpPass = options.Value.SmtpPass;
     private readonly int _smtpPort = options.Value.SmtpPort;
     private readonly string _smtpUser = options.Value.SmtpUser;
-    private readonly bool _enableSsl = options.Value.EnableSsl;
 
     public async Task SendEmailAsync(string messageReceiver, string messageSubject, string messageBody, bool isHtml)
     {

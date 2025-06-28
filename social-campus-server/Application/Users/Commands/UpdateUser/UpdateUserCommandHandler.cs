@@ -42,7 +42,7 @@ public class UpdateUserCommandHandler(
         }
         else
         {
-            await using var newImageStream = request.ProfileImage.OpenReadStream();
+            var newImageStream = request.ProfileImage.Content;
             var newHash = await StorageHelpers.ComputeHashAsync(newImageStream);
             newImageStream.Position = 0;
 
@@ -61,7 +61,7 @@ public class UpdateUserCommandHandler(
             {
                 if (!string.IsNullOrEmpty(imageUrl)) await storageService.DeleteAsync(imageUrl, cancellationToken);
 
-                await using var uploadStream = request.ProfileImage.OpenReadStream();
+                var uploadStream = request.ProfileImage.Content;
                 imageUrl = await storageService.UploadAsync(
                     uploadStream,
                     user.Id,

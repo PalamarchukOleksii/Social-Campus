@@ -8,10 +8,10 @@ namespace Infrastructure.Security;
 
 public class Hasher(IOptions<HasherOptions> options) : IHasher
 {
-    private readonly int _saltSize = options.Value.SaltSize;
+    private readonly HashAlgorithmName _algorithm = HashAlgorithmName.SHA512;
     private readonly int _hashSize = options.Value.HashSize;
     private readonly int _iterations = options.Value.Iterations;
-    private readonly HashAlgorithmName _algorithm = HashAlgorithmName.SHA512;
+    private readonly int _saltSize = options.Value.SaltSize;
 
     public async Task<string?> HashAsync(string value)
     {
