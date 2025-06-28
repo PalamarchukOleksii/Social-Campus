@@ -13,6 +13,7 @@ public class EmailService(IOptions<EmailOptions> options) : IEmailService
     private readonly string _smtpPass = options.Value.SmtpPass;
     private readonly int _smtpPort = options.Value.SmtpPort;
     private readonly string _smtpUser = options.Value.SmtpUser;
+    private readonly bool _enableSsl = options.Value.EnableSsl;
 
     public async Task SendEmailAsync(string messageReceiver, string messageSubject, string messageBody, bool isHtml)
     {
@@ -27,7 +28,7 @@ public class EmailService(IOptions<EmailOptions> options) : IEmailService
         mail.To.Add(messageReceiver);
 
         using var smtp = new SmtpClient(_smtpHost, _smtpPort);
-        smtp.EnableSsl = !string.IsNullOrEmpty(_smtpUser) && !string.IsNullOrEmpty(_smtpPass);
+        smtp.EnableSsl = _enableSsl;
 
         if (!string.IsNullOrEmpty(_smtpUser) && !string.IsNullOrEmpty(_smtpPass))
             smtp.Credentials = new NetworkCredential(_smtpUser, _smtpPass);

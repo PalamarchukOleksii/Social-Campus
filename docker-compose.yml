@@ -1,14 +1,15 @@
 services:
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: socialcampus-mssql
+  postgres:
+    image: postgres
+    container_name: socialcampus-postgres
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Passw0rd.
+      POSTGRES_DB: socialcampus_db
+      POSTGRES_USER: socialcampus_user
+      POSTGRES_PASSWORD: your_strong_password
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - mssql_data:/var/opt/mssql
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - socialcampus-net
 
@@ -64,5 +65,5 @@ networks:
 
 
 volumes:
-  mssql_data:
+  postgres_data:
   minio_data:

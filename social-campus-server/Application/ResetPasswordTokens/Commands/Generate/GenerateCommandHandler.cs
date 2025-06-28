@@ -38,7 +38,7 @@ public class GenerateCommandHandler(
                 "Unable to generate password reset link"));
 
         var messageBody = EmailTemplateHelpers.GetResetPasswordHtml(user.FirstName, verificationLink);
-        await emailService.SendEmailAsync(user.Email, "Password Reset Request", messageBody, true);
+        await emailService.SendEmailAsync(user.Email, "Password Reset", messageBody, true);
 
         return Result.Success();
     }
