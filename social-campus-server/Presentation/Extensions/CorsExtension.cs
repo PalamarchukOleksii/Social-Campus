@@ -1,6 +1,3 @@
-using Microsoft.Extensions.Options;
-using Presentation.Options;
-
 namespace Presentation.Extensions;
 
 public static class CorsExtension
