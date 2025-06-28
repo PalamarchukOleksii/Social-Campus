@@ -76,9 +76,22 @@ public class StorageService : IStorageService
     {
         var uri = new Uri(fileUrl);
         var path = uri.AbsolutePath.TrimStart('/');
+        
+        var bucketIndex = path.IndexOf(_bucketName + "/", StringComparison.Ordinal);
+        if (bucketIndex < 0)
+        {
+            return path;
+        }
+        
+        var objectKeyStart = bucketIndex + _bucketName.Length + 1;
 
-        return path.StartsWith($"{_bucketName}/") ? path[(_bucketName.Length + 1)..] : path;
+        if (objectKeyStart >= path.Length)
+            return string.Empty;
+
+        var objectKey = path[objectKeyStart..];
+        return Uri.UnescapeDataString(objectKey);
     }
+
 
     private async Task EnsureBucketExistsAsync()
     {
