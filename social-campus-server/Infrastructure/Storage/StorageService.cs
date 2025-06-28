@@ -1,10 +1,10 @@
+using Amazon.S3;
+using Amazon.S3.Model;
+using Amazon.S3.Util;
 using Application.Abstractions.Storage;
 using Domain.Models.UserModel;
 using Infrastructure.Options;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using Minio;
-using Minio.DataModel.Args;
 
 namespace Infrastructure.Storage;
 
@@ -12,22 +12,14 @@ public class StorageService : IStorageService
 {
     private readonly string _bucketName;
     private readonly string _endpoint;
-    private readonly IMinioClient _minioClient;
-    private readonly bool _useSsl;
+    private readonly IAmazonS3 _s3Client;
 
-    public StorageService(IOptions<StorageOptions> options)
+    public StorageService(IOptions<StorageOptions> options, IAmazonS3 s3Client)
     {
         _bucketName = options.Value.BucketName;
         _endpoint = options.Value.Endpoint;
-        _useSsl = options.Value.UseSsl;
+        _s3Client = s3Client;
 
-        _minioClient = new MinioClient()
-            .WithEndpoint(_endpoint)
-            .WithCredentials(
-                options.Value.AccessKey,
-                options.Value.SecretKey)
-            .WithSSL(_useSsl)
-            .Build();
         EnsureBucketExistsAsync().GetAwaiter().GetResult();
     }
 
@@ -35,47 +27,50 @@ public class StorageService : IStorageService
         CancellationToken cancellationToken = default)
     {
         var extension = contentType == "image/jpeg" ? ".jpg" : ".png";
-        var objectName = $"{contentFor}/{userId.Value}/{Guid.NewGuid()}{extension}";
+        var objectKey = $"{contentFor}/{userId.Value}/{Guid.NewGuid()}{extension}";
 
-        var putArgs = new PutObjectArgs()
-            .WithBucket(_bucketName)
-            .WithObject(objectName)
-            .WithStreamData(fileStream)
-            .WithObjectSize(fileStream.Length)
-            .WithContentType(contentType);
+        var request = new PutObjectRequest
+        {
+            BucketName = _bucketName,
+            Key = objectKey,
+            InputStream = fileStream,
+            ContentType = contentType,
+            AutoCloseStream = false
+        };
 
-        await _minioClient.PutObjectAsync(putArgs, cancellationToken);
-
-        var protocol = _useSsl ? "https" : "http";
-        return $"{protocol}://{_endpoint}/{_bucketName}/{objectName}";
+        await _s3Client.PutObjectAsync(request, cancellationToken);
+        return $"{_endpoint}/{_bucketName}/{objectKey}";
     }
 
     public async Task DeleteAsync(string fileUrl, CancellationToken cancellationToken = default)
     {
-        var objectName = ExtractObjectNameFromUrl(fileUrl);
+        var objectKey = ExtractObjectNameFromUrl(fileUrl);
 
-        var removeArgs = new RemoveObjectArgs()
-            .WithBucket(_bucketName)
-            .WithObject(objectName);
+        var request = new DeleteObjectRequest
+        {
+            BucketName = _bucketName,
+            Key = objectKey
+        };
 
-        await _minioClient.RemoveObjectAsync(removeArgs, cancellationToken);
+        await _s3Client.DeleteObjectAsync(request, cancellationToken);
     }
 
     public async Task DownloadAsync(string fileUrl, Stream destination, CancellationToken cancellationToken = default)
     {
-        var objectName = ExtractObjectNameFromUrl(fileUrl);
+        var objectKey = ExtractObjectNameFromUrl(fileUrl);
 
-        var args = new GetObjectArgs()
-            .WithBucket(_bucketName)
-            .WithObject(objectName)
-            .WithCallbackStream(stream => stream.CopyTo(destination));
+        var request = new GetObjectRequest
+        {
+            BucketName = _bucketName,
+            Key = objectKey
+        };
 
-        await _minioClient.GetObjectAsync(args, cancellationToken);
+        using var response = await _s3Client.GetObjectAsync(request, cancellationToken);
+        await response.ResponseStream.CopyToAsync(destination, cancellationToken);
     }
 
     private string ExtractObjectNameFromUrl(string fileUrl)
     {
-        if (!fileUrl.StartsWith("http://") && !fileUrl.StartsWith("https://")) return fileUrl;
         var uri = new Uri(fileUrl);
         var path = uri.AbsolutePath.TrimStart('/');
 
@@ -84,8 +79,10 @@ public class StorageService : IStorageService
 
     private async Task EnsureBucketExistsAsync()
     {
-        var found = await _minioClient.BucketExistsAsync(
-            new BucketExistsArgs().WithBucket(_bucketName));
-        if (!found) await _minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(_bucketName));
+        if (!await AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, _bucketName))
+            await _s3Client.PutBucketAsync(new PutBucketRequest
+            {
+                BucketName = _bucketName
+            });
     }
 }

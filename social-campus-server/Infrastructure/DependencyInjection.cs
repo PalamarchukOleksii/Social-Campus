@@ -1,4 +1,5 @@
-﻿using Application.Abstractions.Data;
+﻿using Amazon.S3;
+using Application.Abstractions.Data;
 using Application.Abstractions.Email;
 using Application.Abstractions.Security;
 using Application.Abstractions.Storage;
@@ -12,6 +13,7 @@ using Infrastructure.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure;
 
@@ -47,6 +49,24 @@ public static class DependencyInjection
         services.AddSingleton<IJwtProvider, JwtProvider>();
 
         services.Configure<StorageOptions>(configuration.GetSection("Storage"));
+        services.AddSingleton<IAmazonS3>(sp =>
+        {
+            var options = sp.GetRequiredService<IOptions<StorageOptions>>().Value;
+
+            var config = new AmazonS3Config
+            {
+                ForcePathStyle = true,
+                ServiceURL = options.Endpoint
+            };
+
+            if (!string.IsNullOrWhiteSpace(options.Region))
+                config.RegionEndpoint = Amazon.RegionEndpoint.GetBySystemName(options.Region);
+
+            return new AmazonS3Client(
+                options.AccessKey,
+                options.SecretKey,
+                config);
+        });
         services.AddSingleton<IStorageService, StorageService>();
 
         services.Configure<EmailOptions>(configuration.GetSection("Email"));
