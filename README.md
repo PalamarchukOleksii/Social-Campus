@@ -1,3 +1,9 @@
+<div align="center">
+   <p>
+   <img src="social-campus-client/public/android-chrome-512x512.png" alt="Social Campus Logo"/>
+   </p>
+</div>
+
 # Social Campus
 
 **Social Campus** is a social networking platform specifically designed for students, providing a safe environment for communication, content sharing, and event planning. The platform combines traditional social media features with additional tools for organizing student life, ranging from photo and video sharing to creating events and interest-based communities.
@@ -42,11 +48,11 @@ The target audience includes students, young people, and university staff aged 1
 
 ## Technologies Used
 
-- Frontend: React.js
-- Backend: C# ASP.NET Core
-- Database: MS SQL with Entity Framework
-- Object Storage: MinIO (S3-compatible)
-- Email Testing: MailHog (for local email testing and development)
+- **Frontend**: React.js
+- **Backend**: C# ASP.NET Core
+- **Database**: PostgreSQL with Entity Framework Core
+- **Object Storage**: MinIO
+- **Email Testing**: MailHog
 
 ## Installation
 
@@ -62,13 +68,14 @@ The target audience includes students, young people, and university staff aged 1
    cd Social-Campus
    ```
 
-3. Start required services (MS SQL Server, MinIO, and MailHog) using Docker Compose:
+3. Start required services (PostgreSQL, MinIO, and MailHog) using Docker Compose:
 
    ```bash
    docker-compose up -d
    ```
 
-   > **Note:** MailHog is included for capturing and testing emails locally without sending them.
+   > **Note:** All Docker Compose services are intended **only for local development and testing** purposes.
+   > MailHog is included for capturing and testing emails locally without sending them.
 
 4. Install dependencies for the frontend:
 
@@ -100,7 +107,13 @@ The target audience includes students, young people, and university staff aged 1
 
 ## Usage
 
-After starting both the frontend and backend servers, navigate to `http://localhost:3000` in your web browser to access the Social Campus platform.
+After starting both the frontend and backend servers, navigate to:
+
+```
+http://localhost:3000
+```
+
+to access the Social Campus platform.
 
 ### Accessing MailHog
 
@@ -118,7 +131,7 @@ Contributions are welcome! If you would like to contribute to the project, pleas
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
