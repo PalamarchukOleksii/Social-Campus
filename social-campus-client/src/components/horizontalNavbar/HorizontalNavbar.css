@@ -7,7 +7,10 @@
   padding: 10px 10px 15px 10px;
 }
 
-.horizontal-navbar * {
+.horizontal-navbar > .add-publish-short,
+.horizontal-navbar > .logout-icon,
+.horizontal-navbar > .nav-item,
+.horizontal-navbar > .create-publication-modal-overlay {
   margin: 0;
   padding: 0;
 }
