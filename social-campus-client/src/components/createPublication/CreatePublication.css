@@ -118,5 +118,7 @@
 @media (max-width: 630px) {
   .create-publication{
     width: calc(100vw - 80px);
+    padding: 20px;
+    margin: 10px;
   }
 }
