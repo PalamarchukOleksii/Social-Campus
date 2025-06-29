@@ -1,9 +1,3 @@
-<div align="center">
-   <p>
-   <img src="social-campus-client/public/android-chrome-512x512.png" alt="Social Campus Logo"/>
-   </p>
-</div>
-
 # Social Campus
 
 **Social Campus** is a social networking platform specifically designed for students, providing a safe environment for communication, content sharing, and event planning. The platform combines traditional social media features with additional tools for organizing student life, ranging from photo and video sharing to creating events and interest-based communities.
