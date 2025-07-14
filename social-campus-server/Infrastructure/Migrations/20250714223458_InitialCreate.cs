@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -64,7 +64,7 @@ namespace Infrastructure.Migrations
                     FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Bio = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    ProfileImageUrl = table.Column<string>(type: "text", nullable: true),
+                    ProfileImageObjectKey = table.Column<string>(type: "text", nullable: true),
                     RefreshTokenId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -101,7 +101,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
-                    ImageUrl = table.Column<string>(type: "text", nullable: true),
+                    ImageObjectKey = table.Column<string>(type: "text", nullable: true),
                     CreationDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uuid", nullable: false)
                 },

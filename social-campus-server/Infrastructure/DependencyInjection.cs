@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure;
@@ -23,12 +24,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<HasherOptions>(configuration.GetSection("Hasher"));
-        services.AddSingleton<IHasher, Hasher>();
-
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
-                .UseAsyncSeeding(async (context, _, ct) => await DatabaseSeeder.SeedAsync(context, services, ct)));
+        );
 
         services.AddDataProtection()
             .PersistKeysToDbContext<ApplicationDbContext>()
@@ -44,6 +42,9 @@ public static class DependencyInjection
         services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<IPublicationTagRepository, PublicationTagRepository>();
+        
+        services.Configure<HasherOptions>(configuration.GetSection("Hasher"));
+        services.AddSingleton<IHasher, Hasher>();
 
         services.Configure<EmailVerificationTokenOptions>(configuration.GetSection("EmailVerificationToken"));
         services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
