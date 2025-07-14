@@ -1,0 +1,46 @@
+name: Run EF-Migration on Merge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install EF Core CLI tools globally
+        run: dotnet tool install --global dotnet-ef --version 9.*
+
+      - name: Add dotnet tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Restore dependencies
+        run: dotnet restore ./social-campus-server
+
+      - name: Build project
+        run: dotnet build ./social-campus-server --configuration Release
+
+      - name: Create migration bundle
+        run: dotnet ef migrations bundle \
+          --project ./social-campus-server/Infrastructure \
+          --startup-project ./social-campus-server/Presentation \
+          --output ./ef-bundle \
+          --runtime linux-x64 \
+          --configuration Release
+
+      - name: Make migration bundle executable
+        run: chmod +x ./ef-bundle
+
+      - name: Run migration bundle to update database
+        env:
+          CONNECTION_STRING: ${{ secrets.PROD_CONNECTION_STRING }}
+        run: ./ef-bundle --connection "$CONNECTION_STRING"
