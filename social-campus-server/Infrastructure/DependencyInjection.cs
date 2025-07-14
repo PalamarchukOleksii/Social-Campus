@@ -28,10 +28,6 @@ public static class DependencyInjection
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
         );
 
-        services.AddDataProtection()
-            .PersistKeysToDbContext<ApplicationDbContext>()
-            .SetApplicationName("SocialCampus");
-
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();

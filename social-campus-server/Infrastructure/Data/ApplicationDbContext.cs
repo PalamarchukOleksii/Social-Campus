@@ -14,8 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : DbContext(options), IDataProtectionKeyContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
     public required DbSet<User> Users { get; set; }
     public required DbSet<RefreshToken> RefreshTokens { get; set; }
@@ -28,7 +27,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public required DbSet<PublicationTag> PublicationTags { get; set; }
     public required DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; }
     public required DbSet<ResetPasswordToken> ResetPasswordTokens { get; set; }
-    public required DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
