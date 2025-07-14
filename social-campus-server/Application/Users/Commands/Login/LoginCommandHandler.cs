@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
+using Application.Abstractions.Storage;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
@@ -10,7 +11,8 @@ public class LoginCommandHandler(
     IJwtProvider jwtProvider,
     IUserRepository userRepository,
     IRefreshTokenRepository tokenRepository,
-    IHasher hasher) : ICommandHandler<LoginCommand, UserLoginRefreshDto>
+    IHasher hasher,
+    IStorageService storageService) : ICommandHandler<LoginCommand, UserLoginRefreshDto>
 {
     public async Task<Result<UserLoginRefreshDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
@@ -49,7 +51,7 @@ public class LoginCommandHandler(
             FirstName = user.FirstName,
             LastName = user.LastName,
             Login = user.Login,
-            ProfileImageUrl = user.ProfileImageUrl
+            ProfileImageUrl = await storageService.GetPresignedUrlAsync(user.ProfileImageObjectKey)
         });
     }
 }

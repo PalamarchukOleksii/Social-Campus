@@ -26,8 +26,8 @@ public class DeleteUserCommandHandler(IUserRepository userRepository, IStorageSe
                 "User.NoDeletePermission",
                 $"User with UserId {request.CallerId.Value} do not have permission to delete profile of user with UserId {request.UserId.Value}"));
 
-        if (user.ProfileImageUrl != string.Empty)
-            await storageService.DeleteAsync(user.ProfileImageUrl, cancellationToken);
+        if (user.ProfileImageObjectKey != string.Empty)
+            await storageService.DeleteAsync(user.ProfileImageObjectKey, cancellationToken);
 
         await userRepository.DeleteAsync(user);
 

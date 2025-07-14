@@ -1,4 +1,5 @@
 using Application.Abstractions.Messaging;
+using Application.Abstractions.Storage;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
@@ -7,7 +8,8 @@ namespace Application.Users.Queries.GetUserById;
 
 public class GetUserByIdQueryHandlerI(
     IUserRepository userRepository,
-    IFollowRepository followRepository) : IQueryHandler<GetUserByIdQuery, UserDto>
+    IFollowRepository followRepository,
+    IStorageService storageService) : IQueryHandler<GetUserByIdQuery, UserDto>
 {
     public async Task<Result<UserDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
@@ -28,7 +30,7 @@ public class GetUserByIdQueryHandlerI(
             FirstName = user.FirstName,
             LastName = user.LastName,
             Bio = user.Bio,
-            ProfileImageUrl = user.ProfileImageUrl,
+            ProfileImageUrl = await storageService.GetPresignedUrlAsync(user.ProfileImageObjectKey),
             FollowersCount = followers.Count,
             FollowingCount = following.Count,
             FollowersIds = followers

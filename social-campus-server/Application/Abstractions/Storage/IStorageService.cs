@@ -11,7 +11,7 @@ public interface IStorageService
     Task<string> UploadAsync(Stream fileStream, UserId userId, string contentFor, string contentType,
         CancellationToken cancellationToken = default);
 
-    string GetPresignedUrl(string objectKey, TimeSpan? expiry = null);
+    Task<string?> GetPresignedUrlAsync(string objectKey, TimeSpan? expiry = null);
 
     Task DeleteAsync(string objectKey, CancellationToken cancellationToken = default);
 

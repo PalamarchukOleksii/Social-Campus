@@ -1,4 +1,5 @@
 using Application.Abstractions.Messaging;
+using Application.Abstractions.Storage;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
@@ -10,8 +11,8 @@ public class GetHomePagePublicationsQueryHandler(
     IPublicationRepository publicationRepository,
     IFollowRepository followRepository,
     ICommentRepository commentRepository,
-    IPublicationLikeRepository publicationLikeRepository)
-    : IQueryHandler<GetHomePagePublicationsQuery, IReadOnlyList<PublicationDto>>
+    IPublicationLikeRepository publicationLikeRepository,
+    IStorageService storageService) : IQueryHandler<GetHomePagePublicationsQuery, IReadOnlyList<PublicationDto>>
 {
     public async Task<Result<IReadOnlyList<PublicationDto>>> Handle(GetHomePagePublicationsQuery request,
         CancellationToken cancellationToken)
@@ -45,7 +46,7 @@ public class GetHomePagePublicationsQueryHandler(
             {
                 Id = publication.Id,
                 Description = publication.Description,
-                ImageUrl = publication.ImageUrl,
+                ImageUrl = await storageService.GetPresignedUrlAsync(publication.ImageObjectKey),
                 CreationDateTime = publication.CreationDateTime,
                 CreatorId = publication.CreatorId,
                 UserWhoLikedIds = publicationLikes.Select(like => like.UserId).ToList(),

@@ -1,11 +1,12 @@
 using Application.Abstractions.Messaging;
+using Application.Abstractions.Storage;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
 
 namespace Application.Users.Queries.GetUserRecommendedUsers;
 
-public class GetUserRecommendedUsersQueryHandler(IUserRepository userRepository, IFollowRepository followRepository)
+public class GetUserRecommendedUsersQueryHandler(IUserRepository userRepository, IFollowRepository followRepository, IStorageService storageService)
     : IQueryHandler<GetUserRecommendedUsersQuery, IReadOnlyList<UserDto>>
 {
     public async Task<Result<IReadOnlyList<UserDto>>> Handle(GetUserRecommendedUsersQuery request,
@@ -64,7 +65,7 @@ public class GetUserRecommendedUsersQueryHandler(IUserRepository userRepository,
                 FirstName = recommendedUser.FirstName,
                 LastName = recommendedUser.LastName,
                 Bio = recommendedUser.Bio,
-                ProfileImageUrl = recommendedUser.ProfileImageUrl,
+                ProfileImageUrl = await storageService.GetPresignedUrlAsync(recommendedUser.ProfileImageObjectKey),
                 FollowersIds = userFollowers.Select(f => f.Id).ToList()
             });
         }

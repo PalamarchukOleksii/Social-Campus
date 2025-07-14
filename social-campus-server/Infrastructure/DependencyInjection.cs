@@ -62,7 +62,7 @@ public static class DependencyInjection
             var config = new AmazonS3Config
             {
                 ForcePathStyle = true,
-                ServiceURL = options.Endpoint
+                ServiceURL = options.Endpoint,
             };
 
             var credentials = new BasicAWSCredentials(options.AccessKey, options.SecretKey);

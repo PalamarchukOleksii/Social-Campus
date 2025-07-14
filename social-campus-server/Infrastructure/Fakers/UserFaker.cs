@@ -18,7 +18,6 @@ public static class UserFaker
             f.Name.LastName()));
 
         faker.RuleFor(u => u.Bio, f => f.Lorem.Sentence());
-        faker.RuleFor(u => u.ProfileImageUrl, f => f.Internet.Avatar());
 
         var users = faker.Generate(count);
 

@@ -34,11 +34,11 @@ public class UpdateUserCommandHandler(
                 "User.NotUniqueLogin",
                 $"User with login {request.Login} has already exist"));
 
-        var imageUrl = user.ProfileImageUrl;
+        var imageObjectKey = user.ProfileImageObjectKey;
         if (request.ProfileImage is null)
         {
-            if (!string.IsNullOrEmpty(imageUrl)) await storageService.DeleteAsync(imageUrl, cancellationToken);
-            imageUrl = null;
+            if (!string.IsNullOrEmpty(imageObjectKey)) await storageService.DeleteAsync(imageObjectKey, cancellationToken);
+            imageObjectKey = null;
         }
         else
         {
@@ -47,10 +47,10 @@ public class UpdateUserCommandHandler(
             newImageStream.Position = 0;
 
             var shouldUpload = true;
-            if (!string.IsNullOrEmpty(imageUrl))
+            if (!string.IsNullOrEmpty(imageObjectKey))
             {
                 using var oldStream = new MemoryStream();
-                await storageService.DownloadAsync(imageUrl, oldStream, cancellationToken);
+                await storageService.DownloadAsync(imageObjectKey, oldStream, cancellationToken);
                 oldStream.Position = 0;
 
                 var oldHash = await StorageHelpers.ComputeHashAsync(oldStream);
@@ -59,10 +59,10 @@ public class UpdateUserCommandHandler(
 
             if (shouldUpload)
             {
-                if (!string.IsNullOrEmpty(imageUrl)) await storageService.DeleteAsync(imageUrl, cancellationToken);
+                if (!string.IsNullOrEmpty(imageObjectKey)) await storageService.DeleteAsync(imageObjectKey, cancellationToken);
 
                 var uploadStream = request.ProfileImage.Content;
-                imageUrl = await storageService.UploadAsync(
+                imageObjectKey = await storageService.UploadAsync(
                     uploadStream,
                     user.Id,
                     "profile",
@@ -77,7 +77,7 @@ public class UpdateUserCommandHandler(
             request.FirstName,
             request.LastName,
             request.Bio,
-            imageUrl ?? "");
+            imageObjectKey ?? "");
 
         return Result.Success();
     }
