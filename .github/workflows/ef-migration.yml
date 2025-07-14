@@ -30,12 +30,7 @@ jobs:
         run: dotnet build ./social-campus-server --configuration Release
 
       - name: Create migration bundle
-        run: dotnet ef migrations bundle \
-          --project ./social-campus-server/Infrastructure \
-          --startup-project ./social-campus-server/Presentation \
-          --output ./ef-bundle \
-          --runtime linux-x64 \
-          --configuration Release
+        run: dotnet ef migrations bundle --project ./social-campus-server/Infrastructure --startup-project ./social-campus-server/Presentation --output ./ef-bundle --runtime linux-x64 --configuration Release
 
       - name: Make migration bundle executable
         run: chmod +x ./ef-bundle
