@@ -165,7 +165,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("ImageObjectKey")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -312,7 +312,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(160)
                         .HasColumnType("character varying(160)");
 
-                    b.Property<string>("ProfileImageUrl")
+                    b.Property<string>("ProfileImageObjectKey")
                         .HasColumnType("text");
 
                     b.Property<Guid>("RefreshTokenId")

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250628161319_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250714223458_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -168,7 +168,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("ImageObjectKey")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -315,7 +315,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(160)
                         .HasColumnType("character varying(160)");
 
-                    b.Property<string>("ProfileImageUrl")
+                    b.Property<string>("ProfileImageObjectKey")
                         .HasColumnType("text");
 
                     b.Property<Guid>("RefreshTokenId")

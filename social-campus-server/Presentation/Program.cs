@@ -24,7 +24,7 @@ if (app.Environment.IsDevelopment())
             .AddPreferredSecuritySchemes("Bearer");
     });
 
-    await app.EnsureDatabaseCreatedAsync();
+    await app.MigrateAndSeedDatabaseAsync(builder.Services);
 }
 
 app.UseHttpsRedirection();
