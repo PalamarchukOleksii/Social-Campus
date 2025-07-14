@@ -1,4 +1,5 @@
 using Application.Abstractions.Messaging;
+using Application.Abstractions.Storage;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
@@ -9,8 +10,8 @@ public class GetPublicationsForTagQueryHandler(
     ITagRepository tagRepository,
     IPublicationTagRepository publicationTagRepository,
     ICommentRepository commentRepository,
-    IPublicationLikeRepository publicationLikeRepository)
-    : IQueryHandler<GetPublicationsForTagQuery, IReadOnlyList<PublicationDto>>
+    IPublicationLikeRepository publicationLikeRepository,
+    IStorageService storageService) : IQueryHandler<GetPublicationsForTagQuery, IReadOnlyList<PublicationDto>>
 {
     public async Task<Result<IReadOnlyList<PublicationDto>>> Handle(GetPublicationsForTagQuery request,
         CancellationToken cancellationToken)
@@ -38,7 +39,7 @@ public class GetPublicationsForTagQueryHandler(
             {
                 Id = publication.Id,
                 Description = publication.Description,
-                ImageUrl = publication.ImageUrl,
+                ImageUrl = await storageService.GetPresignedUrlAsync(publication.ImageObjectKey),
                 CreationDateTime = publication.CreationDateTime,
                 CreatorId = publication.CreatorId,
                 UserWhoLikedIds = publicationLikes.Select(like => like.UserId).ToList(),

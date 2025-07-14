@@ -32,11 +32,11 @@ public class UpdatePublicationCommandHandler(
                 "User.NoUpdatePermission",
                 $"User with UserId {request.CallerId.Value} do not have permission to update publication with PublicationId {request.PublicationId.Value}"));
 
-        var imageUrl = publication.ImageUrl;
+        var imageObjectKey = publication.ImageObjectKey;
         if (request.ImageData is null)
         {
-            if (!string.IsNullOrEmpty(imageUrl)) await storageService.DeleteAsync(imageUrl, cancellationToken);
-            imageUrl = null;
+            if (!string.IsNullOrEmpty(imageObjectKey)) await storageService.DeleteAsync(imageObjectKey, cancellationToken);
+            imageObjectKey = null;
         }
         else
         {
@@ -45,10 +45,10 @@ public class UpdatePublicationCommandHandler(
             newImageStream.Position = 0;
 
             var shouldUpload = true;
-            if (!string.IsNullOrEmpty(imageUrl))
+            if (!string.IsNullOrEmpty(imageObjectKey))
             {
                 using var oldStream = new MemoryStream();
-                await storageService.DownloadAsync(imageUrl, oldStream, cancellationToken);
+                await storageService.DownloadAsync(imageObjectKey, oldStream, cancellationToken);
                 oldStream.Position = 0;
 
                 var oldHash = await StorageHelpers.ComputeHashAsync(oldStream);
@@ -57,10 +57,10 @@ public class UpdatePublicationCommandHandler(
 
             if (shouldUpload)
             {
-                if (!string.IsNullOrEmpty(imageUrl)) await storageService.DeleteAsync(imageUrl, cancellationToken);
+                if (!string.IsNullOrEmpty(imageObjectKey)) await storageService.DeleteAsync(imageObjectKey, cancellationToken);
 
                 var uploadStream = request.ImageData.Content;
-                imageUrl = await storageService.UploadAsync(
+                imageObjectKey = await storageService.UploadAsync(
                     uploadStream,
                     publication.CreatorId,
                     "publication",
@@ -69,7 +69,7 @@ public class UpdatePublicationCommandHandler(
             }
         }
 
-        publicationRepository.Update(publication, request.Description, imageUrl ?? "");
+        publicationRepository.Update(publication, request.Description, imageObjectKey ?? "");
 
         var newLabels = TagHelpers.ExtractLabels(request.Description);
         var currentTags = await publicationTagRepository.GetTagsForPublicationAsync(publication.Id, cancellationToken);

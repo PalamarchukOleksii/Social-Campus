@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions.Messaging;
+using Application.Abstractions.Storage;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
@@ -7,7 +8,8 @@ namespace Application.Follows.Queries.GetFollowersList;
 
 public class GetFollowersListQueryHandler(
     IFollowRepository followRepository,
-    IUserRepository userRepository) : IQueryHandler<GetFollowersListQuery, IReadOnlyList<UserDto>>
+    IUserRepository userRepository,
+    IStorageService storageService) : IQueryHandler<GetFollowersListQuery, IReadOnlyList<UserDto>>
 {
     public async Task<Result<IReadOnlyList<UserDto>>> Handle(GetFollowersListQuery request,
         CancellationToken cancellationToken)
@@ -20,7 +22,7 @@ public class GetFollowersListQueryHandler(
 
         var response = await followRepository.GetFollowersUsersByUserIdAsync(user.Id);
 
-        List<UserDto> followersDto = new();
+        List<UserDto> followersDto = [];
 
         foreach (var followingUser in response)
         {
@@ -33,13 +35,13 @@ public class GetFollowersListQueryHandler(
                 FirstName = followingUser.FirstName,
                 LastName = followingUser.LastName,
                 Bio = followingUser.Bio,
-                ProfileImageUrl = followingUser.ProfileImageUrl,
+                ProfileImageUrl = await storageService.GetPresignedUrlAsync(followingUser.ProfileImageObjectKey),
                 FollowersIds = userFollowers
                     .Select(f => f.Id)
                     .ToList()
             });
         }
 
-        return Result.Success(followersDto as IReadOnlyList<UserDto>);
+        return Result.Success<IReadOnlyList<UserDto>>(followersDto);
     }
 }

@@ -10,9 +10,7 @@ namespace Domain.Models.UserModel;
 
 public class User
 {
-    private User()
-    {
-    }
+    private User() { }
 
     public User(
         string login,
@@ -36,7 +34,7 @@ public class User
     public string FirstName { get; private set; } = string.Empty;
     public string LastName { get; private set; } = string.Empty;
     public string Bio { get; private set; } = string.Empty;
-    public string ProfileImageUrl { get; private set; } = string.Empty;
+    public string ProfileImageObjectKey { get; private set; } = string.Empty;
     public RefreshTokenId RefreshTokenId { get; private set; } = new(Guid.Empty);
     public virtual RefreshToken? RefreshToken { get; }
     public virtual ICollection<Follow>? Followers { get; }
@@ -57,13 +55,13 @@ public class User
         RefreshTokenId = new RefreshTokenId(Guid.Empty);
     }
 
-    public void Update(string login, string firstName, string lastName, string bio, string profileImageUrl)
+    public void Update(string login, string firstName, string lastName, string bio, string profileImageObjectKey)
     {
         Login = login;
         FirstName = firstName;
         LastName = lastName;
         Bio = bio;
-        ProfileImageUrl = profileImageUrl;
+        ProfileImageObjectKey = profileImageObjectKey;
     }
 
     public void UpdatePasswordHash(string passwordHash)

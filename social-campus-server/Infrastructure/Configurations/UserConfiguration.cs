@@ -41,7 +41,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.Property(u => u.ProfileImageUrl)
+        builder.Property(u => u.ProfileImageObjectKey)
             .IsRequired(false);
 
         builder.HasIndex(u => u.Id)

@@ -23,7 +23,7 @@ public class PublicationConfiguration : IEntityTypeConfiguration<Publication>
             .IsRequired()
             .HasMaxLength(1000);
 
-        builder.Property(p => p.ImageUrl)
+        builder.Property(p => p.ImageObjectKey)
             .IsRequired(false);
 
         builder.Property(p => p.CreationDateTime)

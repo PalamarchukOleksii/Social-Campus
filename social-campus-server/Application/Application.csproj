@@ -16,9 +16,4 @@
     <ItemGroup>
         <ProjectReference Include="..\Domain\Domain.csproj"/>
     </ItemGroup>
-    <ItemGroup>
-        <Reference Include="Microsoft.AspNetCore.Http.Features">
-            <HintPath>..\..\..\..\..\.nuget\packages\microsoft.aspnetcore.app.ref\9.0.4\ref\net9.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
-        </Reference>
-    </ItemGroup>
 </Project>

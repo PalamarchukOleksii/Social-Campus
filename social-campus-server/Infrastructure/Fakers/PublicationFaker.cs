@@ -12,13 +12,11 @@ public static class PublicationFaker
             .CustomInstantiator(f =>
             {
                 var user = f.PickRandom(users);
-                var hasImage = f.Random.Bool(0.5f);
-                var imageUrl = hasImage ? f.Image.PicsumUrl() : string.Empty;
 
                 return new Publication(
                     f.Lorem.Paragraph(),
                     user.Id,
-                    imageUrl
+                    ""
                 );
             });
 

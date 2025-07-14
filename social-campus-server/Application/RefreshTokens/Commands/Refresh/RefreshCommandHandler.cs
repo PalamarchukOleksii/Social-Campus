@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.Abstractions.Security;
+using Application.Abstractions.Storage;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Models.RefreshTokenModel;
@@ -10,7 +11,8 @@ namespace Application.RefreshTokens.Commands.Refresh;
 public class RefreshCommandHandler(
     IUserRepository userRepository,
     IJwtProvider jwtProvider,
-    IRefreshTokenRepository tokenRepository) : ICommandHandler<RefreshCommand, UserLoginRefreshDto>
+    IRefreshTokenRepository tokenRepository,
+    IStorageService storageService) : ICommandHandler<RefreshCommand, UserLoginRefreshDto>
 {
     public async Task<Result<UserLoginRefreshDto>> Handle(RefreshCommand request, CancellationToken cancellationToken)
     {
@@ -40,7 +42,7 @@ public class RefreshCommandHandler(
             FirstName = user.FirstName,
             LastName = user.LastName,
             Login = user.Login,
-            ProfileImageUrl = user.ProfileImageUrl
+            ProfileImageUrl = await storageService.GetPresignedUrlAsync(user.ProfileImageObjectKey)
         });
     }
 }

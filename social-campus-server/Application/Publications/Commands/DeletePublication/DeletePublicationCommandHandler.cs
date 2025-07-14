@@ -28,8 +28,8 @@ public class DeletePublicationCommandHandler(
                 "User.NoDeletePermission",
                 $"User with UserId {request.CallerId.Value} do not have permission to delete publication with PublicationId {request.PublicationId.Value}"));
 
-        if (publication.ImageUrl != string.Empty)
-            await storageService.DeleteAsync(publication.ImageUrl, cancellationToken);
+        if (publication.ImageObjectKey != string.Empty)
+            await storageService.DeleteAsync(publication.ImageObjectKey, cancellationToken);
 
         await publicationRepository.DeleteAsync(publication);
 

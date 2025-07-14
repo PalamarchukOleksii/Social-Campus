@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions.Messaging;
+using Application.Abstractions.Storage;
 using Application.Dtos;
 using Domain.Abstractions.Repositories;
 using Domain.Shared;
@@ -7,7 +8,8 @@ namespace Application.Users.Queries.GetUserByLogin;
 
 public class GetUserProfileByLoginHandler(
     IUserRepository userRepository,
-    IFollowRepository followRepository) : IQueryHandler<GetUserByLoginQuery, UserDto>
+    IFollowRepository followRepository,
+    IStorageService storageService) : IQueryHandler<GetUserByLoginQuery, UserDto>
 {
     public async Task<Result<UserDto>> Handle(GetUserByLoginQuery request, CancellationToken cancellationToken)
     {
@@ -28,7 +30,7 @@ public class GetUserProfileByLoginHandler(
             FirstName = user.FirstName,
             LastName = user.LastName,
             Bio = user.Bio,
-            ProfileImageUrl = user.ProfileImageUrl,
+            ProfileImageUrl = await storageService.GetPresignedUrlAsync(user.ProfileImageObjectKey),
             FollowersCount = followers.Count,
             FollowingCount = following.Count,
             FollowersIds = followers
