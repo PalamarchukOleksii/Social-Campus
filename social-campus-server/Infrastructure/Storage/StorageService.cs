@@ -11,13 +11,11 @@ namespace Infrastructure.Storage;
 public class StorageService : IStorageService
 {
     private readonly string _bucketName;
-    private readonly string _endpoint;
     private readonly IAmazonS3 _s3Client;
 
     public StorageService(IOptions<StorageOptions> options, IAmazonS3 s3Client)
     {
         _bucketName = options.Value.BucketName;
-        _endpoint = options.Value.Endpoint;
         _s3Client = s3Client;
 
         EnsureBucketExistsAsync().GetAwaiter().GetResult();
@@ -39,16 +37,27 @@ public class StorageService : IStorageService
         };
 
         await _s3Client.PutObjectAsync(request, cancellationToken);
-        var adjustedEndpoint = _endpoint.Contains("/s3")
-            ? _endpoint.Replace("/s3", "/object/public")
-            : _endpoint;
-        return $"{adjustedEndpoint}/{_bucketName}/{objectKey}";
+
+        return objectKey;
     }
 
-    public async Task DeleteAsync(string fileUrl, CancellationToken cancellationToken = default)
+    public string GetPresignedUrl(string objectKey, TimeSpan? expiry = null)
     {
-        var objectKey = ExtractObjectNameFromUrl(fileUrl);
+        expiry ??= TimeSpan.FromMinutes(15);
 
+        var request = new GetPreSignedUrlRequest
+        {
+            BucketName = _bucketName,
+            Key = objectKey,
+            Expires = DateTime.UtcNow.Add(expiry.Value),
+            Verb = HttpVerb.GET
+        };
+
+        return _s3Client.GetPreSignedURL(request);
+    }
+
+    public async Task DeleteAsync(string objectKey, CancellationToken cancellationToken = default)
+    {
         var request = new DeleteObjectRequest
         {
             BucketName = _bucketName,
@@ -58,10 +67,8 @@ public class StorageService : IStorageService
         await _s3Client.DeleteObjectAsync(request, cancellationToken);
     }
 
-    public async Task DownloadAsync(string fileUrl, Stream destination, CancellationToken cancellationToken = default)
+    public async Task DownloadAsync(string objectKey, Stream destination, CancellationToken cancellationToken = default)
     {
-        var objectKey = ExtractObjectNameFromUrl(fileUrl);
-
         var request = new GetObjectRequest
         {
             BucketName = _bucketName,
@@ -72,29 +79,14 @@ public class StorageService : IStorageService
         await response.ResponseStream.CopyToAsync(destination, cancellationToken);
     }
 
-    private string ExtractObjectNameFromUrl(string fileUrl)
-    {
-        var uri = new Uri(fileUrl);
-        var path = uri.AbsolutePath.TrimStart('/');
-
-        var bucketIndex = path.IndexOf(_bucketName + "/", StringComparison.Ordinal);
-        if (bucketIndex < 0) return path;
-
-        var objectKeyStart = bucketIndex + _bucketName.Length + 1;
-
-        if (objectKeyStart >= path.Length)
-            return string.Empty;
-
-        var objectKey = path[objectKeyStart..];
-        return Uri.UnescapeDataString(objectKey);
-    }
-
     private async Task EnsureBucketExistsAsync()
     {
         if (!await AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, _bucketName))
+        {
             await _s3Client.PutBucketAsync(new PutBucketRequest
             {
                 BucketName = _bucketName
             });
+        }
     }
 }
