@@ -15,11 +15,15 @@ namespace Infrastructure.Storage
     public class StorageService : IStorageService
     {
         private readonly string _bucketName;
+        private readonly string _endpoint;
+        private readonly TimeSpan _presignedUrlExpiry;
         private readonly IAmazonS3 _s3Client;
 
         public StorageService(IOptions<StorageOptions> options, IAmazonS3 s3Client)
         {
             _bucketName = options.Value.BucketName;
+            _endpoint = options.Value.Endpoint;
+            _presignedUrlExpiry = TimeSpan.FromSeconds(options.Value.PresignedUrlExpiryInSeconds);
             _s3Client = s3Client;
 
             EnsureBucketExistsAsync().GetAwaiter().GetResult();
@@ -45,23 +49,26 @@ namespace Infrastructure.Storage
             return objectKey;
         }
 
-        public async Task<string?> GetPresignedUrlAsync(string objectKey, TimeSpan? expiry = null)
+        public async Task<string?> GetPresignedUrlAsync(string objectKey)
         {
             if (string.IsNullOrWhiteSpace(objectKey))
                 return null;
             
             if (!await DoesObjectExistAsync(objectKey))
                 return null;
-
-            expiry ??= TimeSpan.FromMinutes(15);
+            
+            var uri = new Uri(_endpoint);
+            var protocol = uri.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase)
+                ? Protocol.HTTPS
+                : Protocol.HTTP;
 
             var request = new GetPreSignedUrlRequest
             {
                 BucketName = _bucketName,
                 Key = objectKey,
-                Expires = DateTime.UtcNow.Add(expiry.Value),
+                Expires = DateTime.UtcNow.Add(_presignedUrlExpiry),
                 Verb = HttpVerb.GET,
-                Protocol = Protocol.HTTP
+                Protocol = protocol
             };
 
             return await _s3Client.GetPreSignedURLAsync(request);
