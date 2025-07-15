@@ -1,9 +1,19 @@
-name: Run EF-Migration on Merge
+name: Run EF-Migration on Push or PR to Main
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'social-campus-server/Infrastructure/Migrations/**'
+      - '.github/workflows/ef-migration.yml'
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'social-campus-server/Infrastructure/Migrations/**'
+      - '.github/workflows/ef-migration.yml'
 
 jobs:
   migrate:
