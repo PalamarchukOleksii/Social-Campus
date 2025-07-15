@@ -5,8 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Behaviors;
 
-public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
-    : IPipelineBehavior<TRequest, TResponse>
+public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TRequest, TResponse>> logger) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
     where TResponse : Result
 {
@@ -15,27 +14,29 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("[{DateTimeUtc}] Starting request {RequestName}",
-            DateTime.UtcNow,
-            typeof(TRequest).Name);
+        var requestName = typeof(TRequest).Name;
+
+        logger.LogInformation("Handling {RequestName}", requestName);
 
         var stopwatch = Stopwatch.StartNew();
+
         var response = await next();
+
         stopwatch.Stop();
 
         if (response.IsFailure)
-            logger.LogError(
-                "[{DateTimeUtc}] Request {RequestName} failed with error: {ErrorCode}, {ErrorMessage}",
-                DateTime.UtcNow,
-                typeof(TRequest).Name,
+        {
+            logger.LogError("Request {RequestName} failed with error: {ErrorCode} - {ErrorMessage}",
+                requestName,
                 response.Error.Code,
                 response.Error.Message);
-
-        logger.LogInformation(
-            "[{DateTimeUtc}] Completed request {RequestName} in {ElapsedMilliseconds}ms",
-            DateTime.UtcNow,
-            typeof(TRequest).Name,
-            stopwatch.ElapsedMilliseconds);
+        }
+        else
+        {
+            logger.LogInformation("Request {RequestName} completed successfully in {ElapsedMilliseconds}ms",
+                requestName,
+                stopwatch.ElapsedMilliseconds);
+        }
 
         return response;
     }
